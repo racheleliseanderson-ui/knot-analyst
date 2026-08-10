@@ -10,6 +10,7 @@
 import type { FieldScenario } from "@/data/scenarios";
 import type { FailurePlay } from "@/data/failure-playbook";
 import type { KnotContent } from "@/domain/types";
+import type { DomainVenue } from "@/domain/venue";
 
 export type DomainId = "fishing" | "boating";
 
@@ -62,6 +63,8 @@ export interface KnotDomain {
   materialAxes?: Record<string, import("@/domain/material").MaterialPreset>;
   diameters: DomainOption[];
   dimensions: DomainDimension[];
+  /** Where the connection works. Domain-specific; optional for legacy domains. */
+  venues?: DomainVenue[];
   scenarios: FieldScenario[];
   failurePlays: FailurePlay[];
   knots: KnotContent[];
