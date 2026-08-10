@@ -99,6 +99,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
           >
             <ModeLink to="/" label={t("nav.decide")} code="01" />
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
+            <ModeLink to="/compare" label="Compare" code="03" />
             <ModeLink to="/admin" label={t("nav.data")} code="04" />
             <button
               type="button"

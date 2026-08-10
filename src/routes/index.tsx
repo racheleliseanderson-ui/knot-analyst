@@ -11,6 +11,7 @@ import { runChooser } from "@/engine/chooser";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
 import { generateDecisionPacket } from "@/lib/decision-packet";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
+import { encodeInput } from "@/lib/handoff";
 import type { ChooseInput, ConnectionJob, DiameterRelation, Difficulty, LineMaterial } from "@/domain/types";
 import {
   DIAMETER_LABELS,
@@ -90,6 +91,7 @@ type Search = {
   scenario?: string;
   run?: boolean;
   from?: string;
+  why?: string;
 };
 
 const str = (v: unknown) => (typeof v === "string" && v.length ? v : undefined);
@@ -119,6 +121,7 @@ export const Route = createFileRoute("/")({
     scenario: str(s['scenario']),
     run: bool(s['run']),
     from: str(s['from']),
+    why: str(s['why']),
   }),
   head: () => ({
     meta: [
@@ -507,12 +510,39 @@ function DecideMode() {
         </div>
       ) : null}
       {search.from ? (
-        <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-accent/40 bg-accent/8 px-4 py-3 no-print">
-          <MicroLabel className="text-accent">Carried from diagnosis</MicroLabel>
-          <p className="text-[0.8125rem] text-foreground/85">
-            {safeDecode(search.from)} — context preloaded below. Adjust anything that was
-            wrong before you trust the answer.
-          </p>
+        <div className="mb-6 rounded-lg border border-accent/40 bg-accent/8 px-4 py-3 no-print">
+          <div className="flex flex-wrap items-center gap-3">
+            <MicroLabel className="text-accent">Carried from diagnosis</MicroLabel>
+            <p className="text-[0.8125rem] text-foreground/85">
+              {safeDecode(search.from)} — context preloaded below. Adjust anything that was
+              wrong before you trust the answer.
+            </p>
+          </div>
+          {search.why ? (
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+              {safeDecode(search.why)
+                .split(" · ")
+                .filter(Boolean)
+                .map((label) => (
+                  <span
+                    key={label}
+                    className="rounded-full border border-accent/40 bg-card px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent"
+                  >
+                    {label}
+                  </span>
+                ))}
+              <span className="text-[0.75rem] text-muted-foreground">
+                set by the failure evidence, not by you
+              </span>
+            </div>
+          ) : null}
+          <Link
+            to="/compare"
+            search={{ a: encodeInput(input) }}
+            className="mt-3 inline-flex min-h-9 items-center rounded-md border border-hairline bg-card px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+          >
+            Compare this against another scenario →
+          </Link>
         </div>
       ) : null}
 
@@ -591,6 +621,13 @@ function DecideMode() {
                       >
                         Print
                       </button>
+                      <Link
+                        to="/compare"
+                        search={{ a: encodeInput(input) }}
+                        className="rounded-md border border-hairline px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                      >
+                        Compare
+                      </Link>
                       <button
                         onClick={async () => {
                           setPacketState("working");

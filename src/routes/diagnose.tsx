@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Shell } from "@/components/instrument/shell";
 import { Bullets, Chip, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
 import { runTroubleshoot, type TroubleshootInput } from "@/engine/troubleshoot";
+import { diagnosisToDecide, encodeInput } from "@/lib/handoff";
 import { FAILURE_PLAYS, type BreakLocation, type FailureEvent } from "@/data/failure-playbook";
 import type { ConnectionJob, DiameterRelation, LineMaterial, RetieDecision } from "@/domain/types";
 import {
@@ -169,17 +170,41 @@ function DiagnoseMode() {
 
   const handoff = () => {
     if (!result) return;
-    const s = result.decideSearch ?? {};
+    const h = diagnosisToDecide(input, result);
     navigate({
       to: "/",
       search: {
-        connection: s.connection ?? input.connection,
-        main: s.mainMaterial ?? input.mainMaterial,
-        secondary: s.secondaryMaterial ?? input.secondaryMaterial,
-        diameter: s.diameterRelation ?? input.diameterRelation,
+        connection: h.input.connection,
+        main: h.input.mainMaterial,
+        secondary: h.input.secondaryMaterial,
+        diameter: h.input.diameterRelation,
+        guides: h.input.mustPassGuides,
+        cold: h.input.coldHands,
+        wind: h.input.windy,
+        lowlight: h.input.lowLight,
+        retie: h.input.retieFrequency,
+        prof: h.input.proficiency,
+        eye: h.input.hardwareEyeSmall,
         run: true,
         from: result.title,
+        why: h.carried.map((c) => c.label).join(" · ") || undefined,
       },
+    });
+  };
+
+  /** Compare the setup that failed against the same job with the evidence applied. */
+  const compareFix = () => {
+    if (!result) return;
+    const h = diagnosisToDecide(input, result);
+    const asFailed = {
+      connection: h.input.connection,
+      mainMaterial: h.input.mainMaterial,
+      secondaryMaterial: h.input.secondaryMaterial,
+      diameterRelation: h.input.diameterRelation,
+    };
+    navigate({
+      to: "/compare",
+      search: { a: encodeInput(asFailed), b: encodeInput(h.input) },
     });
   };
 
@@ -421,20 +446,54 @@ function DiagnoseMode() {
                 </div>
               </Panel>
 
-              <Panel className="flex flex-wrap items-center justify-between gap-4 p-6 no-print">
-                <div className="min-w-[240px] flex-1">
-                  <MicroLabel className="mb-1">Next action</MicroLabel>
-                  <p className="text-[0.9375rem] leading-relaxed text-foreground/85">
-                    {result.decideHint ??
-                      "Carry this context into the decision model and rebuild the connection deliberately."}
-                  </p>
+              <Panel className="p-6 no-print">
+                <MicroLabel className="mb-1">Next action</MicroLabel>
+                <p className="max-w-2xl text-[0.9375rem] leading-relaxed text-foreground/85">
+                  {result.decideHint ??
+                    "Carry this context into the decision model and rebuild the connection deliberately."}
+                </p>
+                {(() => {
+                  const h = diagnosisToDecide(input, result);
+                  return (
+                    <>
+                      {h.carried.length ? (
+                        <div className="mt-4">
+                          <MicroLabel className="mb-2">Constraints this evidence sets</MicroLabel>
+                          <ul className="space-y-1.5">
+                            {h.carried.map((c) => (
+                              <li key={c.label} className="text-[0.8125rem] leading-relaxed">
+                                <span className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent">
+                                  {c.label}
+                                </span>{" "}
+                                <span className="text-muted-foreground">{c.why}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                      {h.rulesOut.length ? (
+                        <div className="mt-4">
+                          <MicroLabel className="mb-2">What the failure rules out</MicroLabel>
+                          <Bullets items={h.rulesOut} marker="!" />
+                        </div>
+                      ) : null}
+                    </>
+                  );
+                })()}
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    onClick={handoff}
+                    className="ki-press min-h-11 rounded-lg border border-primary/60 bg-primary/15 px-5 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25"
+                  >
+                    Decide the replacement →
+                  </button>
+                  <button
+                    onClick={compareFix}
+                    className="ki-press min-h-11 rounded-lg border border-hairline px-5 py-3 text-[0.875rem] font-medium tracking-tight text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                  >
+                    Compare failed setup vs corrected
+                  </button>
                 </div>
-                <button
-                  onClick={handoff}
-                  className="rounded-lg border border-primary/60 bg-primary/15 px-5 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25"
-                >
-                  Decide the replacement →
-                </button>
               </Panel>
 
               {result.findings.length ? (
