@@ -466,7 +466,10 @@ function DecideMode() {
                       ) : null}
                     </div>
                     <div className="border-t border-hairline px-6 py-3">
-                      <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
+                      <p
+                        suppressHydrationWarning
+                        className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70"
+                      >
                         {result.eliminated.length} candidates eliminated on hard constraints ·{" "}
                         engine {result.engineVersion} ·{" "}
                         {new Date(result.generatedAt).toLocaleString()}
