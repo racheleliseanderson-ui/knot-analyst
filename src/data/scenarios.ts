@@ -469,7 +469,7 @@ export const FIELD_SCENARIOS: FieldScenario[] = [
         fiber: "uhmwpe",
         construction: "hollow-core",
         treatment: "uncoated",
-        role: "main",
+        role: "main-line",
       },
       diameterRelation: "main-thinner",
       mustPassGuides: true,
