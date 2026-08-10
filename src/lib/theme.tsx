@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 export type Theme = "dark" | "light";
 const KEY = "ki-theme";
 
-export const THEME_BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('${KEY}');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.classList.toggle('light',t==='light');}catch(e){}})();`;
+export const THEME_BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('${KEY}');document.documentElement.classList.toggle('light',t==='light');}catch(e){}})();`;
 
 function apply(theme: Theme) {
   document.documentElement.classList.toggle("light", theme === "light");
