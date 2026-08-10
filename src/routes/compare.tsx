@@ -247,6 +247,17 @@ function toDecideSearch(i: Partial<ChooseInput>) {
   } as never;
 }
 
+/** A completed comparison, kept for the session so a run can be re-entered. */
+interface RunEntry {
+  runId: string;
+  ranAt: string;
+  ms: number;
+  decisive: number;
+  verdict: string;
+  a: Partial<ChooseInput>;
+  b: Partial<ChooseInput>;
+}
+
 function PipelineStrip({
   comparison,
   revealed,
