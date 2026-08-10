@@ -230,21 +230,52 @@ function Body({ kind, step }: { kind: DiagramKind; step?: number }) {
   }
 }
 
-export function KnotDiagram({ kind, step, className, title, focus }: Props) {
+/** Plain-language geometry of each schematic, for screen readers and print. */
+const KIND_DESCRIPTION: Record<DiagramKind, string> = {
+  "terminal-eye": "A single strand runs to a hardware eye, passes through it, and wraps back along the standing line before the tag end tucks up through the first wrap.",
+  "terminal-palomar": "A doubled bight passes through the hardware eye, an overhand knot is formed in the doubled line, and the loop is then passed over the hook before the knot is drawn to the eye.",
+  "terminal-uni": "The line passes through the eye and doubles back beside itself, forming a loop; the tag end wraps inside that loop several turns and the knot slides down to the eye.",
+  "terminal-snell": "Two parallel strands run along the hook shank; wraps are laid over both, and the tag end exits at the eye so the pull aligns with the shank.",
+  "line-join": "Two lines lie alongside each other in opposite directions, each tag end wrapping back over both strands, with the two knots drawn together into one joint.",
+  "braid-leader-fg": "A heavy leader lies straight while a thin braid weaves alternately over and under it, forming a tight woven sleeve finished with locking half hitches.",
+  "braid-leader-alberto": "The leader is folded into a long bight; braid wraps up the doubled section and back down over itself, exiting alongside the leader.",
+  "loop-fixed": "The standing line is doubled into a fixed loop, with the doubled strands knotted above the loop so the loop stays open under load.",
+  "loop-nonslip": "An overhand knot is made in the standing line, the tag passes through the hardware and back through that knot, wraps around the standing line, and returns, leaving a loop that cannot close.",
+  generic: "A single line runs horizontally, wraps are laid along it, and the tag end exits at an angle to the standing part.",
+};
+
+/** Composable description used by the diagram and by any prose beside it. */
+export function describeDiagram(kind: DiagramKind, step?: number, totalSteps?: number) {
+  const base = KIND_DESCRIPTION[kind] ?? KIND_DESCRIPTION.generic;
+  if (step === undefined) return `Finished structure. ${base}`;
+  const of = totalSteps ? ` of ${totalSteps}` : "";
+  return `Step ${step}${of} highlighted in a heavier line. Earlier parts of the structure are drawn in a lighter weight, later parts are dashed and faint. ${base}`;
+}
+
+export function KnotDiagram({ kind, step, className, title, focus, description }: Props) {
+  const uid = useId();
+  const titleId = `${uid}-t`;
+  const descId = `${uid}-d`;
+  const label = title ?? `Schematic diagram — ${kind}`;
+  const desc = description ?? describeDiagram(kind, step);
   return (
-    <figure className={cn("relative", className)}>
+    <figure className={cn("relative ki-diagram", className)}>
       <svg
         viewBox="0 0 400 180"
         role="img"
-        aria-label={title ?? `Schematic diagram — ${kind}`}
+        aria-labelledby={titleId}
+        aria-describedby={descId}
         className="h-full w-full"
       >
+        <title id={titleId}>{label}</title>
+        <desc id={descId}>{desc}</desc>
         <defs>
           <pattern id="ki-grid" width="20" height="20" patternUnits="userSpaceOnUse">
             <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" />
           </pattern>
         </defs>
         <rect
+          aria-hidden="true"
           width="400"
           height="180"
           fill="url(#ki-grid)"
@@ -252,8 +283,9 @@ export function KnotDiagram({ kind, step, className, title, focus }: Props) {
           opacity={0.14}
         />
         <g
+          aria-hidden="true"
           transform={focusTransform(kind, step, focus)}
-          className="transition-transform duration-500 ease-out"
+          className="transition-transform duration-500 ease-out motion-reduce:transition-none"
         >
           <Body kind={kind} step={step} />
         </g>
