@@ -54,6 +54,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
           <nav className="flex items-center gap-1">
             <ModeLink to="/" label="Decide" code="01" />
             <ModeLink to="/diagnose" label="Diagnose" code="02" />
+            <ModeLink to="/admin" label="Data" code="04" />
             <ThemeToggle />
           </nav>
         </div>

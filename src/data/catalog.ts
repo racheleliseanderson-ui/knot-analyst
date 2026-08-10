@@ -3,9 +3,15 @@ import { ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
 import { TERMINAL_KNOTS } from "@/data/knots/terminal";
 import { LINE_TO_LINE_KNOTS } from "@/data/knots/line-to-line";
 import { LOOP_KNOTS } from "@/data/knots/loops";
+import { UTILITY_KNOTS } from "@/data/knots/utility";
 import { getMechanics } from "@/data/mechanics-profiles";
 
-const RAW: KnotContent[] = [...TERMINAL_KNOTS, ...LINE_TO_LINE_KNOTS, ...LOOP_KNOTS];
+const RAW: KnotContent[] = [
+  ...TERMINAL_KNOTS,
+  ...LINE_TO_LINE_KNOTS,
+  ...LOOP_KNOTS,
+  ...UTILITY_KNOTS,
+];
 
 function hydrate(content: KnotContent): Knot {
   const m = getMechanics(content.id);
