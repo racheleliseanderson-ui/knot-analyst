@@ -629,17 +629,37 @@ function Transfer() {
   const { data, replaceAll, reset } = useOverlay();
   const fileRef = useRef<HTMLInputElement>(null);
   const [report, setReport] = useState<string[]>([]);
+  const [pending, setPending] = useState<{
+    data: ReturnType<typeof parseOverlay>["data"];
+    errors: string[];
+    diff: string[];
+  } | null>(null);
   const json = useMemo(() => overlayToJson(data), [data]);
 
+  /** Dry run first. An import that replaces the draft should never be one click. */
   const ingest = async (file: File) => {
     try {
       const parsed = parseOverlay(JSON.parse(await file.text()));
-      replaceAll(parsed.data);
-      setReport([
-        `Loaded ${parsed.data.scenarios.length} scenarios, ${parsed.data.materials.length} materials, ${parsed.data.connections.length} connections.`,
-        ...parsed.errors,
-      ]);
+      const line = (kind: string, incoming: { id: string }[], current: { id: string }[]) => {
+        const cur = new Set(current.map((x) => x.id));
+        const inc = new Set(incoming.map((x) => x.id));
+        const added = incoming.filter((x) => !cur.has(x.id)).length;
+        const kept = incoming.filter((x) => cur.has(x.id)).length;
+        const dropped = current.filter((x) => !inc.has(x.id)).length;
+        return `${kind}: +${added} new · ${kept} overwritten · ${dropped} removed from the current draft`;
+      };
+      setPending({
+        data: parsed.data,
+        errors: parsed.errors,
+        diff: [
+          line("Scenarios", parsed.data.scenarios, data.scenarios),
+          line("Materials", parsed.data.materials, data.materials),
+          line("Connections", parsed.data.connections, data.connections),
+        ],
+      });
+      setReport([]);
     } catch {
+      setPending(null);
       setReport(["That file is not valid overlay JSON. Nothing was changed."]);
     }
   };
