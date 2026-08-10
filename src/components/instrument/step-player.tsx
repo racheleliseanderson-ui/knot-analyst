@@ -11,6 +11,8 @@ export function StepPlayer({ knot }: { knot: Knot }) {
   const [dir, setDir] = useState<1 | -1>(1);
   const [microOpen, setMicroOpen] = useState(false);
   const current = steps[index];
+  const indexRef = useRef(0);
+  indexRef.current = index;
 
   const goTo = useCallback(
     (next: number) =>
@@ -23,8 +25,6 @@ export function StepPlayer({ knot }: { knot: Knot }) {
   );
 
   const go = useCallback((delta: number) => goTo(indexRef.current + delta), [goTo]);
-  const indexRef = useRef(0);
-  indexRef.current = index;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
