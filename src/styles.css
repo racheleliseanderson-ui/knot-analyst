@@ -158,6 +158,27 @@
   .no-print { display: none !important; }
   body { background: #fff; color: #111; }
   .panel { box-shadow: none; border-color: #ccc; background: #fff; }
+
+  @page { margin: 14mm; }
+
+  /* Ink-safe: no colour dependence, no fills, no shadows */
+  * {
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #111 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  a { text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.6875rem; }
+
+  /* Diagram strokes render as black; step state survives as line weight */
+  .ki-diagram svg path { stroke: #111 !important; opacity: 1 !important; }
+  .ki-diagram svg rect { display: none; }
+  .ki-diagram figcaption { display: none; }
+
+  li, section, ol > li { break-inside: avoid; }
+  h1, h2 { break-after: avoid; }
 }
 
 /* Step-player transition — direction supplied per render via --ki-step-from */
