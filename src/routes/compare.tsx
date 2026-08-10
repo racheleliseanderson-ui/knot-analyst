@@ -187,7 +187,7 @@ function AnswerCard({
           ) : null}
           <Link
             to="/"
-            search={{ ...(input as Record<string, never>), ...toDecideSearch(input) }}
+            search={toDecideSearch(input)}
             className="rounded-md border border-hairline px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
           >
             Open in Decide
