@@ -1,16 +1,31 @@
 import { useCallback, useEffect, useState } from "react";
 
-export type Theme = "dark" | "light";
+/** dark · light · cb (high-contrast, colour-vision-safe signals) */
+export type Appearance = "dark" | "light" | "cb";
+export type Theme = Appearance;
+
 const KEY = "ki-theme";
+export const APPEARANCES: Appearance[] = ["dark", "light", "cb"];
+export const APPEARANCE_LABELS: Record<Appearance, string> = {
+  dark: "Dark",
+  light: "Light",
+  cb: "Colour-blind safe",
+};
 
-export const THEME_BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('${KEY}');document.documentElement.classList.toggle('light',t==='light');}catch(e){}})();`;
+export const THEME_BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('${KEY}');var r=document.documentElement;r.classList.toggle('light',t==='light'||t==='cb');r.classList.toggle('cb',t==='cb');}catch(e){}})();`;
 
-function apply(theme: Theme) {
-  document.documentElement.classList.toggle("light", theme === "light");
+function apply(theme: Appearance) {
+  const r = document.documentElement;
+  r.classList.toggle("light", theme === "light" || theme === "cb");
+  r.classList.toggle("cb", theme === "cb");
+}
+
+function isAppearance(v: string | null): v is Appearance {
+  return v === "dark" || v === "light" || v === "cb";
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Appearance>("dark");
 
   useEffect(() => {
     let stored: string | null = null;
@@ -19,17 +34,16 @@ export function useTheme() {
     } catch {
       stored = null;
     }
-    const initial: Theme =
-      stored === "light" || stored === "dark"
-        ? stored
-        : document.documentElement.classList.contains("light")
-          ? "light"
-          : "dark";
+    const initial: Appearance = isAppearance(stored)
+      ? stored
+      : document.documentElement.classList.contains("light")
+        ? "light"
+        : "dark";
     setTheme(initial);
     apply(initial);
   }, []);
 
-  const set = useCallback((next: Theme) => {
+  const set = useCallback((next: Appearance) => {
     setTheme(next);
     apply(next);
     try {
@@ -39,7 +53,10 @@ export function useTheme() {
     }
   }, []);
 
-  const toggle = useCallback(() => set(theme === "dark" ? "light" : "dark"), [theme, set]);
+  const toggle = useCallback(
+    () => set(theme === "dark" ? "light" : theme === "light" ? "cb" : "dark"),
+    [theme, set],
+  );
 
   return { theme, setTheme: set, toggle };
 }
