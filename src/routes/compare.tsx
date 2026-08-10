@@ -222,17 +222,22 @@ function DeltaRow({ d }: { d: ConstraintDelta }) {
     <div
       className={
         "grid grid-cols-[minmax(0,1fr)] gap-1 px-5 py-4 sm:grid-cols-[minmax(0,180px)_minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-center sm:gap-4 " +
-        (d.decisive ? "bg-accent/8" : "bg-card")
+        (d.decisive ? "bg-accent/8" : d.changesAnswer ? "bg-surface-2/40" : "bg-card")
       }
     >
       <div className="flex items-center gap-2">
         <span className="text-[0.875rem] font-medium tracking-tight">{d.label}</span>
         {d.decisive ? <Verdict tone="watch">decisive</Verdict> : null}
+        {!d.decisive && d.changesAnswer ? (
+          <span className="font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-caution">
+            moves the answer
+          </span>
+        ) : null}
       </div>
       <p className="font-mono text-[0.75rem] text-muted-foreground">A · {d.a}</p>
       <p className="font-mono text-[0.75rem] text-foreground/85">B · {d.b}</p>
       <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground/80 sm:text-right">
-        {d.decisive
+        {d.decisive || d.changesAnswer
           ? `revert → ${d.probeKnot}`
           : d.fitImpact === 0
             ? "no fit change"
