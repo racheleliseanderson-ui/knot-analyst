@@ -1,10 +1,28 @@
 /**
- * Client-side "Decision Packet" PDF.
+ * Client-side "Decision Packet" PDF, in two tiers.
+ *
+ *   brief — one sheet: the call, the conditions, the compromises, the fallback.
+ *   field — the brief plus the surviving options, mechanical readout,
+ *           counterfactuals, eliminations and the full tying procedure.
+ *
  * Presentation only — it renders an existing ChooseResult, it never re-scores.
  */
-import type { ChooseResult } from "@/domain/types";
+import type { ChooseResult, KnotContent } from "@/domain/types";
 import { DIMENSION_LABELS } from "@/domain/types";
 import type { Counterfactual, DecisionCard, Tradeoff } from "@/engine/advisor";
+import { getKnot } from "@/data/catalog";
+
+export type PacketVariant = "brief" | "field";
+
+export const PACKET_LABELS: Record<PacketVariant, string> = {
+  brief: "Decision brief",
+  field: "Field packet",
+};
+
+export const PACKET_NOTES: Record<PacketVariant, string> = {
+  brief: "One sheet. The call, the conditions, the named compromises, the fallback.",
+  field: "Everything in the brief, plus surviving options, readout, eliminations and the tying procedure.",
+};
 
 const INK = { r: 17, g: 28, b: 36 };
 const MUTED = { r: 104, g: 118, b: 128 };
@@ -15,6 +33,8 @@ export interface PacketInput {
   card: DecisionCard;
   tradeoffs: Tradeoff[];
   counterfactuals: Counterfactual[];
+  /** Defaults to the full field packet. */
+  variant?: PacketVariant;
 }
 
 export async function generateDecisionPacket({
@@ -22,7 +42,9 @@ export async function generateDecisionPacket({
   card,
   tradeoffs,
   counterfactuals,
+  variant = "field",
 }: PacketInput): Promise<void> {
+  const full = variant === "field";
   const { jsPDF } = await import("jspdf");
   const doc = new jsPDF({ unit: "pt", format: "letter" });
 
@@ -93,7 +115,12 @@ export async function generateDecisionPacket({
   doc.setFillColor(17, 28, 36).rect(0, 0, W, 96, "F");
   doc.setFont("helvetica", "bold").setFontSize(8);
   doc.setTextColor(224, 168, 78);
-  doc.text("KNOT INTELLIGENCE · DECISION PACKET", M, 40, { charSpace: 1.8 });
+  doc.text(
+    `KNOT INTELLIGENCE · ${full ? "FIELD PACKET" : "DECISION BRIEF"}`,
+    M,
+    40,
+    { charSpace: 1.8 },
+  );
   doc.setFontSize(19).setTextColor(246, 249, 250);
   doc.text(ascii(card.knotName ?? "No valid connection"), M, 66);
   doc.setFont("helvetica", "normal").setFontSize(8).setTextColor(150, 166, 176);
@@ -149,7 +176,7 @@ export async function generateDecisionPacket({
 
   // ── Surviving options ───────────────────────────────────────
   const ranked = result.ranked.slice(0, 5);
-  if (ranked.length > 1) {
+  if (full && ranked.length > 1) {
     rule();
     micro("Surviving options");
     for (const [idx, o] of ranked.entries()) {
@@ -172,7 +199,7 @@ export async function generateDecisionPacket({
 
   // ── Dimension readout ───────────────────────────────────────
   const top = ranked[0];
-  if (top) {
+  if (full && top) {
     rule();
     ensure(70); // keep the readout header with its first rows
     micro("Mechanical readout — " + top.knot.name);
@@ -218,7 +245,7 @@ export async function generateDecisionPacket({
   }
 
   // ── Counterfactuals ─────────────────────────────────────────
-  if (counterfactuals.length) {
+  if (full && counterfactuals.length) {
     rule();
     micro("What would change this");
     for (const c of counterfactuals) {
@@ -237,12 +264,112 @@ export async function generateDecisionPacket({
   }
 
   // ── Eliminated ──────────────────────────────────────────────
-  if (result.eliminated.length) {
+  if (full && result.eliminated.length) {
     rule();
     micro(`Eliminated on hard constraints — ${result.eliminated.length}`);
     bullets(
       result.eliminated.slice(0, 12).map((e) => `${e.knotName} — ${e.reasons[0] ?? "hard constraint"}`),
       "×",
+    );
+  }
+
+  // ── Tying procedure (field packet only) ─────────────────────
+  const knot: KnotContent | undefined = full && top ? getKnot(top.knot.id) : undefined;
+  if (knot) {
+    doc.addPage();
+    y = M;
+    micro("Tying procedure", BRASS);
+    doc.setFont("helvetica", "bold").setFontSize(15);
+    ink(INK);
+    doc.text(ascii(knot.name), M, y);
+    y += 18;
+    body(knot.howToSummary, 9.5, MUTED);
+    y += 8;
+
+    if (knot.beforeYouStart?.length) {
+      micro("Before you start");
+      bullets(knot.beforeYouStart);
+      y += 4;
+    }
+
+    rule();
+    for (const s of knot.steps) {
+      ensure(46);
+      doc.setFont("helvetica", "bold").setFontSize(9);
+      ink(BRASS);
+      doc.text(String(s.order).padStart(2, "0"), M, y);
+      ink(INK);
+      const head = doc.splitTextToSize(ascii(s.instruction), CW - 24) as string[];
+      for (const line of head) {
+        ensure(13);
+        doc.text(line, M + 24, y);
+        y += 13;
+      }
+      y += 2;
+      if (s.detail) body(s.detail, 8.5, MUTED, 24);
+      const cues: [string, string | undefined][] = [
+        ["Look for", s.look ?? s.expectedResult],
+        ["Fails as", s.failureMode ?? s.commonError],
+        ["Quick fix", s.quickFix ?? s.tip],
+      ];
+      for (const [k, v] of cues) {
+        if (!v) continue;
+        ensure(13);
+        doc.setFont("helvetica", "bold").setFontSize(7.5);
+        ink(MUTED);
+        doc.text(ascii(k).toUpperCase(), M + 24, y, { charSpace: 1.1 });
+        doc.setFont("helvetica", "normal").setFontSize(8.5);
+        ink(INK);
+        const lines = doc.splitTextToSize(ascii(v), CW - 92) as string[];
+        for (const [i, line] of lines.entries()) {
+          ensure(12);
+          doc.text(line, M + 92, y);
+          y += 11.5;
+          if (i < lines.length - 1) ensure(12);
+        }
+        y += 2;
+      }
+      y += 8;
+    }
+
+    if (knot.seatingSequence?.length) {
+      rule();
+      micro("Seating sequence — where failures are born");
+      for (const p of knot.seatingSequence) {
+        ensure(26);
+        doc.setFont("helvetica", "bold").setFontSize(9);
+        ink(INK);
+        doc.text(ascii(p.phase), M, y);
+        doc.setFont("helvetica", "normal").setFontSize(7.5);
+        ink(MUTED);
+        doc.text(ascii(p.tension).toUpperCase(), W - M, y, { align: "right", charSpace: 1.1 });
+        y += 12;
+        body(p.action, 8.5, MUTED);
+        y += 5;
+      }
+    }
+
+    if (knot.commonMistakes.length) {
+      rule();
+      micro("Common mistakes");
+      bullets(knot.commonMistakes.slice(0, 8), "×");
+    }
+    if (knot.fieldNotes?.length) {
+      rule();
+      micro("Cold, dark, wet");
+      bullets(knot.fieldNotes, "—");
+    }
+
+    rule();
+    micro("Verify before you fish");
+    bullets(
+      [
+        "Wraps lie in one direction with no crossovers.",
+        "Tag exits where the fingerprint says it should.",
+        "Structure seated wet, under steady load — not jerked.",
+        "Tag trimmed close, no nick in the standing line.",
+      ],
+      "[ ]",
     );
   }
 
@@ -261,5 +388,5 @@ export async function generateDecisionPacket({
   }
 
   const slug = (card.knotName ?? "no-valid-option").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  doc.save(`knot-decision-packet-${slug}.pdf`);
+  doc.save(`knot-${full ? "field-packet" : "decision-brief"}-${slug}.pdf`);
 }
