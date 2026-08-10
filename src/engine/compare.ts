@@ -74,6 +74,8 @@ export interface ConstraintDelta {
   b: string;
   /** Reverting this one field on B restores A's recommendation. */
   decisive: boolean;
+  /** Reverting this field changes B's answer, even if not back to A's. */
+  changesAnswer: boolean;
   /** Field-fit points this single field is worth on side B (signed). */
   fitImpact: number;
   /** Knot B would recommend if this one field matched A. */
@@ -117,13 +119,17 @@ export function runComparison(a: ChooseInput, b: ChooseInput): ComparisonResult 
       a: constraintValueLabel(key, a[key]),
       b: constraintValueLabel(key, b[key]),
       decisive: Boolean(topId(probe)) && topId(probe) === topId(ra) && topId(ra) !== topId(rb),
+      changesAnswer: topId(probe) !== topId(rb),
       fitImpact: topFit(rb) - topFit(probe),
       probeKnot: topName(probe),
     };
   });
 
   deltas.sort(
-    (x, y) => Number(y.decisive) - Number(x.decisive) || Math.abs(y.fitImpact) - Math.abs(x.fitImpact),
+    (x, y) =>
+      Number(y.decisive) - Number(x.decisive) ||
+      Number(y.changesAnswer) - Number(x.changesAnswer) ||
+      Math.abs(y.fitImpact) - Math.abs(x.fitImpact),
   );
 
   const sameAnswer = Boolean(topId(ra)) && topId(ra) === topId(rb);
