@@ -13,6 +13,7 @@ import {
   type RankedOption,
 } from "@/domain/types";
 import { FISHING_WEIGHTS } from "@/domains/fishing/dimensions";
+import { materialModifier } from "@/domain/material";
 
 type Dim = (typeof FIELD_FIT_DIMENSIONS)[number];
 
@@ -166,6 +167,25 @@ function situationalAdjust(
       s.loadBehavior = Math.min(100, s.loadBehavior + 4);
       notes.finishedProfile = "Best finished braid-to-leader system geometry";
     }
+  }
+
+  // ── Material-axis modifiers (no-ops unless deeper axes were declared) ──
+  for (const spec of [input.mainSpec, input.secondarySpec]) {
+    const mod = materialModifier(spec);
+    if (!mod.slipPenalty && !mod.seatingPenalty && !mod.inspectionPenalty) continue;
+
+    // A knot that already demands high tension control copes better with slick
+    // fibre; a low-tension geometry is where slip actually shows up.
+    const tension = knot.contract.tensionRequirements;
+    const resilience = tension === "extreme" ? 0.45 : tension === "high" ? 0.65 : 1;
+    const slipHit = Math.round(mod.slipPenalty * resilience);
+    const slipTolerant = knot.contract.slipSensitivity === "low";
+
+    s.loadBehavior = Math.max(0, s.loadBehavior - (slipTolerant ? slipHit * 0.5 : slipHit));
+    s.failureSensitivity = Math.max(0, s.failureSensitivity - Math.round(slipHit * 0.6));
+    s.requiredTensionControl = Math.max(0, s.requiredTensionControl - mod.seatingPenalty);
+    s.inspectionDifficulty = Math.max(0, s.inspectionDifficulty - mod.inspectionPenalty);
+    if (mod.note && !notes.materialCompatibility) notes.materialCompatibility = mod.note;
   }
 
   return { scores: s, notes };
