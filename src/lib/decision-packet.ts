@@ -40,17 +40,25 @@ export async function generateDecisionPacket({
   };
   const ink = (c: typeof INK) => doc.setTextColor(c.r, c.g, c.b);
 
+  // Helvetica in jsPDF is WinAnsi-only: anything outside it renders as garbage glyphs.
+  const ascii = (t: string) =>
+    t
+      .replace(/\u2192/g, "->")
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[^\u0000-\u00FF]/g, "-");
+
   const micro = (text: string, color = MUTED) => {
     ensure(18);
     doc.setFont("helvetica", "bold").setFontSize(7.5);
     ink(color);
-    doc.text(text.toUpperCase(), M, y, { charSpace: 1.4 });
+    doc.text(ascii(text).toUpperCase(), M, y, { charSpace: 1.4 });
     y += 14;
   };
   const body = (text: string, size = 9.5, color = INK, indent = 0) => {
     doc.setFont("helvetica", "normal").setFontSize(size);
     ink(color);
-    const lines = doc.splitTextToSize(text, CW - indent) as string[];
+    const lines = doc.splitTextToSize(ascii(text), CW - indent) as string[];
     for (const line of lines) {
       ensure(size + 4);
       doc.text(line, M + indent, y);
@@ -68,9 +76,9 @@ export async function generateDecisionPacket({
       doc.setFont("helvetica", "normal").setFontSize(9.5);
       ink(MUTED);
       ensure(14);
-      doc.text(marker, M, y);
+      doc.text(ascii(marker), M, y);
       ink(INK);
-      const lines = doc.splitTextToSize(it, CW - 16) as string[];
+      const lines = doc.splitTextToSize(ascii(it), CW - 16) as string[];
       for (const line of lines) {
         ensure(13);
         doc.text(line, M + 16, y);
