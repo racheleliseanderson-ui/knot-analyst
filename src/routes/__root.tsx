@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { THEME_BOOT_SCRIPT } from "../lib/theme";
 import { OverlayProvider } from "../lib/overlay";
+import { PREFS_BOOT_SCRIPT, PrefsProvider } from "../lib/prefs";
+import { DomainProvider } from "../domain/context";
 
 function NotFoundComponent() {
   return (
@@ -110,6 +112,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: PREFS_BOOT_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
@@ -125,10 +128,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <OverlayProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-      </OverlayProvider>
+      <PrefsProvider>
+        <DomainProvider>
+          <OverlayProvider>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </OverlayProvider>
+        </DomainProvider>
+      </PrefsProvider>
     </QueryClientProvider>
   );
 }
