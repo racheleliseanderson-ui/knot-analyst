@@ -5,6 +5,7 @@
  * offline, printable, and step-aware: elements declare the step at which they
  * appear, so the same drawing drives the step player.
  */
+import { useId } from "react";
 import { cn } from "@/lib/utils";
 import type { DiagramKind } from "@/domain/types";
 
@@ -16,6 +17,8 @@ interface Props {
   title?: string;
   /** Zoom the drawing toward the region the active step concerns */
   focus?: boolean;
+  /** Spoken geometry — what the drawing shows, for non-visual readers */
+  description?: string;
 }
 
 const LINE = "var(--foreground)";
@@ -58,10 +61,12 @@ function focusTransform(kind: DiagramKind, step?: number, enabled?: boolean) {
 }
 
 function toneFor(from: number, step?: number) {
-  if (step === undefined) return { stroke: LINE, opacity: 1 };
-  if (from > step) return { stroke: GHOST, opacity: 0.12 };
-  if (from === step) return { stroke: HOT, opacity: 1 };
-  return { stroke: LINE, opacity: 0.55 };
+  // State is encoded twice — colour AND weight/dash — so it survives
+  // greyscale, colour blindness and print.
+  if (step === undefined) return { stroke: LINE, opacity: 1, scale: 1, ghost: false };
+  if (from > step) return { stroke: GHOST, opacity: 0.3, scale: 0.7, ghost: true };
+  if (from === step) return { stroke: HOT, opacity: 1, scale: 1.6, ghost: false };
+  return { stroke: LINE, opacity: 0.6, scale: 1, ghost: false };
 }
 
 function Seg({
@@ -84,11 +89,11 @@ function Seg({
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={width}
+      strokeWidth={Number((width * tone.scale).toFixed(2))}
       stroke={tone.stroke}
       opacity={tone.opacity}
-      {...(dash ? { strokeDasharray: dash } : {})}
-      className="transition-all duration-300"
+      {...(tone.ghost ? { strokeDasharray: "3 6" } : dash ? { strokeDasharray: dash } : {})}
+      className="transition-all duration-300 motion-reduce:transition-none"
     />
   );
 }
