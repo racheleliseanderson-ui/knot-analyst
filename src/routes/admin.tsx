@@ -92,6 +92,13 @@ function Row({ title, sub, onDelete }: { title: string; sub: string; onDelete: (
   );
 }
 
+/** Case-insensitive substring match across any of the supplied fields. */
+function matches(q: string, ...fields: (string | undefined)[]): boolean {
+  const needle = q.trim().toLowerCase();
+  if (!needle) return true;
+  return fields.some((f) => (f ?? "").toLowerCase().includes(needle));
+}
+
 /** Shared filter for the authored lists — long drafts stop being scannable fast. */
 function FilterBox({
   value,
