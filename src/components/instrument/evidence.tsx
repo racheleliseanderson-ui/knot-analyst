@@ -40,11 +40,13 @@ function DeltaBar({ delta, weight }: { delta: number; weight: number }) {
 export function EvidenceBody({ d }: { d: ConstraintDelta }) {
   const moved = d.dimensionDeltas.filter((x) => x.delta !== 0);
   const still = d.dimensionDeltas.length - moved.length;
-  const proof = d.decisive
-    ? "Reverting this field alone restores side A's recommendation. Decisive."
-    : d.changesAnswer
-      ? "Reverting this field moves the answer, but not back to side A. Partial attribution."
-      : "Reverting this field leaves the recommendation unchanged. The model absorbs it.";
+  const proof = !d.probeKnot || d.probeKnot === "no valid option"
+    ? "Reverting this field leaves no valid connection under hard constraints. The probe fails closed rather than substituting a weaker option."
+    : d.decisive
+      ? "Reverting this field alone restores side A's recommendation. Decisive."
+      : d.changesAnswer
+        ? "Reverting this field moves the answer, but not back to side A. Partial attribution."
+        : "Reverting this field leaves the recommendation unchanged. The model absorbs it.";
 
   return (
     <div className="grid gap-7 border-t border-hairline bg-surface-2/25 px-5 py-6 lg:grid-cols-2">
