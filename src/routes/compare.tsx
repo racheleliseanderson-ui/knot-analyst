@@ -464,7 +464,11 @@ function CompareMode() {
   const toggleRow = (key: string) => {
     const next = openRow === key ? undefined : key;
     setOpenRow(next);
-    void navigate({ to: "/compare", search: (prev) => ({ ...prev, row: next }), replace: true });
+    void navigate({
+      to: "/compare",
+      search: (prev: Search) => ({ ...prev, row: next }),
+      replace: true,
+    });
   };
 
   const shareable = () =>
