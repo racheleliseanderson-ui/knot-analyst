@@ -254,6 +254,9 @@ function PipelineStrip({
   onRerun,
   onStep,
   onToggleFreeze,
+  log,
+  onRestore,
+  onClearLog,
 }: {
   comparison: ComparisonResult;
   revealed: number;
@@ -261,7 +264,11 @@ function PipelineStrip({
   onRerun: () => void;
   onStep: () => void;
   onToggleFreeze: () => void;
+  log: RunEntry[];
+  onRestore: (e: RunEntry) => void;
+  onClearLog: () => void;
 }) {
+  const [showLog, setShowLog] = useState(false);
   return (
     <Panel className={"mt-6 overflow-hidden " + (frozen ? "ring-1 ring-caution/70" : "")}>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3">
@@ -287,8 +294,59 @@ function PipelineStrip({
           >
             {frozen ? "Unfreeze" : "Freeze"}
           </button>
+          <button
+            type="button"
+            onClick={() => setShowLog((v) => !v)}
+            aria-expanded={showLog}
+            className={btn}
+          >
+            Runs {log.length}
+          </button>
         </div>
       </div>
+      {showLog ? (
+        <div className="border-b border-hairline px-5 py-3">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <MicroLabel>Run log — this session only</MicroLabel>
+            <button
+              type="button"
+              onClick={onClearLog}
+              className="font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-destructive"
+            >
+              Clear
+            </button>
+          </div>
+          {log.length === 0 ? (
+            <p className="text-[0.75rem] text-muted-foreground">No completed runs recorded yet.</p>
+          ) : (
+            <ol className="space-y-1">
+              {log.map((e) => (
+                <li
+                  key={e.runId}
+                  className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-hairline py-2 first:border-t-0"
+                >
+                  <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
+                    {e.runId} · {new Date(e.ranAt).toLocaleTimeString()} · {e.ms} ms
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[0.75rem] text-muted-foreground">
+                    {e.verdict}
+                  </span>
+                  <span className="font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-primary">
+                    {e.decisive} decisive
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onRestore(e)}
+                    className="ki-press min-h-9 rounded-md border border-hairline px-2.5 font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Restore inputs
+                  </button>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      ) : null}
       <ol className="grid gap-px bg-hairline sm:grid-cols-4">
         {comparison.stages.map((s, i) => {
           const done = i < revealed;
