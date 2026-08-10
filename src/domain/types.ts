@@ -105,6 +105,12 @@ export interface KnotStep {
   detail?: string;
   /** Observable check — what the structure should look like before moving on */
   expectedResult?: string;
+  /** Micro how-to — one glance cue for the eye */
+  look?: string;
+  /** Micro how-to — the failure this step produces when it goes wrong */
+  failureMode?: string;
+  /** Micro how-to — the shortest correction */
+  quickFix?: string;
 }
 
 /** One phase of the moisten → load → dress → set → trim finishing sequence */

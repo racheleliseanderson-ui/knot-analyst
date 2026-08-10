@@ -1,0 +1,72 @@
+/**
+ * Domain descriptor — the bolt-on that turns Knot Intelligence into the
+ * Fishing domain of a shared Knot Analyst engine.
+ *
+ * The engines already operate on string-keyed vocabularies, so a domain is
+ * just data: vocabulary, weighted dimensions, terminology, datasets. Nothing
+ * here changes Fishing behavior — the Fishing descriptor is assembled from the
+ * existing modules verbatim.
+ */
+import type { FieldScenario } from "@/data/scenarios";
+import type { FailurePlay } from "@/data/failure-playbook";
+import type { KnotContent } from "@/domain/types";
+
+export type DomainId = "fishing" | "boating";
+
+/** Terminology any shared screen may need. Domains supply their own nouns. */
+export interface DomainTerms {
+  /** "line" vs "rope" */
+  line: string;
+  linePlural: string;
+  /** "leader" vs "tail" */
+  secondary: string;
+  /** "retie" vs "re-tie and reeve" */
+  retie: string;
+  /** "guides" vs "fairleads" */
+  passage: string;
+  /** "hardware eye" vs "shackle / ring" */
+  hardware: string;
+  /** unit of work: "connection" vs "made-up line" */
+  connection: string;
+}
+
+export interface DomainOption {
+  id: string;
+  label: string;
+  group?: string;
+}
+
+export interface DomainDimension {
+  key: string;
+  label: string;
+  weight: number;
+  /**
+   * Optional dimensions are rendered only when present in the active domain.
+   * Boating adds Rope Construction here; Fishing never sees it, so Fishing
+   * screens gain no extra rows.
+   */
+  optional?: boolean;
+}
+
+export interface KnotDomain {
+  id: DomainId;
+  label: string;
+  terms: DomainTerms;
+  connections: DomainOption[];
+  materials: DomainOption[];
+  diameters: DomainOption[];
+  dimensions: DomainDimension[];
+  scenarios: FieldScenario[];
+  failurePlays: FailurePlay[];
+  knots: KnotContent[];
+}
+
+/** Weight map for the active domain, keyed by dimension key. */
+export function dimensionWeights(domain: KnotDomain): Record<string, number> {
+  return Object.fromEntries(domain.dimensions.map((d) => [d.key, d.weight]));
+}
+
+/** Dimensions a domain actually renders (optional ones included when present). */
+export function visibleDimensions(domain: KnotDomain): DomainDimension[] {
+  return domain.dimensions;
+}

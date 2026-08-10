@@ -11,6 +11,9 @@ import type { KnotContent, KnotStep, SeatingPhase } from "@/domain/types";
 interface StepDepth {
   detail?: string;
   expectedResult?: string;
+  look?: string;
+  failureMode?: string;
+  quickFix?: string;
 }
 
 interface HowTo {
@@ -492,16 +495,132 @@ export const HOW_TO: Record<string, HowTo> = {
   },
 };
 
+/**
+ * Micro how-to — one glance cue, one failure mode, one correction per step.
+ * Optional everywhere: a step without an entry renders exactly as before.
+ */
+type Micro = Record<number, { look?: string; failureMode?: string; quickFix?: string }>;
+
+export const MICRO: Record<string, Micro> = {
+  palomar: {
+    1: {
+      look: "Both legs of the bight lie parallel through the eye, no twist between them.",
+      failureMode: "A crossed bight seats on itself and cuts the line at the eye.",
+      quickFix: "Withdraw the bight, straighten it flat, feed it again.",
+    },
+    2: {
+      look: "A loose overhand with a loop clearly wider than the hardware.",
+      failureMode: "Tightening early traps the hook and forces a crooked seat.",
+      quickFix: "Open the overhand back up with a finger before continuing.",
+    },
+    3: {
+      look: "The whole hook — point, barb, bend — clear of the loop.",
+      failureMode: "A loop caught on the bend leaves the knot sitting off the eye.",
+      quickFix: "Walk the loop over the bend rather than pulling it through.",
+    },
+    4: {
+      look: "Wet line, both ends moving together, wraps gathering at the eye.",
+      failureMode: "Dry seating burns fluoro and leaves hidden weakness.",
+      quickFix: "Back off, moisten, seat again in one continuous pull.",
+    },
+  },
+  "improved-clinch": {
+    1: {
+      look: "Tag long enough to make every wrap without running short.",
+      failureMode: "A short tag cannot complete the final tuck and pulls free.",
+      quickFix: "Withdraw and restart with more tag — nothing else fixes it.",
+    },
+    2: {
+      look: "Wraps stacked evenly along the standing line, none crossing.",
+      failureMode: "Crossed wraps concentrate load on one turn and break early.",
+      quickFix: "Relax tension and roll the wraps straight with a fingernail.",
+    },
+    3: {
+      look: "Tag through the small loop at the eye, then through the large loop.",
+      failureMode: "Skipping the second tuck leaves a plain clinch that slips in braid.",
+      quickFix: "Follow the tag path once more before any load.",
+    },
+    4: {
+      look: "Wraps rolling down as a block, tag pointing away from the eye.",
+      failureMode: "Sawing the line while seating heats and glazes it.",
+      quickFix: "One pull, one direction, then stop.",
+    },
+  },
+  "uni-knot": {
+    1: {
+      look: "A clean loop laid alongside the standing line, tag inside it.",
+      failureMode: "A twisted loop makes the wraps count uneven.",
+      quickFix: "Flatten the loop against your finger before wrapping.",
+    },
+    2: {
+      look: "Five to six turns inside the loop, each sitting beside the last.",
+      failureMode: "Too few turns slip in slick fluoro; too many jam before seating.",
+      quickFix: "Count out loud — this is the one step worth counting.",
+    },
+    3: {
+      look: "Barrel closing evenly before it slides toward the eye.",
+      failureMode: "Closing and sliding at once leaves a loose turn buried inside.",
+      quickFix: "Close the barrel fully, then slide it down as a finished unit.",
+    },
+  },
+  fg: {
+    1: {
+      look: "Braid under real tension, straight and unmoving.",
+      failureMode: "Slack braid lets the plaits sit loose and the knot slips under load.",
+      quickFix: "Re-tension against a rod butt or a partner before continuing.",
+    },
+    2: {
+      look: "Alternating weaves, each one snugged before the next.",
+      failureMode: "A skipped alternation unzips the whole plait section.",
+      quickFix: "Unwind to the last known-good pair and rebuild from there.",
+    },
+    3: {
+      look: "Plait section long and dense, no leader visible between weaves.",
+      failureMode: "A short plait has too little grip to hold the leader.",
+      quickFix: "Add weaves until the section looks longer than feels necessary.",
+    },
+    4: {
+      look: "Half-hitches locking the braid tag against the plait, then a finish hitch.",
+      failureMode: "An unlocked plait creeps and releases mid-fight.",
+      quickFix: "Add hitches until the tag will not move under a thumbnail.",
+    },
+  },
+  "bimini-twist": {
+    1: {
+      look: "A long loop held under steady, unchanging tension.",
+      failureMode: "Losing tension mid-twist collapses the column instantly.",
+      quickFix: "Reset from the start — a slackened Bimini cannot be recovered.",
+    },
+    2: {
+      look: "Twists tight and uniform along the doubled section.",
+      failureMode: "Too few twists gives no shock absorption and low strength.",
+      quickFix: "Add twists before you gather them — you cannot add them later.",
+    },
+    3: {
+      look: "Twists packing down into a dense column with the tag rolling over them.",
+      failureMode: "Gaps in the column mean the lock will not hold.",
+      quickFix: "Ease tension slightly and let the wraps march back down tight.",
+    },
+    4: {
+      look: "Half-hitches seated hard against the column, tag trimmed short.",
+      failureMode: "A rushed lock unravels in the rod guides before the first cast.",
+      quickFix: "Add one more hitch than you think you need.",
+    },
+  },
+};
+
 export function applyHowTo(content: KnotContent): KnotContent {
   const extra = HOW_TO[content.id];
-  if (!extra) return content;
+  const micro = MICRO[content.id];
+  if (!extra && !micro) return content;
 
   const steps: KnotStep[] = content.steps.map((s) => {
-    const depth = extra.steps?.[s.order];
-    return depth ? { ...s, ...depth } : s;
+    const depth = extra?.steps?.[s.order];
+    const m = micro?.[s.order];
+    return depth || m ? { ...s, ...depth, ...m } : s;
   });
 
-  if (extra.extraSteps?.length) {
+  if (extra?.extraSteps?.length) {
     const base = steps.reduce((max, s) => Math.max(max, s.order), 0);
     extra.extraSteps.forEach((s, i) => steps.push({ ...s, order: base + i + 1 }));
   }
@@ -509,8 +628,8 @@ export function applyHowTo(content: KnotContent): KnotContent {
   return {
     ...content,
     steps,
-    ...(extra.beforeYouStart ? { beforeYouStart: extra.beforeYouStart } : {}),
-    ...(extra.seatingSequence ? { seatingSequence: extra.seatingSequence } : {}),
-    ...(extra.fieldNotes ? { fieldNotes: extra.fieldNotes } : {}),
+    ...(extra?.beforeYouStart ? { beforeYouStart: extra.beforeYouStart } : {}),
+    ...(extra?.seatingSequence ? { seatingSequence: extra.seatingSequence } : {}),
+    ...(extra?.fieldNotes ? { fieldNotes: extra.fieldNotes } : {}),
   };
 }
