@@ -621,6 +621,13 @@ function DecideMode() {
                       >
                         Print
                       </button>
+                      <Link
+                        to="/compare"
+                        search={{ a: encodeInput(input) }}
+                        className="rounded-md border border-hairline px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                      >
+                        Compare
+                      </Link>
                       <button
                         onClick={async () => {
                           setPacketState("working");
