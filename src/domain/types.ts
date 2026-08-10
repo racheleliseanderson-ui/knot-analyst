@@ -227,6 +227,16 @@ export interface KnotContent {
   fieldNotes?: string[];
 }
 
+/** Optional tying video, loaded only when the reader asks for it. */
+export interface KnotVideo {
+  provider: "youtube";
+  id: string;
+  title: string;
+  channel: string;
+  /** Seconds into the clip where the tie actually starts */
+  startsAt?: number;
+}
+
 export interface CompletenessFlags {
   atAGlance: boolean;
   mechanics: boolean;
