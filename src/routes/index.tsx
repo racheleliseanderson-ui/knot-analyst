@@ -9,7 +9,8 @@ import { useDomain } from "@/domain/context";
 import { Bullets, Chip, Meter, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
 import { runChooser } from "@/engine/chooser";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
-import { generateDecisionPacket } from "@/lib/decision-packet";
+import { generateDecisionPacket, type PacketVariant } from "@/lib/decision-packet";
+import { PresetBar } from "@/components/instrument/preset-bar";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import { encodeInput } from "@/lib/handoff";
 import type { ChooseInput, ConnectionJob, DiameterRelation, Difficulty, LineMaterial } from "@/domain/types";
@@ -195,6 +196,7 @@ function DecideMode() {
   const [showEliminated, setShowEliminated] = useState(false);
   const [showMatrix, setShowMatrix] = useState(false);
   const [packetState, setPacketState] = useState<"idle" | "working" | "error">("idle");
+  const [packetKind, setPacketKind] = useState<PacketVariant | null>(null);
   /** Chip keys, so custom materials/connections stay visibly selected */
   const [sel, setSel] = useState<{ connection?: string; main?: string; secondary?: string }>({});
 
@@ -557,6 +559,19 @@ function DecideMode() {
               <span className="text-muted-foreground">The model states the constraint.</span>
             </h1>
           </div>
+
+          <PresetBar
+            domainId={domain.id}
+            input={input}
+            sel={sel}
+            {...(venueId ? { venueId } : {})}
+            onLoad={(p) => {
+              setInput(p.input);
+              setSel(p.sel);
+              setVenueId(p.venueId);
+              setRan(true);
+            }}
+          />
 
           {/* Desktop: the whole instrument at once */}
           <div className="hidden space-y-5 lg:block">
