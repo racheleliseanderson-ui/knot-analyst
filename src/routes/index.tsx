@@ -7,6 +7,7 @@ import { runChooser } from "@/engine/chooser";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
 import { generateDecisionPacket } from "@/lib/decision-packet";
 import { FIELD_SCENARIOS } from "@/data/scenarios";
+import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import type { ChooseInput, ConnectionJob, DiameterRelation, Difficulty, LineMaterial } from "@/domain/types";
 import {
   CONNECTION_GROUPS,
