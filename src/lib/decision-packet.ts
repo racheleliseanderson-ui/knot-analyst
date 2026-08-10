@@ -155,7 +155,7 @@ export async function generateDecisionPacket({
       ensure(34);
       doc.setFont("helvetica", "bold").setFontSize(9.5);
       ink(INK);
-      doc.text(`${String(idx + 1).padStart(2, "0")}  ${o.knot.name}`, M, y);
+      doc.text(ascii(`${String(idx + 1).padStart(2, "0")}  ${o.knot.name}`), M, y);
       doc.setFont("helvetica", "normal");
       ink(MUTED);
       doc.text(`${o.fieldFitPercent}%`, W - M, y, { align: "right" });
@@ -173,6 +173,7 @@ export async function generateDecisionPacket({
   const top = ranked[0];
   if (top) {
     rule();
+    ensure(70); // keep the readout header with its first rows
     micro("Mechanical readout — " + top.knot.name);
     const dims = top.dimensionScores.slice().sort((a, b) => b.weight * b.score - a.weight * a.score);
     const colW = CW / 2;
@@ -185,7 +186,7 @@ export async function generateDecisionPacket({
         doc.setFont("helvetica", "normal").setFontSize(8);
         ink(MUTED);
         doc.text(
-          DIMENSION_LABELS[d.dimension as keyof typeof DIMENSION_LABELS] ?? d.dimension,
+          ascii(DIMENSION_LABELS[d.dimension as keyof typeof DIMENSION_LABELS] ?? d.dimension),
           x,
           y,
         );
