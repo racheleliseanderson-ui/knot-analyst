@@ -90,6 +90,7 @@ type Search = {
   scenario?: string;
   run?: boolean;
   from?: string;
+  why?: string;
 };
 
 const str = (v: unknown) => (typeof v === "string" && v.length ? v : undefined);
@@ -119,6 +120,7 @@ export const Route = createFileRoute("/")({
     scenario: str(s['scenario']),
     run: bool(s['run']),
     from: str(s['from']),
+    why: str(s['why']),
   }),
   head: () => ({
     meta: [
