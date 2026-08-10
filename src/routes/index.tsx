@@ -1,7 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import heroImg from "@/assets/line-tension.jpg";
 import { Shell } from "@/components/instrument/shell";
+import { VenuePicker } from "@/components/instrument/venue-picker";
+import { useT } from "@/i18n";
+import { useDomain } from "@/domain/context";
 import { Bullets, Chip, Meter, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
 import { runChooser } from "@/engine/chooser";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
@@ -155,6 +158,10 @@ const JOIN_JOBS: ConnectionJob[] = [
 function DecideMode() {
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const t = useT();
+  const domain = useDomain();
+  const venues = domain.venues ?? [];
+  const [venueId, setVenueId] = useState<string | undefined>(undefined);
   const scenarios = useScenarios();
   const connectionGroups = useConnectionGroups();
   const materialOptions = useMaterialOptions();
@@ -194,6 +201,17 @@ function DecideMode() {
     }
   }, [seeded]);
 
+  /** A discipline change invalidates the declared job — never carry it over. */
+  const firstDomain = useRef(domain.id);
+  useEffect(() => {
+    if (firstDomain.current === domain.id) return;
+    firstDomain.current = domain.id;
+    setInput({});
+    setSel({});
+    setVenueId(undefined);
+    setRan(false);
+  }, [domain.id]);
+
   const set = (patch: Partial<ChooseInput>, keys?: typeof sel) => {
     setInput((prev) => ({ ...prev, ...patch }));
     if (keys) setSel((prev) => ({ ...prev, ...keys }));
@@ -213,6 +231,14 @@ function DecideMode() {
 
   return (
     <Shell>
+      {domain.id !== "fishing" ? (
+        <div className="mb-6 rounded-lg border border-caution/40 bg-caution/8 px-4 py-3 no-print">
+          <MicroLabel className="text-caution">{t("boating.title")}</MicroLabel>
+          <p className="mt-1.5 max-w-2xl text-[0.8125rem] leading-relaxed text-foreground/85">
+            {t("boating.body")}
+          </p>
+        </div>
+      ) : null}
       {search.from ? (
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-accent/40 bg-accent/8 px-4 py-3 no-print">
           <MicroLabel className="text-accent">Carried from diagnosis</MicroLabel>
@@ -223,7 +249,7 @@ function DecideMode() {
         </div>
       ) : null}
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-10">
+      <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-10">
         {/* ── INSTRUMENT ─────────────────────────────── */}
         <div className="space-y-5 lg:sticky lg:top-24 lg:self-start no-print">
           <div>
@@ -424,13 +450,33 @@ function DecideMode() {
             </div>
           </Panel>
 
+          {venues.length ? (
+          <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+            <StepHead
+              index="04"
+              title={t("decide.venue")}
+              hint={t("decide.venueHint")}
+              state={input.connection ? "open" : "locked"}
+            />
+            <VenuePicker
+              venues={venues}
+              activeId={venueId}
+              disabled={!input.connection}
+              onPick={(v) => {
+                setVenueId(v?.id);
+                if (v) set(v.conditions);
+              }}
+            />
+          </Panel>
+          ) : null}
+
           <button
             type="button"
             disabled={!input.connection}
             onClick={() => setRan(true)}
-            className="w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 disabled:cursor-not-allowed disabled:opacity-40"
+            className="ki-press min-h-12 w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {ran ? "Re-run model" : "Run mechanical model"}
+            {ran ? t("decide.rerun") : t("decide.run")}
           </button>
           {!input.connection ? (
             <p className="text-xs text-muted-foreground">

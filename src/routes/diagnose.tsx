@@ -14,6 +14,9 @@ import {
 } from "@/domain/types";
 
 export const Route = createFileRoute("/diagnose")({
+  validateSearch: (s: Record<string, unknown>): { event?: string } => ({
+    event: typeof s['event'] === "string" ? (s['event'] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Diagnose a failed connection | Knot Intelligence" },
@@ -138,7 +141,11 @@ const retieTone = (d: RetieDecision) =>
 
 function DiagnoseMode() {
   const navigate = useNavigate();
-  const [input, setInput] = useState<Partial<TroubleshootInput>>({});
+  const search = Route.useSearch();
+  const seeded = FAILURE_PLAYS.some((p) => p.id === search.event)
+    ? ({ event: search.event as FailureEvent } as Partial<TroubleshootInput>)
+    : {};
+  const [input, setInput] = useState<Partial<TroubleshootInput>>(seeded);
   const [ran, setRan] = useState(false);
 
   const set = (patch: Partial<TroubleshootInput>) => {
@@ -178,7 +185,7 @@ function DiagnoseMode() {
 
   return (
     <Shell>
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-10">
+      <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-10">
         <div className="space-y-5 lg:sticky lg:top-24 lg:self-start no-print">
           <div>
             <MicroLabel className="text-accent">Mode 02 · Diagnose</MicroLabel>
