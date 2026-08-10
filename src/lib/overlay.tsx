@@ -8,8 +8,8 @@ import {
   type ReactNode,
 } from "react";
 import type { ConnectionJob, LineMaterial } from "@/domain/types";
-import { CONNECTION_GROUPS, CONNECTION_LABELS, MATERIAL_LABELS } from "@/domain/types";
-import { FIELD_SCENARIOS, type FieldScenario } from "@/data/scenarios";
+import { type FieldScenario } from "@/data/scenarios";
+import { useDomain } from "@/domain/context";
 import {
   EMPTY_OVERLAY,
   createLocalAdapter,
