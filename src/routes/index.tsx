@@ -220,6 +220,14 @@ function DecideMode() {
 
   return (
     <Shell>
+      {domain.id !== "fishing" ? (
+        <div className="mb-6 rounded-lg border border-caution/40 bg-caution/8 px-4 py-3 no-print">
+          <MicroLabel className="text-caution">{t("boating.title")}</MicroLabel>
+          <p className="mt-1.5 max-w-2xl text-[0.8125rem] leading-relaxed text-foreground/85">
+            {t("boating.body")}
+          </p>
+        </div>
+      ) : null}
       {search.from ? (
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-accent/40 bg-accent/8 px-4 py-3 no-print">
           <MicroLabel className="text-accent">Carried from diagnosis</MicroLabel>
