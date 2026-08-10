@@ -32,6 +32,8 @@ export type MaterialConstruction =
   | "single-strand-wire"
   | "wire-1x7"
   | "wire-7x7"
+  | "titanium-wire"
+  | "twisted-multifilament"
   | "unspecified";
 
 export type MaterialTreatment =
@@ -40,6 +42,9 @@ export type MaterialTreatment =
   | "nylon-coated"
   | "coated-braid"
   | "gel-spun-finish"
+  | "abrasion-treated"
+  | "high-vis-pigment"
+  | "wax-treated"
   | "unspecified";
 
 export type MaterialRole =
@@ -85,6 +90,8 @@ export const CONSTRUCTION_LABELS: Record<MaterialConstruction, string> = {
   "single-strand-wire": "Single-strand wire",
   "wire-1x7": "1×7 multi-strand",
   "wire-7x7": "7×7 multi-strand",
+  "titanium-wire": "Titanium wire",
+  "twisted-multifilament": "Twisted multifilament",
   unspecified: "Not sure",
 };
 
@@ -94,6 +101,9 @@ export const TREATMENT_LABELS: Record<MaterialTreatment, string> = {
   "nylon-coated": "Nylon-coated",
   "coated-braid": "Coated braid",
   "gel-spun-finish": "Gel-spun finish",
+  "abrasion-treated": "Abrasion-treated",
+  "high-vis-pigment": "High-vis pigment",
+  "wax-treated": "Waxed",
   unspecified: "Not sure",
 };
 
@@ -218,6 +228,26 @@ export function materialModifier(spec: MaterialSpec | undefined): MaterialModifi
     reasons.push(`${CONSTRUCTION_LABELS[spec.construction]} wire resists a clean knot bed`);
   }
 
+  if (spec.construction === "copolymer") {
+    slip += 3;
+    reasons.push("Copolymer runs slicker and stretches less than straight nylon");
+  }
+  if (spec.construction === "titanium-wire") {
+    slip += 12;
+    seating += 14;
+    reasons.push("Titanium wire springs back out of a knot bed instead of setting");
+  }
+  if (spec.construction === "twisted-multifilament") {
+    slip += 5;
+    inspection += 4;
+    reasons.push("Twisted multifilament unlays under load and hides a slipped strand");
+  }
+  if (spec.construction === "coated-core") {
+    seating += 6;
+    inspection += 5;
+    reasons.push("A coated core carries load in the core, not the coating you can see");
+  }
+
   if (spec.treatment === "coated-braid" || spec.treatment === "gel-spun-finish") {
     slip += 6;
     reasons.push(`${TREATMENT_LABELS[spec.treatment]} lowers friction at the seating stage`);
@@ -226,6 +256,18 @@ export function materialModifier(spec: MaterialSpec | undefined): MaterialModifi
     seating += 4;
     inspection += 4;
     reasons.push("Nylon coating hides the wrap stack and creeps when it is over-tightened");
+  }
+  if (spec.treatment === "wax-treated") {
+    slip += 5;
+    reasons.push("Wax lubricates the wrap stack — seat slowly and re-check the tag");
+  }
+  if (spec.treatment === "abrasion-treated") {
+    seating += 3;
+    reasons.push("Abrasion treatment stiffens the surface and resists a tight bed");
+  }
+  if (spec.treatment === "high-vis-pigment") {
+    inspection += 3;
+    reasons.push("Heavy pigment masks the first chafe marks on inspection");
   }
   if (spec.fiber === "polyester") {
     slip = Math.max(0, slip - 6);
@@ -272,6 +314,16 @@ export function terminationAdvice(
       headline: "Crimp or haywire twist — not a knot",
       detail:
         "Single-strand wire takes a permanent set. A conventional knot creates a stress riser at the first bend and fails below rating.",
+    };
+  }
+
+  const titanium = specs.find((s) => s.construction === "titanium-wire");
+  if (titanium) {
+    return {
+      method: "crimp",
+      headline: "Crimp the titanium — knots slip out of it",
+      detail:
+        "Titanium wire is elastic and memory-free, which is exactly why a knot bed will not hold it. Use a crimped sleeve rated to the wire.",
     };
   }
 
