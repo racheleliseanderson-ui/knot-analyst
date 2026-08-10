@@ -6,6 +6,7 @@ import { LOOP_KNOTS } from "@/data/knots/loops";
 import { UTILITY_KNOTS } from "@/data/knots/utility";
 import { getMechanics } from "@/data/mechanics-profiles";
 import { applyHowTo } from "@/data/how-to";
+import { applyVideo } from "@/data/videos";
 
 const RAW: KnotContent[] = [
   ...TERMINAL_KNOTS,
@@ -15,7 +16,7 @@ const RAW: KnotContent[] = [
 ];
 
 function hydrate(raw: KnotContent): Knot {
-  const content = applyHowTo(raw);
+  const content = applyVideo(applyHowTo(raw));
   const m = getMechanics(content.id);
   if (!m) {
     throw new Error(`Missing mechanical profile for knot: ${content.id}`);
