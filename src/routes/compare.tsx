@@ -507,6 +507,7 @@ function CompareMode() {
   const [hover, setHover] = useState<"A" | "B" | null>(null);
   const [compact, setCompact] = useState(false);
   const frozenRef = useRef<ComparisonResult | null>(null);
+  const [log, setLog] = useState<RunEntry[]>([]);
 
   const ready = Boolean(a.connection && b.connection);
   const live = useMemo(
@@ -521,6 +522,24 @@ function CompareMode() {
     else frozenRef.current = null;
     setFrozen(!frozen);
   };
+
+  /** Record each completed run so an earlier setup can be re-entered exactly. */
+  const lastLogged = useRef<string | null>(null);
+  useEffect(() => {
+    if (!live || lastLogged.current === live.runId) return;
+    lastLogged.current = live.runId;
+    const entry: RunEntry = {
+      runId: live.runId,
+      ranAt: live.ranAt,
+      ms: live.stages.reduce((n, s) => n + s.ms, 0),
+      decisive: live.decisive.length,
+      verdict: live.verdict,
+      a: { ...a },
+      b: { ...b },
+    };
+    setLog((prev) => [entry, ...prev].slice(0, 12));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [live]);
 
   const pick = (side: "A" | "B", id: string) => {
     const sc = scenarios.find((s) => s.id === id);
@@ -653,6 +672,16 @@ function CompareMode() {
               }}
               onStep={() => setRevealed((r) => (r >= 4 ? 1 : r + 1))}
               onToggleFreeze={toggleFreeze}
+              log={log}
+              onRestore={(e) => {
+                setA(e.a);
+                setB(e.b);
+                setIds({});
+                setFrozen(false);
+                frozenRef.current = null;
+                setRevealed(4);
+              }}
+              onClearLog={() => setLog([])}
             />
 
             {revealed >= 4 ? (
