@@ -77,7 +77,11 @@ export function Shell({ children, className }: { children: ReactNode; className?
       </a>
       <header className="sticky top-0 z-40 border-b border-hairline bg-background/85 backdrop-blur-xl no-print">
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 py-3 sm:flex-nowrap sm:px-8">
-          <Link to="/" className="flex min-w-0 items-center gap-3">
+          <Link
+            to="/"
+            aria-label="Knot Intelligence — home"
+            className="ki-press flex min-h-11 min-w-0 touch-manipulation items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
             <span className="flex h-8 w-8 items-center justify-center rounded-[6px] border border-primary/40 bg-primary/10 font-mono text-[0.6875rem] font-semibold tracking-tight text-primary">
               KI
             </span>

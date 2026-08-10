@@ -876,12 +876,14 @@ function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
         <p className="mb-5 text-[0.875rem] text-muted-foreground">
           One tap loads a realistic setup and runs the model.
         </p>
-        <div className="grid gap-px overflow-hidden rounded-lg bg-hairline sm:grid-cols-2">
+        <div className="ki-stagger grid gap-px overflow-hidden rounded-lg bg-hairline sm:grid-cols-2">
           {scenarios.map((s) => (
             <button
               key={s.id}
+              type="button"
               onClick={() => onPick(s.id)}
-              className="group bg-card px-5 py-4 text-left transition-colors hover:bg-surface-2"
+              aria-label={`Load scenario: ${s.title}`}
+              className="group ki-press touch-manipulation bg-card px-5 py-4 text-left transition-colors hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
             >
               <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary/80">
                 {s.tag}
