@@ -414,13 +414,16 @@ function ScenarioEditor() {
 function MaterialEditor() {
   const { data, setMaterials } = useOverlay();
   const [label, setLabel] = useState("");
+  const [q, setQ] = useState("");
   const [note, setNote] = useState("");
   const [base, setBase] = useState<LineMaterial>("mono");
   const [error, setError] = useState<string | null>(null);
 
   const add = () => {
     if (!label.trim()) return setError("A material needs a display name.");
+    if (label.trim().length < 3) return setError("Give it a name you would recognise on the water.");
     const id = slugify(label);
+    if (!id) return setError("That name has no usable characters.");
     if (data.materials.some((m) => m.id === id)) return setError("That material already exists.");
     const next: CustomMaterial = {
       id,
@@ -483,14 +486,21 @@ function MaterialEditor() {
       </Panel>
 
       <Panel className="p-5">
-        <MicroLabel className="mb-3">Authored materials</MicroLabel>
+        <FilterBox
+          value={q}
+          onChange={setQ}
+          total={data.materials.length}
+          count={data.materials.filter((m) => matches(q, m.label, m.note, m.behavesLike)).length}
+        />
         {data.materials.length === 0 ? (
           <p className="text-[0.875rem] text-muted-foreground">
             None yet. Built-in classes are always available in Decide.
           </p>
         ) : (
           <div>
-            {data.materials.map((m) => (
+            {data.materials
+              .filter((m) => matches(q, m.label, m.note, m.behavesLike))
+              .map((m) => (
               <Row
                 key={m.id}
                 title={m.label}
@@ -510,6 +520,7 @@ function MaterialEditor() {
 function ConnectionEditor() {
   const { data, setConnections } = useOverlay();
   const [label, setLabel] = useState("");
+  const [q, setQ] = useState("");
   const [group, setGroup] = useState("Custom");
   const [note, setNote] = useState("");
   const [base, setBase] = useState<ConnectionJob>("line-to-hook");
@@ -518,6 +529,7 @@ function ConnectionEditor() {
   const add = () => {
     if (!label.trim()) return setError("A connection type needs a display name.");
     const id = slugify(label);
+    if (!id) return setError("That name has no usable characters.");
     if (data.connections.some((c) => c.id === id)) return setError("That connection already exists.");
     const next: CustomConnection = {
       id,
@@ -584,12 +596,19 @@ function ConnectionEditor() {
       </Panel>
 
       <Panel className="p-5">
-        <MicroLabel className="mb-3">Authored connection types</MicroLabel>
+        <FilterBox
+          value={q}
+          onChange={setQ}
+          total={data.connections.length}
+          count={data.connections.filter((c) => matches(q, c.label, c.group, c.note)).length}
+        />
         {data.connections.length === 0 ? (
           <p className="text-[0.875rem] text-muted-foreground">None yet.</p>
         ) : (
           <div>
-            {data.connections.map((c) => (
+            {data.connections
+              .filter((c) => matches(q, c.label, c.group, c.note))
+              .map((c) => (
               <Row
                 key={c.id}
                 title={c.label}
