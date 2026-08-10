@@ -446,6 +446,15 @@ function DecideMode() {
                         <p className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground/70">
                           {card.conditionLine}
                         </p>
+                        {result.ranked[0] ? (
+                          <Link
+                            to="/tie/$knotId"
+                            params={{ knotId: result.ranked[0].knot.id }}
+                            className="mt-4 inline-flex items-center gap-2 rounded-md border border-accent/50 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent/10 no-print"
+                          >
+                            Tie it — step player + diagram
+                          </Link>
+                        ) : null}
                       </div>
                       <div className="sm:text-right">
                         <div className="font-mono text-[2.5rem] leading-none tabular-nums text-primary">
