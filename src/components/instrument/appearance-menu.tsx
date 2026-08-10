@@ -18,7 +18,7 @@ const ICONS: Record<Appearance, typeof Moon> = {
 
 /** Explicit appearance picker. Cycling a four-state toggle blind is not a control. */
 export function AppearanceMenu() {
-  const { theme, set } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -74,7 +74,7 @@ export function AppearanceMenu() {
                 role="menuitemradio"
                 aria-checked={active}
                 onClick={() => {
-                  set(a);
+                  setTheme(a);
                   setOpen(false);
                   btnRef.current?.focus();
                 }}
