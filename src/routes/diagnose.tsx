@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Shell } from "@/components/instrument/shell";
 import { Bullets, Chip, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
 import { runTroubleshoot, type TroubleshootInput } from "@/engine/troubleshoot";
+import { diagnosisToDecide, encodeInput } from "@/lib/handoff";
 import { FAILURE_PLAYS, type BreakLocation, type FailureEvent } from "@/data/failure-playbook";
 import type { ConnectionJob, DiameterRelation, LineMaterial, RetieDecision } from "@/domain/types";
 import {
@@ -169,17 +170,41 @@ function DiagnoseMode() {
 
   const handoff = () => {
     if (!result) return;
-    const s = result.decideSearch ?? {};
+    const h = diagnosisToDecide(input, result);
     navigate({
       to: "/",
       search: {
-        connection: s.connection ?? input.connection,
-        main: s.mainMaterial ?? input.mainMaterial,
-        secondary: s.secondaryMaterial ?? input.secondaryMaterial,
-        diameter: s.diameterRelation ?? input.diameterRelation,
+        connection: h.input.connection,
+        main: h.input.mainMaterial,
+        secondary: h.input.secondaryMaterial,
+        diameter: h.input.diameterRelation,
+        guides: h.input.mustPassGuides,
+        cold: h.input.coldHands,
+        wind: h.input.windy,
+        lowlight: h.input.lowLight,
+        retie: h.input.retieFrequency,
+        prof: h.input.proficiency,
+        eye: h.input.hardwareEyeSmall,
         run: true,
         from: result.title,
+        why: h.carried.map((c) => c.label).join(" · ") || undefined,
       },
+    });
+  };
+
+  /** Compare the setup that failed against the same job with the evidence applied. */
+  const compareFix = () => {
+    if (!result) return;
+    const h = diagnosisToDecide(input, result);
+    const asFailed = {
+      connection: h.input.connection,
+      mainMaterial: h.input.mainMaterial,
+      secondaryMaterial: h.input.secondaryMaterial,
+      diameterRelation: h.input.diameterRelation,
+    };
+    navigate({
+      to: "/compare",
+      search: { a: encodeInput(asFailed), b: encodeInput(h.input) },
     });
   };
 
