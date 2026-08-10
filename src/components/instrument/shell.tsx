@@ -10,11 +10,11 @@ function ModeLink({ to, label, code }: { to: string; label: string; code: string
   return (
     <Link
       to={to}
-      className="group relative rounded-md px-3 py-1.5 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground"
+      className="group relative flex min-h-[40px] items-center rounded-md px-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground data-[status=active]:text-foreground sm:px-3"
       activeProps={{ "data-status": "active" } as never}
     >
-      <span className="font-mono text-[0.625rem] tracking-[0.16em] text-primary/70">{code}</span>{" "}
-      {label}
+      <span className="font-mono text-[0.625rem] tracking-[0.16em] text-primary/70">{code}</span>
+      <span className="ml-1">{label}</span>
       <span className="absolute inset-x-2 -bottom-[9px] h-px scale-x-0 bg-primary transition-transform duration-300 group-data-[status=active]:scale-x-100" />
     </Link>
   );

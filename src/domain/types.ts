@@ -101,6 +101,17 @@ export interface KnotStep {
   tip?: string;
   commonError?: string;
   failureLinks?: string[];
+  /** Longer "why this matters" paragraph for the how-to player */
+  detail?: string;
+  /** Observable check — what the structure should look like before moving on */
+  expectedResult?: string;
+}
+
+/** One phase of the moisten → load → dress → set → trim finishing sequence */
+export interface SeatingPhase {
+  phase: string;
+  action: string;
+  tension: string;
 }
 
 export interface DiagnosticRule {
@@ -202,6 +213,12 @@ export interface KnotContent {
   tags: string[];
   reviewedOn: string;
   sources: { title: string; url?: string; note?: string }[];
+  /** Preparation before step one */
+  beforeYouStart?: string[];
+  /** Explicit finishing procedure — where most failures are born */
+  seatingSequence?: SeatingPhase[];
+  /** Cold hands, dark, gloves, second-attempt guidance */
+  fieldNotes?: string[];
 }
 
 export interface CompletenessFlags {

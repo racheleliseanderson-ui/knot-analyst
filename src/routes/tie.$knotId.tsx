@@ -73,7 +73,43 @@ function TieMode() {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-6">
+          {knot.beforeYouStart?.length ? (
+            <Panel className="p-5">
+              <MicroLabel className="mb-3">Before you start</MicroLabel>
+              <Bullets items={knot.beforeYouStart} marker="·" />
+              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-hairline pt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                <span>Line + hardware: {knot.materialsNeeded.join(", ")}</span>
+                {knot.toolsHelpful?.length ? <span>Tools: {knot.toolsHelpful.join(", ")}</span> : null}
+              </div>
+            </Panel>
+          ) : null}
+
           <StepPlayer knot={knot} />
+
+          {knot.seatingSequence?.length ? (
+            <Panel className="p-6">
+              <MicroLabel className="mb-1">Seating sequence — where failures are born</MicroLabel>
+              <p className="mb-4 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                The step list compresses the finish. Run these phases in order, one at a time.
+              </p>
+              <ol className="space-y-px overflow-hidden rounded-lg border border-hairline bg-hairline">
+                {knot.seatingSequence.map((p, i) => (
+                  <li
+                    key={p.phase}
+                    className="grid gap-1 bg-card px-4 py-3 sm:grid-cols-[88px_minmax(0,1fr)_minmax(0,0.8fr)] sm:items-baseline sm:gap-4"
+                  >
+                    <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
+                      {String(i + 1).padStart(2, "0")} {p.phase}
+                    </p>
+                    <p className="text-[0.875rem] leading-relaxed text-foreground">{p.action}</p>
+                    <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
+                      {p.tension}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </Panel>
+          ) : null}
 
           <Panel className="p-6">
             <MicroLabel className="mb-4">Finished structure — what correct looks like</MicroLabel>
@@ -81,7 +117,7 @@ function TieMode() {
               <KnotDiagram
                 kind={knot.diagramKind}
                 title={`${knot.name} — finished structure`}
-                className="aspect-[400/180] w-full"
+                className="aspect-[400/220] w-full sm:aspect-[400/180]"
               />
             </div>
             <Bullets
@@ -93,9 +129,50 @@ function TieMode() {
               ]}
             />
           </Panel>
+
+          <Panel className="p-6">
+            <MicroLabel className="mb-1">Verify before you fish it</MicroLabel>
+            <p className="mb-4 text-[0.8125rem] leading-relaxed text-muted-foreground">
+              Every line is pass or fail. One fail means retie — do not fish a knot you argued with.
+            </p>
+            <ul className="space-y-px overflow-hidden rounded-lg border border-hairline bg-hairline">
+              {[
+                knot.fingerprint.expectedGeometry,
+                knot.fingerprint.expectedSeatingPattern,
+                knot.fingerprint.expectedTagOrientation,
+                knot.fingerprint.expectedCoilDistribution,
+                knot.fingerprint.expectedCrossoverBehavior,
+                knot.fingerprint.expectedFinishingStructure,
+              ]
+                .filter(Boolean)
+                .map((check, i) => (
+                  <li key={check} className="flex gap-3 bg-card px-4 py-3">
+                    <span className="mt-0.5 font-mono text-[0.625rem] tracking-[0.16em] text-primary">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-[0.875rem] leading-relaxed text-foreground/90">
+                      {check}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+            <Link
+              to="/diagnose"
+              className="mt-4 inline-block font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent underline underline-offset-4"
+            >
+              Something failed → run Diagnose
+            </Link>
+          </Panel>
         </div>
 
         <div className="space-y-6">
+          {knot.fieldNotes?.length ? (
+            <Panel className="p-5">
+              <MicroLabel className="mb-3">Field notes — dark, cold, gloves</MicroLabel>
+              <Bullets items={knot.fieldNotes} marker="·" />
+            </Panel>
+          ) : null}
+
           <Panel className="p-5">
             <MicroLabel className="mb-3">Common mistakes</MicroLabel>
             <Bullets items={knot.commonMistakes} marker="!" />

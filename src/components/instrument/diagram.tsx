@@ -14,11 +14,48 @@ interface Props {
   step?: number;
   className?: string;
   title?: string;
+  /** Zoom the drawing toward the region the active step concerns */
+  focus?: boolean;
 }
 
 const LINE = "var(--foreground)";
 const HOT = "var(--primary)";
 const GHOST = "var(--muted-foreground)";
+
+/** Per-kind step focus — [cx, cy, scale] in viewBox units */
+const FOCUS: Partial<Record<DiagramKind, Record<number, [number, number, number]>>> = {
+  "terminal-palomar": {
+    1: [140, 90, 1.7],
+    2: [160, 90, 1.7],
+    3: [216, 90, 1.8],
+    4: [270, 90, 1.7],
+    5: [285, 92, 1.9],
+  },
+  "terminal-uni": { 1: [180, 90, 1.4], 2: [140, 74, 1.7], 3: [170, 78, 1.7], 4: [212, 74, 1.9] },
+  "terminal-snell": { 1: [180, 88, 1.4], 2: [160, 86, 1.7], 3: [236, 76, 1.9] },
+  "terminal-eye": { 1: [190, 90, 1.4], 2: [160, 90, 1.7], 3: [214, 80, 1.9] },
+  "line-join": { 1: [195, 90, 1.2], 2: [140, 90, 1.8], 3: [244, 90, 1.8], 4: [195, 82, 1.4] },
+  "braid-leader-fg": {
+    1: [200, 90, 1.2],
+    2: [180, 90, 1.7],
+    3: [260, 90, 1.9],
+    4: [300, 90, 1.9],
+    5: [332, 84, 2],
+  },
+  "braid-leader-alberto": { 1: [180, 90, 1.2], 2: [125, 90, 1.7], 3: [240, 90, 1.7], 4: [312, 90, 1.8] },
+  "loop-fixed": { 1: [280, 90, 1.4], 2: [135, 90, 1.6], 3: [172, 90, 1.9], 4: [205, 82, 1.9] },
+  "loop-nonslip": { 1: [290, 90, 1.4], 2: [148, 90, 1.5], 3: [246, 90, 1.8], 4: [292, 84, 1.9] },
+};
+
+function focusTransform(kind: DiagramKind, step?: number, enabled?: boolean) {
+  if (!enabled || step === undefined) return "translate(0,0) scale(1)";
+  const spec = FOCUS[kind]?.[step];
+  if (!spec) return "translate(0,0) scale(1)";
+  const [cx, cy, k] = spec;
+  // keep the zoom restrained so the hardware and both line ends stay in frame
+  const s = 1 + (k - 1) * 0.55;
+  return `translate(${200 - cx * s}, ${90 - cy * s}) scale(${s})`;
+}
 
 function toneFor(from: number, step?: number) {
   if (step === undefined) return { stroke: LINE, opacity: 1 };
@@ -188,7 +225,7 @@ function Body({ kind, step }: { kind: DiagramKind; step?: number }) {
   }
 }
 
-export function KnotDiagram({ kind, step, className, title }: Props) {
+export function KnotDiagram({ kind, step, className, title, focus }: Props) {
   return (
     <figure className={cn("relative", className)}>
       <svg
@@ -209,7 +246,12 @@ export function KnotDiagram({ kind, step, className, title }: Props) {
           className="text-muted-foreground"
           opacity={0.14}
         />
-        <Body kind={kind} step={step} />
+        <g
+          transform={focusTransform(kind, step, focus)}
+          className="transition-transform duration-500 ease-out"
+        >
+          <Body kind={kind} step={step} />
+        </g>
       </svg>
       <figcaption className="pointer-events-none absolute bottom-1 right-2 font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground/60">
         schematic · not to scale

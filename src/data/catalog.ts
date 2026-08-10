@@ -5,6 +5,7 @@ import { LINE_TO_LINE_KNOTS } from "@/data/knots/line-to-line";
 import { LOOP_KNOTS } from "@/data/knots/loops";
 import { UTILITY_KNOTS } from "@/data/knots/utility";
 import { getMechanics } from "@/data/mechanics-profiles";
+import { applyHowTo } from "@/data/how-to";
 
 const RAW: KnotContent[] = [
   ...TERMINAL_KNOTS,
@@ -13,7 +14,8 @@ const RAW: KnotContent[] = [
   ...UTILITY_KNOTS,
 ];
 
-function hydrate(content: KnotContent): Knot {
+function hydrate(raw: KnotContent): Knot {
+  const content = applyHowTo(raw);
   const m = getMechanics(content.id);
   if (!m) {
     throw new Error(`Missing mechanical profile for knot: ${content.id}`);
