@@ -201,6 +201,17 @@ function DecideMode() {
     }
   }, [seeded]);
 
+  /** A discipline change invalidates the declared job — never carry it over. */
+  const firstDomain = useRef(domain.id);
+  useEffect(() => {
+    if (firstDomain.current === domain.id) return;
+    firstDomain.current = domain.id;
+    setInput({});
+    setSel({});
+    setVenueId(undefined);
+    setRan(false);
+  }, [domain.id]);
+
   const set = (patch: Partial<ChooseInput>, keys?: typeof sel) => {
     setInput((prev) => ({ ...prev, ...patch }));
     if (keys) setSel((prev) => ({ ...prev, ...keys }));
