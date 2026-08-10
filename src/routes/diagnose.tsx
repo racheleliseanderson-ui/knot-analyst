@@ -141,7 +141,11 @@ const retieTone = (d: RetieDecision) =>
 
 function DiagnoseMode() {
   const navigate = useNavigate();
-  const [input, setInput] = useState<Partial<TroubleshootInput>>({});
+  const search = Route.useSearch();
+  const seeded = FAILURE_PLAYS.some((p) => p.id === search.event)
+    ? ({ event: search.event as FailureEvent } as Partial<TroubleshootInput>)
+    : {};
+  const [input, setInput] = useState<Partial<TroubleshootInput>>(seeded);
   const [ran, setRan] = useState(false);
 
   const set = (patch: Partial<TroubleshootInput>) => {
