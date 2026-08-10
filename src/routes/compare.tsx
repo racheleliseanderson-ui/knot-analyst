@@ -248,6 +248,7 @@ function toDecideSearch(i: Partial<ChooseInput>) {
 }
 
 function PipelineStrip({
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   comparison,
   revealed,
   frozen,
