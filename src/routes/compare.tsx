@@ -497,6 +497,14 @@ function CompareMode() {
           <div className="flex flex-wrap gap-2 no-print">
             <button
               type="button"
+              onClick={() => setCompact((c) => !c)}
+              aria-pressed={compact}
+              className={btn}
+            >
+              {compact ? "Expand setup" : "Collapse setup"}
+            </button>
+            <button
+              type="button"
               onClick={() => {
                 setA(b);
                 setB(a);
@@ -537,7 +545,7 @@ function CompareMode() {
             onChange={setA}
             onScenario={(id) => pick("A", id)}
             scenarioId={ids.a}
-            collapsed={false}
+            collapsed={compact}
           />
           <SideEditor
             side="B"
@@ -545,7 +553,7 @@ function CompareMode() {
             onChange={setB}
             onScenario={(id) => pick("B", id)}
             scenarioId={ids.b}
-            collapsed={false}
+            collapsed={compact}
           />
         </div>
       </section>
