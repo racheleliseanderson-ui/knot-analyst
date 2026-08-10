@@ -497,14 +497,16 @@ export const HOW_TO: Record<string, HowTo> = {
 
 export function applyHowTo(content: KnotContent): KnotContent {
   const extra = HOW_TO[content.id];
-  if (!extra) return content;
+  const micro = MICRO[content.id];
+  if (!extra && !micro) return content;
 
   const steps: KnotStep[] = content.steps.map((s) => {
-    const depth = extra.steps?.[s.order];
-    return depth ? { ...s, ...depth } : s;
+    const depth = extra?.steps?.[s.order];
+    const m = micro?.[s.order];
+    return depth || m ? { ...s, ...depth, ...m } : s;
   });
 
-  if (extra.extraSteps?.length) {
+  if (extra?.extraSteps?.length) {
     const base = steps.reduce((max, s) => Math.max(max, s.order), 0);
     extra.extraSteps.forEach((s, i) => steps.push({ ...s, order: base + i + 1 }));
   }
@@ -512,8 +514,8 @@ export function applyHowTo(content: KnotContent): KnotContent {
   return {
     ...content,
     steps,
-    ...(extra.beforeYouStart ? { beforeYouStart: extra.beforeYouStart } : {}),
-    ...(extra.seatingSequence ? { seatingSequence: extra.seatingSequence } : {}),
-    ...(extra.fieldNotes ? { fieldNotes: extra.fieldNotes } : {}),
+    ...(extra?.beforeYouStart ? { beforeYouStart: extra.beforeYouStart } : {}),
+    ...(extra?.seatingSequence ? { seatingSequence: extra.seatingSequence } : {}),
+    ...(extra?.fieldNotes ? { fieldNotes: extra.fieldNotes } : {}),
   };
 }
