@@ -106,10 +106,8 @@ export function StepPlayer({ knot }: { knot: Knot }) {
 
         <div
           key={index}
-          className={cn(
-            "bg-card px-5 py-5 motion-safe:animate-fade-in",
-            dir === -1 && "motion-safe:[animation-direction:normal]",
-          )}
+          className="bg-card px-5 py-5 motion-safe:animate-[ki-step_240ms_ease-out]"
+          style={{ ["--ki-step-from" as string]: dir === 1 ? "10px" : "-10px" }}
           aria-live="polite"
         >
           <p className="sr-only">
