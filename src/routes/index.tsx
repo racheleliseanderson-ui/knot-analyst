@@ -472,7 +472,7 @@ function DecideMode() {
                       >
                         {result.eliminated.length} candidates eliminated on hard constraints ·{" "}
                         engine {result.engineVersion} ·{" "}
-                        {new Date(result.generatedAt).toLocaleString()}
+                        {result.generatedAt.slice(0, 19).replace("T", " ")}Z
                       </p>
                     </div>
                   </>
