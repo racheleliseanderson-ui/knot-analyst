@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import type { Knot } from "@/domain/types";
 import { KnotDiagram } from "@/components/instrument/diagram";
 import { MicroLabel, Panel } from "@/components/instrument/primitives";
@@ -26,10 +26,10 @@ export function StepPlayer({ knot }: { knot: Knot }) {
 
   // Horizontal swipe on the diagram — thumb navigation on a phone
   const swipe = useRef<{ x: number; y: number } | null>(null);
-  const onPointerDown = (e: React.PointerEvent) => {
+  const onPointerDown = (e: ReactPointerEvent) => {
     swipe.current = { x: e.clientX, y: e.clientY };
   };
-  const onPointerUp = (e: React.PointerEvent) => {
+  const onPointerUp = (e: ReactPointerEvent) => {
     const start = swipe.current;
     swipe.current = null;
     if (!start) return;
@@ -46,7 +46,7 @@ export function StepPlayer({ knot }: { knot: Knot }) {
   );
 
   return (
-    <Panel className="overflow-hidden">
+    <Panel className="rounded-lg sm:overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3">
         <MicroLabel>Tying procedure — step {`${index + 1} / ${total}`}</MicroLabel>
         <div className="hidden items-center gap-1.5 no-print sm:flex">
