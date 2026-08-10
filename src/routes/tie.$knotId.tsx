@@ -3,6 +3,7 @@ import { Shell } from "@/components/instrument/shell";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { StepPlayer } from "@/components/instrument/step-player";
 import { KnotDiagram } from "@/components/instrument/diagram";
+import { VideoEmbed } from "@/components/instrument/video-embed";
 import { getKnot } from "@/data/catalog";
 import { DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 
@@ -65,10 +66,19 @@ function TieMode() {
             {knot.mechanicsSummary}
           </p>
         </div>
-        <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
-          {DIFFICULTY_LABELS[knot.difficulty]} ·{" "}
-          {knot.lineMaterials.map((m) => MATERIAL_LABELS[m]).join(" / ")}
-        </p>
+        <div className="flex flex-col items-start gap-2 sm:items-end">
+          <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+            {DIFFICULTY_LABELS[knot.difficulty]} ·{" "}
+            {knot.lineMaterials.map((m) => MATERIAL_LABELS[m]).join(" / ")}
+          </p>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="min-h-[44px] rounded-md border border-hairline px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring no-print"
+          >
+            Print tie card
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -85,6 +95,8 @@ function TieMode() {
           ) : null}
 
           <StepPlayer knot={knot} />
+
+          {knot.video ? <VideoEmbed video={knot.video} knotName={knot.name} /> : null}
 
           {knot.seatingSequence?.length ? (
             <Panel className="p-6">
