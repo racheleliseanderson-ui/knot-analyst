@@ -15,24 +15,8 @@ import {
 
 type Dim = (typeof FIELD_FIT_DIMENSIONS)[number];
 
-const DEFAULT_WEIGHTS: Record<Dim, number> = {
-  connectionJobFit: 1.4,
-  materialCompatibility: 1.2,
-  diameterRelationship: 1.1,
-  eyeHardwareGeometry: 0.7,
-  guidePassage: 0.6,
-  finishedProfile: 0.8,
-  loadBehavior: 1.2,
-  fieldTieability: 0.9,
-  coldWetHandDifficulty: 0.15,
-  lowLightDifficulty: 0.1,
-  windSensitivity: 0.15,
-  requiredTensionControl: 0.5,
-  inspectionDifficulty: 0.4,
-  retieSpeed: 0.6,
-  failureSensitivity: 0.7,
-  userProficiency: 0.8,
-};
+/** Weights come from the active domain descriptor (Fishing values unchanged). */
+const DEFAULT_WEIGHTS: Record<Dim, number> = FISHING_WEIGHTS;
 
 function baseScores(knot: Knot): FieldFitScores {
   const b = knot.fieldFit.baseline;
