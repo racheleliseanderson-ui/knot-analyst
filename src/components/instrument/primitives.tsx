@@ -122,6 +122,9 @@ export function Verdict({
     ok: "border-affirm/50 bg-affirm/12 text-affirm",
     unknown: "border-border bg-surface-2 text-muted-foreground",
   } as const;
+  // Never colour alone — each tone carries a glyph so the state survives
+  // colour-vision deficiency and greyscale printing.
+  const glyph = { stop: "×", watch: "!", ok: "✓", unknown: "?" } as const;
   return (
     <span
       className={cn(
@@ -129,7 +132,12 @@ export function Verdict({
         map[tone],
       )}
     >
-      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+      <span
+        aria-hidden="true"
+        className="grid h-4 w-4 place-items-center rounded-full border border-current text-[0.625rem] leading-none"
+      >
+        {glyph[tone]}
+      </span>
       {children}
     </span>
   );
