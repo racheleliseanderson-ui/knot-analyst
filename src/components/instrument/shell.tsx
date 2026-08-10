@@ -87,7 +87,13 @@ export function Shell({ children, className }: { children: ReactNode; className?
               <span className="label-micro mt-1 block truncate">{domain.label}</span>
             </span>
           </Link>
-          <nav className="flex items-center gap-1" aria-label="Modes">
+          <div className="col-start-2 row-start-1 flex items-center justify-end gap-1">
+            <DomainSwitch />
+          </div>
+          <nav
+            className="col-span-2 row-start-2 flex items-center justify-between gap-1 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end"
+            aria-label="Modes"
+          >
             <ModeLink to="/" label={t("nav.decide")} code="01" />
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
             <ModeLink to="/admin" label={t("nav.data")} code="04" />
@@ -103,9 +109,6 @@ export function Shell({ children, className }: { children: ReactNode; className?
             <ThemeToggle />
             <LocaleSwitch />
           </nav>
-          <div className="col-span-2 flex items-center justify-between gap-3 sm:col-span-1 sm:col-start-1 sm:row-start-1 sm:justify-center">
-            <DomainSwitch />
-          </div>
         </div>
       </header>
       <Finder open={finderOpen} onClose={() => setFinderOpen(false)} />
