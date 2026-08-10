@@ -10,11 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DiagnoseRouteImport } from './routes/diagnose'
+import { Route as TieKnotIdRouteImport } from './routes/tie.$knotId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiagnoseRoute = DiagnoseRouteImport.update({
@@ -22,31 +29,44 @@ const DiagnoseRoute = DiagnoseRouteImport.update({
   path: '/diagnose',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TieKnotIdRoute = TieKnotIdRouteImport.update({
+  id: '/tie/$knotId',
+  path: '/tie/$knotId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/diagnose': typeof DiagnoseRoute
+  '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/diagnose': typeof DiagnoseRoute
+  '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/diagnose': typeof DiagnoseRoute
+  '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/diagnose'
+  fullPaths: '/' | '/admin' | '/diagnose' | '/tie/$knotId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/diagnose'
-  id: '__root__' | '/' | '/diagnose'
+  to: '/' | '/admin' | '/diagnose' | '/tie/$knotId'
+  id: '__root__' | '/' | '/admin' | '/diagnose' | '/tie/$knotId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   DiagnoseRoute: typeof DiagnoseRoute
+  TieKnotIdRoute: typeof TieKnotIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +78,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/diagnose': {
       id: '/diagnose'
       path: '/diagnose'
@@ -65,23 +92,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiagnoseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tie/$knotId': {
+      id: '/tie/$knotId'
+      path: '/tie/$knotId'
+      fullPath: '/tie/$knotId'
+      preLoaderRoute: typeof TieKnotIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   DiagnoseRoute: DiagnoseRoute,
+  TieKnotIdRoute: TieKnotIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
