@@ -643,31 +643,49 @@ function DecideMode() {
                       >
                         Compare
                       </Link>
-                      <button
-                        onClick={async () => {
-                          setPacketState("working");
-                          try {
-                            await generateDecisionPacket({
-                              result,
-                              card,
-                              tradeoffs,
-                              counterfactuals: cfs,
-                            });
-                            setPacketState("idle");
-                          } catch (err) {
-                            console.error(err);
-                            setPacketState("error");
-                          }
-                        }}
-                        disabled={packetState === "working"}
-                        className="rounded-md border border-primary/60 bg-primary/15 px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-primary/25 disabled:opacity-50"
-                      >
-                        {packetState === "working"
-                          ? "Building…"
-                          : packetState === "error"
-                            ? "Retry PDF"
-                            : "PDF packet"}
-                      </button>
+                      {(
+                        [
+                          ["brief", "Brief", "One sheet: the call and its compromises"],
+                          ["field", "Field packet", "Adds options, readout, eliminations and the tying procedure"],
+                        ] as [PacketVariant, string, string][]
+                      ).map(([kind, label, hint]) => {
+                        const busy = packetState === "working" && packetKind === kind;
+                        const failed = packetState === "error" && packetKind === kind;
+                        return (
+                          <button
+                            key={kind}
+                            type="button"
+                            title={hint}
+                            aria-label={`${label} PDF — ${hint}`}
+                            onClick={async () => {
+                              setPacketKind(kind);
+                              setPacketState("working");
+                              try {
+                                await generateDecisionPacket({
+                                  result,
+                                  card,
+                                  tradeoffs,
+                                  counterfactuals: cfs,
+                                  variant: kind,
+                                });
+                                setPacketState("idle");
+                              } catch (err) {
+                                console.error(err);
+                                setPacketState("error");
+                              }
+                            }}
+                            disabled={packetState === "working"}
+                            className={cn(
+                              "ki-press min-h-9 rounded-md border px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                              kind === "field"
+                                ? "border-primary/60 bg-primary/15 text-foreground hover:bg-primary/25"
+                                : "border-hairline text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            {busy ? "Building…" : failed ? `Retry ${label.toLowerCase()}` : label}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
