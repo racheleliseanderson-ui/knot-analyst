@@ -705,6 +705,48 @@ function Transfer() {
             Clear draft
           </button>
         </div>
+        {pending ? (
+          <div className="mt-4 rounded-lg border border-caution/50 bg-caution/8 p-4">
+            <MicroLabel className="mb-2">Dry run — nothing applied yet</MicroLabel>
+            <ul className="space-y-1">
+              {pending.diff.map((d) => (
+                <li key={d} className="text-[0.8125rem] leading-relaxed text-foreground">
+                  {d}
+                </li>
+              ))}
+              {pending.errors.map((e, i) => (
+                <li key={i} className="text-[0.8125rem] leading-relaxed text-destructive">
+                  Rejected — {e}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  replaceAll(pending.data);
+                  setReport([
+                    `Applied ${pending.data.scenarios.length} scenarios, ${pending.data.materials.length} materials, ${pending.data.connections.length} connections.`,
+                  ]);
+                  setPending(null);
+                }}
+                className="ki-press min-h-11 rounded-lg border border-primary/60 bg-primary/15 px-4 text-[0.875rem] font-semibold tracking-tight text-foreground hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Apply import
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPending(null);
+                  setReport(["Import discarded. The draft is unchanged."]);
+                }}
+                className="ki-press min-h-11 rounded-lg border border-hairline px-4 text-[0.875rem] tracking-tight text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        ) : null}
         {report.length ? (
           <ul className="mt-4 space-y-1.5">
             {report.map((r, i) => (
