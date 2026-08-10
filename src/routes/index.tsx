@@ -34,6 +34,13 @@ type Search = {
 };
 
 const str = (v: unknown) => (typeof v === "string" && v.length ? v : undefined);
+const safeDecode = (v: string) => {
+  try {
+    return decodeURIComponent(v);
+  } catch {
+    return v;
+  }
+};
 const bool = (v: unknown) => (v === true || v === "true" || v === "1" ? true : undefined);
 
 export const Route = createFileRoute("/")({
@@ -148,7 +155,7 @@ function DecideMode() {
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-accent/40 bg-accent/8 px-4 py-3 no-print">
           <MicroLabel className="text-accent">Carried from diagnosis</MicroLabel>
           <p className="text-[0.8125rem] text-foreground/85">
-            {search.from} — context preloaded below. Adjust anything that was
+            {safeDecode(search.from)} — context preloaded below. Adjust anything that was
             wrong before you trust the answer.
           </p>
         </div>
