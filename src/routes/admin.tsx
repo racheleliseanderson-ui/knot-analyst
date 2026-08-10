@@ -92,6 +92,35 @@ function Row({ title, sub, onDelete }: { title: string; sub: string; onDelete: (
   );
 }
 
+/** Shared filter for the authored lists — long drafts stop being scannable fast. */
+function FilterBox({
+  value,
+  onChange,
+  count,
+  total,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  count: number;
+  total: number;
+}) {
+  return (
+    <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+      <MicroLabel>
+        Authored · {count}
+        {count !== total ? ` of ${total}` : ""}
+      </MicroLabel>
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Filter"
+        aria-label="Filter authored entries"
+        className="min-h-9 w-40 rounded-md border border-hairline bg-surface-2/40 px-2.5 text-[0.8125rem] text-foreground outline-none focus:border-primary/60"
+      />
+    </div>
+  );
+}
+
 type Tab = "scenarios" | "materials" | "connections" | "transfer";
 
 function AdminMode() {
