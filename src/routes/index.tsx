@@ -103,9 +103,12 @@ const JOIN_JOBS: ConnectionJob[] = [
 function DecideMode() {
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const scenarios = useScenarios();
+  const connectionGroups = useConnectionGroups();
+  const materialOptions = useMaterialOptions();
 
   const seeded: Partial<ChooseInput> | null = useMemo(() => {
-    const sc = FIELD_SCENARIOS.find((s) => s.id === search.scenario);
+    const sc = scenarios.find((s) => s.id === search.scenario);
     if (sc) return sc.input;
     if (!search.connection) return null;
     return {
@@ -122,13 +125,15 @@ function DecideMode() {
       ...(search.eye ? { hardwareEyeSmall: true } : {}),
       ...(search.swing ? { freeSwing: true } : {}),
     };
-  }, [search]);
+  }, [search, scenarios]);
 
   const [input, setInput] = useState<Partial<ChooseInput>>(seeded ?? {});
   const [ran, setRan] = useState<boolean>(Boolean(seeded && search.run !== undefined));
   const [showEliminated, setShowEliminated] = useState(false);
   const [showMatrix, setShowMatrix] = useState(false);
   const [packetState, setPacketState] = useState<"idle" | "working" | "error">("idle");
+  /** Chip keys, so custom materials/connections stay visibly selected */
+  const [sel, setSel] = useState<{ connection?: string; main?: string; secondary?: string }>({});
 
   useEffect(() => {
     if (seeded) {
@@ -137,8 +142,9 @@ function DecideMode() {
     }
   }, [seeded]);
 
-  const set = (patch: Partial<ChooseInput>) => {
+  const set = (patch: Partial<ChooseInput>, keys?: typeof sel) => {
     setInput((prev) => ({ ...prev, ...patch }));
+    if (keys) setSel((prev) => ({ ...prev, ...keys }));
     setRan(false);
   };
   const toggle = (key: keyof ChooseInput) =>
@@ -180,18 +186,22 @@ function DecideMode() {
           <Panel className="p-5">
             <StepHead index="01" title="Connection" hint="What is physically being joined." />
             <div className="space-y-4">
-              {CONNECTION_GROUPS.map((g) => (
+              {connectionGroups.map((g) => (
                 <div key={g.title}>
                   <MicroLabel className="mb-2">{g.title}</MicroLabel>
                   <div className="flex flex-wrap gap-1.5">
                     {g.jobs.map((j) => (
                       <Chip
-                        key={j}
+                        key={j.key}
                         tone="signal"
-                        active={input.connection === j}
-                        onClick={() => set({ connection: j })}
+                        active={
+                          sel.connection
+                            ? sel.connection === j.key
+                            : input.connection === j.base && !j.custom
+                        }
+                        onClick={() => set({ connection: j.base }, { connection: j.key })}
                       >
-                        {CONNECTION_LABELS[j]}
+                        {j.label}
                       </Chip>
                     ))}
                   </div>
@@ -211,14 +221,22 @@ function DecideMode() {
               <div>
                 <MicroLabel className="mb-2">Main line</MicroLabel>
                 <div className="flex flex-wrap gap-1.5">
-                  {MATERIALS.map((m) => (
+                  {materialOptions.map((m) => (
                     <Chip
-                      key={m}
+                      key={m.key}
                       disabled={!input.connection}
-                      active={input.mainMaterial === m}
-                      onClick={() => set({ mainMaterial: input.mainMaterial === m ? undefined : m })}
+                      active={
+                        sel.main ? sel.main === m.key : input.mainMaterial === m.base && !m.custom
+                      }
+                      onClick={() => {
+                        const on = sel.main ? sel.main === m.key : input.mainMaterial === m.base;
+                        set(
+                          { mainMaterial: on ? undefined : m.base },
+                          { main: on ? undefined : m.key },
+                        );
+                      }}
                     >
-                      {MATERIAL_LABELS[m]}
+                      {m.label}
                     </Chip>
                   ))}
                 </div>
@@ -228,15 +246,25 @@ function DecideMode() {
                   <div>
                     <MicroLabel className="mb-2">Leader / second line</MicroLabel>
                     <div className="flex flex-wrap gap-1.5">
-                      {MATERIALS.map((m) => (
+                      {materialOptions.map((m) => (
                         <Chip
-                          key={m}
-                          active={input.secondaryMaterial === m}
-                          onClick={() =>
-                            set({ secondaryMaterial: input.secondaryMaterial === m ? undefined : m })
+                          key={m.key}
+                          active={
+                            sel.secondary
+                              ? sel.secondary === m.key
+                              : input.secondaryMaterial === m.base && !m.custom
                           }
+                          onClick={() => {
+                            const on = sel.secondary
+                              ? sel.secondary === m.key
+                              : input.secondaryMaterial === m.base;
+                            set(
+                              { secondaryMaterial: on ? undefined : m.base },
+                              { secondary: on ? undefined : m.key },
+                            );
+                          }}
                         >
-                          {MATERIAL_LABELS[m]}
+                          {m.label}
                         </Chip>
                       ))}
                     </div>
