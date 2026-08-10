@@ -512,6 +512,19 @@ function DecideMode() {
                   </div>
                 ) : (
                   <>
+                    {result.termination ? (
+                      <div className="border-b border-hairline bg-caution/8 px-6 py-4">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <Verdict tone="watch">{result.termination.method}</Verdict>
+                          <p className="text-[0.9375rem] font-semibold tracking-tight">
+                            {result.termination.headline}
+                          </p>
+                        </div>
+                        <p className="mt-2 max-w-2xl text-[0.8125rem] leading-relaxed text-muted-foreground">
+                          {result.termination.detail}
+                        </p>
+                      </div>
+                    ) : null}
                     <div className="grid gap-6 px-6 py-6 sm:grid-cols-[minmax(0,1fr)_150px]">
                       <div className="min-w-0">
                         <h2 className="text-[2rem] font-semibold leading-none tracking-[-0.03em]">
