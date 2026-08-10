@@ -312,5 +312,102 @@ export function StepPlayer({ knot }: { knot: Knot }) {
         </button>
       </div>
     </Panel>
+
+    <PrintSteps knot={knot} steps={steps} />
+    </>
+  );
+}
+
+/** Print-only linear rendering — every step expanded, no controls. */
+function PrintSteps({ knot, steps }: { knot: Knot; steps: KnotStep[] }) {
+  const total = steps.length;
+  return (
+    <section className="hidden print:block">
+      <h2 className="mb-3 text-[1rem] font-semibold tracking-tight">
+        Tying procedure — {knot.name}
+      </h2>
+      <ol className="space-y-4">
+        {steps.map((s, i) => {
+          const defect = knot.fingerprint.dangerousDefects.filter((d) => d.stepWhere === s.order);
+          return (
+            <li key={s.order} className="break-inside-avoid border-t border-hairline pt-3">
+              <div className="grid gap-3 sm:grid-cols-[180px_minmax(0,1fr)]">
+                <KnotDiagram
+                  kind={knot.diagramKind}
+                  step={s.order}
+                  title={`${knot.name} — step ${i + 1} of ${total}`}
+                  className="aspect-[400/180] w-full"
+                />
+                <div>
+                  <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em]">
+                    Step {String(s.order).padStart(2, "0")} / {total}
+                  </p>
+                  <p className="mt-1 text-[0.9375rem] leading-snug">{s.instruction}</p>
+                  {s.detail ? (
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed">{s.detail}</p>
+                  ) : null}
+                  {s.expectedResult ? (
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed">
+                      <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
+                        You should now see:{" "}
+                      </span>
+                      {s.expectedResult}
+                    </p>
+                  ) : null}
+                  {s.tip ? (
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed">
+                      <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
+                        Tension / control:{" "}
+                      </span>
+                      {s.tip}
+                    </p>
+                  ) : null}
+                  {s.look ? (
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed">
+                      <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
+                        ✓ Look for:{" "}
+                      </span>
+                      {s.look}
+                    </p>
+                  ) : null}
+                  {s.failureMode ? (
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed">
+                      <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
+                        × Fails as:{" "}
+                      </span>
+                      {s.failureMode}
+                    </p>
+                  ) : null}
+                  {s.quickFix ? (
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed">
+                      <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
+                        → Quick fix:{" "}
+                      </span>
+                      {s.quickFix}
+                    </p>
+                  ) : null}
+                  {s.commonError ? (
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed">
+                      <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
+                        Common error:{" "}
+                      </span>
+                      {s.commonError}
+                    </p>
+                  ) : null}
+                  {defect.map((d) => (
+                    <p key={d.id} className="mt-1 text-[0.8125rem] leading-relaxed">
+                      <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
+                        If wrong:{" "}
+                      </span>
+                      {d.label} — {d.consequence}.
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
   );
 }
