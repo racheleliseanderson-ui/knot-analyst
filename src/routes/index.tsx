@@ -431,6 +431,7 @@ function DecideMode() {
             </div>
           </Panel>
 
+          {venues.length ? (
           <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
             <StepHead
               index="04"
@@ -448,6 +449,7 @@ function DecideMode() {
               }}
             />
           </Panel>
+          ) : null}
 
           <button
             type="button"
