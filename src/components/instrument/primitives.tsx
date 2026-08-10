@@ -75,6 +75,7 @@ export function Chip({
       className={cn(
         "rounded-md border px-3 py-1.5 text-left text-[0.8125rem] leading-tight transition-all duration-200",
         "border-hairline bg-surface-2/40 text-muted-foreground hover:border-border hover:text-foreground",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active &&
           (tone === "signal"
             ? "border-primary/70 bg-primary/15 text-foreground shadow-[0_0_0_1px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
@@ -88,8 +89,8 @@ export function Chip({
 }
 
 export function Meter({ value, label, sub }: { value: number; label?: string; sub?: string }) {
-  const tone =
-    value >= 78 ? "var(--grade-1)" : value >= 58 ? "var(--grade-2)" : "var(--grade-3)";
+  const grade = value >= 78 ? 1 : value >= 58 ? 2 : 3;
+  const tone = `var(--grade-${grade})`;
   return (
     <div>
       {label ? (
@@ -100,7 +101,8 @@ export function Meter({ value, label, sub }: { value: number; label?: string; su
       ) : null}
       <div className="h-[3px] w-full overflow-hidden rounded-full bg-surface-2">
         <div
-          className="h-full rounded-full transition-[width] duration-700 ease-out"
+          data-grade={grade}
+          className="ki-meter-fill h-full rounded-full transition-[width] duration-700 ease-out"
           style={{ width: `${Math.max(2, Math.min(100, value))}%`, background: tone }}
         />
       </div>

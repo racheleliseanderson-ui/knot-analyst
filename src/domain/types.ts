@@ -283,6 +283,12 @@ export interface ChooseInput {
   connection: ConnectionJob;
   mainMaterial?: LineMaterial;
   secondaryMaterial?: LineMaterial;
+  /**
+   * Optional four-axis material detail. Absent = behave exactly as the flat
+   * material enum always did.
+   */
+  mainSpec?: import("@/domain/material").MaterialSpec;
+  secondarySpec?: import("@/domain/material").MaterialSpec;
   diameterRelation?: DiameterRelation;
   mustPassGuides?: boolean;
   windy?: boolean;
@@ -334,6 +340,8 @@ export interface ChooseResult {
   counterfactualHints: string[];
   /** Headline tradeoff for marketing / share */
   tradeoffSummary?: string;
+  /** Non-knot termination surfaced by construction axes (splice / crimp) */
+  termination?: import("@/domain/material").TerminationAdvice;
 }
 
 export interface LayeredFinding {

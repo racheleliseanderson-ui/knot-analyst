@@ -105,6 +105,49 @@
   --shadow-instrument: 0 1px 0 0 oklch(1 0 0 / 90%) inset, 0 16px 34px -26px oklch(0.3 0.05 232 / 45%);
 }
 
+/*
+ * Colour-vision-safe, high-contrast signals. Layered on top of .light so only
+ * the signal hues change: a blue / amber / near-black triad that stays
+ * distinguishable under deuteranopia and protanopia, plus stronger text
+ * contrast. Never colour alone — glyphs and meter patterns carry the state.
+ */
+.cb {
+  --foreground: oklch(0.17 0.02 232);
+  --muted-foreground: oklch(0.38 0.02 226);
+  --border: oklch(0.72 0.01 220);
+  --hairline: oklch(0.78 0.01 220);
+  --primary: oklch(0.45 0.14 255);
+  --primary-foreground: oklch(0.99 0.005 255);
+  --accent: oklch(0.38 0.11 255);
+  --accent-foreground: oklch(0.99 0.004 255);
+  --ring: oklch(0.45 0.14 255);
+
+  --affirm: oklch(0.42 0.13 255);
+  --caution: oklch(0.6 0.14 78);
+  --destructive: oklch(0.24 0.03 250);
+  --destructive-foreground: oklch(0.99 0.005 250);
+
+  --grade-1: oklch(0.42 0.13 255);
+  --grade-2: oklch(0.6 0.14 78);
+  --grade-3: oklch(0.24 0.03 250);
+}
+
+/* Meter grade survives greyscale: fill pattern differs per grade. */
+.cb .ki-meter-fill[data-grade="2"] {
+  background-image: repeating-linear-gradient(
+    90deg,
+    oklch(1 0 0 / 70%) 0 2px,
+    transparent 2px 5px
+  );
+}
+.cb .ki-meter-fill[data-grade="3"] {
+  background-image: repeating-linear-gradient(
+    90deg,
+    oklch(1 0 0 / 85%) 0 1px,
+    transparent 1px 3px
+  );
+}
+
 @layer base {
   * {
     border-color: var(--color-border);

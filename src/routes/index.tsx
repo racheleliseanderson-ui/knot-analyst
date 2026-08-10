@@ -12,6 +12,63 @@ import {
   DIAMETER_LABELS,
   DIMENSION_LABELS,
 } from "@/domain/types";
+import { resolveMaterial, type MaterialSpec } from "@/domain/material";
+import { FISHING_MATERIAL_PRESETS } from "@/domains/fishing/materials";
+
+/**
+ * Optional deeper material axes. Only rendered for categories that actually
+ * have a disclosure config (braid, wire, backing), and every row offers
+ * "Not sure", which reproduces today's flat behaviour exactly.
+ */
+function MaterialDetail({
+  category,
+  spec,
+  onChange,
+}: {
+  category: LineMaterial | undefined;
+  spec: MaterialSpec | undefined;
+  onChange: (next: MaterialSpec | undefined) => void;
+}) {
+  const preset = category ? FISHING_MATERIAL_PRESETS[category] : undefined;
+  if (!preset?.disclosure) return null;
+
+  const current = spec ?? preset.spec;
+
+  return (
+    <div className="mt-3 space-y-3 rounded-lg border border-hairline/80 bg-surface-2/25 p-3 [&_button]:min-h-11 sm:[&_button]:min-h-0">
+      {preset.disclosure.map((row) => (
+        <div key={row.axis} role="group" aria-label={row.label}>
+          <MicroLabel className="mb-2">{row.label} · optional</MicroLabel>
+          <div className="flex flex-wrap gap-1.5">
+            {row.options.map((o) => {
+              const active = current[row.axis] === o.id;
+              return (
+                <Chip
+                  key={o.id}
+                  active={active}
+                  onClick={() =>
+                    onChange(
+                      resolveMaterial(category, FISHING_MATERIAL_PRESETS, {
+                        ...(row.axis === "construction"
+                          ? { construction: (active ? "unspecified" : o.id) as MaterialSpec["construction"] }
+                          : { construction: current.construction }),
+                        ...(row.axis === "treatment"
+                          ? { treatment: (active ? "unspecified" : o.id) as MaterialSpec["treatment"] }
+                          : { treatment: current.treatment }),
+                      }),
+                    )
+                  }
+                >
+                  {o.label}
+                </Chip>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 type Search = {
   connection?: ConnectionJob;
@@ -226,7 +283,12 @@ function DecideMode() {
                       onClick={() => {
                         const on = sel.main ? sel.main === m.key : input.mainMaterial === m.base;
                         set(
-                          { mainMaterial: on ? undefined : m.base },
+                          {
+                            mainMaterial: on ? undefined : m.base,
+                            mainSpec: on
+                              ? undefined
+                              : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                          },
                           { main: on ? undefined : m.key },
                         );
                       }}
@@ -235,6 +297,11 @@ function DecideMode() {
                     </Chip>
                   ))}
                 </div>
+                <MaterialDetail
+                  category={input.mainMaterial}
+                  spec={input.mainSpec}
+                  onChange={(next) => set({ mainSpec: next })}
+                />
               </div>
               {isJoin ? (
                 <>
@@ -254,7 +321,12 @@ function DecideMode() {
                               ? sel.secondary === m.key
                               : input.secondaryMaterial === m.base;
                             set(
-                              { secondaryMaterial: on ? undefined : m.base },
+                              {
+                                secondaryMaterial: on ? undefined : m.base,
+                                secondarySpec: on
+                                  ? undefined
+                                  : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                              },
                               { secondary: on ? undefined : m.key },
                             );
                           }}
@@ -263,6 +335,11 @@ function DecideMode() {
                         </Chip>
                       ))}
                     </div>
+                    <MaterialDetail
+                      category={input.secondaryMaterial}
+                      spec={input.secondarySpec}
+                      onChange={(next) => set({ secondarySpec: next })}
+                    />
                   </div>
                   <div>
                     <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
@@ -435,6 +512,19 @@ function DecideMode() {
                   </div>
                 ) : (
                   <>
+                    {result.termination ? (
+                      <div className="border-b border-hairline bg-caution/8 px-6 py-4">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <Verdict tone="watch">{result.termination.method}</Verdict>
+                          <p className="text-[0.9375rem] font-semibold tracking-tight">
+                            {result.termination.headline}
+                          </p>
+                        </div>
+                        <p className="mt-2 max-w-2xl text-[0.8125rem] leading-relaxed text-muted-foreground">
+                          {result.termination.detail}
+                        </p>
+                      </div>
+                    ) : null}
                     <div className="grid gap-6 px-6 py-6 sm:grid-cols-[minmax(0,1fr)_150px]">
                       <div className="min-w-0">
                         <h2 className="text-[2rem] font-semibold leading-none tracking-[-0.03em]">

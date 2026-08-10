@@ -54,6 +54,12 @@ export interface KnotDomain {
   terms: DomainTerms;
   connections: DomainOption[];
   materials: DomainOption[];
+  /**
+   * Optional four-axis material presets keyed by the domain's material
+   * category ids. Boating can supply its own constructions here without
+   * Fishing rendering any extra rows.
+   */
+  materialAxes?: Record<string, import("@/domain/material").MaterialPreset>;
   diameters: DomainOption[];
   dimensions: DomainDimension[];
   scenarios: FieldScenario[];

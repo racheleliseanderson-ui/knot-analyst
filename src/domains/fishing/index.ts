@@ -7,6 +7,7 @@ import { LOOP_KNOTS } from "@/data/knots/loops";
 import { UTILITY_KNOTS } from "@/data/knots/utility";
 import type { KnotDomain } from "@/domain/domain";
 import { FISHING_DIMENSIONS } from "./dimensions";
+import { FISHING_MATERIAL_PRESETS } from "./materials";
 import { FISHING_TERMS } from "./terms";
 import { FISHING_CONNECTIONS, FISHING_DIAMETERS, FISHING_MATERIALS } from "./vocabulary";
 
@@ -16,6 +17,7 @@ export const FISHING_DOMAIN: KnotDomain = {
   terms: FISHING_TERMS,
   connections: FISHING_CONNECTIONS,
   materials: FISHING_MATERIALS,
+  materialAxes: FISHING_MATERIAL_PRESETS,
   diameters: FISHING_DIAMETERS,
   dimensions: FISHING_DIMENSIONS,
   scenarios: FIELD_SCENARIOS,
