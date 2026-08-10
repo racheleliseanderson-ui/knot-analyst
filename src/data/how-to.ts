@@ -11,6 +11,9 @@ import type { KnotContent, KnotStep, SeatingPhase } from "@/domain/types";
 interface StepDepth {
   detail?: string;
   expectedResult?: string;
+  look?: string;
+  failureMode?: string;
+  quickFix?: string;
 }
 
 interface HowTo {
