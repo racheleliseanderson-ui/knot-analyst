@@ -424,13 +424,31 @@ function DecideMode() {
             </div>
           </Panel>
 
+          <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+            <StepHead
+              index="04"
+              title={t("decide.venue")}
+              hint={t("decide.venueHint")}
+              state={input.connection ? "open" : "locked"}
+            />
+            <VenuePicker
+              venues={venues}
+              activeId={venueId}
+              disabled={!input.connection}
+              onPick={(v) => {
+                setVenueId(v?.id);
+                if (v) set(v.conditions);
+              }}
+            />
+          </Panel>
+
           <button
             type="button"
             disabled={!input.connection}
             onClick={() => setRan(true)}
-            className="w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 disabled:cursor-not-allowed disabled:opacity-40"
+            className="ki-press min-h-12 w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {ran ? "Re-run model" : "Run mechanical model"}
+            {ran ? t("decide.rerun") : t("decide.run")}
           </button>
           {!input.connection ? (
             <p className="text-xs text-muted-foreground">
