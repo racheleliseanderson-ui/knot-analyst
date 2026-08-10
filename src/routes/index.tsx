@@ -80,7 +80,6 @@ export const Route = createFileRoute("/")({
   component: DecideMode,
 });
 
-const MATERIALS: LineMaterial[] = ["mono", "fluoro", "braid", "fly-line", "backing", "wire"];
 const DIAMETERS: DiameterRelation[] = [
   "similar",
   "main-thinner",
