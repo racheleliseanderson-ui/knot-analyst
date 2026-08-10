@@ -280,8 +280,83 @@ function PipelineStrip({
   onClearLog: () => void;
 }) {
   const [showLog, setShowLog] = useState(false);
+  /** Roving tabindex: the toolbar is one tab stop, arrows move between controls. */
+  const [focusIdx, setFocusIdx] = useState(0);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
+  const logBtnRef = useRef<HTMLButtonElement>(null);
+  /** What the screen reader hears when a control changes the pipeline. */
+  const [announcement, setAnnouncement] = useState("");
+  const prev = useRef({ revealed, frozen, runId: comparison.runId });
+
+  const stage = comparison.stages[Math.max(0, Math.min(revealed, 4) - 1)];
+
+  useEffect(() => {
+    const p = prev.current;
+    prev.current = { revealed, frozen, runId: comparison.runId };
+    if (p.runId !== comparison.runId) {
+      setAnnouncement(
+        `Pipeline re-run. Run ${comparison.runId}. All four stages complete in ${comparison.stages.reduce((n, s) => n + s.ms, 0)} milliseconds.`,
+      );
+      return;
+    }
+    if (p.frozen !== frozen) {
+      setAnnouncement(
+        frozen
+          ? "Pipeline frozen. Edits to either side are held and not recomputed."
+          : "Pipeline unfrozen. Edits recompute on change.",
+      );
+      return;
+    }
+    if (p.revealed !== revealed && stage) {
+      setAnnouncement(
+        `Stage ${Math.min(revealed, 4)} of 4 revealed. ${stage.label}. ${stage.detail} ${stage.ms} milliseconds.`,
+      );
+    }
+  }, [revealed, frozen, comparison, stage]);
+
+  /** Move focus into the log when it opens; hand it back to the trigger on close. */
+  const closeLog = (returnFocus: boolean) => {
+    setShowLog(false);
+    if (returnFocus) logBtnRef.current?.focus();
+  };
+  useEffect(() => {
+    if (showLog) logRef.current?.focus();
+  }, [showLog]);
+
+  const controlCount = 4;
+  const focusControl = (i: number) => {
+    const next = (i + controlCount) % controlCount;
+    setFocusIdx(next);
+    const nodes = toolbarRef.current?.querySelectorAll<HTMLButtonElement>("button[data-ctl]");
+    nodes?.[next]?.focus();
+  };
+  const onToolbarKey = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      focusControl(focusIdx + 1);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      focusControl(focusIdx - 1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      focusControl(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      focusControl(controlCount - 1);
+    }
+  };
+  const ctl = (i: number) => ({
+    "data-ctl": true as const,
+    tabIndex: focusIdx === i ? 0 : -1,
+    onFocus: () => setFocusIdx(i),
+  });
+
   return (
     <Panel className={"mt-6 overflow-hidden " + (frozen ? "ring-1 ring-caution/70" : "")}>
+      <p aria-live="polite" role="status" className="sr-only">
+        {announcement}
+      </p>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3">
         <div className="flex flex-wrap items-center gap-3">
           <MicroLabel>Pipeline</MicroLabel>
@@ -290,39 +365,92 @@ function PipelineStrip({
           </span>
           {frozen ? <Verdict tone="watch">frozen — edits not recomputed</Verdict> : null}
         </div>
-        <div className="flex flex-wrap gap-2 no-print">
-          <button type="button" onClick={onRerun} className={btn}>
+        <div
+          ref={toolbarRef}
+          role="toolbar"
+          aria-label="Pipeline run controls"
+          aria-orientation="horizontal"
+          onKeyDown={onToolbarKey}
+          className="flex flex-wrap gap-2 no-print"
+        >
+          <button
+            type="button"
+            onClick={onRerun}
+            {...ctl(0)}
+            aria-label={`Re-run the pipeline. Current run ${comparison.runId}.`}
+            className={btn}
+          >
             Re-run
           </button>
-          <button type="button" onClick={onStep} className={btn}>
-            Step {Math.min(revealed, 4)}/4
+          <button
+            type="button"
+            onClick={onStep}
+            {...ctl(1)}
+            aria-label={
+              revealed >= 4
+                ? "Step the pipeline. All four stages revealed; stepping restarts at stage 1."
+                : `Step the pipeline. Stage ${Math.min(revealed, 4)} of 4 revealed; next reveals ${comparison.stages[Math.min(revealed, 3)]?.label ?? "the next stage"}.`
+            }
+            className={btn}
+          >
+            <span aria-hidden="true">Step {Math.min(revealed, 4)}/4</span>
           </button>
           <button
             type="button"
             onClick={onToggleFreeze}
             aria-pressed={frozen}
+            {...ctl(2)}
+            aria-label={
+              frozen
+                ? "Freeze pipeline. On — edits are held and not recomputed."
+                : "Freeze pipeline. Off — edits recompute immediately."
+            }
             className={btn + (frozen ? " border-caution/60 text-caution" : "")}
           >
-            {frozen ? "Unfreeze" : "Freeze"}
+            <span aria-hidden="true">{frozen ? "❄ Unfreeze" : "Freeze"}</span>
           </button>
           <button
             type="button"
-            onClick={() => setShowLog((v) => !v)}
+            ref={logBtnRef}
+            onClick={() => (showLog ? closeLog(false) : setShowLog(true))}
             aria-expanded={showLog}
-            className={btn}
+            aria-controls="pipeline-run-log"
+            {...ctl(3)}
+            aria-label={`${showLog ? "Hide" : "Show"} run log. ${log.length} recorded ${log.length === 1 ? "run" : "runs"} this session.`}
+            className={btn + (showLog ? " border-border text-foreground" : "")}
           >
-            Runs {log.length}
+            <span aria-hidden="true">
+              Runs {log.length} {showLog ? "▴" : "▾"}
+            </span>
           </button>
         </div>
       </div>
       {showLog ? (
-        <div className="border-b border-hairline px-5 py-3">
+        <div
+          id="pipeline-run-log"
+          ref={logRef}
+          tabIndex={-1}
+          role="group"
+          aria-label="Run log for this session"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              e.preventDefault();
+              closeLog(true);
+            }
+          }}
+          className="border-b border-hairline px-5 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+        >
           <div className="mb-2 flex items-center justify-between gap-3">
             <MicroLabel>Run log — this session only</MicroLabel>
             <button
               type="button"
-              onClick={onClearLog}
-              className="font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-destructive"
+              onClick={() => {
+                onClearLog();
+                setAnnouncement("Run log cleared.");
+              }}
+              aria-label={`Clear run log. Discards ${log.length} recorded ${log.length === 1 ? "run" : "runs"}.`}
+              disabled={log.length === 0}
+              className="ki-press min-h-11 rounded-md px-2 font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40 sm:min-h-9"
             >
               Clear
             </button>
@@ -347,7 +475,14 @@ function PipelineStrip({
                   </span>
                   <button
                     type="button"
-                    onClick={() => onRestore(e)}
+                    onClick={() => {
+                      onRestore(e);
+                      setAnnouncement(
+                        `Inputs restored from run ${e.runId}. Pipeline unfrozen and re-run.`,
+                      );
+                      closeLog(true);
+                    }}
+                    aria-label={`Restore inputs from run ${e.runId}, recorded ${new Date(e.ranAt).toLocaleTimeString()}, ${e.decisive} decisive ${e.decisive === 1 ? "constraint" : "constraints"}.`}
                     className="ki-press min-h-9 rounded-md border border-hairline px-2.5 font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Restore inputs
@@ -358,30 +493,49 @@ function PipelineStrip({
           )}
         </div>
       ) : null}
-      <ol className="grid gap-px bg-hairline sm:grid-cols-4">
+      <ol aria-label="Pipeline stages" className="grid gap-px bg-hairline sm:grid-cols-4">
         {comparison.stages.map((s, i) => {
           const done = i < revealed;
+          const current = i === Math.min(revealed, 4) - 1;
           return (
-            <li key={s.id} className="bg-card px-5 py-4">
+            <li
+              key={s.id}
+              aria-current={current ? "step" : undefined}
+              className={
+                "relative bg-card px-5 py-4 " +
+                (current ? "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent" : "")
+              }
+            >
               <div className="flex items-center gap-2">
                 <span className="font-mono text-[0.625rem] text-muted-foreground/60">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="text-[0.875rem] font-medium tracking-tight">{s.label}</span>
+                <span
+                  className={
+                    "text-[0.875rem] tracking-tight " +
+                    (current ? "font-semibold text-foreground" : "font-medium")
+                  }
+                >
+                  {s.label}
+                </span>
                 <span
                   className={
                     "ml-auto font-mono text-[0.5625rem] uppercase tracking-[0.14em] " +
                     (done ? "text-affirm" : "text-muted-foreground/60")
                   }
                 >
-                  {done ? "✓ done" : "· held"}
+                  <span aria-hidden="true">{done ? "✓ done" : "· held"}</span>
+                  <span className="sr-only">
+                    {done ? "complete" : "held, not yet run"}
+                    {current ? ", current stage" : ""}
+                  </span>
                 </span>
               </div>
               <p className="mt-1.5 text-[0.75rem] leading-relaxed text-muted-foreground">
                 {done ? s.detail : "awaiting step"}
               </p>
               <p className="mt-1 font-mono text-[0.625rem] tabular-nums text-muted-foreground/60">
-                {done ? `${s.ms} ms` : "—"}
+                {done ? `${s.ms} ms` : <span aria-hidden="true">—</span>}
               </p>
             </li>
           );
