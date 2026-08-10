@@ -436,6 +436,7 @@ function CompareMode() {
   const [nonce, setNonce] = useState(0);
   const [frozen, setFrozen] = useState(false);
   const [hover, setHover] = useState<"A" | "B" | null>(null);
+  const [compact, setCompact] = useState(false);
   const frozenRef = useRef<ComparisonResult | null>(null);
 
   const ready = Boolean(a.connection && b.connection);
