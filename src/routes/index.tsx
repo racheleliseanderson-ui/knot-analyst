@@ -6,15 +6,11 @@ import { Bullets, Chip, Meter, MicroLabel, Panel, StepHead, Verdict } from "@/co
 import { runChooser } from "@/engine/chooser";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
 import { generateDecisionPacket } from "@/lib/decision-packet";
-import { FIELD_SCENARIOS } from "@/data/scenarios";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import type { ChooseInput, ConnectionJob, DiameterRelation, Difficulty, LineMaterial } from "@/domain/types";
 import {
-  CONNECTION_GROUPS,
-  CONNECTION_LABELS,
   DIAMETER_LABELS,
   DIMENSION_LABELS,
-  MATERIAL_LABELS,
 } from "@/domain/types";
 
 type Search = {
