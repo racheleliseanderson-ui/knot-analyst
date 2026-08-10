@@ -35,7 +35,7 @@ function MaterialDetail({
   const current = spec ?? preset.spec;
 
   return (
-    <div className="mt-3 space-y-3 rounded-lg border border-hairline/80 bg-surface-2/25 p-3">
+    <div className="mt-3 space-y-3 rounded-lg border border-hairline/80 bg-surface-2/25 p-3 [&_button]:min-h-11 sm:[&_button]:min-h-0">
       {preset.disclosure.map((row) => (
         <div key={row.axis} role="group" aria-label={row.label}>
           <MicroLabel className="mb-2">{row.label} · optional</MicroLabel>

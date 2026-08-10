@@ -75,6 +75,7 @@ export function Chip({
       className={cn(
         "rounded-md border px-3 py-1.5 text-left text-[0.8125rem] leading-tight transition-all duration-200",
         "border-hairline bg-surface-2/40 text-muted-foreground hover:border-border hover:text-foreground",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active &&
           (tone === "signal"
             ? "border-primary/70 bg-primary/15 text-foreground shadow-[0_0_0_1px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
