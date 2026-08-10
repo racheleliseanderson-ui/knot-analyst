@@ -225,6 +225,8 @@ export interface KnotContent {
   seatingSequence?: SeatingPhase[];
   /** Cold hands, dark, gloves, second-attempt guidance */
   fieldNotes?: string[];
+  /** Selected tying video, click-to-load */
+  video?: KnotVideo;
 }
 
 /** Optional tying video, loaded only when the reader asks for it. */
