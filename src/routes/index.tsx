@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import heroImg from "@/assets/line-tension.jpg";
 import { Shell } from "@/components/instrument/shell";
 import { VenuePicker } from "@/components/instrument/venue-picker";
