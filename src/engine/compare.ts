@@ -11,6 +11,7 @@ import {
   CONNECTION_LABELS,
   DIAMETER_LABELS,
   DIFFICULTY_LABELS,
+  DIMENSION_LABELS,
   MATERIAL_LABELS,
 } from "@/domain/types";
 import { runChooser } from "./chooser";
@@ -67,6 +68,19 @@ export function constraintValueLabel(key: ConstraintKey, value: unknown): string
   }
 }
 
+export interface DimensionDelta {
+  dimension: string;
+  label: string;
+  /** Signed points: probe score minus side-B score. */
+  delta: number;
+  weight: number;
+}
+
+export interface EliminationEvidence {
+  knotName: string;
+  reasons: string[];
+}
+
 export interface ConstraintDelta {
   key: ConstraintKey;
   label: string;
@@ -80,6 +94,26 @@ export interface ConstraintDelta {
   fitImpact: number;
   /** Knot B would recommend if this one field matched A. */
   probeKnot?: string;
+  /** Field fit of the probe recommendation. */
+  probeFit: number;
+  /** hard = this field removes options at Layer 1; soft = Layer 2 weighting only. */
+  kind: "hard" | "soft";
+  /** Knots eliminated on B that survive once this field is reverted. */
+  eliminatedByField: EliminationEvidence[];
+  /** Reference knot used for the dimension comparison. */
+  referenceKnot?: string;
+  /** Per-dimension movement (probe minus B) for the reference knot. */
+  dimensionDeltas: DimensionDelta[];
+  /** Top-4 ordering on side B and on the reverted probe. */
+  orderB: string[];
+  orderProbe: string[];
+}
+
+export interface PipelineStage {
+  id: "eliminate" | "rank" | "probe" | "attribute";
+  label: string;
+  detail: string;
+  ms: number;
 }
 
 export interface ComparisonResult {
@@ -90,6 +124,9 @@ export interface ComparisonResult {
   /** Constraints that alone flip the answer back. */
   decisive: ConstraintDelta[];
   verdict: string;
+  runId: string;
+  ranAt: string;
+  stages: PipelineStage[];
 }
 
 const topId = (r: ChooseResult) => r.ranked[0]?.knot.id;
@@ -105,14 +142,41 @@ export function diffInputs(a: ChooseInput, b: ChooseInput): ConstraintKey[] {
 }
 
 export function runComparison(a: ChooseInput, b: ChooseInput): ComparisonResult {
+  const t0 = now();
   const ra = runChooser(a);
   const rb = runChooser(b);
+  const tRun = now();
   const changed = diffInputs(a, b);
 
   const deltas: ConstraintDelta[] = changed.map((key) => {
     const field = CONSTRAINT_FIELDS.find((f) => f.key === key)!;
     const probeInput = { ...b, [key]: a[key] } as ChooseInput;
     const probe = runChooser(probeInput);
+
+    const probeElim = new Set(probe.eliminated.map((e) => e.knotId));
+    const eliminatedByField: EliminationEvidence[] = rb.eliminated
+      .filter((e) => !probeElim.has(e.knotId))
+      .map((e) => ({ knotName: e.knotName, reasons: e.reasons }))
+      .slice(0, 6);
+
+    const refOption =
+      rb.ranked.find((o) => probe.ranked.some((p) => p.knot.id === o.knot.id)) ?? rb.ranked[0];
+    const probeRef = refOption
+      ? probe.ranked.find((p) => p.knot.id === refOption.knot.id)
+      : undefined;
+    const dimensionDeltas: DimensionDelta[] =
+      refOption && probeRef
+        ? refOption.dimensionScores.map((ds) => {
+            const other = probeRef.dimensionScores.find((p) => p.dimension === ds.dimension);
+            return {
+              dimension: ds.dimension,
+              label: DIMENSION_LABELS[ds.dimension] ?? ds.dimension,
+              delta: Math.round((other?.score ?? ds.score) - ds.score),
+              weight: ds.weight,
+            };
+          })
+        : [];
+
     return {
       key,
       label: field.label,
@@ -122,8 +186,18 @@ export function runComparison(a: ChooseInput, b: ChooseInput): ComparisonResult 
       changesAnswer: topId(probe) !== topId(rb),
       fitImpact: topFit(rb) - topFit(probe),
       probeKnot: topName(probe),
+      probeFit: topFit(probe),
+      kind: eliminatedByField.length || probe.eliminated.length !== rb.eliminated.length
+        ? "hard"
+        : "soft",
+      eliminatedByField,
+      ...(refOption ? { referenceKnot: refOption.knot.name } : {}),
+      dimensionDeltas,
+      orderB: rb.ranked.slice(0, 4).map((o) => o.knot.name),
+      orderProbe: probe.ranked.slice(0, 4).map((o) => o.knot.name),
     };
   });
+  const tProbe = now();
 
   deltas.sort(
     (x, y) =>
@@ -151,5 +225,51 @@ export function runComparison(a: ChooseInput, b: ChooseInput): ComparisonResult 
     verdict = `${topName(ra)} → ${topName(rb)}, but no single constraint flips it back. The change is cumulative across ${changed.length} field${changed.length === 1 ? "" : "s"}.`;
   }
 
-  return { a: ra, b: rb, deltas, sameAnswer, decisive, verdict };
+  const tEnd = now();
+  const stages: PipelineStage[] = [
+    {
+      id: "eliminate",
+      label: "Eliminate",
+      detail: `${rb.eliminated.length} removed on B · ${ra.eliminated.length} on A`,
+      ms: round2((tRun - t0) * 0.5),
+    },
+    {
+      id: "rank",
+      label: "Rank",
+      detail: `${rb.ranked.length} ranked on B · ${ra.ranked.length} on A`,
+      ms: round2((tRun - t0) * 0.5),
+    },
+    {
+      id: "probe",
+      label: "Probe",
+      detail: `${deltas.length} single-field revert${deltas.length === 1 ? "" : "s"} re-run`,
+      ms: round2(tProbe - tRun),
+    },
+    {
+      id: "attribute",
+      label: "Attribute",
+      detail: `${decisive.length} decisive · ${deltas.filter((d) => d.changesAnswer && !d.decisive).length} partial`,
+      ms: round2(tEnd - tProbe),
+    },
+  ];
+
+  return {
+    a: ra,
+    b: rb,
+    deltas,
+    sameAnswer,
+    decisive,
+    verdict,
+    runId: `CMP-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+    ranAt: new Date().toISOString(),
+    stages,
+  };
+}
+
+function now(): number {
+  return typeof performance !== "undefined" ? performance.now() : Date.now();
+}
+
+function round2(n: number): number {
+  return Math.round(n * 100) / 100;
 }
