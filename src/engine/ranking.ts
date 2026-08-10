@@ -235,6 +235,16 @@ function weightsFor(input: ChooseInput): Record<Dim, number> {
     w.diameterRelationship = Math.max(w.diameterRelationship, 1.5);
   }
 
+  // Declared slick / awkward construction makes load behaviour matter more.
+  const mods = [materialModifier(input.mainSpec), materialModifier(input.secondarySpec)];
+  if (mods.some((m) => m.slipPenalty >= 10)) {
+    w.loadBehavior = Math.max(w.loadBehavior, 1.5);
+    w.failureSensitivity = Math.max(w.failureSensitivity, 1.1);
+  }
+  if (mods.some((m) => m.seatingPenalty >= 8)) {
+    w.requiredTensionControl = Math.max(w.requiredTensionControl, 0.9);
+  }
+
   return w;
 }
 

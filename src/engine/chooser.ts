@@ -12,6 +12,7 @@ import {
 import { eliminateKnots } from "./constraints";
 import { annotateExplainability, explainTradeoff } from "./explain";
 import { rankSurvivors } from "./ranking";
+import { materialModifier, terminationAdvice } from "@/domain/material";
 
 export function runChooser(input: ChooseInput): ChooseResult {
   const { survivors, eliminated } = eliminateKnots(KNOTS, input);
@@ -27,6 +28,9 @@ export function runChooser(input: ChooseInput): ChooseResult {
 
   const top = ranked[0];
   const second = ranked[1];
+  const termination = terminationAdvice(input.mainSpec, input.secondarySpec);
+  const axisNote =
+    materialModifier(input.mainSpec).note ?? materialModifier(input.secondarySpec).note;
 
   let plainSummary: string;
   let tradeoffSummary: string | undefined;
@@ -35,7 +39,9 @@ export function runChooser(input: ChooseInput): ChooseResult {
   } else {
     tradeoffSummary = second ? explainTradeoff(top, second) : undefined;
     const trade = tradeoffSummary ? ` ${tradeoffSummary}` : "";
-    plainSummary = `Best field fit: ${top.knot.name} (${top.fieldFitPercent}%). ${top.whyBest.slice(0, 2).join(". ")}.${trade}`;
+    const axis = axisNote ? ` ${axisNote}.` : "";
+    const term = termination ? ` ${termination.headline}.` : "";
+    plainSummary = `Best field fit: ${top.knot.name} (${top.fieldFitPercent}%). ${top.whyBest.slice(0, 2).join(". ")}.${axis}${term}${trade}`;
   }
 
   const confidence: FindingConfidence = !top
@@ -65,6 +71,7 @@ export function runChooser(input: ChooseInput): ChooseResult {
     confidence,
     counterfactualHints,
     tradeoffSummary,
+    ...(termination ? { termination } : {}),
   };
 }
 
