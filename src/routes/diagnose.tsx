@@ -14,6 +14,9 @@ import {
 } from "@/domain/types";
 
 export const Route = createFileRoute("/diagnose")({
+  validateSearch: (s: Record<string, unknown>): { event?: string } => ({
+    event: typeof s['event'] === "string" ? (s['event'] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Diagnose a failed connection | Knot Intelligence" },
