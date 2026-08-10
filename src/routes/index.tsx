@@ -13,6 +13,7 @@ import { generateDecisionPacket, type PacketVariant } from "@/lib/decision-packe
 import { PresetBar } from "@/components/instrument/preset-bar";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import { encodeInput } from "@/lib/handoff";
+import { cn } from "@/lib/utils";
 import type { ChooseInput, ConnectionJob, DiameterRelation, Difficulty, LineMaterial } from "@/domain/types";
 import {
   DIAMETER_LABELS,
