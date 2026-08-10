@@ -175,6 +175,7 @@ function AdminMode() {
 function ScenarioEditor() {
   const { data, setScenarios } = useOverlay();
   const [title, setTitle] = useState("");
+  const [q, setQ] = useState("");
   const [tag, setTag] = useState("");
   const [blurb, setBlurb] = useState("");
   const [input, setInput] = useState<Partial<ChooseInput>>({});
@@ -186,8 +187,11 @@ function ScenarioEditor() {
   const add = () => {
     if (!title.trim()) return setError("A scenario needs a title.");
     if (!input.connection) return setError("A scenario needs a connection job — nothing runs without it.");
+    if (!input.mainMaterial)
+      return setError("Declare a main material. A scenario that omits it scores a different question.");
     const id = slugify(title);
     if (data.scenarios.some((s) => s.id === id)) return setError("A scenario with that name already exists.");
+    if (blurb.trim().length > 220) return setError("Keep the blurb under 220 characters — it is a chip, not a page.");
     const next: CustomScenario = {
       id,
       title: title.trim(),
@@ -369,14 +373,21 @@ function ScenarioEditor() {
       </Panel>
 
       <Panel className="p-5">
-        <MicroLabel className="mb-3">Authored scenarios</MicroLabel>
+        <FilterBox
+          value={q}
+          onChange={setQ}
+          total={data.scenarios.length}
+          count={data.scenarios.filter((s) => matches(q, s.title, s.tag, s.blurb)).length}
+        />
         {data.scenarios.length === 0 ? (
           <p className="text-[0.875rem] text-muted-foreground">
             None yet. Built-in scenarios stay in code and are never modified from here.
           </p>
         ) : (
           <div>
-            {data.scenarios.map((s) => (
+            {data.scenarios
+              .filter((s) => matches(q, s.title, s.tag, s.blurb))
+              .map((s) => (
               <Row
                 key={s.id}
                 title={s.title}
