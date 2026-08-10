@@ -94,9 +94,9 @@ export async function generateDecisionPacket({
   doc.setTextColor(224, 168, 78);
   doc.text("KNOT INTELLIGENCE · DECISION PACKET", M, 40, { charSpace: 1.8 });
   doc.setFontSize(19).setTextColor(246, 249, 250);
-  doc.text(card.knotName ?? "No valid connection", M, 66);
+  doc.text(ascii(card.knotName ?? "No valid connection"), M, 66);
   doc.setFont("helvetica", "normal").setFontSize(8).setTextColor(150, 166, 176);
-  doc.text(`${card.jobLine} · ${card.systemLine}`, M, 82);
+  doc.text(ascii(`${card.jobLine} · ${card.systemLine}`), M, 82);
   if (card.fieldFit !== undefined) {
     doc.setFont("helvetica", "bold").setFontSize(26).setTextColor(224, 168, 78);
     doc.text(`${card.fieldFit}%`, W - M, 68, { align: "right" });
@@ -115,7 +115,7 @@ export async function generateDecisionPacket({
   doc.setFillColor(244, 246, 247).rect(M, y - 12, CW, 26, "F");
   doc.setFont("helvetica", "bold").setFontSize(8.5);
   ink(BRASS);
-  doc.text(verdict, M + 10, y + 4, { charSpace: 0.6 });
+  doc.text(ascii(verdict), M + 10, y + 4, { charSpace: 0.6 });
   y += 34;
 
   micro("Conditions declared");
