@@ -283,7 +283,12 @@ function DecideMode() {
                       onClick={() => {
                         const on = sel.main ? sel.main === m.key : input.mainMaterial === m.base;
                         set(
-                          { mainMaterial: on ? undefined : m.base },
+                          {
+                            mainMaterial: on ? undefined : m.base,
+                            mainSpec: on
+                              ? undefined
+                              : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                          },
                           { main: on ? undefined : m.key },
                         );
                       }}
@@ -292,6 +297,11 @@ function DecideMode() {
                     </Chip>
                   ))}
                 </div>
+                <MaterialDetail
+                  category={input.mainMaterial}
+                  spec={input.mainSpec}
+                  onChange={(next) => set({ mainSpec: next })}
+                />
               </div>
               {isJoin ? (
                 <>
@@ -311,7 +321,12 @@ function DecideMode() {
                               ? sel.secondary === m.key
                               : input.secondaryMaterial === m.base;
                             set(
-                              { secondaryMaterial: on ? undefined : m.base },
+                              {
+                                secondaryMaterial: on ? undefined : m.base,
+                                secondarySpec: on
+                                  ? undefined
+                                  : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                              },
                               { secondary: on ? undefined : m.key },
                             );
                           }}
@@ -320,6 +335,11 @@ function DecideMode() {
                         </Chip>
                       ))}
                     </div>
+                    <MaterialDetail
+                      category={input.secondaryMaterial}
+                      spec={input.secondarySpec}
+                      onChange={(next) => set({ secondarySpec: next })}
+                    />
                   </div>
                   <div>
                     <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
