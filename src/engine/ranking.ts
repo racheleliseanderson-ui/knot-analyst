@@ -12,6 +12,7 @@ import {
   type Knot,
   type RankedOption,
 } from "@/domain/types";
+import { FISHING_WEIGHTS } from "@/domains/fishing/dimensions";
 
 type Dim = (typeof FIELD_FIT_DIMENSIONS)[number];
 
