@@ -148,7 +148,7 @@ function DecideMode() {
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-accent/40 bg-accent/8 px-4 py-3 no-print">
           <MicroLabel className="text-accent">Carried from diagnosis</MicroLabel>
           <p className="text-[0.8125rem] text-foreground/85">
-            {decodeURIComponent(search.from)} — context preloaded below. Adjust anything that was
+            {search.from} — context preloaded below. Adjust anything that was
             wrong before you trust the answer.
           </p>
         </div>
@@ -484,7 +484,7 @@ function DecideMode() {
                           <Meter value={o.fieldFitPercent} />
                         </div>
                         <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
-                          {o.vsNext ?? o.whyBest[0]}
+                          {idx === 0 ? (o.vsNext ?? o.whyBest[0]) : (o.whyBest[0] ?? o.butNotes[0] ?? o.vsNext)}
                         </p>
                         {idx === 0 ? (
                           <div className="mt-3 grid gap-2 sm:grid-cols-2">

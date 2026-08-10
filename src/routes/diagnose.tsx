@@ -171,7 +171,7 @@ function DiagnoseMode() {
         secondary: s.secondaryMaterial ?? input.secondaryMaterial,
         diameter: s.diameterRelation ?? input.diameterRelation,
         run: true,
-        from: encodeURIComponent(result.title),
+        from: result.title,
       },
     });
   };
