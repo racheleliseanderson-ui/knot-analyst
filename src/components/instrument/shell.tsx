@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/lib/theme";
 import { APPLICATION_ID, ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
 import { KNOTS } from "@/data/catalog";
 
@@ -15,6 +17,21 @@ function ModeLink({ to, label, code }: { to: string; label: string; code: string
       {label}
       <span className="absolute inset-x-2 -bottom-[9px] h-px scale-x-0 bg-primary transition-transform duration-300 group-data-[status=active]:scale-x-100" />
     </Link>
+  );
+}
+
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      title={theme === "dark" ? "Light mode" : "Dark mode"}
+      className="ml-1 flex h-8 w-8 items-center justify-center rounded-md border border-hairline text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+    >
+      {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+    </button>
   );
 }
 
@@ -37,6 +54,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
           <nav className="flex items-center gap-1">
             <ModeLink to="/" label="Decide" code="01" />
             <ModeLink to="/diagnose" label="Diagnose" code="02" />
+            <ThemeToggle />
           </nav>
         </div>
       </header>

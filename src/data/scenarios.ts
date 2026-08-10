@@ -137,6 +137,113 @@ export const FIELD_SCENARIOS: FieldScenario[] = [
       freeSwing: false,
     },
   },
+  {
+    id: "night-dock-light",
+    title: "Night dock light · low visibility",
+    blurb:
+      "Terminal knot rebuilt in the dark off a dock light. Inspectability collapses, so simple verifiable geometry outranks profile.",
+    tag: "Low light · terminal",
+    connectionLine: "Line → lure",
+    likelyPick: "Simple inspectable terminal geometry",
+    autoRun: true,
+    input: {
+      connection: "line-to-lure",
+      mainMaterial: "braid",
+      lowLight: true,
+      coldHands: true,
+      retieFrequency: "frequent",
+      proficiency: "intermediate",
+      hardwareEyeSmall: false,
+    },
+  },
+  {
+    id: "small-eye-fluoro",
+    title: "Small eye · heavy fluoro",
+    blurb:
+      "Stiff fluoro through an undersized hook eye. Doubled-line terminal knots are eliminated before scoring begins.",
+    tag: "Hardware limit",
+    connectionLine: "Line → hook",
+    likelyPick: "Single-pass terminal geometry",
+    autoRun: true,
+    input: {
+      connection: "line-to-hook",
+      mainMaterial: "fluoro",
+      hardwareEyeSmall: true,
+      retieFrequency: "occasional",
+      proficiency: "intermediate",
+    },
+  },
+  {
+    id: "surf-heavy-leader",
+    title: "Surf · thin braid to shock leader",
+    blurb:
+      "Extreme diameter mismatch that must survive repeated casting through guides. Most joins fail the mismatch test outright.",
+    tag: "Mismatch · casting",
+    connectionLine: "Braid → leader",
+    likelyPick: "Slim casting join when skill allows",
+    autoRun: true,
+    input: {
+      connection: "braid-to-leader",
+      mainMaterial: "braid",
+      secondaryMaterial: "mono",
+      diameterRelation: "extreme-mismatch",
+      mustPassGuides: true,
+      windy: true,
+      retieFrequency: "rare",
+      proficiency: "advanced",
+    },
+  },
+  {
+    id: "fly-line-leader",
+    title: "Fly line → leader",
+    blurb:
+      "Coated fly line to a mono butt section. Material class does most of the eliminating here, not preference.",
+    tag: "Fly system",
+    connectionLine: "Fly line → leader",
+    likelyPick: "Loop or nail-style transition",
+    autoRun: true,
+    input: {
+      connection: "fly-line-to-leader",
+      mainMaterial: "fly-line",
+      secondaryMaterial: "mono",
+      diameterRelation: "main-thicker",
+      mustPassGuides: true,
+      retieFrequency: "rare",
+      proficiency: "intermediate",
+    },
+  },
+  {
+    id: "snell-bait",
+    title: "Snelled bait hook",
+    blurb:
+      "Shank-aligned pull for hook-setting geometry. A snell is a different job, not a stronger version of a terminal knot.",
+    tag: "Snell · alignment",
+    connectionLine: "Hook snell",
+    likelyPick: "Snell family only",
+    autoRun: true,
+    input: {
+      connection: "hook-snell",
+      mainMaterial: "mono",
+      retieFrequency: "occasional",
+      proficiency: "intermediate",
+    },
+  },
+  {
+    id: "spool-arbor",
+    title: "New line onto the spool",
+    blurb:
+      "Backing to arbor. Slip behaviour under a bedded load is the only dimension that really matters.",
+    tag: "Utility · rig-up",
+    connectionLine: "Line → spool",
+    likelyPick: "Arbor geometry",
+    autoRun: true,
+    input: {
+      connection: "line-to-spool",
+      mainMaterial: "braid",
+      retieFrequency: "rare",
+      proficiency: "beginner",
+    },
+  },
 ];
 
 export function getScenario(id: string | undefined | null): FieldScenario | undefined {

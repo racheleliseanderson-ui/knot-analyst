@@ -5,6 +5,7 @@ import { Shell } from "@/components/instrument/shell";
 import { Bullets, Chip, Meter, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
 import { runChooser } from "@/engine/chooser";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
+import { generateDecisionPacket } from "@/lib/decision-packet";
 import { FIELD_SCENARIOS } from "@/data/scenarios";
 import type { ChooseInput, ConnectionJob, DiameterRelation, Difficulty, LineMaterial } from "@/domain/types";
 import {
@@ -125,6 +126,8 @@ function DecideMode() {
   const [input, setInput] = useState<Partial<ChooseInput>>(seeded ?? {});
   const [ran, setRan] = useState<boolean>(Boolean(seeded && search.run !== undefined));
   const [showEliminated, setShowEliminated] = useState(false);
+  const [showMatrix, setShowMatrix] = useState(false);
+  const [packetState, setPacketState] = useState<"idle" | "working" | "error">("idle");
 
   useEffect(() => {
     if (seeded) {
@@ -367,6 +370,31 @@ function DecideMode() {
                       >
                         Print
                       </button>
+                      <button
+                        onClick={async () => {
+                          setPacketState("working");
+                          try {
+                            await generateDecisionPacket({
+                              result,
+                              card,
+                              tradeoffs,
+                              counterfactuals: cfs,
+                            });
+                            setPacketState("idle");
+                          } catch (err) {
+                            console.error(err);
+                            setPacketState("error");
+                          }
+                        }}
+                        disabled={packetState === "working"}
+                        className="rounded-md border border-primary/60 bg-primary/15 px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-primary/25 disabled:opacity-50"
+                      >
+                        {packetState === "working"
+                          ? "Building…"
+                          : packetState === "error"
+                            ? "Retry PDF"
+                            : "PDF packet"}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -438,10 +466,13 @@ function DecideMode() {
                       ) : null}
                     </div>
                     <div className="border-t border-hairline px-6 py-3">
-                      <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
+                      <p
+                        suppressHydrationWarning
+                        className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70"
+                      >
                         {result.eliminated.length} candidates eliminated on hard constraints ·{" "}
                         engine {result.engineVersion} ·{" "}
-                        {new Date(result.generatedAt).toLocaleString()}
+                        {result.generatedAt.slice(0, 19).replace("T", " ")}Z
                       </p>
                     </div>
                   </>
@@ -511,6 +542,78 @@ function DecideMode() {
                       </div>
                     ))}
                   </div>
+                </Panel>
+              ) : null}
+
+              {result.ranked.length > 1 ? (
+                <Panel className="p-6">
+                  <button
+                    onClick={() => setShowMatrix((v) => !v)}
+                    className="flex w-full items-center justify-between gap-4 text-left no-print"
+                  >
+                    <MicroLabel>Dimension matrix — surviving options</MicroLabel>
+                    <span className="font-mono text-xs text-muted-foreground">
+                      {showMatrix ? "collapse" : "expand"}
+                    </span>
+                  </button>
+                  {showMatrix ? (
+                    <div className="mt-5 -mx-2 overflow-x-auto">
+                      <table className="w-full min-w-[560px] border-collapse text-left">
+                        <thead>
+                          <tr>
+                            <th className="px-2 pb-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                              Dimension
+                            </th>
+                            {result.ranked.slice(0, 4).map((o) => (
+                              <th
+                                key={o.knot.id}
+                                className="px-2 pb-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground"
+                              >
+                                {o.knot.name}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(result.ranked[0]?.dimensionScores ?? [])
+                            .slice()
+                            .sort((a, b) => b.weight - a.weight)
+                            .map((d) => (
+                              <tr key={d.dimension} className="border-t border-hairline">
+                                <td className="px-2 py-2 text-[0.8125rem] text-muted-foreground">
+                                  {DIMENSION_LABELS[d.dimension]}
+                                </td>
+                                {result.ranked.slice(0, 4).map((o) => {
+                                  const s =
+                                    o.dimensionScores.find((x) => x.dimension === d.dimension)
+                                      ?.score ?? 0;
+                                  return (
+                                    <td key={o.knot.id} className="px-2 py-2">
+                                      <span
+                                        className={
+                                          s >= 78
+                                            ? "font-mono text-[0.8125rem] tabular-nums text-affirm"
+                                            : s >= 58
+                                              ? "font-mono text-[0.8125rem] tabular-nums text-caution"
+                                              : "font-mono text-[0.8125rem] tabular-nums text-destructive"
+                                        }
+                                      >
+                                        {s}
+                                      </span>
+                                    </td>
+                                  );
+                                })}
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                      Every scored dimension, every surviving option, side by side. Weighted order —
+                      the top rows are the ones actually deciding this call.
+                    </p>
+                  )}
                 </Panel>
               ) : null}
 
