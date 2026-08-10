@@ -1,7 +1,8 @@
 /**
  * Fishing material presets — the six angler-facing buttons, unchanged, each
- * resolving to a four-axis spec. Only braid, wire and backing carry an
- * optional disclosure row, so the common path does not get longer.
+ * resolving to a four-axis spec. Every button now carries an optional
+ * disclosure row; each row offers "Not sure", so an untouched selection ranks
+ * byte-identically to the flat material it always was.
  */
 import type { LineMaterial } from "@/domain/types";
 import {
@@ -118,7 +119,10 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       {
         axis: "treatment",
         label: "Finish",
-        options: [...treat("uncoated", "coated-braid", "gel-spun-finish"), { id: "unspecified", label: "Not sure" }],
+        options: [
+          ...treat("uncoated", "coated-braid", "gel-spun-finish", "wax-treated", "high-vis-pigment"),
+          { id: "unspecified", label: "Not sure" },
+        ],
       },
     ],
   },
