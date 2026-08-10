@@ -46,7 +46,8 @@ export async function generateDecisionPacket({
       .replace(/\u2192/g, "->")
       .replace(/[\u2018\u2019]/g, "'")
       .replace(/[\u201C\u201D]/g, '"')
-      .replace(/[^\u0000-\u00FF]/g, "-");
+      // em/en dash and middot render fine in jsPDF's WinAnsi encoding — keep them.
+      .replace(/[^\u0000-\u00FF\u2013\u2014]/g, "-");
 
   const micro = (text: string, color = MUTED) => {
     ensure(18);
