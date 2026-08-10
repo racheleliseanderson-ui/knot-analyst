@@ -88,8 +88,8 @@ export function Chip({
 }
 
 export function Meter({ value, label, sub }: { value: number; label?: string; sub?: string }) {
-  const tone =
-    value >= 78 ? "var(--grade-1)" : value >= 58 ? "var(--grade-2)" : "var(--grade-3)";
+  const grade = value >= 78 ? 1 : value >= 58 ? 2 : 3;
+  const tone = `var(--grade-${grade})`;
   return (
     <div>
       {label ? (
@@ -100,7 +100,8 @@ export function Meter({ value, label, sub }: { value: number; label?: string; su
       ) : null}
       <div className="h-[3px] w-full overflow-hidden rounded-full bg-surface-2">
         <div
-          className="h-full rounded-full transition-[width] duration-700 ease-out"
+          data-grade={grade}
+          className="ki-meter-fill h-full rounded-full transition-[width] duration-700 ease-out"
           style={{ width: `${Math.max(2, Math.min(100, value))}%`, background: tone }}
         />
       </div>
