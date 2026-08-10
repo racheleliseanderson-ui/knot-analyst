@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import type { Knot } from "@/domain/types";
-import { KnotDiagram } from "@/components/instrument/diagram";
+import type { Knot, KnotStep } from "@/domain/types";
+import { KnotDiagram, describeDiagram } from "@/components/instrument/diagram";
 import { MicroLabel, Panel } from "@/components/instrument/primitives";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ export function StepPlayer({ knot }: { knot: Knot }) {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState<1 | -1>(1);
   const [microOpen, setMicroOpen] = useState(false);
+  const [describeOpen, setDescribeOpen] = useState(false);
   const current = steps[index];
   const indexRef = useRef(0);
   indexRef.current = index;
@@ -57,10 +58,12 @@ export function StepPlayer({ knot }: { knot: Knot }) {
   );
 
   const hasMicro = Boolean(current.look || current.failureMode || current.quickFix);
+  const diagramDescription = describeDiagram(knot.diagramKind, index + 1, total);
 
   return (
+    <>
     <Panel
-      className="rounded-lg sm:overflow-hidden"
+      className="rounded-lg print:hidden sm:overflow-hidden"
       role="group"
       aria-roledescription="step player"
       aria-label={`${knot.name} tying procedure`}
@@ -97,8 +100,33 @@ export function StepPlayer({ knot }: { knot: Knot }) {
             step={index + 1}
             focus
             title={`${knot.name} — step ${index + 1} of ${total}: ${current.instruction}`}
+            description={`${diagramDescription} This step: ${current.instruction}`}
             className="aspect-[400/230] w-full transition-opacity duration-200 motion-reduce:transition-none sm:aspect-[400/180]"
           />
+          <div className="mt-2">
+            <button
+              type="button"
+              onClick={() => setDescribeOpen((v) => !v)}
+              aria-expanded={describeOpen}
+              className="flex min-h-[44px] w-full items-center justify-between gap-3 rounded-md px-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <MicroLabel>Describe diagram</MicroLabel>
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "font-mono text-[0.625rem] text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
+                  describeOpen && "rotate-90",
+                )}
+              >
+                ▸
+              </span>
+            </button>
+            {describeOpen ? (
+              <p className="motion-safe:animate-fade-in px-1 pb-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                {diagramDescription}
+              </p>
+            ) : null}
+          </div>
           <p className="mt-1 text-center font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground/60 sm:hidden">
             swipe to step
           </p>
