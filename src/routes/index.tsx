@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { Fragment, useMemo, useState, useEffect, useRef } from "react";
 import heroImg from "@/assets/line-tension.jpg";
 import { Shell } from "@/components/instrument/shell";
 import { VenuePicker } from "@/components/instrument/venue-picker";
+import { DecideStepper, type DecideStep } from "@/components/instrument/decide-stepper";
 import { useT } from "@/i18n";
 import { useDomain } from "@/domain/context";
 import { Bullets, Chip, Meter, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
@@ -229,6 +230,272 @@ function DecideMode() {
   const cfs = result ? counterfactuals(result) : [];
   const isJoin = input.connection ? JOIN_JOBS.includes(input.connection) : false;
 
+  /**
+   * The same four panels drive both layouts: desktop stacks them in the
+   * sticky column, phone walks them one screen at a time. One definition, so
+   * the two layouts can never drift apart or ask different questions.
+   */
+  const steps: DecideStep[] = [
+    {
+      id: "connection",
+      label: "Connection",
+      ready: true,
+      node: (
+                  <Panel className="p-5">
+                    <StepHead index="01" title="Connection" hint="What is physically being joined." />
+                    <div className="space-y-4">
+                      {connectionGroups.map((g) => (
+                        <div key={g.title}>
+                          <MicroLabel className="mb-2">{g.title}</MicroLabel>
+                          <div className="flex flex-wrap gap-1.5">
+                            {g.jobs.map((j) => (
+                              <Chip
+                                key={j.key}
+                                tone="signal"
+                                active={
+                                  sel.connection
+                                    ? sel.connection === j.key
+                                    : input.connection === j.base && !j.custom
+                                }
+                                onClick={() => set({ connection: j.base }, { connection: j.key })}
+                              >
+                                {j.label}
+                              </Chip>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Panel>
+      ),
+    },
+    {
+      id: "material",
+      label: "Material",
+      ready: Boolean(input.connection),
+      node: (
+                  <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+                    <StepHead
+                      index="02"
+                      title="Material system"
+                      hint="Materials decide what is even permitted."
+                      state={input.connection ? "open" : "locked"}
+                    />
+                    <div className="space-y-4">
+                      <div>
+                        <MicroLabel className="mb-2">Main line</MicroLabel>
+                        <div className="flex flex-wrap gap-1.5">
+                          {materialOptions.map((m) => (
+                            <Chip
+                              key={m.key}
+                              disabled={!input.connection}
+                              active={
+                                sel.main ? sel.main === m.key : input.mainMaterial === m.base && !m.custom
+                              }
+                              onClick={() => {
+                                const on = sel.main ? sel.main === m.key : input.mainMaterial === m.base;
+                                set(
+                                  {
+                                    mainMaterial: on ? undefined : m.base,
+                                    mainSpec: on
+                                      ? undefined
+                                      : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                                  },
+                                  { main: on ? undefined : m.key },
+                                );
+                              }}
+                            >
+                              {m.label}
+                            </Chip>
+                          ))}
+                        </div>
+                        <MaterialDetail
+                          category={input.mainMaterial}
+                          spec={input.mainSpec}
+                          onChange={(next) => set({ mainSpec: next })}
+                        />
+                      </div>
+                      {isJoin ? (
+                        <>
+                          <div>
+                            <MicroLabel className="mb-2">Leader / second line</MicroLabel>
+                            <div className="flex flex-wrap gap-1.5">
+                              {materialOptions.map((m) => (
+                                <Chip
+                                  key={m.key}
+                                  active={
+                                    sel.secondary
+                                      ? sel.secondary === m.key
+                                      : input.secondaryMaterial === m.base && !m.custom
+                                  }
+                                  onClick={() => {
+                                    const on = sel.secondary
+                                      ? sel.secondary === m.key
+                                      : input.secondaryMaterial === m.base;
+                                    set(
+                                      {
+                                        secondaryMaterial: on ? undefined : m.base,
+                                        secondarySpec: on
+                                          ? undefined
+                                          : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                                      },
+                                      { secondary: on ? undefined : m.key },
+                                    );
+                                  }}
+                                >
+                                  {m.label}
+                                </Chip>
+                              ))}
+                            </div>
+                            <MaterialDetail
+                              category={input.secondaryMaterial}
+                              spec={input.secondarySpec}
+                              onChange={(next) => set({ secondarySpec: next })}
+                            />
+                          </div>
+                          <div>
+                            <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
+                            <div className="flex flex-wrap gap-1.5">
+                              {DIAMETERS.map((d) => (
+                                <Chip
+                                  key={d}
+                                  active={input.diameterRelation === d}
+                                  onClick={() =>
+                                    set({ diameterRelation: input.diameterRelation === d ? undefined : d })
+                                  }
+                                >
+                                  {DIAMETER_LABELS[d]}
+                                </Chip>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      ) : null}
+                    </div>
+                  </Panel>
+      ),
+    },
+    {
+      id: "conditions",
+      label: "Conditions",
+      ready: Boolean(input.connection),
+      node: (
+                  <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+                    <StepHead
+                      index="03"
+                      title="Field conditions"
+                      hint="Only declared conditions carry weight."
+                      state={input.connection ? "open" : "locked"}
+                    />
+                    <div className="flex flex-wrap gap-1.5">
+                      <Chip active={input.mustPassGuides} onClick={() => toggle("mustPassGuides")}>
+                        Must pass guides
+                      </Chip>
+                      <Chip active={input.windy} onClick={() => toggle("windy")}>
+                        Wind
+                      </Chip>
+                      <Chip active={input.coldHands} onClick={() => toggle("coldHands")}>
+                        Cold / wet hands
+                      </Chip>
+                      <Chip active={input.lowLight} onClick={() => toggle("lowLight")}>
+                        Low light
+                      </Chip>
+                      <Chip active={input.hardwareEyeSmall} onClick={() => toggle("hardwareEyeSmall")}>
+                        Small eye
+                      </Chip>
+                      <Chip active={input.freeSwing} onClick={() => toggle("freeSwing")}>
+                        Free-swing action
+                      </Chip>
+                      <Chip active={input.needsUntie} onClick={() => toggle("needsUntie")}>
+                        Must untie later
+                      </Chip>
+                    </div>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <MicroLabel className="mb-2">Retie tempo</MicroLabel>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(["frequent", "occasional", "rare"] as const).map((r) => (
+                            <Chip
+                              key={r}
+                              active={input.retieFrequency === r}
+                              onClick={() => set({ retieFrequency: input.retieFrequency === r ? undefined : r })}
+                            >
+                              {r}
+                            </Chip>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <MicroLabel className="mb-2">Hands</MicroLabel>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(["beginner", "intermediate", "advanced"] as const).map((p) => (
+                            <Chip
+                              key={p}
+                              active={input.proficiency === p}
+                              onClick={() => set({ proficiency: input.proficiency === p ? undefined : p })}
+                            >
+                              {p}
+                            </Chip>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </Panel>
+      ),
+    },
+    ...(venues.length
+      ? [
+          {
+            id: "venue",
+            label: t("decide.venue"),
+            ready: Boolean(input.connection),
+            node: (
+          
+                        <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+                          <StepHead
+                            index="04"
+                            title={t("decide.venue")}
+                            hint={t("decide.venueHint")}
+                            state={input.connection ? "open" : "locked"}
+                          />
+                          <VenuePicker
+                            venues={venues}
+                            activeId={venueId}
+                            disabled={!input.connection}
+                            onPick={(v) => {
+                              setVenueId(v?.id);
+                              if (v) set(v.conditions);
+                            }}
+                          />
+                        </Panel>
+
+            ),
+          } as DecideStep,
+        ]
+      : []),
+  ];
+
+  const jobSummary = input.connection
+    ? [
+        input.connection.replace(/-/g, " "),
+        input.mainMaterial,
+        input.secondaryMaterial,
+        input.retieFrequency ? `${input.retieFrequency} reties` : undefined,
+      ]
+        .filter(Boolean)
+        .join(" · ")
+    : "No connection declared — nothing can score yet";
+
+  const runNow = () => {
+    setRan(true);
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      window.setTimeout(
+        () => document.getElementById("ki-output")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        60,
+      );
+    }
+  };
+
   return (
     <Shell>
       {domain.id !== "fishing" ? (
@@ -261,232 +528,39 @@ function DecideMode() {
             </h1>
           </div>
 
-          <Panel className="p-5">
-            <StepHead index="01" title="Connection" hint="What is physically being joined." />
-            <div className="space-y-4">
-              {connectionGroups.map((g) => (
-                <div key={g.title}>
-                  <MicroLabel className="mb-2">{g.title}</MicroLabel>
-                  <div className="flex flex-wrap gap-1.5">
-                    {g.jobs.map((j) => (
-                      <Chip
-                        key={j.key}
-                        tone="signal"
-                        active={
-                          sel.connection
-                            ? sel.connection === j.key
-                            : input.connection === j.base && !j.custom
-                        }
-                        onClick={() => set({ connection: j.base }, { connection: j.key })}
-                      >
-                        {j.label}
-                      </Chip>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Panel>
-
-          <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
-            <StepHead
-              index="02"
-              title="Material system"
-              hint="Materials decide what is even permitted."
-              state={input.connection ? "open" : "locked"}
-            />
-            <div className="space-y-4">
-              <div>
-                <MicroLabel className="mb-2">Main line</MicroLabel>
-                <div className="flex flex-wrap gap-1.5">
-                  {materialOptions.map((m) => (
-                    <Chip
-                      key={m.key}
-                      disabled={!input.connection}
-                      active={
-                        sel.main ? sel.main === m.key : input.mainMaterial === m.base && !m.custom
-                      }
-                      onClick={() => {
-                        const on = sel.main ? sel.main === m.key : input.mainMaterial === m.base;
-                        set(
-                          {
-                            mainMaterial: on ? undefined : m.base,
-                            mainSpec: on
-                              ? undefined
-                              : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
-                          },
-                          { main: on ? undefined : m.key },
-                        );
-                      }}
-                    >
-                      {m.label}
-                    </Chip>
-                  ))}
-                </div>
-                <MaterialDetail
-                  category={input.mainMaterial}
-                  spec={input.mainSpec}
-                  onChange={(next) => set({ mainSpec: next })}
-                />
-              </div>
-              {isJoin ? (
-                <>
-                  <div>
-                    <MicroLabel className="mb-2">Leader / second line</MicroLabel>
-                    <div className="flex flex-wrap gap-1.5">
-                      {materialOptions.map((m) => (
-                        <Chip
-                          key={m.key}
-                          active={
-                            sel.secondary
-                              ? sel.secondary === m.key
-                              : input.secondaryMaterial === m.base && !m.custom
-                          }
-                          onClick={() => {
-                            const on = sel.secondary
-                              ? sel.secondary === m.key
-                              : input.secondaryMaterial === m.base;
-                            set(
-                              {
-                                secondaryMaterial: on ? undefined : m.base,
-                                secondarySpec: on
-                                  ? undefined
-                                  : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
-                              },
-                              { secondary: on ? undefined : m.key },
-                            );
-                          }}
-                        >
-                          {m.label}
-                        </Chip>
-                      ))}
-                    </div>
-                    <MaterialDetail
-                      category={input.secondaryMaterial}
-                      spec={input.secondarySpec}
-                      onChange={(next) => set({ secondarySpec: next })}
-                    />
-                  </div>
-                  <div>
-                    <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
-                    <div className="flex flex-wrap gap-1.5">
-                      {DIAMETERS.map((d) => (
-                        <Chip
-                          key={d}
-                          active={input.diameterRelation === d}
-                          onClick={() =>
-                            set({ diameterRelation: input.diameterRelation === d ? undefined : d })
-                          }
-                        >
-                          {DIAMETER_LABELS[d]}
-                        </Chip>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              ) : null}
-            </div>
-          </Panel>
-
-          <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
-            <StepHead
-              index="03"
-              title="Field conditions"
-              hint="Only declared conditions carry weight."
-              state={input.connection ? "open" : "locked"}
-            />
-            <div className="flex flex-wrap gap-1.5">
-              <Chip active={input.mustPassGuides} onClick={() => toggle("mustPassGuides")}>
-                Must pass guides
-              </Chip>
-              <Chip active={input.windy} onClick={() => toggle("windy")}>
-                Wind
-              </Chip>
-              <Chip active={input.coldHands} onClick={() => toggle("coldHands")}>
-                Cold / wet hands
-              </Chip>
-              <Chip active={input.lowLight} onClick={() => toggle("lowLight")}>
-                Low light
-              </Chip>
-              <Chip active={input.hardwareEyeSmall} onClick={() => toggle("hardwareEyeSmall")}>
-                Small eye
-              </Chip>
-              <Chip active={input.freeSwing} onClick={() => toggle("freeSwing")}>
-                Free-swing action
-              </Chip>
-              <Chip active={input.needsUntie} onClick={() => toggle("needsUntie")}>
-                Must untie later
-              </Chip>
-            </div>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
-                <MicroLabel className="mb-2">Retie tempo</MicroLabel>
-                <div className="flex flex-wrap gap-1.5">
-                  {(["frequent", "occasional", "rare"] as const).map((r) => (
-                    <Chip
-                      key={r}
-                      active={input.retieFrequency === r}
-                      onClick={() => set({ retieFrequency: input.retieFrequency === r ? undefined : r })}
-                    >
-                      {r}
-                    </Chip>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <MicroLabel className="mb-2">Hands</MicroLabel>
-                <div className="flex flex-wrap gap-1.5">
-                  {(["beginner", "intermediate", "advanced"] as const).map((p) => (
-                    <Chip
-                      key={p}
-                      active={input.proficiency === p}
-                      onClick={() => set({ proficiency: input.proficiency === p ? undefined : p })}
-                    >
-                      {p}
-                    </Chip>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Panel>
-
-          {venues.length ? (
-          <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
-            <StepHead
-              index="04"
-              title={t("decide.venue")}
-              hint={t("decide.venueHint")}
-              state={input.connection ? "open" : "locked"}
-            />
-            <VenuePicker
-              venues={venues}
-              activeId={venueId}
+          {/* Desktop: the whole instrument at once */}
+          <div className="hidden space-y-5 lg:block">
+            {steps.map((s) => (
+              <Fragment key={s.id}>{s.node}</Fragment>
+            ))}
+            <button
+              type="button"
               disabled={!input.connection}
-              onPick={(v) => {
-                setVenueId(v?.id);
-                if (v) set(v.conditions);
-              }}
-            />
-          </Panel>
-          ) : null}
+              onClick={runNow}
+              className="ki-press min-h-12 w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {ran ? t("decide.rerun") : t("decide.run")}
+            </button>
+            {!input.connection ? (
+              <p className="text-xs text-muted-foreground">
+                Nothing scores until a connection is declared. That is deliberate.
+              </p>
+            ) : null}
+          </div>
 
-          <button
-            type="button"
-            disabled={!input.connection}
-            onClick={() => setRan(true)}
-            className="ki-press min-h-12 w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {ran ? t("decide.rerun") : t("decide.run")}
-          </button>
-          {!input.connection ? (
-            <p className="text-xs text-muted-foreground">
-              Nothing scores until a connection is declared. That is deliberate.
-            </p>
-          ) : null}
+          {/* Phone: one decision per screen, job carried in the sticky bar */}
+          <DecideStepper
+            className="lg:hidden"
+            steps={steps}
+            summary={jobSummary}
+            canRun={Boolean(input.connection)}
+            runLabel={ran ? t("decide.rerun") : t("decide.run")}
+            onRun={runNow}
+          />
         </div>
 
         {/* ── OUTPUT ─────────────────────────────────── */}
-        <div className="space-y-6">
+        <div id="ki-output" className="space-y-6 scroll-mt-20">
           {!result ? <EmptyDecide onPick={(id) => navigate({ to: "/", search: { scenario: id, run: true } })} /> : null}
 
           {result && card ? (

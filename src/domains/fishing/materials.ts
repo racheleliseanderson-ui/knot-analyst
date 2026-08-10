@@ -1,7 +1,8 @@
 /**
  * Fishing material presets — the six angler-facing buttons, unchanged, each
- * resolving to a four-axis spec. Only braid, wire and backing carry an
- * optional disclosure row, so the common path does not get longer.
+ * resolving to a four-axis spec. Every button now carries an optional
+ * disclosure row; each row offers "Not sure", so an untouched selection ranks
+ * byte-identically to the flat material it always was.
  */
 import type { LineMaterial } from "@/domain/types";
 import {
@@ -25,6 +26,24 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       treatment: "uncoated",
       role: "unspecified",
     },
+    disclosure: [
+      {
+        axis: "construction",
+        label: "What kind of mono?",
+        options: [
+          ...con("monofilament", "copolymer", "twisted-multifilament"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+      {
+        axis: "treatment",
+        label: "Finish",
+        options: [
+          ...treat("uncoated", "fluoro-coated", "abrasion-treated", "high-vis-pigment"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+    ],
   },
   fluoro: {
     category: "fluoro",
@@ -35,6 +54,24 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       treatment: "uncoated",
       role: "leader",
     },
+    disclosure: [
+      {
+        axis: "construction",
+        label: "What kind of fluoro?",
+        options: [
+          ...con("monofilament", "copolymer"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+      {
+        axis: "treatment",
+        label: "Finish",
+        options: [
+          ...treat("uncoated", "abrasion-treated"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+    ],
   },
   "fly-line": {
     category: "fly-line",
@@ -45,6 +82,21 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       treatment: "uncoated",
       role: "fly-line",
     },
+    disclosure: [
+      {
+        axis: "construction",
+        label: "Line build",
+        options: [
+          ...con("coated-core", "twisted-multifilament"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+      {
+        axis: "treatment",
+        label: "Finish",
+        options: [...treat("uncoated", "wax-treated"), { id: "unspecified", label: "Not sure" }],
+      },
+    ],
   },
   braid: {
     category: "braid",
@@ -67,7 +119,10 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       {
         axis: "treatment",
         label: "Finish",
-        options: [...treat("uncoated", "coated-braid", "gel-spun-finish"), { id: "unspecified", label: "Not sure" }],
+        options: [
+          ...treat("uncoated", "coated-braid", "gel-spun-finish", "wax-treated", "high-vis-pigment"),
+          { id: "unspecified", label: "Not sure" },
+        ],
       },
     ],
   },
@@ -85,7 +140,7 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
         axis: "construction",
         label: "What type of wire?",
         options: [
-          ...con("single-strand-wire", "wire-1x7", "wire-7x7"),
+          ...con("single-strand-wire", "wire-1x7", "wire-7x7", "titanium-wire"),
           { id: "unspecified", label: "Not sure" },
         ],
       },
