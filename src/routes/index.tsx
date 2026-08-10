@@ -158,6 +158,10 @@ const JOIN_JOBS: ConnectionJob[] = [
 function DecideMode() {
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const t = useT();
+  const domain = useDomain();
+  const venues = domain.venues ?? [];
+  const [venueId, setVenueId] = useState<string | undefined>(undefined);
   const scenarios = useScenarios();
   const connectionGroups = useConnectionGroups();
   const materialOptions = useMaterialOptions();
