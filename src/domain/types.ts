@@ -225,6 +225,18 @@ export interface KnotContent {
   seatingSequence?: SeatingPhase[];
   /** Cold hands, dark, gloves, second-attempt guidance */
   fieldNotes?: string[];
+  /** Selected tying video, click-to-load */
+  video?: KnotVideo;
+}
+
+/** Optional tying video, loaded only when the reader asks for it. */
+export interface KnotVideo {
+  provider: "youtube";
+  id: string;
+  title: string;
+  channel: string;
+  /** Seconds into the clip where the tie actually starts */
+  startsAt?: number;
 }
 
 export interface CompletenessFlags {
