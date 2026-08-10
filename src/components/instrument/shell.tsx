@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Contrast, Moon, Search, Sun } from "lucide-react";
+import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { APPEARANCE_LABELS, useTheme, type Appearance } from "@/lib/theme";
 import { APPLICATION_ID, ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
 import { KNOTS } from "@/data/catalog";
 import { DomainSwitch } from "@/components/instrument/domain-switch";
 import { LocaleSwitch } from "@/components/instrument/locale-switch";
+import { AppearanceMenu } from "@/components/instrument/appearance-menu";
 import { Finder } from "@/components/instrument/finder";
 import { useT } from "@/i18n";
 import { useDomain } from "@/domain/context";
@@ -23,26 +23,6 @@ function ModeLink({ to, label, code }: { to: string; label: string; code: string
       <span className="sr-only sm:hidden">{label}</span>
       <span className="absolute inset-x-2 -bottom-[9px] h-px scale-x-0 bg-primary transition-transform duration-300 group-data-[status=active]:scale-x-100" />
     </Link>
-  );
-}
-
-const NEXT: Record<Appearance, Appearance> = { dark: "light", light: "cb", cb: "dark" };
-
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
-  const next = NEXT[theme];
-  const Icon = theme === "dark" ? Moon : theme === "light" ? Sun : Contrast;
-  return (
-    <button
-      type="button"
-      onClick={toggle}
-      aria-label={`Appearance: ${APPEARANCE_LABELS[theme]}. Switch to ${APPEARANCE_LABELS[next].toLowerCase()}.`}
-      title={`Switch to ${APPEARANCE_LABELS[next].toLowerCase()}`}
-      className="ml-1 flex min-h-11 min-w-11 items-center justify-center rounded-md border border-hairline text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-9 sm:min-w-9"
-    >
-      <Icon size={15} aria-hidden="true" />
-      <span className="sr-only">{APPEARANCE_LABELS[theme]}</span>
-    </button>
   );
 }
 
@@ -110,7 +90,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             >
               <Search size={15} aria-hidden="true" />
             </button>
-            <ThemeToggle />
+            <AppearanceMenu />
             <LocaleSwitch />
           </nav>
         </div>

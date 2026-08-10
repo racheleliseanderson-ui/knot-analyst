@@ -7,6 +7,7 @@
 @theme inline {
   --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: var(--display-family);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -79,6 +80,12 @@
   --shadow-lift: 0 30px 60px -30px oklch(0 0 0 / 80%);
   --gradient-depth: linear-gradient(180deg, oklch(0.216 0.024 232) 0%, oklch(0.178 0.02 232) 100%);
   --gradient-signal: linear-gradient(100deg, oklch(0.795 0.132 72), oklch(0.735 0.098 205));
+
+  /* Headline family is swappable per appearance; sans everywhere by default. */
+  --display-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --display-weight: 600;
+  --display-tracking: -0.02em;
+  --display-style: normal;
 }
 
 .light {
@@ -148,6 +155,74 @@
   );
 }
 
+/*
+ * Atelier — editorial reading mode. Near-black teal ground, brass and bone,
+ * true hairlines, serif display. Same information, longer measure, less chrome.
+ * Dark-derived: it does NOT layer on .light.
+ */
+.atelier {
+  --radius: 0.25rem;
+
+  --background: oklch(0.132 0.018 218);
+  --foreground: oklch(0.925 0.012 84);
+  --surface: oklch(0.163 0.019 218);
+  --surface-2: oklch(0.196 0.02 218);
+  --card: oklch(0.161 0.019 218);
+  --card-foreground: oklch(0.925 0.012 84);
+  --popover: oklch(0.183 0.02 218);
+  --popover-foreground: oklch(0.925 0.012 84);
+
+  --primary: oklch(0.775 0.098 82);
+  --primary-foreground: oklch(0.16 0.024 82);
+  --secondary: oklch(0.225 0.018 218);
+  --secondary-foreground: oklch(0.9 0.012 84);
+  --muted: oklch(0.21 0.016 218);
+  --muted-foreground: oklch(0.695 0.018 88);
+  --accent: oklch(0.69 0.062 196);
+  --accent-foreground: oklch(0.15 0.022 210);
+
+  --destructive: oklch(0.605 0.152 28);
+  --destructive-foreground: oklch(0.97 0.01 28);
+  --caution: oklch(0.775 0.108 84);
+  --affirm: oklch(0.7 0.082 168);
+
+  --border: oklch(0.268 0.016 218);
+  --hairline: oklch(0.252 0.014 218);
+  --input: oklch(0.27 0.016 218);
+  --ring: oklch(0.775 0.098 82);
+
+  --grade-1: oklch(0.7 0.082 168);
+  --grade-2: oklch(0.775 0.108 84);
+  --grade-3: oklch(0.605 0.152 28);
+
+  --display-family: "Instrument Serif", "Archivo", ui-serif, Georgia, serif;
+  --display-weight: 400;
+  --display-tracking: -0.012em;
+
+  --shadow-instrument: 0 1px 0 0 oklch(1 0 0 / 4%) inset, 0 22px 46px -34px oklch(0 0 0 / 80%);
+  --shadow-lift: 0 34px 70px -38px oklch(0 0 0 / 85%);
+  --gradient-depth: linear-gradient(180deg, oklch(0.172 0.02 218) 0%, oklch(0.146 0.018 218) 100%);
+  --gradient-signal: linear-gradient(100deg, oklch(0.775 0.098 82), oklch(0.69 0.062 196));
+}
+
+/* Editorial display treatment: serif headings, wider measure, quieter panels. */
+.atelier h1,
+.atelier h2 {
+  font-family: var(--display-family);
+  font-weight: var(--display-weight);
+  font-style: var(--display-style);
+  letter-spacing: var(--display-tracking);
+}
+.atelier h1 { font-size: clamp(2rem, 1.4rem + 2.4vw, 3.05rem); line-height: 1.06; }
+.atelier p { max-width: 68ch; }
+.atelier .panel { box-shadow: var(--shadow-instrument); }
+/* True 1px rules at any density */
+.atelier .panel,
+.atelier .border-hairline { border-width: 1px; }
+@media (min-resolution: 2dppx) {
+  .atelier .panel { border-width: 0.5px; }
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -195,6 +270,12 @@
     linear-gradient(color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
   background-size: 44px 44px;
+}
+
+@utility display-face {
+  font-family: var(--display-family);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
 }
 
 @media print {

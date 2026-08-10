@@ -92,6 +92,42 @@ function Row({ title, sub, onDelete }: { title: string; sub: string; onDelete: (
   );
 }
 
+/** Case-insensitive substring match across any of the supplied fields. */
+function matches(q: string, ...fields: (string | undefined)[]): boolean {
+  const needle = q.trim().toLowerCase();
+  if (!needle) return true;
+  return fields.some((f) => (f ?? "").toLowerCase().includes(needle));
+}
+
+/** Shared filter for the authored lists — long drafts stop being scannable fast. */
+function FilterBox({
+  value,
+  onChange,
+  count,
+  total,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  count: number;
+  total: number;
+}) {
+  return (
+    <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+      <MicroLabel>
+        Authored · {count}
+        {count !== total ? ` of ${total}` : ""}
+      </MicroLabel>
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Filter"
+        aria-label="Filter authored entries"
+        className="min-h-9 w-40 rounded-md border border-hairline bg-surface-2/40 px-2.5 text-[0.8125rem] text-foreground outline-none focus:border-primary/60"
+      />
+    </div>
+  );
+}
+
 type Tab = "scenarios" | "materials" | "connections" | "transfer";
 
 function AdminMode() {
@@ -146,6 +182,7 @@ function AdminMode() {
 function ScenarioEditor() {
   const { data, setScenarios } = useOverlay();
   const [title, setTitle] = useState("");
+  const [q, setQ] = useState("");
   const [tag, setTag] = useState("");
   const [blurb, setBlurb] = useState("");
   const [input, setInput] = useState<Partial<ChooseInput>>({});
@@ -157,8 +194,11 @@ function ScenarioEditor() {
   const add = () => {
     if (!title.trim()) return setError("A scenario needs a title.");
     if (!input.connection) return setError("A scenario needs a connection job — nothing runs without it.");
+    if (!input.mainMaterial)
+      return setError("Declare a main material. A scenario that omits it scores a different question.");
     const id = slugify(title);
     if (data.scenarios.some((s) => s.id === id)) return setError("A scenario with that name already exists.");
+    if (blurb.trim().length > 220) return setError("Keep the blurb under 220 characters — it is a chip, not a page.");
     const next: CustomScenario = {
       id,
       title: title.trim(),
@@ -340,14 +380,21 @@ function ScenarioEditor() {
       </Panel>
 
       <Panel className="p-5">
-        <MicroLabel className="mb-3">Authored scenarios</MicroLabel>
+        <FilterBox
+          value={q}
+          onChange={setQ}
+          total={data.scenarios.length}
+          count={data.scenarios.filter((s) => matches(q, s.title, s.tag, s.blurb)).length}
+        />
         {data.scenarios.length === 0 ? (
           <p className="text-[0.875rem] text-muted-foreground">
             None yet. Built-in scenarios stay in code and are never modified from here.
           </p>
         ) : (
           <div>
-            {data.scenarios.map((s) => (
+            {data.scenarios
+              .filter((s) => matches(q, s.title, s.tag, s.blurb))
+              .map((s) => (
               <Row
                 key={s.id}
                 title={s.title}
@@ -367,13 +414,16 @@ function ScenarioEditor() {
 function MaterialEditor() {
   const { data, setMaterials } = useOverlay();
   const [label, setLabel] = useState("");
+  const [q, setQ] = useState("");
   const [note, setNote] = useState("");
   const [base, setBase] = useState<LineMaterial>("mono");
   const [error, setError] = useState<string | null>(null);
 
   const add = () => {
     if (!label.trim()) return setError("A material needs a display name.");
+    if (label.trim().length < 3) return setError("Give it a name you would recognise on the water.");
     const id = slugify(label);
+    if (!id) return setError("That name has no usable characters.");
     if (data.materials.some((m) => m.id === id)) return setError("That material already exists.");
     const next: CustomMaterial = {
       id,
@@ -436,14 +486,21 @@ function MaterialEditor() {
       </Panel>
 
       <Panel className="p-5">
-        <MicroLabel className="mb-3">Authored materials</MicroLabel>
+        <FilterBox
+          value={q}
+          onChange={setQ}
+          total={data.materials.length}
+          count={data.materials.filter((m) => matches(q, m.label, m.note, m.behavesLike)).length}
+        />
         {data.materials.length === 0 ? (
           <p className="text-[0.875rem] text-muted-foreground">
             None yet. Built-in classes are always available in Decide.
           </p>
         ) : (
           <div>
-            {data.materials.map((m) => (
+            {data.materials
+              .filter((m) => matches(q, m.label, m.note, m.behavesLike))
+              .map((m) => (
               <Row
                 key={m.id}
                 title={m.label}
@@ -463,6 +520,7 @@ function MaterialEditor() {
 function ConnectionEditor() {
   const { data, setConnections } = useOverlay();
   const [label, setLabel] = useState("");
+  const [q, setQ] = useState("");
   const [group, setGroup] = useState("Custom");
   const [note, setNote] = useState("");
   const [base, setBase] = useState<ConnectionJob>("line-to-hook");
@@ -471,6 +529,7 @@ function ConnectionEditor() {
   const add = () => {
     if (!label.trim()) return setError("A connection type needs a display name.");
     const id = slugify(label);
+    if (!id) return setError("That name has no usable characters.");
     if (data.connections.some((c) => c.id === id)) return setError("That connection already exists.");
     const next: CustomConnection = {
       id,
@@ -537,12 +596,19 @@ function ConnectionEditor() {
       </Panel>
 
       <Panel className="p-5">
-        <MicroLabel className="mb-3">Authored connection types</MicroLabel>
+        <FilterBox
+          value={q}
+          onChange={setQ}
+          total={data.connections.length}
+          count={data.connections.filter((c) => matches(q, c.label, c.group, c.note)).length}
+        />
         {data.connections.length === 0 ? (
           <p className="text-[0.875rem] text-muted-foreground">None yet.</p>
         ) : (
           <div>
-            {data.connections.map((c) => (
+            {data.connections
+              .filter((c) => matches(q, c.label, c.group, c.note))
+              .map((c) => (
               <Row
                 key={c.id}
                 title={c.label}
@@ -563,17 +629,37 @@ function Transfer() {
   const { data, replaceAll, reset } = useOverlay();
   const fileRef = useRef<HTMLInputElement>(null);
   const [report, setReport] = useState<string[]>([]);
+  const [pending, setPending] = useState<{
+    data: ReturnType<typeof parseOverlay>["data"];
+    errors: string[];
+    diff: string[];
+  } | null>(null);
   const json = useMemo(() => overlayToJson(data), [data]);
 
+  /** Dry run first. An import that replaces the draft should never be one click. */
   const ingest = async (file: File) => {
     try {
       const parsed = parseOverlay(JSON.parse(await file.text()));
-      replaceAll(parsed.data);
-      setReport([
-        `Loaded ${parsed.data.scenarios.length} scenarios, ${parsed.data.materials.length} materials, ${parsed.data.connections.length} connections.`,
-        ...parsed.errors,
-      ]);
+      const line = (kind: string, incoming: { id: string }[], current: { id: string }[]) => {
+        const cur = new Set(current.map((x) => x.id));
+        const inc = new Set(incoming.map((x) => x.id));
+        const added = incoming.filter((x) => !cur.has(x.id)).length;
+        const kept = incoming.filter((x) => cur.has(x.id)).length;
+        const dropped = current.filter((x) => !inc.has(x.id)).length;
+        return `${kind}: +${added} new · ${kept} overwritten · ${dropped} removed from the current draft`;
+      };
+      setPending({
+        data: parsed.data,
+        errors: parsed.errors,
+        diff: [
+          line("Scenarios", parsed.data.scenarios, data.scenarios),
+          line("Materials", parsed.data.materials, data.materials),
+          line("Connections", parsed.data.connections, data.connections),
+        ],
+      });
+      setReport([]);
     } catch {
+      setPending(null);
       setReport(["That file is not valid overlay JSON. Nothing was changed."]);
     }
   };
@@ -619,6 +705,48 @@ function Transfer() {
             Clear draft
           </button>
         </div>
+        {pending ? (
+          <div className="mt-4 rounded-lg border border-caution/50 bg-caution/8 p-4">
+            <MicroLabel className="mb-2">Dry run — nothing applied yet</MicroLabel>
+            <ul className="space-y-1">
+              {pending.diff.map((d) => (
+                <li key={d} className="text-[0.8125rem] leading-relaxed text-foreground">
+                  {d}
+                </li>
+              ))}
+              {pending.errors.map((e, i) => (
+                <li key={i} className="text-[0.8125rem] leading-relaxed text-destructive">
+                  Rejected — {e}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  replaceAll(pending.data);
+                  setReport([
+                    `Applied ${pending.data.scenarios.length} scenarios, ${pending.data.materials.length} materials, ${pending.data.connections.length} connections.`,
+                  ]);
+                  setPending(null);
+                }}
+                className="ki-press min-h-11 rounded-lg border border-primary/60 bg-primary/15 px-4 text-[0.875rem] font-semibold tracking-tight text-foreground hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Apply import
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPending(null);
+                  setReport(["Import discarded. The draft is unchanged."]);
+                }}
+                className="ki-press min-h-11 rounded-lg border border-hairline px-4 text-[0.875rem] tracking-tight text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        ) : null}
         {report.length ? (
           <ul className="mt-4 space-y-1.5">
             {report.map((r, i) => (
