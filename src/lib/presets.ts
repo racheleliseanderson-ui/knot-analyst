@@ -56,11 +56,20 @@ export function parsePresets(raw: unknown): { presets: Preset[]; errors: string[
 
   const presets: Preset[] = [];
   list.forEach((item, i) => {
-    if (!isRecord(item)) return errors.push(`Entry ${i + 1}: not an object.`);
+    if (!isRecord(item)) {
+      errors.push(`Entry ${i + 1}: not an object.`);
+      return;
+    }
     const name = typeof item["name"] === "string" ? item["name"].trim() : "";
     const input = isRecord(item["input"]) ? (item["input"] as Partial<ChooseInput>) : null;
-    if (!name) return errors.push(`Entry ${i + 1}: missing a name.`);
-    if (!input?.connection) return errors.push(`"${name}": no connection job — nothing would run.`);
+    if (!name) {
+      errors.push(`Entry ${i + 1}: missing a name.`);
+      return;
+    }
+    if (!input?.connection) {
+      errors.push(`"${name}": no connection job — nothing would run.`);
+      return;
+    }
     const now = new Date().toISOString();
     presets.push({
       id: typeof item["id"] === "string" ? item["id"] : uid(),
