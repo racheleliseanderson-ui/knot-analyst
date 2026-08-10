@@ -52,7 +52,9 @@ function focusTransform(kind: DiagramKind, step?: number, enabled?: boolean) {
   const spec = FOCUS[kind]?.[step];
   if (!spec) return "translate(0,0) scale(1)";
   const [cx, cy, k] = spec;
-  return `translate(${200 - cx * k}, ${90 - cy * k}) scale(${k})`;
+  // keep the zoom restrained so the hardware and both line ends stay in frame
+  const s = 1 + (k - 1) * 0.55;
+  return `translate(${200 - cx * s}, ${90 - cy * s}) scale(${s})`;
 }
 
 function toneFor(from: number, step?: number) {
