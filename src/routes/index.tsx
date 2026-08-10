@@ -710,6 +710,7 @@ function DecideMode() {
 }
 
 function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
+  const scenarios = useScenarios();
   return (
     <div className="space-y-6">
       <div className="relative overflow-hidden rounded-xl border border-hairline">
@@ -736,7 +737,7 @@ function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
           One tap loads a realistic setup and runs the model.
         </p>
         <div className="grid gap-px overflow-hidden rounded-lg bg-hairline sm:grid-cols-2">
-          {FIELD_SCENARIOS.map((s) => (
+          {scenarios.map((s) => (
             <button
               key={s.id}
               onClick={() => onPick(s.id)}
