@@ -75,7 +75,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
         {t("skip")}
       </a>
       <header className="sticky top-0 z-40 border-b border-hairline bg-background/85 backdrop-blur-xl no-print">
-        <div className="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-3 sm:px-8">
+        <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 py-3 sm:flex-nowrap sm:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <span className="flex h-8 w-8 items-center justify-center rounded-[6px] border border-primary/40 bg-primary/10 font-mono text-[0.6875rem] font-semibold tracking-tight text-primary">
               KI
@@ -87,11 +87,9 @@ export function Shell({ children, className }: { children: ReactNode; className?
               <span className="label-micro mt-1 block truncate">{domain.label}</span>
             </span>
           </Link>
-          <div className="col-start-2 row-start-1 flex items-center justify-end gap-1">
-            <DomainSwitch />
-          </div>
+          <DomainSwitch />
           <nav
-            className="col-span-2 row-start-2 flex items-center justify-between gap-1 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-end"
+            className="flex w-full items-center justify-between gap-1 sm:w-auto sm:justify-end"
             aria-label="Modes"
           >
             <ModeLink to="/" label={t("nav.decide")} code="01" />
