@@ -8,12 +8,23 @@ export function StepPlayer({ knot }: { knot: Knot }) {
   const steps = knot.steps.slice().sort((a, b) => a.order - b.order);
   const total = steps.length;
   const [index, setIndex] = useState(0);
+  const [dir, setDir] = useState<1 | -1>(1);
+  const [microOpen, setMicroOpen] = useState(false);
   const current = steps[index];
 
-  const go = useCallback(
-    (delta: number) => setIndex((i) => Math.min(total - 1, Math.max(0, i + delta))),
+  const goTo = useCallback(
+    (next: number) =>
+      setIndex((i) => {
+        const clamped = Math.min(total - 1, Math.max(0, next));
+        if (clamped !== i) setDir(clamped > i ? 1 : -1);
+        return clamped;
+      }),
     [total],
   );
+
+  const go = useCallback((delta: number) => goTo(indexRef.current + delta), [goTo]);
+  const indexRef = useRef(0);
+  indexRef.current = index;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -45,19 +56,29 @@ export function StepPlayer({ knot }: { knot: Knot }) {
     (d) => d.stepWhere === current.order,
   );
 
+  const hasMicro = Boolean(current.look || current.failureMode || current.quickFix);
+
   return (
-    <Panel className="rounded-lg sm:overflow-hidden">
+    <Panel
+      className="rounded-lg sm:overflow-hidden"
+      role="group"
+      aria-roledescription="step player"
+      aria-label={`${knot.name} tying procedure`}
+    >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3">
         <MicroLabel>Tying procedure — step {`${index + 1} / ${total}`}</MicroLabel>
-        <div className="hidden items-center gap-1.5 no-print sm:flex">
+        <div className="hidden items-center gap-1.5 no-print sm:flex" role="tablist" aria-label="Steps">
           {steps.map((s, i) => (
             <button
               key={s.order}
               type="button"
-              aria-label={`Step ${i + 1}`}
-              onClick={() => setIndex(i)}
+              role="tab"
+              aria-label={`Step ${i + 1} of ${total}`}
+              aria-selected={i === index}
+              aria-current={i === index ? "step" : undefined}
+              onClick={() => goTo(i)}
               className={cn(
-                "relative h-1.5 rounded-full transition-all after:absolute after:-inset-y-5 after:-inset-x-1 after:content-['']",
+                "relative h-1.5 rounded-full transition-all after:absolute after:-inset-y-5 after:-inset-x-1 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 i === index ? "w-6 bg-primary" : "w-3 bg-surface-2 hover:bg-border",
               )}
             />
@@ -75,15 +96,25 @@ export function StepPlayer({ knot }: { knot: Knot }) {
             kind={knot.diagramKind}
             step={index + 1}
             focus
-            title={`${knot.name} — step ${index + 1}`}
-            className="aspect-[400/230] w-full sm:aspect-[400/180]"
+            title={`${knot.name} — step ${index + 1} of ${total}: ${current.instruction}`}
+            className="aspect-[400/230] w-full transition-opacity duration-200 motion-reduce:transition-none sm:aspect-[400/180]"
           />
           <p className="mt-1 text-center font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground/60 sm:hidden">
             swipe to step
           </p>
         </div>
 
-        <div className="bg-card px-5 py-5">
+        <div
+          key={index}
+          className={cn(
+            "bg-card px-5 py-5 motion-safe:animate-fade-in",
+            dir === -1 && "motion-safe:[animation-direction:normal]",
+          )}
+          aria-live="polite"
+        >
+          <p className="sr-only">
+            Step {index + 1} of {total}
+          </p>
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
             {String(current.order).padStart(2, "0")}
           </p>
@@ -124,6 +155,56 @@ export function StepPlayer({ knot }: { knot: Knot }) {
             </div>
           ) : null}
 
+          {hasMicro ? (
+            <div className="mt-4 overflow-hidden rounded-md border border-hairline">
+              <button
+                type="button"
+                onClick={() => setMicroOpen((v) => !v)}
+                aria-expanded={microOpen}
+                className="flex min-h-[44px] w-full items-center justify-between gap-3 bg-surface-2/40 px-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+              >
+                <MicroLabel>Micro how-to</MicroLabel>
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "font-mono text-[0.625rem] text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
+                    microOpen && "rotate-90",
+                  )}
+                >
+                  ▸
+                </span>
+              </button>
+              {microOpen ? (
+                <dl className="motion-safe:animate-fade-in space-y-3 border-t border-hairline px-3 py-3">
+                  {current.look ? (
+                    <div>
+                      <dt className="label-micro text-affirm">✓ Look for</dt>
+                      <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                        {current.look}
+                      </dd>
+                    </div>
+                  ) : null}
+                  {current.failureMode ? (
+                    <div>
+                      <dt className="label-micro text-destructive">× Fails as</dt>
+                      <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                        {current.failureMode}
+                      </dd>
+                    </div>
+                  ) : null}
+                  {current.quickFix ? (
+                    <div>
+                      <dt className="label-micro text-accent">→ Quick fix</dt>
+                      <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                        {current.quickFix}
+                      </dd>
+                    </div>
+                  ) : null}
+                </dl>
+              ) : null}
+            </div>
+          ) : null}
+
           {defect.length ? (
             <div className="mt-4 border-l-2 border-destructive/60 pl-3">
               <MicroLabel className="text-destructive">What fails if this is wrong</MicroLabel>
@@ -145,7 +226,7 @@ export function StepPlayer({ knot }: { knot: Knot }) {
           type="button"
           onClick={() => go(-1)}
           disabled={index === 0}
-          className="rounded-md border border-hairline px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground disabled:opacity-35"
+          className="rounded-md border border-hairline px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
         >
           ← Previous
         </button>
@@ -156,7 +237,7 @@ export function StepPlayer({ knot }: { knot: Knot }) {
           type="button"
           onClick={() => go(1)}
           disabled={index === total - 1}
-          className="rounded-md border border-primary/60 bg-primary/15 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-primary/25 disabled:opacity-35"
+          className="rounded-md border border-primary/60 bg-primary/15 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
         >
           Next →
         </button>
@@ -169,22 +250,25 @@ export function StepPlayer({ knot }: { knot: Knot }) {
           onClick={() => go(-1)}
           disabled={index === 0}
           aria-label="Previous step"
-          className="min-h-[44px] min-w-[64px] rounded-md border border-hairline px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground disabled:opacity-35"
+          className="min-h-[44px] min-w-[64px] rounded-md border border-hairline px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
         >
           ← Prev
         </button>
-        <div className="flex flex-1 items-center justify-center gap-1.5">
+        <div className="flex flex-1 items-center justify-center gap-1.5" role="tablist" aria-label="Steps">
           {steps.map((s, i) => (
             <button
               key={s.order}
               type="button"
-              aria-label={`Step ${i + 1}`}
-              onClick={() => setIndex(i)}
-              className="flex h-11 items-center px-1"
+              role="tab"
+              aria-label={`Step ${i + 1} of ${total}`}
+              aria-selected={i === index}
+              aria-current={i === index ? "step" : undefined}
+              onClick={() => goTo(i)}
+              className="flex h-11 min-w-[16px] items-center px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span
                 className={cn(
-                  "block h-1.5 rounded-full transition-all",
+                  "block h-1.5 rounded-full transition-all motion-reduce:transition-none",
                   i === index ? "w-6 bg-primary" : "w-2.5 bg-surface-2",
                 )}
               />
@@ -196,7 +280,7 @@ export function StepPlayer({ knot }: { knot: Knot }) {
           onClick={() => go(1)}
           disabled={index === total - 1}
           aria-label="Next step"
-          className="min-h-[44px] min-w-[64px] rounded-md border border-primary/60 bg-primary/15 px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground disabled:opacity-35"
+          className="min-h-[44px] min-w-[64px] rounded-md border border-primary/60 bg-primary/15 px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
         >
           Next →
         </button>
