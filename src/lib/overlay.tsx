@@ -107,19 +107,18 @@ export interface ConnectionOption {
   note?: string;
 }
 
-const BASE_MATERIALS: LineMaterial[] = ["mono", "fluoro", "braid", "fly-line", "backing", "wire"];
-
 export function useMaterialOptions(): MaterialOption[] {
   const { data } = useOverlay();
+  const domain = useDomain();
   return useMemo(
     () => [
-      ...BASE_MATERIALS.map((m) => ({
-        key: m,
-        label: MATERIAL_LABELS[m],
-        base: m,
+      ...domain.materials.map((m) => ({
+        key: m.id,
+        label: m.label,
+        base: m.id as LineMaterial,
         custom: false,
       })),
-      ...data.materials.map((m) => ({
+      ...(domain.id === "fishing" ? data.materials : []).map((m) => ({
         key: `x:${m.id}`,
         label: m.label,
         base: m.behavesLike,
@@ -127,23 +126,28 @@ export function useMaterialOptions(): MaterialOption[] {
         ...(m.note ? { note: m.note } : {}),
       })),
     ],
-    [data.materials],
+    [data.materials, domain],
   );
 }
 
 export function useConnectionGroups(): { title: string; jobs: ConnectionOption[] }[] {
   const { data } = useOverlay();
+  const domain = useDomain();
   return useMemo(() => {
-    const groups = CONNECTION_GROUPS.map((g) => ({
-      title: g.title,
-      jobs: g.jobs.map<ConnectionOption>((j) => ({
-        key: j,
-        label: CONNECTION_LABELS[j],
-        base: j,
+    const groups: { title: string; jobs: ConnectionOption[] }[] = [];
+    for (const c of domain.connections) {
+      const option: ConnectionOption = {
+        key: c.id,
+        label: c.label,
+        base: c.id as ConnectionJob,
         custom: false,
-      })),
-    }));
-    for (const c of data.connections) {
+      };
+      const title = c.group ?? "Other";
+      const existing = groups.find((g) => g.title === title);
+      if (existing) existing.jobs.push(option);
+      else groups.push({ title, jobs: [option] });
+    }
+    for (const c of domain.id === "fishing" ? data.connections : []) {
       const option: ConnectionOption = {
         key: `x:${c.id}`,
         label: c.label,
@@ -156,14 +160,15 @@ export function useConnectionGroups(): { title: string; jobs: ConnectionOption[]
       else groups.push({ title: c.group, jobs: [option] });
     }
     return groups;
-  }, [data.connections]);
+  }, [data.connections, domain]);
 }
 
 export function useScenarios(): FieldScenario[] {
   const { data } = useOverlay();
+  const domain = useDomain();
   return useMemo(
     () => [
-      ...data.scenarios.map<FieldScenario>((s) => ({
+      ...(domain.id === "fishing" ? data.scenarios : []).map<FieldScenario>((s) => ({
         id: s.id,
         title: s.title,
         blurb: s.blurb,
@@ -173,8 +178,8 @@ export function useScenarios(): FieldScenario[] {
         autoRun: s.autoRun,
         input: s.input,
       })),
-      ...FIELD_SCENARIOS,
+      ...domain.scenarios,
     ],
-    [data.scenarios],
+    [data.scenarios, domain],
   );
 }
