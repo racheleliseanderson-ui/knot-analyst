@@ -19,8 +19,8 @@ function ModeLink({ to, label, code }: { to: string; label: string; code: string
       activeProps={{ "data-status": "active" } as never}
     >
       <span className="font-mono text-[0.625rem] tracking-[0.16em] text-primary/70">{code}</span>
-      <span className="ml-1 hidden xs:inline sm:inline">{label}</span>
-      <span className="sr-only">{label}</span>
+      <span className="ml-1 hidden sm:inline">{label}</span>
+      <span className="sr-only sm:hidden">{label}</span>
       <span className="absolute inset-x-2 -bottom-[9px] h-px scale-x-0 bg-primary transition-transform duration-300 group-data-[status=active]:scale-x-100" />
     </Link>
   );
