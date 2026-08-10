@@ -12,6 +12,63 @@ import {
   DIAMETER_LABELS,
   DIMENSION_LABELS,
 } from "@/domain/types";
+import { resolveMaterial, type MaterialSpec } from "@/domain/material";
+import { FISHING_MATERIAL_PRESETS } from "@/domains/fishing/materials";
+
+/**
+ * Optional deeper material axes. Only rendered for categories that actually
+ * have a disclosure config (braid, wire, backing), and every row offers
+ * "Not sure", which reproduces today's flat behaviour exactly.
+ */
+function MaterialDetail({
+  category,
+  spec,
+  onChange,
+}: {
+  category: LineMaterial | undefined;
+  spec: MaterialSpec | undefined;
+  onChange: (next: MaterialSpec | undefined) => void;
+}) {
+  const preset = category ? FISHING_MATERIAL_PRESETS[category] : undefined;
+  if (!preset?.disclosure) return null;
+
+  const current = spec ?? preset.spec;
+
+  return (
+    <div className="mt-3 space-y-3 rounded-lg border border-hairline/80 bg-surface-2/25 p-3">
+      {preset.disclosure.map((row) => (
+        <div key={row.axis} role="group" aria-label={row.label}>
+          <MicroLabel className="mb-2">{row.label} · optional</MicroLabel>
+          <div className="flex flex-wrap gap-1.5">
+            {row.options.map((o) => {
+              const active = current[row.axis] === o.id;
+              return (
+                <Chip
+                  key={o.id}
+                  active={active}
+                  onClick={() =>
+                    onChange(
+                      resolveMaterial(category, FISHING_MATERIAL_PRESETS, {
+                        ...(row.axis === "construction"
+                          ? { construction: (active ? "unspecified" : o.id) as MaterialSpec["construction"] }
+                          : { construction: current.construction }),
+                        ...(row.axis === "treatment"
+                          ? { treatment: (active ? "unspecified" : o.id) as MaterialSpec["treatment"] }
+                          : { treatment: current.treatment }),
+                      }),
+                    )
+                  }
+                >
+                  {o.label}
+                </Chip>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 type Search = {
   connection?: ConnectionJob;
