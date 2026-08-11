@@ -8,7 +8,7 @@ export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
 export const KNOT_CATALOG_VERSION = "2026-08-09.2";
 export const CONFIG_VERSION = "nitro-fluid-v1.2.1";
-export const ENGINE_VERSION = "mech-intel-1.2.1";
+export const ENGINE_VERSION = "mech-intel-1.2.2";
 
 /** What the angler is actually connecting */
 export type ConnectionJob =
@@ -155,6 +155,43 @@ export interface MechanicalContract {
   hardExclusions?: string[];
 }
 
+/**
+ * Machine-checkable geometric invariant for a knot family or specific knot.
+ * Evaluated after observation→defect mapping. Fail-closed only (can escalate
+ * severity, never relax it). Vision layers emit the same observation keys.
+ */
+export interface GeometricRule {
+  id: string;
+  /** Human-readable statement of the invariant */
+  description: string;
+  /**
+   * Observation keys that, when marked, violate this rule.
+   * Keys must already exist on the knot’s ObservationDef list.
+   */
+  violatedBy: string[];
+  /**
+   * Observation keys that, when marked good, support this rule.
+   * Used for confidence language only — not for pass/fail.
+   */
+  supportedBy?: string[];
+  /** Minimum decision this violation produces */
+  severity: RetieDecision;
+  /** Short mechanical reason shown in findings */
+  mechanicsWhy: string;
+  /** Optional step where the geometry is usually introduced */
+  stepWhere?: number | null;
+  /**
+   * Optional applicability gate against the knot contract.
+   * When omitted, the rule always applies for knots that declare it.
+   */
+  appliesWhen?: {
+    requiresDoubledLine?: boolean;
+    requiresStandingLoop?: boolean;
+    finishedGeometry?: MechanicalContract["finishedGeometry"][];
+    loopBehavior?: MechanicalContract["loopBehavior"][];
+  };
+}
+
 /** Finished-knot fingerprint for Layer 3 diagnostics */
 export interface FinishedFingerprint {
   expectedGeometry: string;
@@ -170,7 +207,39 @@ export interface FinishedFingerprint {
   expectedFinishingStructure: string;
   dangerousDefects: DefectDef[];
   cosmeticIrregularities: string[];
+  /** Formal geometric rules (evaluated after observation mapping; fail-closed only) */
+  geometricRules?: GeometricRule[];
 }
+
+/**
+ * Future vision / observation-extraction layer contract.
+ * Vision only extracts structured observations + quality gates.
+ * It never decides retie — Layer 3 (rules + fingerprint) owns the conclusion.
+ */
+export interface VisionObservation {
+  /** Must match an existing ObservationDef.key on the target knot */
+  key: string;
+  confidence: number;
+  evidence?: {
+    boundingBox?: [number, number, number, number];
+    view?: "front" | "side" | "tag" | "exit";
+    notes?: string;
+  };
+}
+
+export interface VisionResult {
+  /** Optional hint only — never authoritative for identity or retie */
+  knotIdHint?: string;
+  observations: VisionObservation[];
+  quality: {
+    focusOk: boolean;
+    criticalStructureVisible: boolean;
+    bothExitsVisible: boolean;
+    tagVisible: boolean;
+  };
+  unableToVerify: string[];
+}
+
 
 export interface DefectDef {
   id: string;

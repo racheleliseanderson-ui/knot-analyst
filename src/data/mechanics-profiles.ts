@@ -7,6 +7,7 @@ import type {
   DiagramKind,
   FieldFitProfile,
   FinishedFingerprint,
+  GeometricRule,
   MechanicalContract,
   ObservationDef,
 } from "@/domain/types";
@@ -86,6 +87,70 @@ function baseLoopObs(defectPrefix: string): ObservationDef[] {
     obs("tag_wrong", "Tag finish incorrect", "finish", true, [`${defectPrefix}-tag`]),
     obs("both_exits", "Loop, standing line, and tag visible", "visibility", false, []),
   ];
+}
+
+
+/** Shared high-value geometric invariants — seed on strongest knots first */
+const RULE_WRAPS_PARALLEL: GeometricRule = {
+  id: "wraps-parallel",
+  description: "Wraps / coils must remain parallel with no crossover",
+  violatedBy: ["crossover"],
+  supportedBy: ["wraps_neat", "barrel_uniform"],
+  severity: "retie-now",
+  mechanicsWhy:
+    "A crossed turn creates a local high-stress point and lets the structure walk or cut under load.",
+};
+
+const RULE_SEATED_TO_HARDWARE: GeometricRule = {
+  id: "seated-to-hardware",
+  description: "Knot body must seat against the eye / hardware with no gap",
+  violatedBy: ["gap_at_eye"],
+  supportedBy: ["seated_to_eye"],
+  severity: "retie-recommended",
+  mechanicsWhy:
+    "A gap at the hardware interface lets the knot walk and abrade under cyclic load.",
+};
+
+const RULE_TAG_EXIT_CORRECT: GeometricRule = {
+  id: "tag-exit-correct",
+  description: "Tag must follow the expected finish path",
+  violatedBy: ["tag_wrong"],
+  supportedBy: ["tag_visible", "tags_ok", "tag_ok"],
+  severity: "retie-now",
+  mechanicsWhy: "Wrong tag path leaves the lock incomplete — the structure can unlock under load.",
+};
+
+const RULE_BARRELS_BUTTED: GeometricRule = {
+  id: "barrels-butted",
+  description: "Both Uni barrels must meet face-to-face with no seating gap",
+  violatedBy: ["gap_seating"],
+  supportedBy: ["fully_seated"],
+  severity: "retie-now",
+  mechanicsWhy: "Double Uni locks when the barrels butt and seat; a gap means the join can separate.",
+};
+
+const RULE_LOOP_STABLE: GeometricRule = {
+  id: "loop-stable",
+  description: "Finished loop must stay open and stable under moderate load",
+  violatedBy: ["loop_collapses"],
+  supportedBy: ["loop_stable"],
+  severity: "retie-now",
+  mechanicsWhy: "A collapsing loop means the non-slip / lock structure never finished correctly.",
+  appliesWhen: { loopBehavior: ["fixed", "non-slip", "open"] },
+};
+
+const RULE_COLUMN_DENSE: GeometricRule = {
+  id: "column-dense",
+  description: "Twist or plait column must be continuous with no gaps or loose weave",
+  violatedBy: ["crossover", "gap_seating"],
+  supportedBy: ["barrel_uniform", "fully_seated"],
+  severity: "retie-now",
+  mechanicsWhy:
+    "FG and Bimini hold by continuous compression; gaps or crossed turns let the column unzip under load.",
+};
+
+function withStep(rule: GeometricRule, stepWhere: number | null): GeometricRule {
+  return { ...rule, stepWhere };
 }
 
 const terminalFit = (overrides: Partial<FieldFitProfile["baseline"]> = {}): FieldFitProfile => ({
@@ -189,7 +254,12 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
           decision: "retie-now",
         },
       ],
-      cosmeticIrregularities: ["Slight tag length variation", "Minor coil twist if still fully seated"],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 4),
+        withStep(RULE_SEATED_TO_HARDWARE, 4),
+        withStep(RULE_TAG_EXIT_CORRECT, 5),
+      ],
+            cosmeticIrregularities: ["Slight tag length variation", "Minor coil twist if still fully seated"],
     },
     observations: baseTerminalObs("palomar"),
     diagramKind: "terminal-palomar",
@@ -687,7 +757,12 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
           decision: "watch",
         },
       ],
-      cosmeticIrregularities: ["Slight barrel size difference if wrap counts intentionally differ"],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 2),
+        withStep(RULE_BARRELS_BUTTED, 4),
+        withStep(RULE_TAG_EXIT_CORRECT, 5),
+      ],
+            cosmeticIrregularities: ["Slight barrel size difference if wrap counts intentionally differ"],
     },
     observations: baseJoinObs("double-uni"),
     diagramKind: "line-join",
@@ -787,7 +862,12 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
           decision: "retie-recommended",
         },
       ],
-      cosmeticIrregularities: ["Minor lock hitch count variation if weave is solid"],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 2),
+        withStep(RULE_COLUMN_DENSE, 2),
+        withStep(RULE_TAG_EXIT_CORRECT, 3),
+      ],
+            cosmeticIrregularities: ["Minor lock hitch count variation if weave is solid"],
     },
     observations: baseJoinObs("fg"),
     diagramKind: "braid-leader-fg",
@@ -878,6 +958,11 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
           stepWhere: 4,
           decision: "watch",
         },
+      ],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 2),
+        withStep(RULE_BARRELS_BUTTED, 4),
+        withStep(RULE_TAG_EXIT_CORRECT, 4),
       ],
       cosmeticIrregularities: [],
     },
@@ -1441,6 +1526,12 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
         { id: "bimini-twist-crossover", label: "Loose / gapped twists", observationKey: "crossover", consequence: "Weak column", mechanicsWhy: "Dense even twists required", stepWhere: 2, decision: "retie-now" },
         { id: "bimini-twist-tag", label: "Incomplete lock", observationKey: "tag_wrong", consequence: "Unravels under load", mechanicsWhy: "Lock hitches finish the Bimini", stepWhere: 4, decision: "retie-now" },
       ],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 2),
+        withStep(RULE_LOOP_STABLE, 3),
+        withStep(RULE_COLUMN_DENSE, 2),
+        withStep(RULE_TAG_EXIT_CORRECT, 4),
+      ],
       cosmeticIrregularities: [],
     },
     observations: baseLoopObs("bimini-twist"),
@@ -1614,6 +1705,11 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
           stepWhere: 5,
           decision: "retie-now",
         },
+      ],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 2),
+        withStep(RULE_SEATED_TO_HARDWARE, 5),
+        withStep(RULE_TAG_EXIT_CORRECT, 4),
       ],
       cosmeticIrregularities: ["Slight tag length variation", "One turn marginally proud"],
     },

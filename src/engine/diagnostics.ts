@@ -6,9 +6,11 @@ import type {
   CheckInput,
   CheckResult,
   FindingConfidence,
+  GeometricRule,
   Knot,
   LayeredFinding,
   RetieDecision,
+  VisionResult,
 } from "@/domain/types";
 import { APPLICATION_ID, ENGINE_VERSION, RETIE_LABELS } from "@/domain/types";
 
@@ -28,6 +30,92 @@ function fid(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/**
+ * Map a VisionResult into CheckInput.
+ * Vision is a pure observation emitter — it never decides retie.
+ * Only existing observation keys should be present on VisionResult.observations.
+ */
+export function visionToCheckInput(vision: VisionResult, knotId: string): CheckInput {
+  return {
+    knotId,
+    observations: vision.observations.map((o) => o.key),
+    focusOk: vision.quality.focusOk,
+    criticalStructureVisible: vision.quality.criticalStructureVisible,
+    bothExitsVisible: vision.quality.bothExitsVisible,
+    tagVisible: vision.quality.tagVisible,
+  };
+}
+
+function ruleApplies(rule: GeometricRule, knot: Knot): boolean {
+  const gate = rule.appliesWhen;
+  if (!gate) return true;
+  const c = knot.contract;
+  if (gate.requiresDoubledLine === true && !c.requiresDoubleLine && !c.eyeMustPassDoubledLine) {
+    return false;
+  }
+  if (gate.requiresStandingLoop === true && !c.requiresStandingLoop) {
+    return false;
+  }
+  if (gate.finishedGeometry && !gate.finishedGeometry.includes(c.finishedGeometry)) {
+    return false;
+  }
+  if (gate.loopBehavior && !gate.loopBehavior.includes(c.loopBehavior)) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Evaluate formal geometric rules after defect mapping.
+ * Fail-closed only: can escalate retieDecision, never relax it.
+ */
+function evaluateGeometricRules(
+  knot: Knot,
+  marked: Set<string>,
+  currentDecision: RetieDecision,
+): { decision: RetieDecision; findings: LayeredFinding[]; hitCount: number } {
+  const rules = knot.fingerprint.geometricRules ?? [];
+  const findings: LayeredFinding[] = [];
+  let decision = currentDecision;
+  let hitCount = 0;
+
+  for (const rule of rules) {
+    if (!ruleApplies(rule, knot)) continue;
+
+    const hitKeys = rule.violatedBy.filter((k) => marked.has(k));
+    if (hitKeys.length === 0) continue;
+
+    hitCount += 1;
+    decision = worse(decision, rule.severity);
+
+    const severity =
+      rule.severity === "retie-now" || rule.severity === "retie-recommended"
+        ? "stop"
+        : rule.severity === "watch"
+          ? "watch"
+          : "info";
+
+    findings.push({
+      id: fid(rule.id),
+      severity,
+      title: rule.description,
+      observation: `Geometric rule violated: ${hitKeys.join(", ")}`,
+      implication: rule.mechanicsWhy,
+      nextAction:
+        rule.severity === "retie-now" || rule.severity === "retie-recommended"
+          ? "Cut it off and retie. Do not fish this connection."
+          : "Inspect more carefully; pull-test if you proceed.",
+      rationale: "Formal geometric invariant evaluated by the finished-knot model.",
+      confidence: "high",
+      category: "retie",
+      mechanicsLink: rule.mechanicsWhy,
+      stepLink: rule.stepWhere ?? undefined,
+    });
+  }
+
+  return { decision, findings, hitCount };
+}
+
 export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
   const marked = new Set(input.observations);
   const unableToVerify: string[] = [];
@@ -41,7 +129,11 @@ export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
   const focusOk = input.focusOk !== false;
   const criticalVisible = input.criticalStructureVisible !== false;
   const bothExits = input.bothExitsVisible === true || marked.has("both_exits");
-  const tagVisible = input.tagVisible === true || marked.has("tag_visible") || marked.has("tags_ok") || marked.has("tag_ok");
+  const tagVisible =
+    input.tagVisible === true ||
+    marked.has("tag_visible") ||
+    marked.has("tags_ok") ||
+    marked.has("tag_ok");
 
   if (!focusOk) unableToVerify.push("Focus / image sharpness");
   if (!criticalVisible) unableToVerify.push("Critical knot structure");
@@ -103,13 +195,21 @@ export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
     for (const g of goodKeys) {
       if (!marked.has(g.key) && !marked.has("both_exits")) {
         // Not marked good and not in a pass path — soft watch if related to seating
-        if (g.key.includes("seat") || g.key.includes("neat") || g.key.includes("uniform") || g.key.includes("straight")) {
+        if (
+          g.key.includes("seat") ||
+          g.key.includes("neat") ||
+          g.key.includes("uniform") ||
+          g.key.includes("straight")
+        ) {
           // only if user engaged with any checks
         }
       }
     }
 
-    if (hitDefects.length === 0 && marked.size > 0) {
+    // Geometric rules — after defect mapping, fail-closed only (evaluate before pass)
+    const geo = evaluateGeometricRules(knot, marked, decision);
+
+    if (hitDefects.length === 0 && geo.hitCount === 0 && marked.size > 0) {
       confidenceReasons.push("No dangerous defect markers selected");
       confidenceReasons.push("Finished geometry consistent with diagnostic model (self-report)");
       findings.push({
@@ -119,14 +219,19 @@ export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
         observation: "Selected observations do not match known dangerous defects for this knot.",
         implication: "Self-inspection is not a laboratory proof — still pull-test before fishing.",
         nextAction: "Pull-test, then fish. Re-inspect after first hard load.",
-        rationale: "Deterministic engine only flags modeled defects.",
+        rationale: "Deterministic engine only flags modeled defects and geometric rules.",
         confidence: bothExits && tagVisible ? "high" : "moderate",
         category: "diagnostics",
       });
       if (!bothExits || !tagVisible) {
         decision = worse(decision, "watch");
         diagnosticConfidence = "moderate";
-        unableToVerify.push(...[...(!bothExits ? ["Rear / opposite exits"] : []), ...(!tagVisible ? ["Tag end"] : [])]);
+        unableToVerify.push(
+          ...[
+            ...(!bothExits ? ["Rear / opposite exits"] : []),
+            ...(!tagVisible ? ["Tag end"] : []),
+          ],
+        );
       }
     }
 
@@ -166,6 +271,20 @@ export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
       });
     }
 
+    // Apply geometric rule escalations and findings (after defects, never relaxes)
+    decision = worse(decision, geo.decision);
+    findings.push(...geo.findings);
+    if (geo.hitCount > 0) {
+      confidenceReasons.push(
+        `${geo.hitCount} formal geometric rule${geo.hitCount === 1 ? "" : "s"} violated`,
+      );
+      for (const f of geo.findings) {
+        if (f.implication) whyItMatters.push(f.implication);
+        if (f.nextAction) whatToDo.push(f.nextAction);
+      }
+      diagnosticConfidence = "high";
+    }
+
     // Symptom free-text against catalog diagnostics
     if (input.symptom?.trim()) {
       const s = input.symptom.toLowerCase();
@@ -200,9 +319,11 @@ export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
       confidenceReasons.push(`Partial visibility gaps: ${unableToVerify.join(", ")}`);
     }
 
-    if (hitDefects.some((d) => d.decision === "retie-now")) {
+    if (hitDefects.some((d) => d.decision === "retie-now") || geo.hitCount > 0) {
       diagnosticConfidence = "high";
-      confidenceReasons.push("Critical defect geometry matched diagnostic model");
+      if (hitDefects.some((d) => d.decision === "retie-now")) {
+        confidenceReasons.push("Critical defect geometry matched diagnostic model");
+      }
     }
   }
 
@@ -214,7 +335,10 @@ export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
     observation:
       "Observations were evaluated by the finished-knot diagnostic model — not by free-form AI judgment.",
     implication: "If the safest answer is retie, that is intentional fail-closed design.",
-    nextAction: decision.startsWith("retie") || decision === "cannot-verify" ? "Retie now." : "Pull-test before fishing.",
+    nextAction:
+      decision.startsWith("retie") || decision === "cannot-verify"
+        ? "Retie now."
+        : "Pull-test before fishing.",
     rationale: "Layer 3 authority is rules + fingerprint, never an LLM override.",
     confidence: "high",
     category: "boundary",
@@ -233,7 +357,9 @@ export function runFinishedCheck(knot: Knot, input: CheckInput): CheckResult {
 
   if (whatToDo.length === 0) {
     whatToDo.push(
-      decision === "cannot-verify" ? "Cut it off and retie — or capture a complete view" : "Pull-test, then fish",
+      decision === "cannot-verify"
+        ? "Cut it off and retie — or capture a complete view"
+        : "Pull-test, then fish",
     );
   }
 
