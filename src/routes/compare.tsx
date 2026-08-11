@@ -279,7 +279,7 @@ function PipelineStrip({
   onRestore: (e: RunEntry) => void;
   onClearLog: () => void;
 }) {
-  const [showLog, setShowLog] = useState(false);
+  const [showLog, setShowLog] = useSessionState("ki-cmp-log-open", false);
   /** Roving tabindex: the toolbar is one tab stop, arrows move between controls. */
   const [focusIdx, setFocusIdx] = useState(0);
   const toolbarRef = useRef<HTMLDivElement>(null);
