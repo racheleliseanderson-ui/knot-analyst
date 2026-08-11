@@ -6,6 +6,7 @@ import { runTroubleshoot, type TroubleshootInput } from "@/engine/troubleshoot";
 import { diagnosisToDecide, encodeInput } from "@/lib/handoff";
 import { FAILURE_PLAYS, type BreakLocation, type FailureEvent } from "@/data/failure-playbook";
 import type { ConnectionJob, DiameterRelation, LineMaterial, RetieDecision } from "@/domain/types";
+import { isJoinJob } from "@/domain/connection-preset";
 import {
   CONNECTION_GROUPS,
   CONNECTION_LABELS,
@@ -56,14 +57,6 @@ const DIAMETERS: DiameterRelation[] = [
   "main-thicker",
   "extreme-mismatch",
 ];
-const JOIN_JOBS: ConnectionJob[] = [
-  "braid-to-leader",
-  "leader-to-leader",
-  "leader-to-tippet",
-  "double-line-to-leader",
-  "fly-line-to-leader",
-];
-
 const STARTERS: { id: string; title: string; line: string; input: TroubleshootInput }[] = [
   {
     id: "braid-fluoro-pop",
@@ -166,7 +159,7 @@ function DiagnoseMode() {
     [ran, input],
   );
 
-  const isJoin = input.connection ? JOIN_JOBS.includes(input.connection) : false;
+  const isJoin = isJoinJob(input.connection);
 
   const handoff = () => {
     if (!result) return;
@@ -292,41 +285,60 @@ function DiagnoseMode() {
                   ))}
                 </div>
               </div>
-              {isJoin ? (
-                <>
-                  <div>
-                    <MicroLabel className="mb-2">Leader</MicroLabel>
-                    <div className="flex flex-wrap gap-1.5">
-                      {MATERIALS.map((m) => (
-                        <Chip
-                          key={m}
-                          active={input.secondaryMaterial === m}
-                          onClick={() =>
-                            set({ secondaryMaterial: input.secondaryMaterial === m ? undefined : m })
-                          }
-                        >
-                          {MATERIAL_LABELS[m]}
-                        </Chip>
-                      ))}
+              {input.connection ? (
+                isJoin ? (
+                  <>
+                    <div className="rounded-md border border-primary/30 bg-primary/8 px-3 py-2">
+                      <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary">
+                        Two-sided job
+                      </p>
+                      <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+                        Declare the leader / second line so the diagnosis can separate join failure from main-line failure.
+                      </p>
                     </div>
-                  </div>
-                  <div>
-                    <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
-                    <div className="flex flex-wrap gap-1.5">
-                      {DIAMETERS.map((d) => (
-                        <Chip
-                          key={d}
-                          active={input.diameterRelation === d}
-                          onClick={() =>
-                            set({ diameterRelation: input.diameterRelation === d ? undefined : d })
-                          }
-                        >
-                          {DIAMETER_LABELS[d]}
-                        </Chip>
-                      ))}
+                    <div>
+                      <MicroLabel className="mb-2">Leader / second line · required</MicroLabel>
+                      <div className="flex flex-wrap gap-1.5">
+                        {MATERIALS.map((m) => (
+                          <Chip
+                            key={m}
+                            active={input.secondaryMaterial === m}
+                            onClick={() =>
+                              set({ secondaryMaterial: input.secondaryMaterial === m ? undefined : m })
+                            }
+                          >
+                            {MATERIAL_LABELS[m]}
+                          </Chip>
+                        ))}
+                      </div>
                     </div>
+                    <div>
+                      <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
+                      <div className="flex flex-wrap gap-1.5">
+                        {DIAMETERS.map((d) => (
+                          <Chip
+                            key={d}
+                            active={input.diameterRelation === d}
+                            onClick={() =>
+                              set({ diameterRelation: input.diameterRelation === d ? undefined : d })
+                            }
+                          >
+                            {DIAMETER_LABELS[d]}
+                          </Chip>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="rounded-md border border-hairline bg-surface-2/30 px-3 py-2">
+                    <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                      Single-side job
+                    </p>
+                    <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+                      No second line for this connection. Pick a line-to-line join if the failure was at a leader splice or tippet.
+                    </p>
                   </div>
-                </>
+                )
               ) : null}
               <div>
                 <MicroLabel className="mb-2">Field notes (optional)</MicroLabel>

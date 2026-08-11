@@ -257,6 +257,10 @@ function DecideMode() {
   const [showMatrix, setShowMatrix] = useState(false);
   const [packetState, setPacketState] = useState<"idle" | "working" | "error">("idle");
   const [packetKind, setPacketKind] = useState<PacketVariant | null>(null);
+  /** Which surviving option is active on the decision card (0 = recommended). */
+  const [altPick, setAltPick] = useState(0);
+  /** Expand optional instrument panels (mm measure, fiber detail stays progressive). */
+  const [showAdvanced, setShowAdvanced] = useState(false);
   /** Chip keys, so custom materials/connections stay visibly selected */
   const [sel, setSel] = useState<{ connection?: string; main?: string; secondary?: string }>({});
 
@@ -282,6 +286,7 @@ function DecideMode() {
     setInput((prev) => ({ ...prev, ...patch }));
     if (keys) setSel((prev) => ({ ...prev, ...keys }));
     setRan(false);
+    setAltPick(0);
   };
   const toggle = (key: keyof ChooseInput) =>
     set({ [key]: !input[key] } as Partial<ChooseInput>);
@@ -294,6 +299,9 @@ function DecideMode() {
   const tradeoffs = result ? detectTradeoffs(result) : [];
   const cfs = result ? counterfactuals(result) : [];
   const isJoin = isJoinJob(input.connection);
+  const ranked = result?.ranked ?? [];
+  const safeAlt = Math.min(altPick, Math.max(0, ranked.length - 1));
+  const activeOption = ranked[safeAlt] ?? ranked[0];
 
   /**
    * The same four panels drive both layouts: desktop stacks them in the
@@ -324,15 +332,48 @@ function DecideMode() {
                                 }
                                 onClick={() => {
                                   const dual = dualWriteFromConnection(j.base);
-                                  set(
-                                    {
-                                      connection: j.base,
-                                      structuralJob: dual.structuralJob,
-                                      mainRole: dual.mainRole,
-                                      secondaryRole: dual.secondaryRole,
-                                    },
-                                    { connection: j.key },
-                                  );
+                                  const patch: Partial<ChooseInput> = {
+                                    connection: j.base,
+                                    structuralJob: dual.structuralJob,
+                                    mainRole: dual.mainRole,
+                                    secondaryRole: dual.secondaryRole,
+                                  };
+                                  const selPatch: { connection?: string; main?: string; secondary?: string } = {
+                                    connection: j.key,
+                                  };
+                                  // Soft material hints from the convenience label — only when unset.
+                                  if (dual.mainMaterialHint && !input.mainMaterial) {
+                                    patch.mainMaterial = dual.mainMaterialHint;
+                                    patch.mainSpec = resolveMaterial(
+                                      dual.mainMaterialHint,
+                                      FISHING_MATERIAL_PRESETS,
+                                      { role: dual.mainRole },
+                                    );
+                                    selPatch.main = dual.mainMaterialHint;
+                                  }
+                                  if (dual.isJoin) {
+                                    if (dual.secondaryMaterialHint && !input.secondaryMaterial) {
+                                      patch.secondaryMaterial = dual.secondaryMaterialHint;
+                                      patch.secondarySpec = resolveMaterial(
+                                        dual.secondaryMaterialHint,
+                                        FISHING_MATERIAL_PRESETS,
+                                        {
+                                          ...(dual.secondaryRole ? { role: dual.secondaryRole } : {}),
+                                        },
+                                      );
+                                      selPatch.secondary = dual.secondaryMaterialHint;
+                                    }
+                                  } else {
+                                    // Terminal / single-side jobs: second line is not part of the job.
+                                    patch.secondaryMaterial = undefined;
+                                    patch.secondarySpec = undefined;
+                                    patch.secondaryRole = undefined;
+                                    patch.diameterRelation = undefined;
+                                    patch.mainDiameterMm = undefined;
+                                    patch.secondaryDiameterMm = undefined;
+                                    selPatch.secondary = undefined;
+                                  }
+                                  set(patch, selPatch);
                                 }}
                               >
                                 {j.label}
@@ -393,84 +434,113 @@ function DecideMode() {
                           onChange={(next) => set({ mainSpec: next })}
                         />
                       </div>
-                      {isJoin ? (
-                        <>
-                          <div>
-                            <MicroLabel className="mb-2">Leader / second line</MicroLabel>
-                            <div className="flex flex-wrap gap-1.5">
-                              {materialOptions.map((m) => (
-                                <Chip
-                                  key={m.key}
-                                  active={
-                                    sel.secondary
-                                      ? sel.secondary === m.key
-                                      : input.secondaryMaterial === m.base && !m.custom
-                                  }
-                                  onClick={() => {
-                                    const on = sel.secondary
-                                      ? sel.secondary === m.key
-                                      : input.secondaryMaterial === m.base;
-                                    set(
-                                      {
-                                        secondaryMaterial: on ? undefined : m.base,
-                                        secondarySpec: on
-                                          ? undefined
-                                          : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS, {
-                                              ...(input.secondaryRole
-                                                ? { role: input.secondaryRole }
-                                                : {}),
-                                            }),
-                                      },
-                                      { secondary: on ? undefined : m.key },
-                                    );
-                                  }}
-                                >
-                                  {m.label}
-                                </Chip>
-                              ))}
+                      {input.connection ? (
+                        isJoin ? (
+                          <>
+                            <div className="rounded-md border border-primary/30 bg-primary/8 px-3 py-2">
+                              <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary">
+                                Two-sided job
+                              </p>
+                              <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+                                Both sides matter for joins. Declare the leader / second line so the model can score diameter mismatch and material pairs.
+                              </p>
                             </div>
-                            <MaterialDetail
-                              category={input.secondaryMaterial}
-                              spec={input.secondarySpec}
-                              onChange={(next) => set({ secondarySpec: next })}
-                            />
-                          </div>
-                          <div>
-                            <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
-                            <div className="flex flex-wrap gap-1.5">
-                              {DIAMETERS.map((d) => (
-                                <Chip
-                                  key={d}
-                                  active={input.diameterRelation === d}
-                                  onClick={() =>
-                                    set({
-                                      diameterRelation: input.diameterRelation === d ? undefined : d,
-                                      // Clear measured pair when picking a band chip
-                                      mainDiameterMm: undefined,
-                                      secondaryDiameterMm: undefined,
-                                    })
-                                  }
-                                >
-                                  {DIAMETER_LABELS[d]}
-                                </Chip>
-                              ))}
+                            <div>
+                              <MicroLabel className="mb-2">Leader / second line · required</MicroLabel>
+                              <div className="flex flex-wrap gap-1.5">
+                                {materialOptions.map((m) => (
+                                  <Chip
+                                    key={m.key}
+                                    active={
+                                      sel.secondary
+                                        ? sel.secondary === m.key
+                                        : input.secondaryMaterial === m.base && !m.custom
+                                    }
+                                    onClick={() => {
+                                      const on = sel.secondary
+                                        ? sel.secondary === m.key
+                                        : input.secondaryMaterial === m.base;
+                                      set(
+                                        {
+                                          secondaryMaterial: on ? undefined : m.base,
+                                          secondarySpec: on
+                                            ? undefined
+                                            : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS, {
+                                                ...(input.secondaryRole
+                                                  ? { role: input.secondaryRole }
+                                                  : {}),
+                                              }),
+                                        },
+                                        { secondary: on ? undefined : m.key },
+                                      );
+                                    }}
+                                  >
+                                    {m.label}
+                                  </Chip>
+                                ))}
+                              </div>
+                              <MaterialDetail
+                                category={input.secondaryMaterial}
+                                spec={input.secondarySpec}
+                                onChange={(next) => set({ secondarySpec: next })}
+                              />
                             </div>
-                            <DiameterMmFields
-                              mainMm={input.mainDiameterMm}
-                              secondaryMm={input.secondaryDiameterMm}
-                              onApply={(main, secondary, relation) =>
-                                set({
-                                  mainDiameterMm: main,
-                                  secondaryDiameterMm: secondary,
-                                  ...(relation ? { diameterRelation: relation } : {}),
-                                })
-                              }
-                            />
-                            <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
-                              Prefer measured diameters over manufacturer pound-test. When both sides are entered, the relational band updates automatically.
+                            <div>
+                              <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
+                              <div className="flex flex-wrap gap-1.5">
+                                {DIAMETERS.map((d) => (
+                                  <Chip
+                                    key={d}
+                                    active={input.diameterRelation === d}
+                                    onClick={() =>
+                                      set({
+                                        diameterRelation: input.diameterRelation === d ? undefined : d,
+                                        mainDiameterMm: undefined,
+                                        secondaryDiameterMm: undefined,
+                                      })
+                                    }
+                                  >
+                                    {DIAMETER_LABELS[d]}
+                                  </Chip>
+                                ))}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setShowAdvanced((v) => !v)}
+                                className="ki-press mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                              >
+                                {showAdvanced ? "Hide measured Ø mm" : "Optional · enter measured Ø mm"}
+                              </button>
+                              {showAdvanced ? (
+                                <>
+                                  <DiameterMmFields
+                                    mainMm={input.mainDiameterMm}
+                                    secondaryMm={input.secondaryDiameterMm}
+                                    onApply={(main, secondary, relation) =>
+                                      set({
+                                        mainDiameterMm: main,
+                                        secondaryDiameterMm: secondary,
+                                        ...(relation ? { diameterRelation: relation } : {}),
+                                      })
+                                    }
+                                  />
+                                  <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
+                                    Prefer measured diameters over manufacturer pound-test. When both sides are entered, the relational band updates automatically.
+                                  </p>
+                                </>
+                              ) : null}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="rounded-md border border-hairline bg-surface-2/30 px-3 py-2">
+                            <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                              Single-side job
+                            </p>
+                            <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+                              This connection only needs a main line — no leader / second line for this job. Switch to a line-to-line join to declare both sides.
                             </p>
                           </div>
-                        </>
+                        )
                       ) : null}
                     </div>
                   </Panel>
@@ -829,21 +899,49 @@ function DecideMode() {
                         ) : null}
                       </div>
                     ) : null}
+                    {ranked.length > 1 ? (
+                      <div className="border-b border-hairline px-6 py-3 no-print">
+                        <MicroLabel className="mb-2">Toggle alternative</MicroLabel>
+                        <div className="flex flex-wrap gap-1.5">
+                          {ranked.slice(0, 4).map((o, idx) => (
+                            <Chip
+                              key={o.knot.id}
+                              tone={idx === 0 ? "signal" : "neutral"}
+                              active={safeAlt === idx}
+                              onClick={() => setAltPick(idx)}
+                            >
+                              {idx === 0 ? "Recommended" : `Alt ${idx}`} · {o.knot.name}
+                              <span className="ml-1 font-mono text-[0.625rem] text-muted-foreground">
+                                {o.fieldFitPercent}%
+                              </span>
+                            </Chip>
+                          ))}
+                        </div>
+                        <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
+                          Same constraints. Switch candidates without re-running — compare field fit and trade-offs side by side in your head.
+                        </p>
+                      </div>
+                    ) : null}
                     <div className="grid gap-6 px-6 py-6 sm:grid-cols-[minmax(0,1fr)_150px]">
                       <div className="min-w-0">
                         <h2 className="text-[2rem] font-semibold leading-none tracking-[-0.03em]">
-                          {card.knotName}
+                          {activeOption ? activeOption.knot.name : card.knotName}
                         </h2>
+                        {safeAlt > 0 ? (
+                          <p className="mt-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-caution">
+                            Alternative {safeAlt} · not the primary recommendation
+                          </p>
+                        ) : null}
                         <p className="mt-3 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
                           {card.jobLine} · {card.systemLine}
                         </p>
                         <p className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground/70">
                           {card.conditionLine}
                         </p>
-                        {result.ranked[0] ? (
+                        {activeOption ? (
                           <Link
                             to="/tie/$knotId"
-                            params={{ knotId: result.ranked[0].knot.id }}
+                            params={{ knotId: activeOption.knot.id }}
                             className="mt-4 inline-flex items-center gap-2 rounded-md border border-accent/50 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent/10 no-print"
                           >
                             Tie it — step player + diagram
@@ -852,7 +950,7 @@ function DecideMode() {
                       </div>
                       <div className="sm:text-right">
                         <div className="font-mono text-[2.5rem] leading-none tabular-nums text-primary">
-                          {card.fieldFit}
+                          {activeOption ? activeOption.fieldFitPercent : card.fieldFit}
                           <span className="text-lg text-muted-foreground">%</span>
                         </div>
                         <MicroLabel className="mt-1">field fit</MicroLabel>
@@ -864,8 +962,20 @@ function DecideMode() {
 
                     <div className="grid gap-px bg-hairline sm:grid-cols-2">
                       <div className="bg-card px-6 py-5">
-                        <MicroLabel className="mb-3">Why this one</MicroLabel>
-                        <Bullets items={card.reasons} />
+                        <MicroLabel className="mb-3">
+                          {safeAlt === 0 ? "Why this one" : "Why this alternative"}
+                        </MicroLabel>
+                        <Bullets
+                          items={
+                            safeAlt === 0
+                              ? card.reasons
+                              : activeOption?.whyBest?.length
+                                ? activeOption.whyBest
+                                : activeOption?.butNotes?.length
+                                  ? activeOption.butNotes
+                                  : card.reasons
+                          }
+                        />
                       </div>
                       <div className="bg-card px-6 py-5">
                         <MicroLabel className="mb-3">Retie notes</MicroLabel>
@@ -889,6 +999,15 @@ function DecideMode() {
                           <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                             {card.runnerUp.when}
                           </p>
+                          {ranked.length > 1 ? (
+                            <button
+                              type="button"
+                              onClick={() => setAltPick(1)}
+                              className="ki-press mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent hover:underline"
+                            >
+                              Toggle to this alternative →
+                            </button>
+                          ) : null}
                         </div>
                       ) : null}
                     </div>

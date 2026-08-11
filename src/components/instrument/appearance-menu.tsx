@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Contrast, Moon, PenTool, Sun } from "lucide-react";
+import { Contrast, Moon, Sun } from "lucide-react";
 import {
   APPEARANCES,
   APPEARANCE_LABELS,
@@ -13,10 +13,9 @@ const ICONS: Record<Appearance, typeof Moon> = {
   dark: Moon,
   light: Sun,
   cb: Contrast,
-  atelier: PenTool,
 };
 
-/** Explicit appearance picker. Cycling a four-state toggle blind is not a control. */
+/** Explicit appearance picker. Cycling a multi-state toggle blind is not a control. */
 export function AppearanceMenu() {
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);

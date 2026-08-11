@@ -1,37 +1,42 @@
 import { useCallback, useEffect, useState } from "react";
 
-/** dark · light · cb (high-contrast, colour-vision-safe signals) · atelier (editorial) */
-export type Appearance = "dark" | "light" | "cb" | "atelier";
+/** dark · light · cb (high-contrast, colour-vision-safe signals) */
+export type Appearance = "dark" | "light" | "cb";
 export type Theme = Appearance;
 
 const KEY = "ki-theme";
-export const APPEARANCES: Appearance[] = ["dark", "light", "atelier", "cb"];
+export const APPEARANCES: Appearance[] = ["dark", "light", "cb"];
 export const APPEARANCE_LABELS: Record<Appearance, string> = {
   dark: "Dark",
   light: "Light",
   cb: "Colour-blind safe",
-  atelier: "Atelier",
 };
 
 /** One line per mode, so nobody has to infer the difference from a swatch. */
 export const APPEARANCE_NOTES: Record<Appearance, string> = {
   dark: "Deep harbour slate. The working default.",
-  light: "Paper base for daylight and print setup.",
+  light: "Soft instrument light for daylight — cooler grey, not pure white.",
   cb: "High contrast, colour-vision-safe signals. Patterns carry state.",
-  atelier: "Editorial reading: near-black teal, brass and bone, wider measure.",
 };
 
-export const THEME_BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('${KEY}');var r=document.documentElement;r.classList.toggle('light',t==='light'||t==='cb');r.classList.toggle('cb',t==='cb');r.classList.toggle('atelier',t==='atelier');}catch(e){}})();`;
+export const THEME_BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('${KEY}');if(t==='atelier')t='dark';var r=document.documentElement;r.classList.remove('atelier');r.classList.toggle('light',t==='light'||t==='cb');r.classList.toggle('cb',t==='cb');}catch(e){}})();`;
 
 function apply(theme: Appearance) {
   const r = document.documentElement;
+  r.classList.remove("atelier");
   r.classList.toggle("light", theme === "light" || theme === "cb");
   r.classList.toggle("cb", theme === "cb");
-  r.classList.toggle("atelier", theme === "atelier");
 }
 
 function isAppearance(v: string | null): v is Appearance {
-  return v === "dark" || v === "light" || v === "cb" || v === "atelier";
+  return v === "dark" || v === "light" || v === "cb";
+}
+
+/** Map removed themes (atelier) and unknowns to a live appearance. */
+function migrateStored(v: string | null): Appearance | null {
+  if (isAppearance(v)) return v;
+  if (v === "atelier") return "dark";
+  return null;
 }
 
 export function useTheme() {
@@ -44,11 +49,17 @@ export function useTheme() {
     } catch {
       stored = null;
     }
-    const initial: Appearance = isAppearance(stored)
-      ? stored
-      : document.documentElement.classList.contains("light")
-        ? "light"
-        : "dark";
+    const migrated = migrateStored(stored);
+    const initial: Appearance =
+      migrated ??
+      (document.documentElement.classList.contains("light") ? "light" : "dark");
+    if (stored === "atelier") {
+      try {
+        localStorage.setItem(KEY, "dark");
+      } catch {
+        /* session-only */
+      }
+    }
     setTheme(initial);
     apply(initial);
   }, []);
