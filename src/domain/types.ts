@@ -1,16 +1,19 @@
 /**
  * Framework-independent knot intelligence domain.
  * Mechanical intelligence first — AI never overrides Layer 1 hard constraints.
+ *
+ * Product: Knot Analyst (Hook the Horizon). Application IDs stay stable for
+ * provenance; they are not user-facing product names — see domain/brand.ts.
  */
 
-export const APP_VERSION = "1.0.0";
+export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
 export const KNOT_CATALOG_VERSION = "2026-08-09.2";
-export const CONFIG_VERSION = "nitro-fluid-v1.2.1";
-export const ENGINE_VERSION = "mech-intel-1.2.2";
+export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
+export const ENGINE_VERSION = "mech-intel-1.3.0";
 
-/** What the angler is actually connecting */
+/** What the angler is actually connecting (convenience preset IDs — stable). */
 export type ConnectionJob =
   | "line-to-hook"
   | "line-to-lure"
@@ -358,7 +361,17 @@ export interface ChooseInput {
    */
   mainSpec?: import("@/domain/material").MaterialSpec;
   secondarySpec?: import("@/domain/material").MaterialSpec;
+  /**
+   * Dual-write from connection preset. Structural job is independent of the
+   * convenience material baked into some ConnectionJob labels.
+   */
+  structuralJob?: import("@/domain/connection-preset").StructuralJob;
+  mainRole?: import("@/domain/material").MaterialRole;
+  secondaryRole?: import("@/domain/material").MaterialRole;
   diameterRelation?: DiameterRelation;
+  /** Optional measured diameters (mm). When both set, map into diameterRelation. */
+  mainDiameterMm?: number;
+  secondaryDiameterMm?: number;
   mustPassGuides?: boolean;
   windy?: boolean;
   coldHands?: boolean;
@@ -411,6 +424,11 @@ export interface ChooseResult {
   tradeoffSummary?: string;
   /** Non-knot termination surfaced by construction axes (splice / crimp) */
   termination?: import("@/domain/material").TerminationAdvice;
+  /**
+   * Parallel Candidate Termination track — may include splice, crimp, twist,
+   * mechanical options. Knot ranking remains the primary list.
+   */
+  terminationCandidates?: import("@/domain/termination").TerminationCandidate[];
 }
 
 export interface LayeredFinding {

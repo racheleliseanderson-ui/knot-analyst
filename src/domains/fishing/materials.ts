@@ -7,6 +7,7 @@
 import type { LineMaterial } from "@/domain/types";
 import {
   CONSTRUCTION_LABELS,
+  FIBER_LABELS,
   TREATMENT_LABELS,
   type MaterialPreset,
 } from "@/domain/material";
@@ -15,6 +16,8 @@ const con = (...ids: (keyof typeof CONSTRUCTION_LABELS)[]) =>
   ids.map((id) => ({ id, label: CONSTRUCTION_LABELS[id] }));
 const treat = (...ids: (keyof typeof TREATMENT_LABELS)[]) =>
   ids.map((id) => ({ id, label: TREATMENT_LABELS[id] }));
+const fiber = (...ids: (keyof typeof FIBER_LABELS)[]) =>
+  ids.map((id) => ({ id, label: FIBER_LABELS[id] }));
 
 export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
   mono: {
@@ -109,6 +112,14 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
     },
     disclosure: [
       {
+        axis: "fiber",
+        label: "Fiber / material",
+        options: [
+          ...fiber("uhmwpe", "polyester"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+      {
         axis: "construction",
         label: "What type of braid?",
         options: [
@@ -137,6 +148,14 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
     },
     disclosure: [
       {
+        axis: "fiber",
+        label: "Metal",
+        options: [
+          ...fiber("stainless", "titanium"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+      {
         axis: "construction",
         label: "What type of wire?",
         options: [
@@ -162,10 +181,18 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
     },
     disclosure: [
       {
+        axis: "fiber",
+        label: "Fiber / material",
+        options: [
+          ...fiber("uhmwpe", "polyester"),
+          { id: "unspecified", label: "Not sure" },
+        ],
+      },
+      {
         axis: "construction",
         label: "What type of backing?",
         options: [
-          ...con("braid-12", "braid-8", "hollow-core"),
+          ...con("braid-12", "braid-8", "hollow-core", "twisted-multifilament"),
           { id: "unspecified", label: "Not sure" },
         ],
       },

@@ -2,6 +2,10 @@
  * Layer 2 — Field-Fit Ranking Engine
  * Ranks only knots that survived Layer 1. Exposes dimension scores.
  * Inactive field conditions do not drag scores (weights collapse toward zero).
+ *
+ * Schema 2.0 rule: flat inputs (no MaterialSpec axes, no mm diameters) must
+ * rank byte-identically to engine 1.2.x. Side-aware / axis effects only fire
+ * when deeper data is declared.
  */
 import {
   DIMENSION_LABELS,
@@ -14,6 +18,7 @@ import {
 } from "@/domain/types";
 import { FISHING_WEIGHTS } from "@/domains/fishing/dimensions";
 import { materialModifier } from "@/domain/material";
+import { effectiveDiameterRelation } from "@/engine/constraints";
 
 type Dim = (typeof FIELD_FIT_DIMENSIONS)[number];
 
@@ -36,6 +41,7 @@ function situationalAdjust(
 ): { scores: FieldFitScores; notes: Partial<Record<Dim, string>> } {
   const s = { ...scores };
   const notes: Partial<Record<Dim, string>> = {};
+  const diameter = effectiveDiameterRelation(input);
 
   if (knot.contract.connectionFamilies[0] === input.connection) {
     s.connectionJobFit = Math.min(100, s.connectionJobFit + 6);
@@ -51,7 +57,16 @@ function situationalAdjust(
     }
   }
 
-  if (input.diameterRelation === "main-much-thinner" || input.diameterRelation === "extreme-mismatch") {
+  // Side-aware secondary bonus only when a deeper secondarySpec was declared
+  if (
+    input.secondarySpec &&
+    input.secondaryMaterial &&
+    knot.contract.secondaryMaterials?.includes(input.secondaryMaterial)
+  ) {
+    s.materialCompatibility = Math.min(100, s.materialCompatibility + 4);
+  }
+
+  if (diameter === "main-much-thinner" || diameter === "extreme-mismatch") {
     if (knot.id === "fg") {
       s.diameterRelationship = Math.min(100, s.diameterRelationship + 10);
       notes.diameterRelationship = "Excellent large-diameter transition";
@@ -157,7 +172,7 @@ function situationalAdjust(
   if (
     input.connection === "braid-to-leader" &&
     input.mustPassGuides &&
-    (input.diameterRelation === "main-much-thinner" || input.diameterRelation === "extreme-mismatch") &&
+    (diameter === "main-much-thinner" || diameter === "extreme-mismatch") &&
     !input.coldHands &&
     !input.windy &&
     input.retieFrequency !== "frequent"
@@ -174,8 +189,6 @@ function situationalAdjust(
     const mod = materialModifier(spec);
     if (!mod.slipPenalty && !mod.seatingPenalty && !mod.inspectionPenalty) continue;
 
-    // A knot that already demands high tension control copes better with slick
-    // fibre; a low-tension geometry is where slip actually shows up.
     const tension = knot.contract.tensionRequirements;
     const resilience = tension === "extreme" ? 0.45 : tension === "high" ? 0.65 : 1;
     const slipHit = Math.round(mod.slipPenalty * resilience);
@@ -193,6 +206,7 @@ function situationalAdjust(
 
 function weightsFor(input: ChooseInput): Record<Dim, number> {
   const w = { ...DEFAULT_WEIGHTS };
+  const diameter = effectiveDiameterRelation(input);
 
   if (input.mustPassGuides) {
     w.guidePassage = 1.8;
@@ -231,11 +245,10 @@ function weightsFor(input: ChooseInput): Record<Dim, number> {
     w.fieldTieability = 0.55;
   }
 
-  if (input.diameterRelation === "main-much-thinner" || input.diameterRelation === "extreme-mismatch") {
+  if (diameter === "main-much-thinner" || diameter === "extreme-mismatch") {
     w.diameterRelationship = Math.max(w.diameterRelationship, 1.5);
   }
 
-  // Declared slick / awkward construction makes load behaviour matter more.
   const mods = [materialModifier(input.mainSpec), materialModifier(input.secondarySpec)];
   if (mods.some((m) => m.slipPenalty >= 10)) {
     w.loadBehavior = Math.max(w.loadBehavior, 1.5);

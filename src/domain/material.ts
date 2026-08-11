@@ -119,7 +119,7 @@ export const ROLE_LABELS: Record<MaterialRole, string> = {
 
 /** A single optional disclosure row under one of the six buttons. */
 export interface DisclosureRow {
-  axis: "construction" | "treatment";
+  axis: "construction" | "treatment" | "fiber";
   label: string;
   options: { id: string; label: string }[];
 }
@@ -131,16 +131,20 @@ export interface MaterialPreset {
   disclosure?: DisclosureRow[];
 }
 
+export type MaterialAxisPatch = Partial<
+  Pick<MaterialSpec, "construction" | "treatment" | "fiber" | "role">
+>;
+
 /** Widen a legacy flat material into a spec, merging any declared axes. */
 export function resolveMaterial(
   category: LineMaterial | undefined,
   presets: Record<string, MaterialPreset>,
-  patch?: Partial<Pick<MaterialSpec, "construction" | "treatment">>,
+  patch?: MaterialAxisPatch,
 ): MaterialSpec | undefined {
   if (!category) return undefined;
   const preset = presets[category];
   const base: MaterialSpec = preset
-    ? preset.spec
+    ? { ...preset.spec }
     : {
         category,
         fiber: "unspecified",
@@ -149,21 +153,29 @@ export function resolveMaterial(
         role: "unspecified",
       };
   if (!patch) return base;
-  return {
-    ...base,
-    ...(patch.construction && patch.construction !== "unspecified"
-      ? { construction: patch.construction }
-      : {}),
-    ...(patch.treatment && patch.treatment !== "unspecified" ? { treatment: patch.treatment } : {}),
-  };
+
+  const next: MaterialSpec = { ...base };
+  if (patch.construction !== undefined) next.construction = patch.construction;
+  if (patch.treatment !== undefined) next.treatment = patch.treatment;
+  if (patch.fiber !== undefined) next.fiber = patch.fiber;
+  if (patch.role !== undefined && patch.role !== "unspecified") next.role = patch.role;
+  return next;
 }
 
 /** True when nothing beyond the preset default has been declared. */
 export function isUnspecified(spec: MaterialSpec | undefined, preset?: MaterialPreset): boolean {
   if (!spec) return true;
-  if (!preset) return spec.construction === "unspecified" && spec.treatment === "unspecified";
+  if (!preset) {
+    return (
+      spec.construction === "unspecified" &&
+      spec.treatment === "unspecified" &&
+      spec.fiber === "unspecified"
+    );
+  }
   return (
-    spec.construction === preset.spec.construction && spec.treatment === preset.spec.treatment
+    spec.construction === preset.spec.construction &&
+    spec.treatment === preset.spec.treatment &&
+    spec.fiber === preset.spec.fiber
   );
 }
 
@@ -181,6 +193,10 @@ const SLIPPERY_FIBERS: MaterialFiber[] = ["uhmwpe", "aramid"];
 /**
  * Axis-driven modifiers. Deliberately returns zeroes when the deeper axes were
  * never declared, so legacy inputs rank byte-identically.
+ *
+ * Slippery-fiber penalties only fire when construction is also declared —
+ * selecting Braid alone (preset fiber UHMWPE, construction unspecified) is a
+ * no-op, matching pre–Schema 2.0 flat-material ranking.
  */
 export function materialModifier(spec: MaterialSpec | undefined): MaterialModifier {
   const none: MaterialModifier = { slipPenalty: 0, seatingPenalty: 0, inspectionPenalty: 0 };
