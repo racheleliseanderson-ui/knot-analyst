@@ -8,7 +8,7 @@ export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
 export const KNOT_CATALOG_VERSION = "2026-08-09.2";
 export const CONFIG_VERSION = "nitro-fluid-v1.2.1";
-export const ENGINE_VERSION = "mech-intel-1.2";
+export const ENGINE_VERSION = "mech-intel-1.2.1";
 
 /** What the angler is actually connecting */
 export type ConnectionJob =

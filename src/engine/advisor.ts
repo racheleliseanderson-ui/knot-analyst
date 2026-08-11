@@ -120,23 +120,43 @@ export function detectTradeoffs(result: ChooseResult): Tradeoff[] {
       "guidePassage",
     );
   }
-  if (
-    input.proficiency &&
-    input.proficiency !== "any" &&
-    dim(top, "userProficiency") < 68
-  ) {
-    push(
-      "skill",
-      "Best geometry vs stated proficiency",
-      "This is above the skill level you declared.",
-      `Proficiency fit scores ${dim(top, "userProficiency")}. Tie it at the bench before you rely on it on the water; a mis-tied superior knot loses to a clean simple one.`,
-      "userProficiency",
-    );
+
+  // Skill / proficiency — tightened so advanced users on hard geometries (FG baseline 40 +25 = 65)
+  // no longer receive a false “above the skill level you declared” warning.
+  if (input.proficiency && input.proficiency !== "any") {
+    const skillScore = dim(top, "userProficiency");
+    const declared = input.proficiency;
+    const isHardGeometry = top.knot.difficulty === "advanced";
+
+    // Fire only when the fit is genuinely poor relative to what was declared.
+    const shouldWarn =
+      (declared === "beginner" && skillScore < 70) ||
+      (declared === "intermediate" && skillScore < 62) ||
+      (declared === "advanced" && skillScore < 55) || // after the +25 boost this is rare
+      (declared === "advanced" && isHardGeometry && skillScore < 58);
+
+    if (shouldWarn) {
+      const tension =
+        declared === "advanced"
+          ? "Even with advanced hands, this geometry remains marginal under the other active constraints."
+          : "This is above the skill level you declared.";
+      const detail =
+        declared === "advanced"
+          ? `Proficiency fit scores ${skillScore}. The advanced boost is already applied; residual low score means other conditions (cold, wind, frequent retie, etc.) are still fighting the geometry. Practice at the bench before you rely on it.`
+          : `Proficiency fit scores ${skillScore}. Tie it at the bench before you rely on it on the water; a mis-tied superior knot loses to a clean simple one.`;
+
+      push("skill", "Best geometry vs stated proficiency", tension, detail, "userProficiency");
+    }
   }
   return out;
 }
 
-const VARIANTS: { id: string; question: string; patch: Partial<ChooseInput>; skip?: (i: ChooseInput) => boolean }[] = [
+const VARIANTS: {
+  id: string;
+  question: string;
+  patch: Partial<ChooseInput>;
+  skip?: (i: ChooseInput) => boolean;
+}[] = [
   {
     id: "cold-wind",
     question: "What if the wind picks up and your hands go cold?",
@@ -174,6 +194,19 @@ const VARIANTS: { id: string; question: string; patch: Partial<ChooseInput>; ski
     skip: (i) =>
       Boolean(i.hardwareEyeSmall) ||
       !["line-to-hook", "line-to-lure", "line-to-swivel"].includes(i.connection),
+  },
+  // New probes (still limited to 4 displayed)
+  {
+    id: "free-swing",
+    question: "What if the lure must swing freely (non-slip / open loop required)?",
+    patch: { freeSwing: true },
+    skip: (i) => Boolean(i.freeSwing),
+  },
+  {
+    id: "must-untie",
+    question: "What if you need to untie this connection later without cutting?",
+    patch: { needsUntie: true },
+    skip: (i) => Boolean(i.needsUntie),
   },
 ];
 
