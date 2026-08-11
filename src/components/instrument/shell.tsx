@@ -3,6 +3,12 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { APPLICATION_ID, ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
+import {
+  PRODUCT_MONOGRAM,
+  PRODUCT_NAME,
+  PRODUCT_TAGLINE,
+  PUBLISHER_NAME,
+} from "@/domain/brand";
 import { KNOTS } from "@/data/catalog";
 import { DomainSwitch } from "@/components/instrument/domain-switch";
 import { LocaleSwitch } from "@/components/instrument/locale-switch";
@@ -59,17 +65,19 @@ export function Shell({ children, className }: { children: ReactNode; className?
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 py-3 sm:flex-nowrap sm:px-8">
           <Link
             to="/"
-            aria-label="Knot Analyst — home"
+            aria-label={`${PRODUCT_NAME} — home`}
             className="ki-press flex min-h-11 min-w-0 touch-manipulation items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-[6px] border border-primary/40 bg-primary/10 font-mono text-[0.6875rem] font-semibold tracking-tight text-primary">
-              KI
+              {PRODUCT_MONOGRAM}
             </span>
             <span className="hidden min-w-0 leading-none sm:block">
               <span className="block text-[0.875rem] font-semibold tracking-tight">
-                Knot Analyst
+                {PRODUCT_NAME}
               </span>
-              <span className="label-micro mt-1 block truncate">{domain.label}</span>
+              <span className="label-micro mt-1 block truncate">
+                {domain.label} · {PUBLISHER_NAME}
+              </span>
             </span>
           </Link>
           <DomainSwitch />
@@ -101,10 +109,15 @@ export function Shell({ children, className }: { children: ReactNode; className?
       </main>
       <footer className="border-t border-hairline no-print">
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-3 px-5 py-6 sm:px-8">
-          <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
-            A decision and diagnosis instrument, not a knot library. Invalid options never score.
-            Unsuitable recommendations fail closed.
-          </p>
+          <div className="max-w-md space-y-1">
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              A decision and diagnosis instrument, not a knot library. Invalid options never score.
+              Unsuitable recommendations fail closed.
+            </p>
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/60">
+              {PRODUCT_NAME} · {PRODUCT_TAGLINE}
+            </p>
+          </div>
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
             {APPLICATION_ID} · {ENGINE_VERSION} · catalog {KNOT_CATALOG_VERSION} ·{" "}
             {KNOTS.length} modelled connections · {domain.label}

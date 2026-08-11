@@ -21,6 +21,75 @@ import {
 } from "@/domain/types";
 import { resolveMaterial, type MaterialSpec } from "@/domain/material";
 import { FISHING_MATERIAL_PRESETS } from "@/domains/fishing/materials";
+import { dualWriteFromConnection, isJoinJob } from "@/domain/connection-preset";
+import { parseMm, relationFromDiameters } from "@/domain/diameter";
+import { PRODUCT_META_DESCRIPTION, PRODUCT_META_TITLE } from "@/domain/brand";
+
+
+function DiameterMmFields({
+  mainMm,
+  secondaryMm,
+  onApply,
+}: {
+  mainMm?: number;
+  secondaryMm?: number;
+  onApply: (
+    main: number | undefined,
+    secondary: number | undefined,
+    relation?: DiameterRelation,
+  ) => void;
+}) {
+  const [mainDraft, setMainDraft] = useState(mainMm != null ? String(mainMm) : "");
+  const [secDraft, setSecDraft] = useState(secondaryMm != null ? String(secondaryMm) : "");
+
+  useEffect(() => {
+    setMainDraft(mainMm != null ? String(mainMm) : "");
+  }, [mainMm]);
+  useEffect(() => {
+    setSecDraft(secondaryMm != null ? String(secondaryMm) : "");
+  }, [secondaryMm]);
+
+  const push = (mainRaw: string, secRaw: string) => {
+    const main = parseMm(mainRaw);
+    const sec = parseMm(secRaw);
+    const relation =
+      main != null && sec != null ? relationFromDiameters(main, sec) : undefined;
+    onApply(main, sec, relation);
+  };
+
+  return (
+    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+      <label className="block">
+        <MicroLabel className="mb-1.5">Main Ø mm · optional</MicroLabel>
+        <input
+          type="text"
+          inputMode="decimal"
+          placeholder="e.g. 0.18"
+          value={mainDraft}
+          onChange={(e) => {
+            setMainDraft(e.target.value);
+            push(e.target.value, secDraft);
+          }}
+          className="min-h-11 w-full rounded-md border border-hairline bg-card px-3 py-2 font-mono text-[0.8125rem] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring sm:min-h-9"
+        />
+      </label>
+      <label className="block">
+        <MicroLabel className="mb-1.5">Second Ø mm · optional</MicroLabel>
+        <input
+          type="text"
+          inputMode="decimal"
+          placeholder="e.g. 0.43"
+          value={secDraft}
+          onChange={(e) => {
+            setSecDraft(e.target.value);
+            push(mainDraft, e.target.value);
+          }}
+          className="min-h-11 w-full rounded-md border border-hairline bg-card px-3 py-2 font-mono text-[0.8125rem] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring sm:min-h-9"
+        />
+      </label>
+    </div>
+  );
+}
 
 /**
  * Optional deeper material axes. Only rendered for categories that actually
@@ -53,18 +122,17 @@ function MaterialDetail({
                 <Chip
                   key={o.id}
                   active={active}
-                  onClick={() =>
+                  onClick={() => {
+                    const nextVal = active ? "unspecified" : o.id;
                     onChange(
                       resolveMaterial(category, FISHING_MATERIAL_PRESETS, {
-                        ...(row.axis === "construction"
-                          ? { construction: (active ? "unspecified" : o.id) as MaterialSpec["construction"] }
-                          : { construction: current.construction }),
-                        ...(row.axis === "treatment"
-                          ? { treatment: (active ? "unspecified" : o.id) as MaterialSpec["treatment"] }
-                          : { treatment: current.treatment }),
+                        construction: current.construction,
+                        treatment: current.treatment,
+                        fiber: current.fiber,
+                        [row.axis]: nextVal,
                       }),
-                    )
-                  }
+                    );
+                  }}
                 >
                   {o.label}
                 </Chip>
@@ -127,11 +195,10 @@ export const Route = createFileRoute("/")({
   }),
   head: () => ({
     meta: [
-      { title: "Knot Analyst — Decide the connection | Hook the Horizon" },
+      { title: PRODUCT_META_TITLE },
       {
         name: "description",
-        content:
-          "A mechanical decision instrument for fishing connections. State the job, the materials and the conditions; invalid knots are eliminated before anything scores.",
+        content: PRODUCT_META_DESCRIPTION,
       },
       { property: "og:title", content: "Knot Analyst — Decide the connection" },
       {
@@ -153,14 +220,6 @@ const DIAMETERS: DiameterRelation[] = [
   "main-thicker",
   "extreme-mismatch",
 ];
-const JOIN_JOBS: ConnectionJob[] = [
-  "braid-to-leader",
-  "leader-to-leader",
-  "leader-to-tippet",
-  "double-line-to-leader",
-  "fly-line-to-leader",
-];
-
 function DecideMode() {
   const search = Route.useSearch();
   const navigate = useNavigate();
@@ -234,7 +293,7 @@ function DecideMode() {
   const card = result ? buildDecisionCard(result) : null;
   const tradeoffs = result ? detectTradeoffs(result) : [];
   const cfs = result ? counterfactuals(result) : [];
-  const isJoin = input.connection ? JOIN_JOBS.includes(input.connection) : false;
+  const isJoin = isJoinJob(input.connection);
 
   /**
    * The same four panels drive both layouts: desktop stacks them in the
@@ -263,7 +322,18 @@ function DecideMode() {
                                     ? sel.connection === j.key
                                     : input.connection === j.base && !j.custom
                                 }
-                                onClick={() => set({ connection: j.base }, { connection: j.key })}
+                                onClick={() => {
+                                  const dual = dualWriteFromConnection(j.base);
+                                  set(
+                                    {
+                                      connection: j.base,
+                                      structuralJob: dual.structuralJob,
+                                      mainRole: dual.mainRole,
+                                      secondaryRole: dual.secondaryRole,
+                                    },
+                                    { connection: j.key },
+                                  );
+                                }}
                               >
                                 {j.label}
                               </Chip>
@@ -305,7 +375,9 @@ function DecideMode() {
                                     mainMaterial: on ? undefined : m.base,
                                     mainSpec: on
                                       ? undefined
-                                      : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                                      : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS, {
+                                          ...(input.mainRole ? { role: input.mainRole } : {}),
+                                        }),
                                   },
                                   { main: on ? undefined : m.key },
                                 );
@@ -343,7 +415,11 @@ function DecideMode() {
                                         secondaryMaterial: on ? undefined : m.base,
                                         secondarySpec: on
                                           ? undefined
-                                          : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS),
+                                          : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS, {
+                                              ...(input.secondaryRole
+                                                ? { role: input.secondaryRole }
+                                                : {}),
+                                            }),
                                       },
                                       { secondary: on ? undefined : m.key },
                                     );
@@ -367,13 +443,32 @@ function DecideMode() {
                                   key={d}
                                   active={input.diameterRelation === d}
                                   onClick={() =>
-                                    set({ diameterRelation: input.diameterRelation === d ? undefined : d })
+                                    set({
+                                      diameterRelation: input.diameterRelation === d ? undefined : d,
+                                      // Clear measured pair when picking a band chip
+                                      mainDiameterMm: undefined,
+                                      secondaryDiameterMm: undefined,
+                                    })
                                   }
                                 >
                                   {DIAMETER_LABELS[d]}
                                 </Chip>
                               ))}
                             </div>
+                            <DiameterMmFields
+                              mainMm={input.mainDiameterMm}
+                              secondaryMm={input.secondaryDiameterMm}
+                              onApply={(main, secondary, relation) =>
+                                set({
+                                  mainDiameterMm: main,
+                                  secondaryDiameterMm: secondary,
+                                  ...(relation ? { diameterRelation: relation } : {}),
+                                })
+                              }
+                            />
+                            <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
+                              Prefer measured diameters over manufacturer pound-test. When both sides are entered, the relational band updates automatically.
+                            </p>
                           </div>
                         </>
                       ) : null}
@@ -714,6 +809,24 @@ function DecideMode() {
                         <p className="mt-2 max-w-2xl text-[0.8125rem] leading-relaxed text-muted-foreground">
                           {result.termination.detail}
                         </p>
+                        {result.terminationCandidates && result.terminationCandidates.length > 0 ? (
+                          <div className="mt-4 space-y-3">
+                            <MicroLabel>Candidate terminations</MicroLabel>
+                            {result.terminationCandidates.map((c) => (
+                              <div key={c.id} className="rounded-md border border-hairline/80 bg-card/60 px-3 py-2.5">
+                                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                                  <p className="text-[0.875rem] font-medium tracking-tight">{c.name}</p>
+                                  <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                                    {c.terminationType} · {c.confidence}
+                                  </span>
+                                </div>
+                                <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                                  {c.when}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
                       </div>
                     ) : null}
                     <div className="grid gap-6 px-6 py-6 sm:grid-cols-[minmax(0,1fr)_150px]">

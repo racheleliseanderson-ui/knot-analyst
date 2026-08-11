@@ -81,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "author", content: "Hook the Horizon" },
+      { name: "author", content: "Hook the Horizon · Knot Analyst" },
       { name: "theme-color", content: "#111c24" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

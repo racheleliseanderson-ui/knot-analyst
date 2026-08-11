@@ -1,5 +1,7 @@
 /**
  * Orchestrates Layer 1 (constraints) + Layer 2 (field-fit ranking).
+ * Schema 2.0: normalizes dual-write connection metadata and mm→diameter bands
+ * before elimination; attaches parallel Candidate Termination list.
  */
 import { KNOTS } from "@/data/catalog";
 import type { ChooseInput, ChooseResult, FindingConfidence } from "@/domain/types";
@@ -9,14 +11,51 @@ import {
   ENGINE_VERSION,
   KNOT_CATALOG_VERSION,
 } from "@/domain/types";
+import { dualWriteFromConnection } from "@/domain/connection-preset";
+import { relationFromDiameters } from "@/domain/diameter";
+import { materialModifier, terminationAdvice } from "@/domain/material";
+import { candidateTerminations } from "@/domain/termination";
 import { eliminateKnots } from "./constraints";
 import { annotateExplainability, explainTradeoff } from "./explain";
 import { rankSurvivors } from "./ranking";
-import { materialModifier, terminationAdvice } from "@/domain/material";
+
+/** Normalize input without changing user-declared fields they already set. */
+export function normalizeChooseInput(input: ChooseInput): ChooseInput {
+  const dual = dualWriteFromConnection(input.connection);
+  const next: ChooseInput = {
+    ...input,
+    structuralJob: input.structuralJob ?? dual.structuralJob,
+    mainRole: input.mainRole ?? dual.mainRole,
+    ...(input.secondaryRole || dual.secondaryRole
+      ? { secondaryRole: input.secondaryRole ?? dual.secondaryRole }
+      : {}),
+  };
+
+  // Optional mm pair → relational band (does not wipe an explicit chip unless mm pair is complete)
+  if (
+    next.mainDiameterMm != null &&
+    next.secondaryDiameterMm != null &&
+    next.mainDiameterMm > 0 &&
+    next.secondaryDiameterMm > 0
+  ) {
+    next.diameterRelation = relationFromDiameters(next.mainDiameterMm, next.secondaryDiameterMm);
+  }
+
+  // Align MaterialSpec.role with dual-write when specs exist and role was never set
+  if (next.mainSpec && next.mainRole && next.mainSpec.role === "unspecified") {
+    next.mainSpec = { ...next.mainSpec, role: next.mainRole };
+  }
+  if (next.secondarySpec && next.secondaryRole && next.secondarySpec.role === "unspecified") {
+    next.secondarySpec = { ...next.secondarySpec, role: next.secondaryRole };
+  }
+
+  return next;
+}
 
 export function runChooser(input: ChooseInput): ChooseResult {
-  const { survivors, eliminated } = eliminateKnots(KNOTS, input);
-  let ranked = rankSurvivors(survivors, input);
+  const normalized = normalizeChooseInput(input);
+  const { survivors, eliminated } = eliminateKnots(KNOTS, normalized);
+  let ranked = rankSurvivors(survivors, normalized);
   ranked = annotateExplainability(ranked, eliminated);
 
   if (ranked.length >= 1) {
@@ -28,14 +67,18 @@ export function runChooser(input: ChooseInput): ChooseResult {
 
   const top = ranked[0];
   const second = ranked[1];
-  const termination = terminationAdvice(input.mainSpec, input.secondarySpec);
+  const termination = terminationAdvice(normalized.mainSpec, normalized.secondarySpec);
+  const terminationCandidates = candidateTerminations(
+    normalized.mainSpec,
+    normalized.secondarySpec,
+  );
   const axisNote =
-    materialModifier(input.mainSpec).note ?? materialModifier(input.secondarySpec).note;
+    materialModifier(normalized.mainSpec).note ?? materialModifier(normalized.secondarySpec).note;
 
   let plainSummary: string;
   let tradeoffSummary: string | undefined;
   if (!top) {
-    plainSummary = `No valid knot remains for ${CONNECTION_LABELS[input.connection]} under hard constraints. Widen materials or diameter assumptions — the engine will not invent a match.`;
+    plainSummary = `No valid knot remains for ${CONNECTION_LABELS[normalized.connection]} under hard constraints. Widen materials or diameter assumptions — the engine will not invent a match.`;
   } else {
     tradeoffSummary = second ? explainTradeoff(top, second) : undefined;
     const trade = tradeoffSummary ? ` ${tradeoffSummary}` : "";
@@ -64,7 +107,7 @@ export function runChooser(input: ChooseInput): ChooseResult {
     applicationId: APPLICATION_ID,
     engineVersion: ENGINE_VERSION,
     catalogVersion: KNOT_CATALOG_VERSION,
-    input,
+    input: normalized,
     eliminated,
     ranked: ranked.slice(0, 8),
     plainSummary,
@@ -72,6 +115,7 @@ export function runChooser(input: ChooseInput): ChooseResult {
     counterfactualHints,
     tradeoffSummary,
     ...(termination ? { termination } : {}),
+    ...(terminationCandidates.length ? { terminationCandidates } : {}),
   };
 }
 

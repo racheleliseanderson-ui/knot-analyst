@@ -1,0 +1,125 @@
+/**
+ * Connection presets — convenience UI labels that dual-write structured job
+ * metadata. ConnectionJob IDs are never renamed; they remain the public preset
+ * keys. Internally we always also store structural job + side roles.
+ */
+import type { ConnectionJob, LineMaterial } from "@/domain/types";
+import type { MaterialRole } from "@/domain/material";
+
+/** Job family independent of which material the angler clicked as a shortcut. */
+export type StructuralJob =
+  | "terminal-to-hardware"
+  | "main-to-leader"
+  | "leader-to-leader"
+  | "leader-to-tippet"
+  | "fly-line-to-leader"
+  | "double-line-to-leader"
+  | "loop-to-loop"
+  | "line-to-loop"
+  | "line-to-spool"
+  | "snell";
+
+export interface ConnectionSides {
+  structuralJob: StructuralJob;
+  mainRole: MaterialRole;
+  secondaryRole?: MaterialRole;
+  /** Optional material family hints from the convenience label — never forced. */
+  mainMaterialHint?: LineMaterial;
+  secondaryMaterialHint?: LineMaterial;
+  /** True when the job mechanically needs two line sides. */
+  isJoin: boolean;
+}
+
+const PRESETS: Record<ConnectionJob, ConnectionSides> = {
+  "line-to-hook": {
+    structuralJob: "terminal-to-hardware",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "line-to-lure": {
+    structuralJob: "terminal-to-hardware",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "line-to-swivel": {
+    structuralJob: "terminal-to-hardware",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "hook-snell": {
+    structuralJob: "snell",
+    mainRole: "leader",
+    isJoin: false,
+  },
+  "braid-to-leader": {
+    structuralJob: "main-to-leader",
+    mainRole: "main-line",
+    secondaryRole: "leader",
+    mainMaterialHint: "braid",
+    isJoin: true,
+  },
+  "leader-to-leader": {
+    structuralJob: "leader-to-leader",
+    mainRole: "leader",
+    secondaryRole: "leader",
+    isJoin: true,
+  },
+  "leader-to-tippet": {
+    structuralJob: "leader-to-tippet",
+    mainRole: "leader",
+    secondaryRole: "tippet",
+    isJoin: true,
+  },
+  "fly-line-to-leader": {
+    structuralJob: "fly-line-to-leader",
+    mainRole: "fly-line",
+    secondaryRole: "leader",
+    mainMaterialHint: "fly-line",
+    isJoin: true,
+  },
+  "double-line-to-leader": {
+    structuralJob: "double-line-to-leader",
+    mainRole: "main-line",
+    secondaryRole: "leader",
+    isJoin: true,
+  },
+  "loop-to-loop": {
+    structuralJob: "loop-to-loop",
+    mainRole: "leader",
+    secondaryRole: "leader",
+    isJoin: true,
+  },
+  "line-to-loop": {
+    structuralJob: "line-to-loop",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "line-to-spool": {
+    structuralJob: "line-to-spool",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+};
+
+export function connectionSides(job: ConnectionJob): ConnectionSides {
+  return PRESETS[job];
+}
+
+export function isJoinJob(job: ConnectionJob | undefined): boolean {
+  if (!job) return false;
+  return PRESETS[job].isJoin;
+}
+
+/** Dual-write fields derived from a convenience connection preset. */
+export function dualWriteFromConnection(job: ConnectionJob): {
+  structuralJob: StructuralJob;
+  mainRole: MaterialRole;
+  secondaryRole?: MaterialRole;
+} {
+  const p = PRESETS[job];
+  return {
+    structuralJob: p.structuralJob,
+    mainRole: p.mainRole,
+    ...(p.secondaryRole ? { secondaryRole: p.secondaryRole } : {}),
+  };
+}
