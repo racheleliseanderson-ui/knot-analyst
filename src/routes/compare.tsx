@@ -12,6 +12,7 @@ import {
 import { buildDecisionCard } from "@/engine/advisor";
 import { decodeInput, encodeInput } from "@/lib/handoff";
 import { useScenarios } from "@/lib/overlay";
+import { useSessionState } from "@/lib/session-state";
 import type { ChooseInput } from "@/domain/types";
 import { CONNECTION_LABELS, MATERIAL_LABELS } from "@/domain/types";
 
@@ -279,7 +280,7 @@ function PipelineStrip({
   onRestore: (e: RunEntry) => void;
   onClearLog: () => void;
 }) {
-  const [showLog, setShowLog] = useState(false);
+  const [showLog, setShowLog] = useSessionState("ki-cmp-log-open", false);
   /** Roving tabindex: the toolbar is one tab stop, arrows move between controls. */
   const [focusIdx, setFocusIdx] = useState(0);
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -655,9 +656,9 @@ function CompareMode() {
     ...(search.bs ? { b: search.bs } : {}),
   });
   const [openRow, setOpenRow] = useState<string | undefined>(search.row);
-  const [revealed, setRevealed] = useState(4);
+  const [revealed, setRevealed] = useSessionState("ki-cmp-revealed", 4);
   const [nonce, setNonce] = useState(0);
-  const [frozen, setFrozen] = useState(false);
+  const [frozen, setFrozen] = useSessionState("ki-cmp-frozen", false);
   const [hover, setHover] = useState<"A" | "B" | null>(null);
   const [compact, setCompact] = useState(false);
   const frozenRef = useRef<ComparisonResult | null>(null);
@@ -670,6 +671,11 @@ function CompareMode() {
     [a, b, ready, nonce],
   );
   const comparison = frozen && frozenRef.current ? frozenRef.current : live;
+
+  /** Restored-from-session freeze: pin the first run computed after reload. */
+  useEffect(() => {
+    if (frozen && !frozenRef.current && live) frozenRef.current = live;
+  }, [frozen, live]);
 
   const toggleFreeze = () => {
     if (!frozen) frozenRef.current = live;
@@ -824,7 +830,7 @@ function CompareMode() {
                 setRevealed(4);
                 setNonce((n) => n + 1);
               }}
-              onStep={() => setRevealed((r) => (r >= 4 ? 1 : r + 1))}
+              onStep={() => setRevealed((r: number) => (r >= 4 ? 1 : r + 1))}
               onToggleFreeze={toggleFreeze}
               log={log}
               onRestore={(e) => {
