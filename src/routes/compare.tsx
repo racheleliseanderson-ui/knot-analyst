@@ -655,9 +655,9 @@ function CompareMode() {
     ...(search.bs ? { b: search.bs } : {}),
   });
   const [openRow, setOpenRow] = useState<string | undefined>(search.row);
-  const [revealed, setRevealed] = useState(4);
+  const [revealed, setRevealed] = useSessionState("ki-cmp-revealed", 4);
   const [nonce, setNonce] = useState(0);
-  const [frozen, setFrozen] = useState(false);
+  const [frozen, setFrozen] = useSessionState("ki-cmp-frozen", false);
   const [hover, setHover] = useState<"A" | "B" | null>(null);
   const [compact, setCompact] = useState(false);
   const frozenRef = useRef<ComparisonResult | null>(null);
