@@ -1,5 +1,5 @@
 /**
- * Domain descriptor — the bolt-on that turns Knot Intelligence into the
+ * Domain descriptor — the bolt-on that turns Knot Analyst into the
  * Fishing domain of a shared Knot Analyst engine.
  *
  * The engines already operate on string-keyed vocabularies, so a domain is

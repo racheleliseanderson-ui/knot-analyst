@@ -29,7 +29,7 @@ export const Route = createFileRoute("/compare")({
   }),
   head: () => ({
     meta: [
-      { title: "Quick compare — two scenarios, one engine | Knot Intelligence" },
+      { title: "Quick compare — two scenarios, one engine | Knot Analyst" },
       {
         name: "description",
         content:

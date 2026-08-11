@@ -127,13 +127,13 @@ export const Route = createFileRoute("/")({
   }),
   head: () => ({
     meta: [
-      { title: "Knot Intelligence — Decide the connection | Hook the Horizon" },
+      { title: "Knot Analyst — Decide the connection | Hook the Horizon" },
       {
         name: "description",
         content:
           "A mechanical decision instrument for fishing connections. State the job, the materials and the conditions; invalid knots are eliminated before anything scores.",
       },
-      { property: "og:title", content: "Knot Intelligence — Decide the connection" },
+      { property: "og:title", content: "Knot Analyst — Decide the connection" },
       {
         property: "og:description",
         content:

@@ -116,7 +116,7 @@ export async function generateDecisionPacket({
   doc.setFont("helvetica", "bold").setFontSize(8);
   doc.setTextColor(224, 168, 78);
   doc.text(
-    `KNOT INTELLIGENCE · ${full ? "FIELD PACKET" : "DECISION BRIEF"}`,
+    `KNOT ANALYST · ${full ? "FIELD PACKET" : "DECISION BRIEF"}`,
     M,
     40,
     { charSpace: 1.8 },

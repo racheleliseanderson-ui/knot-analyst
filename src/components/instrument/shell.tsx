@@ -59,7 +59,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 py-3 sm:flex-nowrap sm:px-8">
           <Link
             to="/"
-            aria-label="Knot Intelligence — home"
+            aria-label="Knot Analyst — home"
             className="ki-press flex min-h-11 min-w-0 touch-manipulation items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-[6px] border border-primary/40 bg-primary/10 font-mono text-[0.6875rem] font-semibold tracking-tight text-primary">
@@ -67,7 +67,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             </span>
             <span className="hidden min-w-0 leading-none sm:block">
               <span className="block text-[0.875rem] font-semibold tracking-tight">
-                Knot Intelligence
+                Knot Analyst
               </span>
               <span className="label-micro mt-1 block truncate">{domain.label}</span>
             </span>

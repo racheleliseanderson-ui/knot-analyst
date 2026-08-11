@@ -20,7 +20,7 @@ export const Route = createFileRoute("/diagnose")({
   }),
   head: () => ({
     meta: [
-      { title: "Diagnose a failed connection | Knot Intelligence" },
+      { title: "Diagnose a failed connection | Knot Analyst" },
       {
         name: "description",
         content:

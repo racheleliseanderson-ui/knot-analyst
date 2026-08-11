@@ -23,13 +23,13 @@ import {
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Data editor — scenarios, materials, connections | Knot Intelligence" },
+      { title: "Data editor — scenarios, materials, connections | Knot Analyst" },
       {
         name: "description",
         content:
           "Author new field scenarios, line materials and connection jobs without touching code. Drafts stay in this browser and export as JSON.",
       },
-      { property: "og:title", content: "Knot Intelligence — data editor" },
+      { property: "og:title", content: "Knot Analyst — data editor" },
       {
         property: "og:description",
         content: "Add scenarios, materials and connection types without a code change.",

@@ -8,7 +8,7 @@ Current Vercel Application: https://knot-intelligence.vercel.app/
 
 Git Hub Repo https://github.com/racheleliseanderson-ui/knot-intelligence
 
-Upgrade Knot Intelligence (Hook the Horizon) into a high-end, precise decision + diagnosis instrument for fishing connections while strictly preserving its core philosophy.
+Upgrade Knot Analyst (Hook the Horizon) into a high-end, precise decision + diagnosis instrument for fishing connections while strictly preserving its core philosophy.
 
 ### Core Philosophy (do not break)
 

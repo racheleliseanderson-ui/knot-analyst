@@ -20,7 +20,7 @@ export const Route = createFileRoute("/tie/$knotId")({
       "Step-by-step tying procedure with schematic diagram and failure points.";
     return {
       meta: [
-        { title: `${name} — tying procedure | Knot Intelligence` },
+        { title: `${name} — tying procedure | Knot Analyst` },
         { name: "description", content: desc.slice(0, 155) },
         { property: "og:title", content: `${name} — tying procedure` },
         { property: "og:description", content: desc.slice(0, 155) },

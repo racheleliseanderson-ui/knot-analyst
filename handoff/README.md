@@ -1,4 +1,4 @@
-# Knot Intelligence — Handoff Package (non-canonical)
+# Knot Analyst — Handoff Package (non-canonical)
 
 Source baseline: `racheleliseanderson-ui/knot-intelligence` @ `main` (live: knot-intelligence.vercel.app).
 This directory is a **selective port map**, not a merge instruction. Nothing here is published,
@@ -6,7 +6,7 @@ deployed, or connected to a canonical branch.
 
 ## Scope of this generation
 
-One publication (Hook the Horizon · Knot Intelligence), two routes, one palette, one type system,
+One publication (Hook the Horizon · Knot Analyst), two routes, one palette, one type system,
 one image plan. Philosophy preserved: decision + diagnosis instrument, not a knot library.
 
 ## File-by-file classification
