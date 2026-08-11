@@ -12,6 +12,7 @@ import {
 import { buildDecisionCard } from "@/engine/advisor";
 import { decodeInput, encodeInput } from "@/lib/handoff";
 import { useScenarios } from "@/lib/overlay";
+import { useSessionState } from "@/lib/session-state";
 import type { ChooseInput } from "@/domain/types";
 import { CONNECTION_LABELS, MATERIAL_LABELS } from "@/domain/types";
 
@@ -824,7 +825,7 @@ function CompareMode() {
                 setRevealed(4);
                 setNonce((n) => n + 1);
               }}
-              onStep={() => setRevealed((r) => (r >= 4 ? 1 : r + 1))}
+              onStep={() => setRevealed((r: number) => (r >= 4 ? 1 : r + 1))}
               onToggleFreeze={toggleFreeze}
               log={log}
               onRestore={(e) => {
