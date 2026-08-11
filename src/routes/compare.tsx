@@ -672,6 +672,11 @@ function CompareMode() {
   );
   const comparison = frozen && frozenRef.current ? frozenRef.current : live;
 
+  /** Restored-from-session freeze: pin the first run computed after reload. */
+  useEffect(() => {
+    if (frozen && !frozenRef.current && live) frozenRef.current = live;
+  }, [frozen, live]);
+
   const toggleFreeze = () => {
     if (!frozen) frozenRef.current = live;
     else frozenRef.current = null;
