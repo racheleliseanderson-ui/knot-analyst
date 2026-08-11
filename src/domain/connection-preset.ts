@@ -56,6 +56,7 @@ const PRESETS: Record<ConnectionJob, ConnectionSides> = {
     mainRole: "main-line",
     secondaryRole: "leader",
     mainMaterialHint: "braid",
+    secondaryMaterialHint: "fluoro",
     isJoin: true,
   },
   "leader-to-leader": {
@@ -75,6 +76,7 @@ const PRESETS: Record<ConnectionJob, ConnectionSides> = {
     mainRole: "fly-line",
     secondaryRole: "leader",
     mainMaterialHint: "fly-line",
+    secondaryMaterialHint: "mono",
     isJoin: true,
   },
   "double-line-to-leader": {
@@ -115,11 +117,17 @@ export function dualWriteFromConnection(job: ConnectionJob): {
   structuralJob: StructuralJob;
   mainRole: MaterialRole;
   secondaryRole?: MaterialRole;
+  mainMaterialHint?: LineMaterial;
+  secondaryMaterialHint?: LineMaterial;
+  isJoin: boolean;
 } {
   const p = PRESETS[job];
   return {
     structuralJob: p.structuralJob,
     mainRole: p.mainRole,
+    isJoin: p.isJoin,
     ...(p.secondaryRole ? { secondaryRole: p.secondaryRole } : {}),
+    ...(p.mainMaterialHint ? { mainMaterialHint: p.mainMaterialHint } : {}),
+    ...(p.secondaryMaterialHint ? { secondaryMaterialHint: p.secondaryMaterialHint } : {}),
   };
 }
