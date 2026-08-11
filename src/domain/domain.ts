@@ -63,8 +63,16 @@ export interface KnotDomain {
   materialAxes?: Record<string, import("@/domain/material").MaterialPreset>;
   diameters: DomainOption[];
   dimensions: DomainDimension[];
-  /** Where the connection works. Domain-specific; optional for legacy domains. */
+  /**
+   * Where the connection works (waterbody / place). Domain-specific.
+   * Phase C: fishing lists waterbodies here; platforms are separate.
+   */
   venues?: DomainVenue[];
+  /**
+   * How the angler / crew is positioned (kayak, wading, large boat…).
+   * Optional second layer — fishing only for now. Soft condition patches only.
+   */
+  platforms?: DomainVenue[];
   scenarios: FieldScenario[];
   failurePlays: FailurePlay[];
   knots: KnotContent[];

@@ -25,6 +25,8 @@ export interface Preset {
   input: Partial<ChooseInput>;
   sel: PresetSelection;
   venueId?: string;
+  /** Phase C platform layer (kayak, wading, large-boat…). */
+  platformId?: string;
   pinned: boolean;
   createdAt: string;
   updatedAt: string;
@@ -79,6 +81,7 @@ export function parsePresets(raw: unknown): { presets: Preset[]; errors: string[
       input,
       sel: isRecord(item["sel"]) ? (item["sel"] as PresetSelection) : {},
       ...(typeof item["venueId"] === "string" ? { venueId: item["venueId"] } : {}),
+      ...(typeof item["platformId"] === "string" ? { platformId: item["platformId"] } : {}),
       pinned: item["pinned"] === true,
       createdAt: typeof item["createdAt"] === "string" ? item["createdAt"] : now,
       updatedAt: typeof item["updatedAt"] === "string" ? item["updatedAt"] : now,
@@ -119,6 +122,7 @@ export function makePreset(args: {
   input: Partial<ChooseInput>;
   sel: PresetSelection;
   venueId?: string;
+  platformId?: string;
 }): Preset {
   const now = new Date().toISOString();
   return {
@@ -129,6 +133,7 @@ export function makePreset(args: {
     input: args.input,
     sel: args.sel,
     ...(args.venueId ? { venueId: args.venueId } : {}),
+    ...(args.platformId ? { platformId: args.platformId } : {}),
     pinned: false,
     createdAt: now,
     updatedAt: now,
