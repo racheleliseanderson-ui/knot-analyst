@@ -22,6 +22,7 @@ import {
 import { resolveMaterial, type MaterialSpec } from "@/domain/material";
 import { FISHING_MATERIAL_PRESETS } from "@/domains/fishing/materials";
 import { dualWriteFromConnection, isJoinJob } from "@/domain/connection-preset";
+import { mergeVenueConditions, resolveLegacyVenue } from "@/domain/venue";
 import { parseMm, relationFromDiameters } from "@/domain/diameter";
 import { PRODUCT_META_DESCRIPTION, PRODUCT_META_TITLE } from "@/domain/brand";
 
@@ -226,7 +227,9 @@ function DecideMode() {
   const t = useT();
   const domain = useDomain();
   const venues = domain.venues ?? [];
+  const platforms = domain.platforms ?? [];
   const [venueId, setVenueId] = useState<string | undefined>(undefined);
+  const [platformId, setPlatformId] = useState<string | undefined>(undefined);
   const scenarios = useScenarios();
   const connectionGroups = useConnectionGroups();
   const materialOptions = useMaterialOptions();
@@ -279,6 +282,7 @@ function DecideMode() {
     setInput({});
     setSel({});
     setVenueId(undefined);
+    setPlatformId(undefined);
     setRan(false);
   }, [domain.id]);
 
@@ -290,6 +294,20 @@ function DecideMode() {
   };
   const toggle = (key: keyof ChooseInput) =>
     set({ [key]: !input[key] } as Partial<ChooseInput>);
+
+  /** Soft-load merged waterbody + platform conditions (editable chips still win after). */
+  const applyVenueLayers = (
+    nextWaterbodyId: string | undefined,
+    nextPlatformId: string | undefined,
+  ) => {
+    const wb = venues.find((v) => v.id === nextWaterbodyId);
+    const pl = platforms.find((v) => v.id === nextPlatformId);
+    const patch = mergeVenueConditions(wb, pl);
+    setVenueId(nextWaterbodyId);
+    setPlatformId(nextPlatformId);
+    if (Object.keys(patch).length) set(patch);
+    else setRan(false);
+  };
 
   const result = useMemo(
     () => (ran && input.connection ? runChooser(input as ChooseInput) : null),
@@ -631,11 +649,15 @@ function DecideMode() {
                           />
                           <VenuePicker
                             venues={venues}
+                            platforms={platforms}
                             activeId={venueId}
+                            activePlatformId={platformId}
                             disabled={!input.connection}
                             onPick={(v) => {
-                              setVenueId(v?.id);
-                              if (v) set(v.conditions);
+                              applyVenueLayers(v?.id, platformId);
+                            }}
+                            onPickPlatform={(p) => {
+                              applyVenueLayers(venueId, p?.id);
                             }}
                           />
                         </Panel>
@@ -731,10 +753,16 @@ function DecideMode() {
             input={input}
             sel={sel}
             {...(venueId ? { venueId } : {})}
+            {...(platformId ? { platformId } : {})}
             onLoad={(p) => {
               setInput(p.input);
               setSel(p.sel);
-              setVenueId(p.venueId);
+              // Phase C: migrate legacy single venue ids; prefer explicit platformId.
+              const legacy = resolveLegacyVenue(p.venueId);
+              const nextWb = legacy.waterbodyId ?? p.venueId;
+              const nextPl = p.platformId ?? legacy.platformId;
+              setVenueId(nextWb);
+              setPlatformId(nextPl);
               setRan(true);
             }}
           />

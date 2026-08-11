@@ -68,3 +68,18 @@ npm run test:schema
 ## Engine version
 
 `ENGINE_VERSION = mech-intel-1.3.0`
+
+## Phase C — Waterbody + platform (2026-08-11)
+
+Fishing venues split into two soft layers (no ranking ID renames, no engine change):
+
+| Layer | Role | Examples |
+|---|---|---|
+| **Waterbody** (`domain.venues`) | Where — water / structure | Surf, Shoreline, Lake, Reservoir, River, Waterway, Offshore |
+| **Platform** (`domain.platforms`) | How positioned | Wading, Bank/shore, Kayak, Skiff, Large boat |
+
+- Condition patches merge (platform wins on key collision); chips remain editable.
+- Legacy preset `venueId` values map via `LEGACY_FISHING_VENUE` (`pier`→shoreline, `kayak`→platform, `river`→river+wading, `flats`→waterway).
+- Boating keeps a single flat venue list.
+- Schema goldens: unchanged (venues never enter flat ChooseInput goldens).
+
