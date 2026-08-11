@@ -28,6 +28,44 @@ one image plan. Philosophy preserved: decision + diagnosis instrument, not a kno
 | baseline `src/routes/catalog.tsx`, `compare.tsx`, `knots.$knotId.tsx`, `tie.$knotId.tsx` | VERIFY | Library-shaped surfaces. Keep only if the owner explicitly wants a reference tier; they are outside the "not a library" contract as elevated here. |
 | baseline `src/routes/api/**` | VERIFY | Unchanged contract; re-point only if the canonical runtime exposes them. |
 
+## Later generations — additional classification
+
+| Path | Class | Note |
+| --- | --- | --- |
+| `src/engine/compare.ts` | **NEW — PORT** | Quick-compare. Single-field revert probes attribute a changed recommendation to specific constraints. Pure; no scoring authority. |
+| `src/routes/compare.tsx` | **NEW — PORT** | Mode 03. Two-scenario editor, "what changed" rows with evidence drilldown, pipeline run controls (re-run / step / freeze / session log), session-persisted control state. |
+| `src/components/instrument/evidence.tsx` | **NEW — PORT** | Delta bars, elimination evidence, plain-text summaries for each changed constraint. |
+| `src/lib/handoff.ts` | **NEW — PORT** | Diagnose → Decide constraint mapping with stated reasons and rules-out list. Nothing inferred without evidence. |
+| `src/domain/material.ts` | **NEW — PORT** | 4-axis material intelligence (fiber, construction, treatment, role). Shared across domains. |
+| `src/domain/context.tsx`, `src/domains/**`, `src/components/instrument/domain-switch.tsx` | **NEW — PORT** | Fishing / Boating domain bolt-on: terminology, dimensions, venues, vocabulary per domain. Fishing behaviour unchanged. |
+| `src/domain/venue.ts`, `src/components/instrument/venue-picker.tsx` | **NEW — PORT** | Venue selection with condition patches and micro-callouts. |
+| `src/data/how-to.ts`, `src/data/videos.ts` | **NEW — PORT** | Deep tying procedure content (look-for / failure mode / quick fix per step) and video references. |
+| `src/components/instrument/step-player.tsx`, `diagram.tsx`, `video-embed.tsx` | **NEW — PORT** | Step player with sticky mobile bar and swipe, parametric accessible SVG diagrams (dual-encoded), click-to-load video facade. |
+| `src/routes/tie.$knotId.tsx` | **NEW — PORT** | Procedure surface. Instructional tier, not a browsable library index. |
+| `src/lib/decision-packet.ts` (jspdf) | **NEW — PORT** | Two-tier PDF: Brief and Field Packet. WinAnsi glyph mapping required. |
+| `src/lib/presets.ts`, `preset-bar.tsx` | **NEW — PORT** | Named/pinned input presets in localStorage. |
+| `src/lib/theme.tsx`, `appearance-menu.tsx` | **NEW — PORT** | Four appearance modes: dark, light, colour-blind safe, Atelier. Boot script prevents flash. |
+| `src/lib/overlay-store.ts`, `overlay.tsx`, `src/routes/admin.tsx` | **NEW — PORT (gated)** | Local authored overlays (`x:` prefix) merged over library data, with dry-run import. localStorage only — needs a real persistence + authorisation story before any shared runtime. |
+| `src/lib/prefs.tsx`, `src/i18n/index.tsx`, `locale-switch.tsx` | **NEW — PORT** | Persisted domain + locale (en/es). Translation coverage is partial — audit strings before shipping the switch publicly. |
+| `src/components/instrument/finder.tsx` | **NEW — PORT** | Cmd+K / `/` finder, scored matching, typo tolerance, facets. |
+| `src/components/instrument/decide-stepper.tsx` | **NEW — PORT** | Phone-only guided Decide flow (ARIA tablist, gestures). |
+| `src/lib/session-state.ts` | **NEW — PORT** | Hydration-safe sessionStorage hook. |
+| `src/lib/error-capture.ts`, `error-page.ts`, `lovable-error-reporting.ts`, `src/server.ts`, `src/start.ts` | REJECT | Lovable/TanStack runtime scaffold. Do not merge into canonical. |
+| `src/routeTree.gen.ts`, `vite.config.ts`, `bunfig.toml`, lockfile | REJECT | Generated build scaffold for this runtime only. |
+| `.lovable/**` | REJECT | Internal plan records, not product. |
+
+## Known limits at freeze
+
+- All authored data (overlays, presets, appearance, domain, locale, pipeline state) is browser-local. No server persistence, no auth, no multi-device.
+- Spanish locale is partial.
+- Diagrams and generated imagery are placeholders for owned artwork.
+- No automated test suite ships with this generation; the fail-closed checks below are manual.
+
+## Freeze
+
+Freeze the exact commit produced by the GitHub sync of this generation and port only the
+rows classed PORT above. Do not merge the repository wholesale.
+
 ## Behavior added (must be re-tested in canonical)
 
 1. **Trade-off surfacing** — declared conditions that fight the winning geometry are named on their
