@@ -33,6 +33,16 @@ const en = {
   "venue.platform": "Platform",
   "venue.platformHint":
     "Optional. Changes hands, stability and retie tempo — not the water chemistry.",
+  "decide.region": "Region",
+  "decide.regionHint":
+    "Soft prior for US waters. Loads conditions you can still edit — never forces a knot.",
+  "region.broad": "US region",
+  "region.fine": "More specific",
+  "region.fineHint": "Optional second tap. Finer priors for abrasion, wire-watch, and hands.",
+  "region.prior": "Regional prior",
+  "region.override": "These notes bias judgment only. Field chips and the constraint engine still decide.",
+  "region.none": "No region declared",
+  "region.fieldNote": "Regional field note",
   "finder.placeholder": "Scenario, knot or symptom…",
   "finder.empty": "Nothing matches. Try a material, a job, or what went wrong.",
   "finder.scenarios": "Scenarios",
@@ -75,6 +85,16 @@ const es: Record<Key, string> = {
   "venue.platform": "Plataforma",
   "venue.platformHint":
     "Opcional. Cambia manos, estabilidad y ritmo de reatado — no la química del agua.",
+  "decide.region": "Región",
+  "decide.regionHint":
+    "Prior suave para aguas de EE. UU. Precarga condiciones que aún puedes editar — nunca impone un nudo.",
+  "region.broad": "Región de EE. UU.",
+  "region.fine": "Más específico",
+  "region.fineHint": "Segundo toque opcional. Priores más finos de abrasión, wire-watch y manos.",
+  "region.prior": "Prior regional",
+  "region.override": "Estas notas solo orientan el criterio. Los chips y el motor de restricciones deciden.",
+  "region.none": "Sin región declarada",
+  "region.fieldNote": "Nota de campo regional",
   "finder.placeholder": "Escenario, nudo o síntoma…",
   "finder.empty": "Nada coincide. Prueba con un material, un trabajo o lo que falló.",
   "finder.scenarios": "Escenarios",

@@ -10,6 +10,7 @@
 import type { FieldScenario } from "@/data/scenarios";
 import type { FailurePlay } from "@/data/failure-playbook";
 import type { KnotContent } from "@/domain/types";
+import type { DomainRegion } from "@/domain/region";
 import type { DomainVenue } from "@/domain/venue";
 
 export type DomainId = "fishing" | "boating";
@@ -73,6 +74,11 @@ export interface KnotDomain {
    * Optional second layer — fishing only for now. Soft condition patches only.
    */
   platforms?: DomainVenue[];
+  /**
+   * Phase D — soft geographic priors (US regions). Advisor copy + optional
+   * condition patches. Never hard-codes knot IDs.
+   */
+  regions?: DomainRegion[];
   scenarios: FieldScenario[];
   failurePlays: FailurePlay[];
   knots: KnotContent[];

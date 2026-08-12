@@ -27,6 +27,10 @@ export interface Preset {
   venueId?: string;
   /** Phase C platform layer (kayak, wading, large-boat…). */
   platformId?: string;
+  /** Phase D region broad id. */
+  regionBroadId?: string;
+  /** Phase D region fine id (optional second tap). */
+  regionFineId?: string;
   pinned: boolean;
   createdAt: string;
   updatedAt: string;
@@ -82,6 +86,8 @@ export function parsePresets(raw: unknown): { presets: Preset[]; errors: string[
       sel: isRecord(item["sel"]) ? (item["sel"] as PresetSelection) : {},
       ...(typeof item["venueId"] === "string" ? { venueId: item["venueId"] } : {}),
       ...(typeof item["platformId"] === "string" ? { platformId: item["platformId"] } : {}),
+      ...(typeof item["regionBroadId"] === "string" ? { regionBroadId: item["regionBroadId"] } : {}),
+      ...(typeof item["regionFineId"] === "string" ? { regionFineId: item["regionFineId"] } : {}),
       pinned: item["pinned"] === true,
       createdAt: typeof item["createdAt"] === "string" ? item["createdAt"] : now,
       updatedAt: typeof item["updatedAt"] === "string" ? item["updatedAt"] : now,
@@ -123,6 +129,8 @@ export function makePreset(args: {
   sel: PresetSelection;
   venueId?: string;
   platformId?: string;
+  regionBroadId?: string;
+  regionFineId?: string;
 }): Preset {
   const now = new Date().toISOString();
   return {
@@ -134,6 +142,8 @@ export function makePreset(args: {
     sel: args.sel,
     ...(args.venueId ? { venueId: args.venueId } : {}),
     ...(args.platformId ? { platformId: args.platformId } : {}),
+    ...(args.regionBroadId ? { regionBroadId: args.regionBroadId } : {}),
+    ...(args.regionFineId ? { regionFineId: args.regionFineId } : {}),
     pinned: false,
     createdAt: now,
     updatedAt: now,
