@@ -3,6 +3,8 @@ import { Fragment, useMemo, useState, useEffect, useRef } from "react";
 import heroImg from "@/assets/line-tension.jpg";
 import { Shell } from "@/components/instrument/shell";
 import { VenuePicker } from "@/components/instrument/venue-picker";
+import { RegionPicker } from "@/components/instrument/region-picker";
+import { activeRegion } from "@/domain/region";
 import { DecideStepper, type DecideStep } from "@/components/instrument/decide-stepper";
 import { useT } from "@/i18n";
 import { useDomain } from "@/domain/context";
@@ -228,8 +230,11 @@ function DecideMode() {
   const domain = useDomain();
   const venues = domain.venues ?? [];
   const platforms = domain.platforms ?? [];
+  const regions = domain.regions ?? [];
   const [venueId, setVenueId] = useState<string | undefined>(undefined);
   const [platformId, setPlatformId] = useState<string | undefined>(undefined);
+  const [regionBroadId, setRegionBroadId] = useState<string | undefined>(undefined);
+  const [regionFineId, setRegionFineId] = useState<string | undefined>(undefined);
   const scenarios = useScenarios();
   const connectionGroups = useConnectionGroups();
   const materialOptions = useMaterialOptions();
@@ -283,6 +288,8 @@ function DecideMode() {
     setSel({});
     setVenueId(undefined);
     setPlatformId(undefined);
+    setRegionBroadId(undefined);
+    setRegionFineId(undefined);
     setRan(false);
   }, [domain.id]);
 
@@ -308,6 +315,24 @@ function DecideMode() {
     if (Object.keys(patch).length) set(patch);
     else setRan(false);
   };
+
+  /** Soft-load region condition prior (editable chips still win after). */
+  const applyRegion = (nextBroad?: string, nextFine?: string) => {
+    // Drop fine if it no longer belongs to the broad parent
+    let fine = nextFine;
+    if (fine && nextBroad) {
+      const ok = regions.some((r) => r.id === fine && r.parentId === nextBroad);
+      if (!ok) fine = undefined;
+    }
+    if (!nextBroad) fine = undefined;
+    setRegionBroadId(nextBroad);
+    setRegionFineId(fine);
+    const reg = activeRegion(regions, nextBroad, fine);
+    if (reg && Object.keys(reg.conditions).length) set(reg.conditions);
+    else setRan(false);
+  };
+
+  const selectedRegion = activeRegion(regions, regionBroadId, regionFineId);
 
   const result = useMemo(
     () => (ran && input.connection ? runChooser(input as ChooseInput) : null),
@@ -632,6 +657,33 @@ function DecideMode() {
                   </Panel>
       ),
     },
+    ...(regions.length
+      ? [
+          {
+            id: "region",
+            label: t("decide.region"),
+            ready: Boolean(input.connection),
+            node: (
+              <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+                <StepHead
+                  index="04"
+                  title={t("decide.region")}
+                  hint={t("decide.regionHint")}
+                  state={input.connection ? "open" : "locked"}
+                />
+                <RegionPicker
+                  regions={regions}
+                  broadId={regionBroadId}
+                  fineId={regionFineId}
+                  disabled={!input.connection}
+                  onPickBroad={(id) => applyRegion(id, undefined)}
+                  onPickFine={(id) => applyRegion(regionBroadId, id)}
+                />
+              </Panel>
+            ),
+          } as DecideStep,
+        ]
+      : []),
     ...(venues.length
       ? [
           {
@@ -639,29 +691,27 @@ function DecideMode() {
             label: t("decide.venue"),
             ready: Boolean(input.connection),
             node: (
-          
-                        <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
-                          <StepHead
-                            index="04"
-                            title={t("decide.venue")}
-                            hint={t("decide.venueHint")}
-                            state={input.connection ? "open" : "locked"}
-                          />
-                          <VenuePicker
-                            venues={venues}
-                            platforms={platforms}
-                            activeId={venueId}
-                            activePlatformId={platformId}
-                            disabled={!input.connection}
-                            onPick={(v) => {
-                              applyVenueLayers(v?.id, platformId);
-                            }}
-                            onPickPlatform={(p) => {
-                              applyVenueLayers(venueId, p?.id);
-                            }}
-                          />
-                        </Panel>
-
+              <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+                <StepHead
+                  index={regions.length ? "05" : "04"}
+                  title={t("decide.venue")}
+                  hint={t("decide.venueHint")}
+                  state={input.connection ? "open" : "locked"}
+                />
+                <VenuePicker
+                  venues={venues}
+                  platforms={platforms}
+                  activeId={venueId}
+                  activePlatformId={platformId}
+                  disabled={!input.connection}
+                  onPick={(v) => {
+                    applyVenueLayers(v?.id, platformId);
+                  }}
+                  onPickPlatform={(p) => {
+                    applyVenueLayers(venueId, p?.id);
+                  }}
+                />
+              </Panel>
             ),
           } as DecideStep,
         ]
@@ -754,6 +804,8 @@ function DecideMode() {
             sel={sel}
             {...(venueId ? { venueId } : {})}
             {...(platformId ? { platformId } : {})}
+            {...(regionBroadId ? { regionBroadId } : {})}
+            {...(regionFineId ? { regionFineId } : {})}
             onLoad={(p) => {
               setInput(p.input);
               setSel(p.sel);
@@ -763,6 +815,8 @@ function DecideMode() {
               const nextPl = p.platformId ?? legacy.platformId;
               setVenueId(nextWb);
               setPlatformId(nextPl);
+              setRegionBroadId(p.regionBroadId);
+              setRegionFineId(p.regionFineId);
               setRan(true);
             }}
           />
@@ -925,6 +979,34 @@ function DecideMode() {
                             ))}
                           </div>
                         ) : null}
+                      </div>
+                    ) : null}
+                    {selectedRegion ? (
+                      <div className="border-b border-hairline bg-accent/6 px-6 py-4">
+                        <MicroLabel className="mb-2 text-accent">{t("region.fieldNote")}</MicroLabel>
+                        <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                          {selectedRegion.label}
+                          {selectedRegion.signals?.saltLean
+                            ? ` · ${selectedRegion.signals.saltLean}`
+                            : ""}
+                          {selectedRegion.signals?.wireWatch ? " · wire-watch" : ""}
+                          {selectedRegion.signals?.abrasion
+                            ? ` · ${selectedRegion.signals.abrasion} abrasion`
+                            : ""}
+                        </p>
+                        <ul className="mt-2 space-y-1.5">
+                          {selectedRegion.advisories.map((line) => (
+                            <li
+                              key={line}
+                              className="text-[0.8125rem] leading-relaxed text-muted-foreground"
+                            >
+                              {line}
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="mt-2 text-[0.6875rem] leading-relaxed text-muted-foreground/80">
+                          {t("region.override")}
+                        </p>
                       </div>
                     ) : null}
                     {ranked.length > 1 ? (

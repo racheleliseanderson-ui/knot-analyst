@@ -21,6 +21,8 @@ export interface PresetBarProps {
   sel: PresetSelection;
   venueId?: string;
   platformId?: string;
+  regionBroadId?: string;
+  regionFineId?: string;
   onLoad: (p: Preset) => void;
 }
 
@@ -28,7 +30,7 @@ export interface PresetBarProps {
  * Saved setups. Inputs only — the engine re-runs them, so a preset can
  * legitimately return a different call after a catalog change.
  */
-export function PresetBar({ domainId, input, sel, venueId, platformId, onLoad }: PresetBarProps) {
+export function PresetBar({ domainId, input, sel, venueId, platformId, regionBroadId, regionFineId, onLoad }: PresetBarProps) {
   const [presets, setPresets] = useState<Preset[]>([]);
   const [naming, setNaming] = useState(false);
   const [name, setName] = useState("");
@@ -53,7 +55,7 @@ export function PresetBar({ domainId, input, sel, venueId, platformId, onLoad }:
     if (!canSave) return;
     const label = name.trim() || `Setup ${mine.length + 1}`;
     commit([
-      makePreset({ name: label, domainId, input, sel, ...(venueId ? { venueId } : {}), ...(platformId ? { platformId } : {}) }),
+      makePreset({ name: label, domainId, input, sel, ...(venueId ? { venueId } : {}), ...(platformId ? { platformId } : {}), ...(regionBroadId ? { regionBroadId } : {}), ...(regionFineId ? { regionFineId } : {}) }),
       ...presets,
     ]);
     setName("");

@@ -83,3 +83,26 @@ Fishing venues split into two soft layers (no ranking ID renames, no engine chan
 - Boating keeps a single flat venue list.
 - Schema goldens: unchanged (venues never enter flat ChooseInput goldens).
 
+
+## Phase D — US region soft priors (2026-08-12)
+
+Geographic intelligence without hard-coded knots.
+
+| Piece | Location |
+|---|---|
+| Model | `src/domain/region.ts` |
+| Fishing catalog | `src/domains/fishing/regions.ts` |
+| Picker | `src/components/instrument/region-picker.tsx` |
+| Domain hook | `domain.regions` |
+
+### Behavior
+- **Broad** chips: Northeast · Southeast · Midwest · West · Southwest
+- **Fine** optional second tap (e.g. Gulf, Great Lakes, Pacific, Mountain…)
+- Soft-loads condition chips only (same contract as venue)
+- Post-run **Regional field note** panel with advisories + signals (salt/fresh, wire-watch, abrasion)
+- Never renames ConnectionJob / knot IDs; never forces a ranking winner
+- Schema goldens: unchanged when region not selected (flat path)
+
+### Signals (for Phase E)
+`saltLean`, `wireWatch`, `abrasion`, `shockLeaderCommon`, `clearPressured`, `coldSeason`
+
