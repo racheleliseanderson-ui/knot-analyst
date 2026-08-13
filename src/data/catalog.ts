@@ -4,6 +4,7 @@ import { TERMINAL_KNOTS } from "@/data/knots/terminal";
 import { LINE_TO_LINE_KNOTS } from "@/data/knots/line-to-line";
 import { LOOP_KNOTS } from "@/data/knots/loops";
 import { UTILITY_KNOTS } from "@/data/knots/utility";
+import { SEED_BATCH_2 } from "@/data/knots/seed-batch-2";
 import { getMechanics } from "@/data/mechanics";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
@@ -17,6 +18,7 @@ const RAW: KnotContent[] = [
   ...LINE_TO_LINE_KNOTS,
   ...LOOP_KNOTS,
   ...UTILITY_KNOTS,
+  ...SEED_BATCH_2,
 ];
 
 function hydrate(raw: KnotContent): Knot {
@@ -25,7 +27,6 @@ function hydrate(raw: KnotContent): Knot {
   if (!m) {
     throw new Error(`Missing mechanical profile for knot: ${content.id}`);
   }
-  // Gold-standard model meta is required for every decision-model entry.
   if (!getConnectionModelMeta(content.id)) {
     throw new Error(`Missing connection model meta for knot: ${content.id}`);
   }
@@ -108,7 +109,6 @@ export function catalogMeta() {
       withFingerprint: KNOTS.filter((k) => k.completeness.mechanicalFingerprint).length,
       withModelMeta: KNOTS.filter((k) => Boolean(getConnectionModelMeta(k.id))).length,
     },
-    /** Surfaced only through existing affordances (admin / mono meta lines). */
     reviewDue: review.due,
     newestReviewed: review.newestReviewed,
     daysSinceReview: review.daysSince,
