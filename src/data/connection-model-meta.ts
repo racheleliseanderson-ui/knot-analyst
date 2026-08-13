@@ -1,9 +1,10 @@
 /**
  * Gold-standard modelled-connection fields.
- * Constraint-first: these describe decision/diagnosis intelligence only.
+ * Constraint-first: decision/diagnosis intelligence only.
  * Strength bands are always ranges from cited sources — never a false-precise single %.
  */
 import type { LineMaterial } from "@/domain/types";
+import { CONNECTION_MODEL_META_TERMINAL } from "@/data/connection-model-meta-terminal";
 
 export type ConditionAbility = "excellent" | "good" | "fair" | "poor" | "impractical";
 export type RetieTempo = "instant" | "fast" | "moderate" | "slow" | "dock-only";
@@ -92,7 +93,7 @@ function tie(
   return { cold, wind, lowLight, boatMotion };
 }
 
-export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
+const CONNECTION_MODEL_META_CORE: Record<string, ConnectionModelMeta> = {
   palomar: {
     materialsValidityMatrix: { main: braidOk },
     tieAbilityUnderCondition: tie("excellent", "good", "good", "good"),
@@ -359,6 +360,11 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
     sourceId: "fishingknots-db",
     reviewedDate: "2026-08-13",
   },
+};
+
+export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
+  ...CONNECTION_MODEL_META_CORE,
+  ...CONNECTION_MODEL_META_TERMINAL,
 };
 
 export function getConnectionModelMeta(id: string): ConnectionModelMeta | undefined {
