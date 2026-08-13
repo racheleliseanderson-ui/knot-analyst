@@ -17,11 +17,14 @@ import { TERMINAL_KNOTS } from "../src/data/knots/terminal";
 import { LINE_TO_LINE_KNOTS } from "../src/data/knots/line-to-line";
 import { LOOP_KNOTS } from "../src/data/knots/loops";
 import { UTILITY_KNOTS } from "../src/data/knots/utility";
+import { SEED_BATCH_2 } from "../src/data/knots/seed-batch-2";
 
 const ALL_MECHANICS = { ...MECHANICS, ...MECHANICS_EXTRAS };
 
 const contentIds = new Set(
-  [...TERMINAL_KNOTS, ...LINE_TO_LINE_KNOTS, ...LOOP_KNOTS, ...UTILITY_KNOTS].map((k) => k.id),
+  [...TERMINAL_KNOTS, ...LINE_TO_LINE_KNOTS, ...LOOP_KNOTS, ...UTILITY_KNOTS, ...SEED_BATCH_2].map(
+    (k) => k.id,
+  ),
 );
 
 const RETIE = new Set(["instant", "fast", "moderate", "slow", "dock-only"]);
