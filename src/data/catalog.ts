@@ -4,9 +4,13 @@ import { TERMINAL_KNOTS } from "@/data/knots/terminal";
 import { LINE_TO_LINE_KNOTS } from "@/data/knots/line-to-line";
 import { LOOP_KNOTS } from "@/data/knots/loops";
 import { UTILITY_KNOTS } from "@/data/knots/utility";
-import { getMechanics } from "@/data/mechanics-profiles";
+import { getMechanics } from "@/data/mechanics";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
+import {
+  catalogReviewDue,
+  getConnectionModelMeta,
+} from "@/data/connection-model-meta";
 
 const RAW: KnotContent[] = [
   ...TERMINAL_KNOTS,
@@ -20,6 +24,10 @@ function hydrate(raw: KnotContent): Knot {
   const m = getMechanics(content.id);
   if (!m) {
     throw new Error(`Missing mechanical profile for knot: ${content.id}`);
+  }
+  // Gold-standard model meta is required for every decision-model entry.
+  if (!getConnectionModelMeta(content.id)) {
+    throw new Error(`Missing connection model meta for knot: ${content.id}`);
   }
   return {
     ...content,
@@ -83,6 +91,7 @@ export function filterKnots(opts: {
 }
 
 export function catalogMeta() {
+  const review = catalogReviewDue();
   return {
     version: KNOT_CATALOG_VERSION,
     count: KNOTS.length,
@@ -97,6 +106,11 @@ export function catalogMeta() {
     completeness: {
       withDecisionModel: KNOTS.filter((k) => k.completeness.decisionModel).length,
       withFingerprint: KNOTS.filter((k) => k.completeness.mechanicalFingerprint).length,
+      withModelMeta: KNOTS.filter((k) => Boolean(getConnectionModelMeta(k.id))).length,
     },
+    /** Surfaced only through existing affordances (admin / mono meta lines). */
+    reviewDue: review.due,
+    newestReviewed: review.newestReviewed,
+    daysSinceReview: review.daysSince,
   };
 }
