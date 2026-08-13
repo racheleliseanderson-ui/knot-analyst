@@ -5,6 +5,7 @@ import { LINE_TO_LINE_KNOTS } from "@/data/knots/line-to-line";
 import { LOOP_KNOTS } from "@/data/knots/loops";
 import { UTILITY_KNOTS } from "@/data/knots/utility";
 import { SEED_BATCH_2 } from "@/data/knots/seed-batch-2";
+import { SEED_BATCH_3_TERMINAL } from "@/data/knots/seed-batch-3-terminal";
 import { getMechanics } from "@/data/mechanics";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
@@ -19,6 +20,7 @@ const RAW: KnotContent[] = [
   ...LOOP_KNOTS,
   ...UTILITY_KNOTS,
   ...SEED_BATCH_2,
+  ...SEED_BATCH_3_TERMINAL,
 ];
 
 function hydrate(raw: KnotContent): Knot {
