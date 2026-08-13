@@ -9,11 +9,8 @@ export type ConditionAbility = "excellent" | "good" | "fair" | "poor" | "impract
 export type RetieTempo = "instant" | "fast" | "moderate" | "slow" | "dock-only";
 
 export interface MaterialsValidityMatrix {
-  /** Materials this connection is rated for as primary / main. */
   main: LineMaterial[];
-  /** Materials valid on the secondary / leader / tippet side (omit for single-side terminals). */
   secondary?: LineMaterial[];
-  /** Explicitly invalid combinations (hard exclusions for scoring). */
   invalidPairs?: Array<{ main: LineMaterial; secondary: LineMaterial; reason: string }>;
 }
 
@@ -24,11 +21,9 @@ export interface TieAbilityUnderCondition {
   boatMotion: ConditionAbility;
 }
 
-/** Inclusive % band of rated line strength retained when the connection is seated correctly. */
 export interface StrengthRetentionBand {
   lowPct: number;
   highPct: number;
-  /** Short citation key — must resolve via sourceId. */
   note: string;
 }
 
@@ -38,21 +33,13 @@ export interface ConnectionModelMeta {
   retieTempoFit: RetieTempo;
   strengthRetentionBand: StrengthRetentionBand;
   failsWhen: string[];
-  /** How tolerant the geometry is of diameter mismatch (decision language, not a formula). */
   diameterMismatchTolerance: "strict-similar" | "moderate" | "wide" | "extreme-ok" | "n/a";
   guidesFriendly: boolean;
   sourceId: string;
-  reviewedDate: string; // YYYY-MM-DD
+  reviewedDate: string;
 }
 
-/**
- * Source registry for strength / validity claims.
- * Keep URLs stable; meta.sourceId must match a key here.
- */
-export const MODEL_SOURCES: Record<
-  string,
-  { title: string; url?: string; note?: string }
-> = {
+export const MODEL_SOURCES: Record<string, { title: string; url?: string; note?: string }> = {
   "fishingknots-db": {
     title: "FishingKnots.com Knot Strength Database",
     url: "https://fishingknots.com/knot-strength-database",
@@ -105,21 +92,13 @@ function tie(
   return { cold, wind, lowLight, boatMotion };
 }
 
-/**
- * Every id in MECHANICS must appear here. Validation fails closed on missing keys.
- */
 export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
   palomar: {
     materialsValidityMatrix: { main: braidOk },
     tieAbilityUnderCondition: tie("excellent", "good", "good", "good"),
     retieTempoFit: "fast",
     strengthRetentionBand: band(90, 100, "Typically high 90s when doubled line seats clean; braid often near top of band."),
-    failsWhen: [
-      "Eye too small for doubled line",
-      "Dry seat on mono/fluoro scores the line",
-      "Tag sucked into the stack",
-      "Chaotic crossed coils at the eye",
-    ],
+    failsWhen: ["Eye too small for doubled line", "Dry seat on mono/fluoro scores the line", "Tag sucked into the stack", "Chaotic crossed coils at the eye"],
     diameterMismatchTolerance: "n/a",
     guidesFriendly: true,
     sourceId: "knots-fish-benchmarks",
@@ -206,10 +185,7 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
     reviewedDate: "2026-08-13",
   },
   "double-uni": {
-    materialsValidityMatrix: {
-      main: braidOk,
-      secondary: braidOk,
-    },
+    materialsValidityMatrix: { main: braidOk, secondary: braidOk },
     tieAbilityUnderCondition: tie("excellent", "good", "good", "good"),
     retieTempoFit: "fast",
     strengthRetentionBand: band(82, 92, "Reliable general connector; lag FG on extreme diameter jumps for guide passage."),
@@ -231,22 +207,14 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
     tieAbilityUnderCondition: tie("impractical", "poor", "poor", "poor"),
     retieTempoFit: "dock-only",
     strengthRetentionBand: band(73, 100, "Near full retention when woven under tension; field-tied competition results show wide technique variance."),
-    failsWhen: [
-      "Loose early wraps",
-      "Insufficient leader tension",
-      "Missing lock hitches",
-      "Long stiff leader tag catching guides",
-    ],
+    failsWhen: ["Loose early wraps", "Insufficient leader tension", "Missing lock hitches", "Long stiff leader tag catching guides"],
     diameterMismatchTolerance: "extreme-ok",
     guidesFriendly: true,
     sourceId: "sportfishing-braid-leader",
     reviewedDate: "2026-08-13",
   },
   alberto: {
-    materialsValidityMatrix: {
-      main: ["braid"],
-      secondary: monoFluoro,
-    },
+    materialsValidityMatrix: { main: ["braid"], secondary: monoFluoro },
     tieAbilityUnderCondition: tie("fair", "fair", "fair", "fair"),
     retieTempoFit: "moderate",
     strengthRetentionBand: band(80, 95, "Field-friendlier than FG; typically a step below perfect FG on pure strength."),
@@ -271,10 +239,7 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
     reviewedDate: "2026-08-13",
   },
   blood: {
-    materialsValidityMatrix: {
-      main: monoFluoro,
-      secondary: monoFluoro,
-    },
+    materialsValidityMatrix: { main: monoFluoro, secondary: monoFluoro },
     tieAbilityUnderCondition: tie("poor", "fair", "poor", "fair"),
     retieTempoFit: "moderate",
     strengthRetentionBand: band(80, 92, "Slim similar-diameter mono/fluoro join; intolerant of mismatch."),
@@ -285,10 +250,7 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
     reviewedDate: "2026-08-13",
   },
   surgeons: {
-    materialsValidityMatrix: {
-      main: monoFluoro,
-      secondary: monoFluoro,
-    },
+    materialsValidityMatrix: { main: monoFluoro, secondary: monoFluoro },
     tieAbilityUnderCondition: tie("excellent", "good", "good", "good"),
     retieTempoFit: "instant",
     strengthRetentionBand: band(85, 95, "Fast tippet join; bulkier than Blood but cold-hand friendly."),
@@ -354,21 +316,47 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
     reviewedDate: "2026-08-13",
   },
   yucatan: {
-    materialsValidityMatrix: {
-      main: ["braid"],
-      secondary: monoFluoro,
-    },
+    materialsValidityMatrix: { main: ["braid"], secondary: monoFluoro },
     tieAbilityUnderCondition: tie("fair", "fair", "poor", "fair"),
     retieTempoFit: "moderate",
     strengthRetentionBand: band(90, 100, "Doubled braid to leader; near full retention when Bimini (or equivalent double) base is sound."),
-    failsWhen: [
-      "Single-line braid used without a proper double",
-      "Insufficient wraps on the leader",
-      "Loose seat leaving a hinge",
-    ],
+    failsWhen: ["Single-line braid used without a proper double", "Insufficient wraps on the leader", "Loose seat leaving a hinge"],
     diameterMismatchTolerance: "wide",
     guidesFriendly: false,
     sourceId: "castandspear-yucatan",
+    reviewedDate: "2026-08-13",
+  },
+  "slim-beauty": {
+    materialsValidityMatrix: { main: ["braid"], secondary: monoFluoro },
+    tieAbilityUnderCondition: tie("fair", "fair", "fair", "fair"),
+    retieTempoFit: "moderate",
+    strengthRetentionBand: band(85, 95, "High when figure-8 locks and wraps seat; cited as competitive with other slim braid-leader joins."),
+    failsWhen: ["Loose figure-8 that never locks", "Too few wraps on a heavy leader", "Incomplete opposing seat"],
+    diameterMismatchTolerance: "extreme-ok",
+    guidesFriendly: true,
+    sourceId: "fishingknots-db",
+    reviewedDate: "2026-08-13",
+  },
+  "spider-hitch": {
+    materialsValidityMatrix: { main: ["mono", "fluoro", "braid"] },
+    tieAbilityUnderCondition: tie("fair", "fair", "poor", "fair"),
+    retieTempoFit: "fast",
+    strengthRetentionBand: band(90, 100, "Strong practical double on mono/fluoro when wrapped and seated under tension; not a free 100% claim."),
+    failsWhen: ["Too few wraps", "Seating without continuous tension", "Uninspected cyclic load on a marginal hitch"],
+    diameterMismatchTolerance: "n/a",
+    guidesFriendly: true,
+    sourceId: "fishingknots-db",
+    reviewedDate: "2026-08-13",
+  },
+  "nail-knot": {
+    materialsValidityMatrix: { main: ["fly-line"], secondary: monoFluoro },
+    tieAbilityUnderCondition: tie("fair", "fair", "poor", "fair"),
+    retieTempoFit: "slow",
+    strengthRetentionBand: band(85, 92, "Low-profile fly-line to leader; band reflects weaker-side retention when coil is even."),
+    failsWhen: ["Uneven or gapped wraps", "Coil never transferred onto the fly line", "Over-trim before seat completes"],
+    diameterMismatchTolerance: "extreme-ok",
+    guidesFriendly: true,
+    sourceId: "fishingknots-db",
     reviewedDate: "2026-08-13",
   },
 };
@@ -377,7 +365,6 @@ export function getConnectionModelMeta(id: string): ConnectionModelMeta | undefi
   return CONNECTION_MODEL_META[id];
 }
 
-/** Catalog is review-due when the newest reviewedDate is older than this many days. */
 export const REVIEW_DUE_AFTER_DAYS = 120;
 
 export function catalogReviewDue(asOf: Date = new Date()): {
