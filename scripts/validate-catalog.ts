@@ -7,6 +7,7 @@
  */
 import { MECHANICS } from "../src/data/mechanics-profiles";
 import { MECHANICS_EXTRAS } from "../src/data/mechanics-extras";
+import { MECHANICS_EXTRAS_TERMINAL } from "../src/data/mechanics-extras-terminal";
 import {
   CONNECTION_MODEL_META,
   MODEL_SOURCES,
@@ -18,13 +19,19 @@ import { LINE_TO_LINE_KNOTS } from "../src/data/knots/line-to-line";
 import { LOOP_KNOTS } from "../src/data/knots/loops";
 import { UTILITY_KNOTS } from "../src/data/knots/utility";
 import { SEED_BATCH_2 } from "../src/data/knots/seed-batch-2";
+import { SEED_BATCH_3_TERMINAL } from "../src/data/knots/seed-batch-3-terminal";
 
-const ALL_MECHANICS = { ...MECHANICS, ...MECHANICS_EXTRAS };
+const ALL_MECHANICS = { ...MECHANICS, ...MECHANICS_EXTRAS, ...MECHANICS_EXTRAS_TERMINAL };
 
 const contentIds = new Set(
-  [...TERMINAL_KNOTS, ...LINE_TO_LINE_KNOTS, ...LOOP_KNOTS, ...UTILITY_KNOTS, ...SEED_BATCH_2].map(
-    (k) => k.id,
-  ),
+  [
+    ...TERMINAL_KNOTS,
+    ...LINE_TO_LINE_KNOTS,
+    ...LOOP_KNOTS,
+    ...UTILITY_KNOTS,
+    ...SEED_BATCH_2,
+    ...SEED_BATCH_3_TERMINAL,
+  ].map((k) => k.id),
 );
 
 const RETIE = new Set(["instant", "fast", "moderate", "slow", "dock-only"]);
