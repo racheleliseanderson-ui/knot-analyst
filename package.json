@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test:schema": "tsx scripts/schema-regression.ts",
-    "test": "tsx scripts/schema-regression.ts"
+    "test:catalog": "tsx scripts/validate-catalog.ts",
+    "test": "tsx scripts/schema-regression.ts && tsx scripts/validate-catalog.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
