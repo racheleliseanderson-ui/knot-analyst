@@ -1,0 +1,22 @@
+name: Catalog validation
+
+on:
+  push:
+    branches: [main, "catalog-*"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install
+        run: bun install --frozen-lockfile || bun install
+      - name: Schema regression
+        run: bunx tsx scripts/schema-regression.ts
+      - name: Catalog gold-standard schema
+        run: bunx tsx scripts/validate-catalog.ts
