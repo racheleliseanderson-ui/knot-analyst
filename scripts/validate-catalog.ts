@@ -1,12 +1,12 @@
 /**
  * Catalog gold-standard schema check.
- * Every MECHANICS id must have ConnectionModelMeta with required fields.
- * Every meta id must have MECHANICS + KnotContent.
+ * Every modelled id must have MECHANICS (core|extras), ConnectionModelMeta, KnotContent.
  * Exit non-zero on any malformed entry — fails the CI build.
  *
  * Run: npx tsx scripts/validate-catalog.ts
  */
 import { MECHANICS } from "../src/data/mechanics-profiles";
+import { MECHANICS_EXTRAS } from "../src/data/mechanics-extras";
 import {
   CONNECTION_MODEL_META,
   MODEL_SOURCES,
@@ -17,6 +17,8 @@ import { TERMINAL_KNOTS } from "../src/data/knots/terminal";
 import { LINE_TO_LINE_KNOTS } from "../src/data/knots/line-to-line";
 import { LOOP_KNOTS } from "../src/data/knots/loops";
 import { UTILITY_KNOTS } from "../src/data/knots/utility";
+
+const ALL_MECHANICS = { ...MECHANICS, ...MECHANICS_EXTRAS };
 
 const contentIds = new Set(
   [...TERMINAL_KNOTS, ...LINE_TO_LINE_KNOTS, ...LOOP_KNOTS, ...UTILITY_KNOTS].map((k) => k.id),
@@ -79,7 +81,7 @@ function checkMeta(id: string, m: ConnectionModelMeta) {
   }
 }
 
-const mechIds = Object.keys(MECHANICS);
+const mechIds = Object.keys(ALL_MECHANICS);
 const metaIds = Object.keys(CONNECTION_MODEL_META);
 
 for (const id of mechIds) {
@@ -89,12 +91,12 @@ for (const id of mechIds) {
 }
 
 for (const id of metaIds) {
-  if (!MECHANICS[id]) fail(`CONNECTION_MODEL_META[${id}] missing MECHANICS`);
+  if (!ALL_MECHANICS[id]) fail(`CONNECTION_MODEL_META[${id}] missing MECHANICS`);
   if (!contentIds.has(id)) fail(`CONNECTION_MODEL_META[${id}] missing KnotContent`);
 }
 
 for (const id of contentIds) {
-  if (!MECHANICS[id]) fail(`KnotContent[${id}] missing MECHANICS (hydrate will throw)`);
+  if (!ALL_MECHANICS[id]) fail(`KnotContent[${id}] missing MECHANICS (hydrate will throw)`);
 }
 
 if (failed === 0) {
