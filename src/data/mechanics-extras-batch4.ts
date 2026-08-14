@@ -139,7 +139,7 @@ export const MECHANICS_EXTRAS_BATCH4: Record<string, MechanicsBundle> = {
     "Fast braid-to-leader join with field tempo priority.",
     ["braid-to-leader"],
     ["braid", "mixed"],
-    "line-join",
+    "braid-leader-fg",
     [6, 12],
     {
       mainMaterials: ["braid"],
@@ -152,7 +152,7 @@ export const MECHANICS_EXTRAS_BATCH4: Record<string, MechanicsBundle> = {
     "Needle-assisted fly-line to leader transition coil.",
     ["fly-line-to-leader"],
     ["fly-line", "mono", "fluoro", "mixed"],
-    "line-join",
+    "fly-line-coil",
     [5, 8],
     {
       mainMaterials: ["fly-line"],
@@ -184,7 +184,7 @@ export const MECHANICS_EXTRAS_BATCH4: Record<string, MechanicsBundle> = {
     "Plaited double-line for heavy tackle.",
     ["line-to-loop", "double-line-to-leader"],
     ["mono", "fluoro", "braid"],
-    "loop-fixed",
+    "double-line",
     [8, 20],
     {
       requiresDoubleLine: true,

@@ -178,7 +178,7 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
       cosmeticIrregularities: ["Minor wrap count variation if density is solid"],
     },
     observations: baseJoinObs("yucatan"),
-    diagramKind: "line-join",
+    diagramKind: "braid-leader-fg",
     mechanicsSummary:
       "Doubled braid (Bimini base) wrapped onto a mono/fluoro leader under tension. High retention when the double is sound; bulkier than FG.",
     completeness: FULL,
@@ -272,7 +272,7 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
       cosmeticIrregularities: [],
     },
     observations: baseJoinObs("slim-beauty"),
-    diagramKind: "line-join",
+    diagramKind: "braid-leader-alberto",
     mechanicsSummary:
       "Leader figure-8 locked with down-and-back braid wraps. Slim diameter-jump join; field-friendlier than FG for many anglers.",
     completeness: FULL,
@@ -352,7 +352,7 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
       cosmeticIrregularities: [],
     },
     observations: baseLoopObs("spider-hitch"),
-    diagramKind: "loop-fixed",
+    diagramKind: "double-line",
     mechanicsSummary:
       "Fast doubled-line hitch. Practical alternative to Bimini when time is short; inspect under load before trusting big fish.",
     completeness: FULL,
@@ -443,7 +443,7 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
       cosmeticIrregularities: [],
     },
     observations: baseJoinObs("nail-knot"),
-    diagramKind: "line-join",
+    diagramKind: "fly-line-coil",
     mechanicsSummary:
       "Leader coil transferred onto the fly-line tip over a temporary form. Smooth guide passage for fly systems.",
     completeness: FULL,

@@ -27,6 +27,7 @@ import { HOW_TO, MICRO } from "../src/data/how-to";
 import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "../src/data/how-to-extras";
 import { KNOT_VIDEOS } from "../src/data/videos";
 import type { KnotContent } from "../src/domain/types";
+import { MODELLED_DIAGRAM_KINDS } from "../src/domain/types";
 
 const VALID_JOBS = new Set([
   "line-to-hook",
@@ -164,6 +165,11 @@ function checkMechanicsContract(id: string) {
   if (!m.mechanicsSummary || m.mechanicsSummary.length < 12) fail(`${id}: mechanicsSummary too thin`);
   if (!m.fingerprint?.dangerousDefects?.length) fail(`${id}: fingerprint.dangerousDefects required`);
   if (!m.observations?.length) fail(`${id}: observations required`);
+  const kind = m.diagramKind;
+  if (!kind) fail(`${id}: diagramKind required`);
+  else if (!(MODELLED_DIAGRAM_KINDS as readonly string[]).includes(kind)) {
+    fail(`${id}: diagramKind "${kind}" is not an implemented schematic (no generic fallback)`);
+  }
 }
 
 function checkTieBuild(id: string, c: KnotContent) {
@@ -216,6 +222,7 @@ if (failed === 0) {
   ok(`${mechIds.length} modelled connections fully schema-checked`);
   ok(`${contentIds.size} content entries fully field-checked`);
   ok(`${contentIds.size} Tie-mode how-to + micro builds checked`);
+  ok(`${mechIds.length} implemented schematic families assigned (no generic fallback)`);
   ok(`${Object.keys(KNOT_VIDEOS).length} cited videos attached (optional — never invented)`);
   ok(`${Object.keys(MODEL_SOURCES).length} sources registered`);
 }

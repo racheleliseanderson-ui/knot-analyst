@@ -48,6 +48,10 @@ const FOCUS: Partial<Record<DiagramKind, Record<number, [number, number, number]
   "braid-leader-alberto": { 1: [180, 90, 1.2], 2: [125, 90, 1.7], 3: [240, 90, 1.7], 4: [312, 90, 1.8] },
   "loop-fixed": { 1: [280, 90, 1.4], 2: [135, 90, 1.6], 3: [172, 90, 1.9], 4: [205, 82, 1.9] },
   "loop-nonslip": { 1: [290, 90, 1.4], 2: [148, 90, 1.5], 3: [246, 90, 1.8], 4: [292, 84, 1.9] },
+  "loop-dropper": { 1: [200, 90, 1.3], 2: [200, 90, 1.6], 3: [200, 70, 1.7], 4: [200, 58, 1.8] },
+  "double-line": { 1: [140, 90, 1.3], 2: [200, 90, 1.7], 3: [268, 90, 1.8], 4: [320, 84, 1.9] },
+  "fly-line-coil": { 1: [160, 90, 1.3], 2: [210, 90, 1.7], 3: [250, 90, 1.8], 4: [300, 84, 1.8] },
+  "arbor-spool": { 1: [90, 90, 1.5], 2: [170, 90, 1.7], 3: [230, 90, 1.8], 4: [270, 90, 1.8] },
 };
 
 function focusTransform(kind: DiagramKind, step?: number, enabled?: boolean) {
@@ -219,6 +223,49 @@ function Body({ kind, step }: { kind: DiagramKind; step?: number }) {
           <Seg d="M 280 90 l 30 -18" from={4} step={step} width={2} dash="5 4" />
         </>
       );
+    case "loop-dropper":
+      return (
+        <>
+          <Seg d="M 10 90 L 390 90" from={1} step={step} />
+          <Seg d={coils(128, 90, 2, 20, 11)} from={2} step={step} width={2.5} />
+          <Seg d={coils(232, 90, 2, 20, 11)} from={2} step={step} width={2.5} />
+          <Seg d="M 200 90 q -28 -62 0 -78 q 28 16 0 78" from={3} step={step} width={2.5} />
+          <Seg d="M 200 12 l 0 -8" from={4} step={step} width={2} dash="4 4" />
+        </>
+      );
+    case "double-line":
+      return (
+        <>
+          <Seg d="M 40 72 q -28 18 0 36 L 140 108" from={1} step={step} width={2.5} />
+          <Seg d="M 40 72 L 140 72" from={1} step={step} width={2.5} />
+          <Seg d={coils(140, 90, 6, 16, 14)} from={2} step={step} width={2.5} />
+          <Seg d="M 236 90 q 22 -18 40 0 q -22 18 -40 0" from={3} step={step} width={2.5} />
+          <Seg d="M 276 90 L 370 90" from={4} step={step} />
+          <Seg d="M 276 90 l 22 -16" from={4} step={step} width={1.8} dash="4 4" />
+        </>
+      );
+    case "fly-line-coil":
+      return (
+        <>
+          <Seg d="M 10 90 L 210 90" from={1} step={step} width={6} />
+          <Seg d="M 190 90 L 390 90" from={1} step={step} width={2} />
+          <Seg d={coils(168, 90, 5, 16, 13)} from={2} step={step} width={2.2} />
+          <Seg d="M 248 90 q 18 -8 10 -20" from={3} step={step} width={1.8} dash="4 4" />
+          <Seg d="M 168 90 l -16 -14" from={4} step={step} width={1.8} dash="4 4" />
+        </>
+      );
+    case "arbor-spool":
+      return (
+        <>
+          <circle cx={58} cy={90} r={28} fill="none" stroke={GHOST} strokeWidth={5} opacity={0.5} />
+          <circle cx={58} cy={90} r={10} fill="none" stroke={GHOST} strokeWidth={3} opacity={0.4} />
+          <Seg d="M 86 90 q 20 -24 50 -10 L 340 80" from={1} step={step} />
+          <Seg d="M 86 90 q 16 22 48 10 L 220 100" from={1} step={step} width={2.5} />
+          <Seg d="M 170 78 q 18 -22 40 0 q -18 22 -40 0" from={2} step={step} width={2.5} />
+          <Seg d="M 228 100 q 18 20 36 0 q -14 -18 -36 0" from={3} step={step} width={2.5} />
+          <Seg d="M 264 100 l 22 12" from={4} step={step} width={1.8} dash="4 4" />
+        </>
+      );
     default:
       return (
         <>
@@ -241,6 +288,10 @@ const KIND_DESCRIPTION: Record<DiagramKind, string> = {
   "braid-leader-alberto": "The leader is folded into a long bight; braid wraps up the doubled section and back down over itself, exiting alongside the leader.",
   "loop-fixed": "The standing line is doubled into a fixed loop, with the doubled strands knotted above the loop so the loop stays open under load.",
   "loop-nonslip": "An overhand knot is made in the standing line, the tag passes through the hardware and back through that knot, wraps around the standing line, and returns, leaving a loop that cannot close.",
+  "loop-dropper": "The standing line runs through; twists sit on both sides of a mid-line opening; the loop is passed through that opening so it stands perpendicular to the line.",
+  "double-line": "A long doubled section is twisted or plaited into a dense column and locked at the far end, leaving a load-bearing loop in the doubled line.",
+  "fly-line-coil": "A thick fly line and a thinner leader meet at the tip; even wraps of the leader transfer onto the fly-line tip as a low-profile coil.",
+  "arbor-spool": "Line wraps the reel arbor; an overhand on the standing line slides to the spool and a stopper overhand in the tag jams against it.",
   generic: "A single line runs horizontally, wraps are laid along it, and the tag end exits at an angle to the standing part.",
 };
 

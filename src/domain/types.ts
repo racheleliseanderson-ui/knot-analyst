@@ -9,7 +9,7 @@
 export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
-export const KNOT_CATALOG_VERSION = "2026-08-14.1";
+export const KNOT_CATALOG_VERSION = "2026-08-14.2";
 export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
 export const ENGINE_VERSION = "mech-intel-1.3.0";
 
@@ -293,7 +293,28 @@ export type DiagramKind =
   | "braid-leader-alberto"
   | "loop-fixed"
   | "loop-nonslip"
+  | "loop-dropper"
+  | "double-line"
+  | "fly-line-coil"
+  | "arbor-spool"
   | "generic";
+
+/** Schematics the renderer draws as first-class families. `generic` is fallback only. */
+export const MODELLED_DIAGRAM_KINDS = [
+  "terminal-eye",
+  "terminal-palomar",
+  "terminal-uni",
+  "terminal-snell",
+  "line-join",
+  "braid-leader-fg",
+  "braid-leader-alberto",
+  "loop-fixed",
+  "loop-nonslip",
+  "loop-dropper",
+  "double-line",
+  "fly-line-coil",
+  "arbor-spool",
+] as const satisfies readonly DiagramKind[];
 
 export interface Knot extends KnotContent {
   contract: MechanicalContract;
