@@ -14,6 +14,7 @@ import { MECHANICS_EXTRAS_BATCH5 } from "../src/data/mechanics-extras-batch5";
 import { MECHANICS_EXTRAS_BATCH6 } from "../src/data/mechanics-extras-batch6";
 import { MECHANICS_EXTRAS_BOATING } from "../src/data/mechanics-extras-boating";
 import { MECHANICS_EXTRAS_BOATING_2 } from "../src/data/mechanics-extras-boating-2";
+import { MECHANICS_EXTRAS_BOATING_3 } from "../src/data/mechanics-extras-boating-3";
 import {
   CONNECTION_MODEL_META,
   MODEL_SOURCES,
@@ -31,6 +32,7 @@ import { SEED_BATCH_5_TERMINAL } from "../src/data/knots/seed-batch-5-terminal";
 import { SEED_BATCH_6 } from "../src/data/knots/seed-batch-6";
 import { BOATING_BATCH_1 } from "../src/data/knots/boating-batch-1";
 import { BOATING_BATCH_2 } from "../src/data/knots/boating-batch-2";
+import { BOATING_BATCH_3 } from "../src/data/knots/boating-batch-3";
 import { HOW_TO, MICRO } from "../src/data/how-to";
 import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "../src/data/how-to-extras";
 import { KNOT_VIDEOS } from "../src/data/videos";
@@ -62,6 +64,7 @@ const VALID_JOBS = new Set([
   "shorten-line",
   "mid-line-loop",
   "tension-line",
+  "reef-or-bind",
 ]);
 
 const ALL_MECHANICS = {
@@ -73,6 +76,7 @@ const ALL_MECHANICS = {
   ...MECHANICS_EXTRAS_BATCH6,
   ...MECHANICS_EXTRAS_BOATING,
   ...MECHANICS_EXTRAS_BOATING_2,
+  ...MECHANICS_EXTRAS_BOATING_3,
 };
 
 const ALL_CONTENT: KnotContent[] = [
@@ -87,6 +91,7 @@ const ALL_CONTENT: KnotContent[] = [
   ...SEED_BATCH_6,
   ...BOATING_BATCH_1,
   ...BOATING_BATCH_2,
+  ...BOATING_BATCH_3,
 ];
 
 const contentById = new Map(ALL_CONTENT.map((k) => [k.id, k]));

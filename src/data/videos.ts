@@ -462,6 +462,66 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
     title: "Ashley Stopper Knot Tutorial",
     channel: "MeZillch",
   },
+  "yosemite-bowline": {
+    provider: "youtube",
+    id: "Jj42B8eCOzc",
+    title: "Don't Kill Yourself Climbing: The Bowline With Yosemite Finish (Yosemite Bowline)",
+    channel: "WhyKnot",
+  },
+  "pile-hitch": {
+    provider: "youtube",
+    id: "ukcKvt9XqME",
+    title: "Fast Temporary Mooring With A Pile Hitch",
+    channel: "WhyKnot",
+  },
+  "halyard-hitch": {
+    provider: "youtube",
+    id: "zEEYkfINomY",
+    title: "How to Tie the Halyard Hitch",
+    channel: "AnimatedKnots",
+  },
+  "midshipmans-hitch": {
+    provider: "youtube",
+    id: "LveOF6QHhFw",
+    title: "How to Tie the Midshipman's hitch IN 60 SECONDS!!",
+    channel: "Jason's Knot Channel",
+  },
+  "hunters-bend": {
+    provider: "youtube",
+    id: "zGeLiKoNMuo",
+    title: "Learn How To Tie A Hunter's Bend Knot",
+    channel: "WhyKnot",
+  },
+  "heaving-line-knot": {
+    provider: "youtube",
+    id: "wMH4b1a0lVo",
+    title: "How to Tie the Heaving Line Knot",
+    channel: "AnimatedKnots",
+  },
+  "estar-stopper": {
+    provider: "youtube",
+    id: "WsbZIx7QSb0",
+    title: "How to Tie the EStar Stopper Knot",
+    channel: "AnimatedKnots",
+  },
+  "reef-knot": {
+    provider: "youtube",
+    id: "0Y_iorha2k4",
+    title: "How to Tie a Square Knot (Reef Knot)",
+    channel: "AnimatedKnots",
+  },
+  constrictor: {
+    provider: "youtube",
+    id: "QmKWZr5ueDA",
+    title: "How to Tie the Constrictor Knot - ITS Knot of the Week HD",
+    channel: "ITS Tactical / Imminent Threat Solutions",
+  },
+  "timber-hitch": {
+    provider: "youtube",
+    id: "WsCU86SDfb4",
+    title: "Timber Hitch | How to Tie the Timber Hitch",
+    channel: "AnimatedKnots",
+  },
 };
 
 export function applyVideo(content: KnotContent): KnotContent {

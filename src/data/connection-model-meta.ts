@@ -10,6 +10,7 @@ import { CONNECTION_MODEL_META_BATCH5 } from "@/data/connection-model-meta-batch
 import { CONNECTION_MODEL_META_BATCH6 } from "@/data/connection-model-meta-batch6";
 import { CONNECTION_MODEL_META_BOATING } from "@/data/connection-model-meta-boating";
 import { CONNECTION_MODEL_META_BOATING_2 } from "@/data/connection-model-meta-boating-2";
+import { CONNECTION_MODEL_META_BOATING_3 } from "@/data/connection-model-meta-boating-3";
 
 export type ConditionAbility = "excellent" | "good" | "fair" | "poor" | "impractical";
 export type RetieTempo = "instant" | "fast" | "moderate" | "slow" | "dock-only";
@@ -380,6 +381,7 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
   ...CONNECTION_MODEL_META_BATCH6,
   ...CONNECTION_MODEL_META_BOATING,
   ...CONNECTION_MODEL_META_BOATING_2,
+  ...CONNECTION_MODEL_META_BOATING_3,
 };
 
 export function getConnectionModelMeta(id: string): ConnectionModelMeta | undefined {

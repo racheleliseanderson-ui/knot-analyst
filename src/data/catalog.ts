@@ -12,6 +12,7 @@ import { SEED_BATCH_5_TERMINAL } from "@/data/knots/seed-batch-5-terminal";
 import { SEED_BATCH_6 } from "@/data/knots/seed-batch-6";
 import { BOATING_BATCH_1 } from "@/data/knots/boating-batch-1";
 import { BOATING_BATCH_2 } from "@/data/knots/boating-batch-2";
+import { BOATING_BATCH_3 } from "@/data/knots/boating-batch-3";
 import { getMechanics } from "@/data/mechanics";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
@@ -32,7 +33,7 @@ const FISHING_RAW: KnotContent[] = [
   ...SEED_BATCH_6,
 ];
 
-const BOATING_RAW: KnotContent[] = [...BOATING_BATCH_1, ...BOATING_BATCH_2];
+const BOATING_RAW: KnotContent[] = [...BOATING_BATCH_1, ...BOATING_BATCH_2, ...BOATING_BATCH_3];
 
 function hydrate(raw: KnotContent): Knot {
   const content = applyVideo(applyHowTo(raw));
@@ -77,6 +78,7 @@ const BOATING_CONNECTION_JOBS = new Set<ConnectionJob>([
   "shorten-line",
   "mid-line-loop",
   "tension-line",
+  "reef-or-bind",
 ]);
 
 export function knotsForDomain(id: DomainId): Knot[] {

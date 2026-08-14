@@ -14,6 +14,7 @@ export const BOATING_CONNECTIONS: DomainOption[] = [
   { id: "tension-line", label: "Tension / lash a line", group: "Working" },
   { id: "stopper", label: "Stopper in the end", group: "Working" },
   { id: "shorten-line", label: "Shorten under load", group: "Working" },
+  { id: "reef-or-bind", label: "Reef / bind", group: "Bind" },
 ];
 
 export const BOATING_MATERIALS: DomainOption[] = [

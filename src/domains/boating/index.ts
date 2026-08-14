@@ -5,6 +5,7 @@
 import type { KnotDomain } from "@/domain/domain";
 import { BOATING_BATCH_1 } from "@/data/knots/boating-batch-1";
 import { BOATING_BATCH_2 } from "@/data/knots/boating-batch-2";
+import { BOATING_BATCH_3 } from "@/data/knots/boating-batch-3";
 import { BOATING_DIMENSIONS } from "./dimensions";
 import { BOATING_MATERIAL_PRESETS } from "./materials";
 import { BOATING_SCENARIOS } from "./scenarios";
@@ -24,5 +25,5 @@ export const BOATING_DOMAIN: KnotDomain = {
   venues: BOATING_VENUES,
   scenarios: BOATING_SCENARIOS,
   failurePlays: [],
-  knots: [...BOATING_BATCH_1, ...BOATING_BATCH_2],
+  knots: [...BOATING_BATCH_1, ...BOATING_BATCH_2, ...BOATING_BATCH_3],
 };
