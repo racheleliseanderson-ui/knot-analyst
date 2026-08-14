@@ -176,6 +176,9 @@ function checkContent(id: string, c: KnotContent) {
   if (!DIFFICULTY.has(c.difficulty)) fail(`${id}: difficulty invalid`);
   if (!Array.isArray(c.materialsNeeded) || c.materialsNeeded.length < 1) fail(`${id}: materialsNeeded required`);
   if (!c.howToSummary || c.howToSummary.length < 20) fail(`${id}: howToSummary too thin`);
+  if (!c.strengthRetentionTypical || c.strengthRetentionTypical.length < 16) {
+    fail(`${id}: strengthRetentionTypical required (cited band, not a single figure)`);
+  }
   if (!Array.isArray(c.steps) || c.steps.length < 3) fail(`${id}: steps need ≥3`);
   if (!Array.isArray(c.commonMistakes) || c.commonMistakes.length < 1) fail(`${id}: commonMistakes required`);
   if (!Array.isArray(c.diagnostics) || c.diagnostics.length < 1) fail(`${id}: diagnostics required`);
@@ -215,6 +218,20 @@ function checkTieBuild(id: string, c: KnotContent) {
   if (!how.beforeYouStart?.length) fail(`${id}: how-to beforeYouStart required`);
   if (!how.seatingSequence || how.seatingSequence.length < 3) fail(`${id}: how-to seatingSequence needs ≥3 phases`);
   if (!how.fieldNotes?.length) fail(`${id}: how-to fieldNotes required`);
+
+  const stepDepth = how.steps ?? {};
+  for (const s of c.steps) {
+    const d = stepDepth[s.order];
+    if (!d?.detail) fail(`${id}: how-to step ${s.order} needs detail`);
+    if (!d?.expectedResult) fail(`${id}: how-to step ${s.order} needs expectedResult`);
+  }
+  if (how.extraSteps?.length) {
+    how.extraSteps.forEach((s, i) => {
+      const n = Math.max(...c.steps.map((x) => x.order), 0) + i + 1;
+      if (!s.detail) fail(`${id}: extraStep ${n} needs detail`);
+      if (!s.expectedResult) fail(`${id}: extraStep ${n} needs expectedResult`);
+    });
+  }
 
   const micro = { ...(MICRO_EXTRAS[id] ?? {}), ...(MICRO[id] ?? {}) };
   if (!Object.keys(micro).length) {

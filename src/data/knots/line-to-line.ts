@@ -166,6 +166,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       "Accessible braid-to-leader knot that many anglers find easier than FG while still relatively slim and strong.",
     notIdealFor: ["Absolute thinnest guide-friendly profile (FG wins)", "Two equal mono lines"],
     lineMaterials: ["braid", "mixed"],
+    strengthRetentionTypical:
+      "Field-friendlier braid-to-leader; typically cited 80–95% when wraps are even.",
     difficulty: "intermediate",
     materialsNeeded: ["Braid", "Leader"],
     howToSummary:
@@ -220,6 +222,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       "Classic knot for joining lines of different diameters, including braid to mono and some fly-line style connections.",
     notIdealFor: ["Equal-diameter mono joins (Blood or Double Uni may suit better)"],
     lineMaterials: ["mono", "fluoro", "braid", "mixed"],
+    strengthRetentionTypical:
+      "Classic mismatch join; typically 80–92% when wraps stay on the bight.",
     difficulty: "intermediate",
     materialsNeeded: ["Two lines of different or similar diameter"],
     howToSummary:
@@ -273,6 +277,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       "Slim join for two mono or fluoro lines of similar diameter — a fly-fishing leader staple.",
     notIdealFor: ["Large diameter mismatches", "Braid-to-mono without modification"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Slim similar-diameter join; typically 80–92% — intolerant of mismatch.",
     difficulty: "intermediate",
     materialsNeeded: ["Two similar-diameter lines"],
     howToSummary:
@@ -333,6 +339,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       "Critical braid-to-leader offshore connections",
     ],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Fast tippet join; typically 85–95% of the weaker side when both lines pass every time.",
     difficulty: "beginner",
     materialsNeeded: ["Leader and tippet (or two lines)"],
     howToSummary:
