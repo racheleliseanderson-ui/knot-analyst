@@ -8,6 +8,7 @@
 import { MECHANICS } from "../src/data/mechanics-profiles";
 import { MECHANICS_EXTRAS } from "../src/data/mechanics-extras";
 import { MECHANICS_EXTRAS_TERMINAL } from "../src/data/mechanics-extras-terminal";
+import { MECHANICS_EXTRAS_BATCH4 } from "../src/data/mechanics-extras-batch4";
 import {
   CONNECTION_MODEL_META,
   MODEL_SOURCES,
@@ -20,8 +21,14 @@ import { LOOP_KNOTS } from "../src/data/knots/loops";
 import { UTILITY_KNOTS } from "../src/data/knots/utility";
 import { SEED_BATCH_2 } from "../src/data/knots/seed-batch-2";
 import { SEED_BATCH_3_TERMINAL } from "../src/data/knots/seed-batch-3-terminal";
+import { SEED_BATCH_4 } from "../src/data/knots/seed-batch-4";
 
-const ALL_MECHANICS = { ...MECHANICS, ...MECHANICS_EXTRAS, ...MECHANICS_EXTRAS_TERMINAL };
+const ALL_MECHANICS = {
+  ...MECHANICS,
+  ...MECHANICS_EXTRAS,
+  ...MECHANICS_EXTRAS_TERMINAL,
+  ...MECHANICS_EXTRAS_BATCH4,
+};
 
 const contentIds = new Set(
   [
@@ -31,6 +38,7 @@ const contentIds = new Set(
     ...UTILITY_KNOTS,
     ...SEED_BATCH_2,
     ...SEED_BATCH_3_TERMINAL,
+    ...SEED_BATCH_4,
   ].map((k) => k.id),
 );
 
