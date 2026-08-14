@@ -1,6 +1,16 @@
-/** Batch 4 mechanics — line-to-line + loops. Merged via mechanics.ts */
+/**
+ * Batch 4 mechanics — line-to-line + loops (full gold-standard).
+ * connectionFamilies must be valid ConnectionJob values only.
+ */
 import type { MechanicsBundle } from "@/data/mechanics-profiles";
-import type { CompletenessFlags, FieldFitProfile } from "@/domain/types";
+import type {
+  CompletenessFlags,
+  FieldFitProfile,
+  ConnectionJob,
+  LineMaterial,
+  DiameterRelation,
+  DiagramKind,
+} from "@/domain/types";
 
 const FULL: CompletenessFlags = {
   atAGlance: true, mechanics: true, diagram: true, tyingSteps: true,
@@ -41,18 +51,18 @@ function baseJoinObs(p: string) {
 function mk(
   id: string,
   summary: string,
-  families: string[],
-  materials: string[],
-  diagram: string,
+  families: ConnectionJob[],
+  materials: LineMaterial[],
+  diagram: DiagramKind,
   wraps: [number, number],
-  extras: Partial<MechanicsBundle["contract"]> = {},
+  extra?: Partial<MechanicsBundle["contract"]>,
 ): MechanicsBundle {
   return {
     contract: {
-      connectionFamilies: families as MechanicsBundle["contract"]["connectionFamilies"],
-      permittedMaterials: materials as MechanicsBundle["contract"]["permittedMaterials"],
-      mainMaterials: materials as MechanicsBundle["contract"]["mainMaterials"],
-      diameterRelationships: ["similar", "main-thinner", "main-thicker"],
+      connectionFamilies: families,
+      permittedMaterials: materials,
+      mainMaterials: materials,
+      diameterRelationships: ["similar", "main-thinner", "main-thicker"] as DiameterRelation[],
       guidePassage: "good",
       finishedGeometry: "wrap-stack",
       loopBehavior: "none",
@@ -62,10 +72,13 @@ function mk(
       tensionRequirements: "moderate",
       failureSensitiveStages: ["structure", "seat"],
       hardExclusions: [],
-      ...extras,
+      ...extra,
     },
     fieldFit: {
-      ...terminalFit({ connectionJobFit: 86, materialCompatibility: 82, fieldTieability: 68, retieSpeed: 65, loadBehavior: 84 }),
+      ...terminalFit({
+        connectionJobFit: 86, materialCompatibility: 82, fieldTieability: 68,
+        retieSpeed: 65, loadBehavior: 84,
+      }),
       strengths: ["Documented job from Hook the Horizon library"],
       weaknesses: ["Technique-sensitive seating"],
     },
@@ -87,19 +100,97 @@ function mk(
       cosmeticIrregularities: [],
     },
     observations: baseJoinObs(id),
-    diagramKind: diagram as MechanicsBundle["diagramKind"],
+    diagramKind: diagram,
     mechanicsSummary: summary,
     completeness: FULL,
   };
 }
 
 export const MECHANICS_EXTRAS_BATCH4: Record<string, MechanicsBundle> = {
-  "orvis-tippet": mk("orvis-tippet", "Leader-to-tippet Orvis structure; slim similar-diameter join.", ["leader-to-tippet", "line-to-line"], ["mono", "fluoro"], "line-join", [3, 6], { secondaryMaterials: ["mono", "fluoro"] as never }),
-  seaguar: mk("seaguar", "Seaguar paired-loop join for similar-diameter mono/fluoro.", ["leader-to-tippet", "line-to-line"], ["mono", "fluoro"], "line-join", [3, 5], { secondaryMaterials: ["mono", "fluoro"] as never }),
-  "j-knot": mk("j-knot", "J-knot leader-to-tippet join; strong on similar tippet steps.", ["leader-to-tippet", "line-to-line"], ["mono", "fluoro"], "line-join", [3, 6], { secondaryMaterials: ["mono", "fluoro"] as never }),
-  "aussie-quickie": mk("aussie-quickie", "Fast braid-to-leader join with field tempo priority.", ["braid-to-leader", "line-to-line"], ["braid", "mixed"], "line-join", [6, 12], { mainMaterials: ["braid"] as never, secondaryMaterials: ["mono", "fluoro"] as never, diameterRelationships: ["main-thinner", "main-much-thinner", "extreme-mismatch"] as never }),
-  "needle-knot": mk("needle-knot", "Needle-assisted fly-line to leader transition coil.", ["fly-line-to-leader", "line-to-line"], ["fly-line", "mono", "fluoro", "mixed"], "line-join", [5, 8], { mainMaterials: ["fly-line"] as never, secondaryMaterials: ["mono", "fluoro"] as never, guidePassage: "excellent" as never }),
-  "homer-rhode": mk("homer-rhode", "Heavy-leader free-swing loop for lure action.", ["line-to-loop", "line-to-lure"], ["mono", "fluoro"], "loop-nonslip", [3, 6], { loopBehavior: "fixed" as never, loadDirection: "loop-swing" as never, finishedGeometry: "loop" as never }),
-  "king-sling": mk("king-sling", "Fixed end loop with controllable size.", ["line-to-loop"], ["mono", "fluoro"], "loop-fixed", [2, 5], { loopBehavior: "fixed" as never, finishedGeometry: "loop" as never }),
-  "australian-plait": mk("australian-plait", "Plaited double-line for heavy tackle.", ["line-to-loop", "double-line-to-leader"], ["mono", "fluoro", "braid"], "loop-fixed", [8, 20], { requiresDoubleLine: true as never, loopBehavior: "fixed" as never, finishedGeometry: "loop" as never, tensionRequirements: "high" as never }),
+  "orvis-tippet": mk(
+    "orvis-tippet",
+    "Leader-to-tippet Orvis structure; slim similar-diameter join.",
+    ["leader-to-tippet", "leader-to-leader"],
+    ["mono", "fluoro"],
+    "line-join",
+    [3, 6],
+    { secondaryMaterials: ["mono", "fluoro"], diameterRelationships: ["similar"] },
+  ),
+  seaguar: mk(
+    "seaguar",
+    "Seaguar paired-loop join for similar-diameter mono/fluoro.",
+    ["leader-to-tippet", "leader-to-leader"],
+    ["mono", "fluoro"],
+    "line-join",
+    [3, 5],
+    { secondaryMaterials: ["mono", "fluoro"], diameterRelationships: ["similar"] },
+  ),
+  "j-knot": mk(
+    "j-knot",
+    "J-knot leader-to-tippet join; strong on similar tippet steps.",
+    ["leader-to-tippet", "leader-to-leader"],
+    ["mono", "fluoro"],
+    "line-join",
+    [3, 6],
+    { secondaryMaterials: ["mono", "fluoro"], diameterRelationships: ["similar"] },
+  ),
+  "aussie-quickie": mk(
+    "aussie-quickie",
+    "Fast braid-to-leader join with field tempo priority.",
+    ["braid-to-leader"],
+    ["braid", "mixed"],
+    "line-join",
+    [6, 12],
+    {
+      mainMaterials: ["braid"],
+      secondaryMaterials: ["mono", "fluoro"],
+      diameterRelationships: ["main-thinner", "main-much-thinner", "extreme-mismatch"],
+    },
+  ),
+  "needle-knot": mk(
+    "needle-knot",
+    "Needle-assisted fly-line to leader transition coil.",
+    ["fly-line-to-leader"],
+    ["fly-line", "mono", "fluoro", "mixed"],
+    "line-join",
+    [5, 8],
+    {
+      mainMaterials: ["fly-line"],
+      secondaryMaterials: ["mono", "fluoro"],
+      guidePassage: "excellent",
+      diameterRelationships: ["main-thicker", "extreme-mismatch", "main-much-thinner"],
+    },
+  ),
+  "homer-rhode": mk(
+    "homer-rhode",
+    "Heavy-leader free-swing loop for lure action.",
+    ["line-to-loop", "line-to-lure"],
+    ["mono", "fluoro"],
+    "loop-nonslip",
+    [3, 6],
+    { loopBehavior: "non-slip", loadDirection: "loop-swing", finishedGeometry: "loop" },
+  ),
+  "king-sling": mk(
+    "king-sling",
+    "Fixed end loop with controllable size.",
+    ["line-to-loop"],
+    ["mono", "fluoro"],
+    "loop-fixed",
+    [2, 5],
+    { loopBehavior: "fixed", finishedGeometry: "loop" },
+  ),
+  "australian-plait": mk(
+    "australian-plait",
+    "Plaited double-line for heavy tackle.",
+    ["line-to-loop", "double-line-to-leader"],
+    ["mono", "fluoro", "braid"],
+    "loop-fixed",
+    [8, 20],
+    {
+      requiresDoubleLine: true,
+      loopBehavior: "fixed",
+      finishedGeometry: "loop",
+      tensionRequirements: "high",
+    },
+  ),
 };
