@@ -1,6 +1,7 @@
 /**
  * Catalog gold-standard schema check.
- * Every modelled id must have MECHANICS (core|extras), ConnectionModelMeta, KnotContent.
+ * Every modelled id must have MECHANICS, ConnectionModelMeta, KnotContent.
+ * Also validates content required fields and ConnectionJob families.
  * Exit non-zero on any malformed entry — fails the CI build.
  *
  * Run: npx tsx scripts/validate-catalog.ts
@@ -22,6 +23,22 @@ import { UTILITY_KNOTS } from "../src/data/knots/utility";
 import { SEED_BATCH_2 } from "../src/data/knots/seed-batch-2";
 import { SEED_BATCH_3_TERMINAL } from "../src/data/knots/seed-batch-3-terminal";
 import { SEED_BATCH_4 } from "../src/data/knots/seed-batch-4";
+import type { KnotContent } from "../src/domain/types";
+
+const VALID_JOBS = new Set([
+  "line-to-hook",
+  "line-to-lure",
+  "braid-to-leader",
+  "leader-to-leader",
+  "line-to-swivel",
+  "line-to-spool",
+  "fly-line-to-leader",
+  "leader-to-tippet",
+  "double-line-to-leader",
+  "loop-to-loop",
+  "line-to-loop",
+  "hook-snell",
+]);
 
 const ALL_MECHANICS = {
   ...MECHANICS,
@@ -30,21 +47,32 @@ const ALL_MECHANICS = {
   ...MECHANICS_EXTRAS_BATCH4,
 };
 
-const contentIds = new Set(
-  [
-    ...TERMINAL_KNOTS,
-    ...LINE_TO_LINE_KNOTS,
-    ...LOOP_KNOTS,
-    ...UTILITY_KNOTS,
-    ...SEED_BATCH_2,
-    ...SEED_BATCH_3_TERMINAL,
-    ...SEED_BATCH_4,
-  ].map((k) => k.id),
-);
+const ALL_CONTENT: KnotContent[] = [
+  ...TERMINAL_KNOTS,
+  ...LINE_TO_LINE_KNOTS,
+  ...LOOP_KNOTS,
+  ...UTILITY_KNOTS,
+  ...SEED_BATCH_2,
+  ...SEED_BATCH_3_TERMINAL,
+  ...SEED_BATCH_4,
+];
+
+const contentById = new Map(ALL_CONTENT.map((k) => [k.id, k]));
+const contentIds = new Set(ALL_CONTENT.map((k) => k.id));
 
 const RETIE = new Set(["instant", "fast", "moderate", "slow", "dock-only"]);
 const ABILITY = new Set(["excellent", "good", "fair", "poor", "impractical"]);
 const DIAM = new Set(["strict-similar", "moderate", "wide", "extreme-ok", "n/a"]);
+const CATEGORIES = new Set([
+  "terminal",
+  "line-to-line",
+  "loop",
+  "leader-to-tippet",
+  "backing-to-line",
+  "specialty",
+  "utility",
+]);
+const DIFFICULTY = new Set(["beginner", "intermediate", "advanced"]);
 
 let failed = 0;
 const report: string[] = [];
@@ -99,6 +127,42 @@ function checkMeta(id: string, m: ConnectionModelMeta) {
   }
 }
 
+function checkContent(id: string, c: KnotContent) {
+  if (!c.name?.trim()) fail(`${id}: name required`);
+  if (!Array.isArray(c.aliases)) fail(`${id}: aliases must be array`);
+  if (!CATEGORIES.has(c.category)) fail(`${id}: category invalid (${c.category})`);
+  if (!Array.isArray(c.bestFor) || c.bestFor.length < 1) fail(`${id}: bestFor needs ≥1`);
+  if (!c.goodFor || c.goodFor.length < 20) fail(`${id}: goodFor too thin`);
+  if (!Array.isArray(c.notIdealFor) || c.notIdealFor.length < 1) fail(`${id}: notIdealFor needs ≥1`);
+  if (!Array.isArray(c.lineMaterials) || c.lineMaterials.length < 1) fail(`${id}: lineMaterials required`);
+  if (!DIFFICULTY.has(c.difficulty)) fail(`${id}: difficulty invalid`);
+  if (!Array.isArray(c.materialsNeeded) || c.materialsNeeded.length < 1) fail(`${id}: materialsNeeded required`);
+  if (!c.howToSummary || c.howToSummary.length < 20) fail(`${id}: howToSummary too thin`);
+  if (!Array.isArray(c.steps) || c.steps.length < 3) fail(`${id}: steps need ≥3`);
+  if (!Array.isArray(c.commonMistakes) || c.commonMistakes.length < 1) fail(`${id}: commonMistakes required`);
+  if (!Array.isArray(c.diagnostics) || c.diagnostics.length < 1) fail(`${id}: diagnostics required`);
+  if (!Array.isArray(c.resources) || c.resources.length < 1) fail(`${id}: resources required`);
+  if (!Array.isArray(c.relatedKnots)) fail(`${id}: relatedKnots must be array`);
+  if (!Array.isArray(c.tags) || c.tags.length < 1) fail(`${id}: tags required`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(c.reviewedOn)) fail(`${id}: reviewedOn must be YYYY-MM-DD`);
+  if (!Array.isArray(c.sources) || c.sources.length < 1) fail(`${id}: sources required`);
+}
+
+function checkMechanicsContract(id: string) {
+  const m = ALL_MECHANICS[id];
+  if (!m) return;
+  const families = m.contract?.connectionFamilies ?? [];
+  if (!families.length) fail(`${id}: connectionFamilies empty`);
+  for (const f of families) {
+    if (!VALID_JOBS.has(f)) fail(`${id}: invalid ConnectionJob "${f}"`);
+  }
+  if (!m.completeness?.decisionModel) fail(`${id}: completeness.decisionModel must be true`);
+  if (!m.completeness?.mechanicalFingerprint) fail(`${id}: completeness.mechanicalFingerprint must be true`);
+  if (!m.mechanicsSummary || m.mechanicsSummary.length < 12) fail(`${id}: mechanicsSummary too thin`);
+  if (!m.fingerprint?.dangerousDefects?.length) fail(`${id}: fingerprint.dangerousDefects required`);
+  if (!m.observations?.length) fail(`${id}: observations required`);
+}
+
 const mechIds = Object.keys(ALL_MECHANICS);
 const metaIds = Object.keys(CONNECTION_MODEL_META);
 
@@ -106,6 +170,8 @@ for (const id of mechIds) {
   if (!CONNECTION_MODEL_META[id]) fail(`MECHANICS[${id}] missing CONNECTION_MODEL_META`);
   else checkMeta(id, CONNECTION_MODEL_META[id]);
   if (!contentIds.has(id)) fail(`MECHANICS[${id}] missing KnotContent`);
+  else checkContent(id, contentById.get(id)!);
+  checkMechanicsContract(id);
 }
 
 for (const id of metaIds) {
@@ -119,6 +185,7 @@ for (const id of contentIds) {
 
 if (failed === 0) {
   ok(`${mechIds.length} modelled connections fully schema-checked`);
+  ok(`${contentIds.size} content entries fully field-checked`);
   ok(`${Object.keys(MODEL_SOURCES).length} sources registered`);
 }
 
