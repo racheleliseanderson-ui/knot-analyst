@@ -7,6 +7,7 @@
  * author the same shape later.
  */
 import type { KnotContent, KnotStep, SeatingPhase } from "@/domain/types";
+import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "@/data/how-to-extras";
 
 interface StepDepth {
   detail?: string;
@@ -610,8 +611,8 @@ export const MICRO: Record<string, Micro> = {
 };
 
 export function applyHowTo(content: KnotContent): KnotContent {
-  const extra = HOW_TO[content.id];
-  const micro = MICRO[content.id];
+  const extra = HOW_TO[content.id] ?? HOW_TO_EXTRAS[content.id];
+  const micro = { ...(MICRO_EXTRAS[content.id] ?? {}), ...(MICRO[content.id] ?? {}) };
   if (!extra && !micro) return content;
 
   const steps: KnotStep[] = content.steps.map((s) => {

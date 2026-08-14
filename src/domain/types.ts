@@ -9,7 +9,7 @@
 export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
-export const KNOT_CATALOG_VERSION = "2026-08-09.2";
+export const KNOT_CATALOG_VERSION = "2026-08-14.6";
 export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
 export const ENGINE_VERSION = "mech-intel-1.3.0";
 
@@ -26,7 +26,17 @@ export type ConnectionJob =
   | "double-line-to-leader"
   | "loop-to-loop"
   | "line-to-loop"
-  | "hook-snell";
+  | "hook-snell"
+  | "rope-to-cleat"
+  | "rope-to-bollard"
+  | "rope-to-ring"
+  | "fixed-eye"
+  | "loop-over-post"
+  | "rope-to-rope"
+  | "unequal-rope-join"
+  | "load-transfer"
+  | "stopper"
+  | "shorten-line";
 
 export type LineMaterial =
   | "mono"
@@ -35,7 +45,13 @@ export type LineMaterial =
   | "fly-line"
   | "backing"
   | "wire"
-  | "mixed";
+  | "mixed"
+  | "polyester"
+  | "nylon"
+  | "polypropylene"
+  | "dyneema"
+  | "aramid"
+  | "natural";
 
 export type DiameterRelation =
   | "similar"
@@ -53,7 +69,8 @@ export type KnotCategory =
   | "leader-to-tippet"
   | "backing-to-line"
   | "specialty"
-  | "utility";
+  | "utility"
+  | "rope";
 
 export type FindingSeverity = "info" | "watch" | "stop";
 export type FindingConfidence = "low" | "moderate" | "high";
@@ -104,19 +121,13 @@ export interface KnotStep {
   tip?: string;
   commonError?: string;
   failureLinks?: string[];
-  /** Longer "why this matters" paragraph for the how-to player */
   detail?: string;
-  /** Observable check — what the structure should look like before moving on */
   expectedResult?: string;
-  /** Micro how-to — one glance cue for the eye */
   look?: string;
-  /** Micro how-to — the failure this step produces when it goes wrong */
   failureMode?: string;
-  /** Micro how-to — the shortest correction */
   quickFix?: string;
 }
 
-/** One phase of the moisten → load → dress → set → trim finishing sequence */
 export interface SeatingPhase {
   phase: string;
   action: string;
@@ -136,7 +147,6 @@ export interface DiagnosticRule {
   stepLink?: number;
 }
 
-/** Hard constraint contract — Layer 1 */
 export interface MechanicalContract {
   connectionFamilies: ConnectionJob[];
   permittedMaterials: LineMaterial[];
@@ -158,35 +168,14 @@ export interface MechanicalContract {
   hardExclusions?: string[];
 }
 
-/**
- * Machine-checkable geometric invariant for a knot family or specific knot.
- * Evaluated after observation→defect mapping. Fail-closed only (can escalate
- * severity, never relax it). Vision layers emit the same observation keys.
- */
 export interface GeometricRule {
   id: string;
-  /** Human-readable statement of the invariant */
   description: string;
-  /**
-   * Observation keys that, when marked, violate this rule.
-   * Keys must already exist on the knot’s ObservationDef list.
-   */
   violatedBy: string[];
-  /**
-   * Observation keys that, when marked good, support this rule.
-   * Used for confidence language only — not for pass/fail.
-   */
   supportedBy?: string[];
-  /** Minimum decision this violation produces */
   severity: RetieDecision;
-  /** Short mechanical reason shown in findings */
   mechanicsWhy: string;
-  /** Optional step where the geometry is usually introduced */
   stepWhere?: number | null;
-  /**
-   * Optional applicability gate against the knot contract.
-   * When omitted, the rule always applies for knots that declare it.
-   */
   appliesWhen?: {
     requiresDoubledLine?: boolean;
     requiresStandingLoop?: boolean;
@@ -195,7 +184,6 @@ export interface GeometricRule {
   };
 }
 
-/** Finished-knot fingerprint for Layer 3 diagnostics */
 export interface FinishedFingerprint {
   expectedGeometry: string;
   expectedWrapDirection?: string;
@@ -210,17 +198,10 @@ export interface FinishedFingerprint {
   expectedFinishingStructure: string;
   dangerousDefects: DefectDef[];
   cosmeticIrregularities: string[];
-  /** Formal geometric rules (evaluated after observation mapping; fail-closed only) */
   geometricRules?: GeometricRule[];
 }
 
-/**
- * Future vision / observation-extraction layer contract.
- * Vision only extracts structured observations + quality gates.
- * It never decides retie — Layer 3 (rules + fingerprint) owns the conclusion.
- */
 export interface VisionObservation {
-  /** Must match an existing ObservationDef.key on the target knot */
   key: string;
   confidence: number;
   evidence?: {
@@ -231,7 +212,6 @@ export interface VisionObservation {
 }
 
 export interface VisionResult {
-  /** Optional hint only — never authoritative for identity or retie */
   knotIdHint?: string;
   observations: VisionObservation[];
   quality: {
@@ -242,7 +222,6 @@ export interface VisionResult {
   };
   unableToVerify: string[];
 }
-
 
 export interface DefectDef {
   id: string;
@@ -268,7 +247,6 @@ export interface FieldFitProfile {
   weaknesses: string[];
 }
 
-/** Prose + steps catalog entry (hydrated with mechanics at load) */
 export interface KnotContent {
   id: string;
   name: string;
@@ -291,28 +269,22 @@ export interface KnotContent {
   tags: string[];
   reviewedOn: string;
   sources: { title: string; url?: string; note?: string }[];
-  /** Preparation before step one */
   beforeYouStart?: string[];
-  /** Explicit finishing procedure — where most failures are born */
   seatingSequence?: SeatingPhase[];
-  /** Cold hands, dark, gloves, second-attempt guidance */
   fieldNotes?: string[];
-  /** Selected tying video, click-to-load */
   video?: KnotVideo;
 }
 
-/** Optional tying video, loaded only when the reader asks for it. */
 export interface KnotVideo {
   provider: "youtube";
   id: string;
   title: string;
   channel: string;
-  /** Seconds into the clip where the tie actually starts */
   startsAt?: number;
 }
 
 export interface CompletenessFlags {
-  atAGlance: boolean;
+  atAGlance: true | boolean;
   mechanics: boolean;
   diagram: boolean;
   tyingSteps: boolean;
@@ -338,7 +310,38 @@ export type DiagramKind =
   | "braid-leader-alberto"
   | "loop-fixed"
   | "loop-nonslip"
+  | "loop-dropper"
+  | "double-line"
+  | "fly-line-coil"
+  | "arbor-spool"
+  | "rope-cleat"
+  | "rope-hitch"
+  | "rope-bend"
+  | "rope-loop"
+  | "rope-stopper"
   | "generic";
+
+/** Schematics the renderer draws as first-class families. `generic` is fallback only. */
+export const MODELLED_DIAGRAM_KINDS = [
+  "terminal-eye",
+  "terminal-palomar",
+  "terminal-uni",
+  "terminal-snell",
+  "line-join",
+  "braid-leader-fg",
+  "braid-leader-alberto",
+  "loop-fixed",
+  "loop-nonslip",
+  "loop-dropper",
+  "double-line",
+  "fly-line-coil",
+  "arbor-spool",
+  "rope-cleat",
+  "rope-hitch",
+  "rope-bend",
+  "rope-loop",
+  "rope-stopper",
+] as const satisfies readonly DiagramKind[];
 
 export interface Knot extends KnotContent {
   contract: MechanicalContract;
@@ -350,26 +353,16 @@ export interface Knot extends KnotContent {
   completeness: CompletenessFlags;
 }
 
-/** Progressive chooser input — connection first */
 export interface ChooseInput {
   connection: ConnectionJob;
   mainMaterial?: LineMaterial;
   secondaryMaterial?: LineMaterial;
-  /**
-   * Optional four-axis material detail. Absent = behave exactly as the flat
-   * material enum always did.
-   */
   mainSpec?: import("@/domain/material").MaterialSpec;
   secondarySpec?: import("@/domain/material").MaterialSpec;
-  /**
-   * Dual-write from connection preset. Structural job is independent of the
-   * convenience material baked into some ConnectionJob labels.
-   */
   structuralJob?: import("@/domain/connection-preset").StructuralJob;
   mainRole?: import("@/domain/material").MaterialRole;
   secondaryRole?: import("@/domain/material").MaterialRole;
   diameterRelation?: DiameterRelation;
-  /** Optional measured diameters (mm). When both set, map into diameterRelation. */
   mainDiameterMm?: number;
   secondaryDiameterMm?: number;
   mustPassGuides?: boolean;
@@ -402,9 +395,7 @@ export interface RankedOption {
   dimensionScores: DimensionScore[];
   whyBest: string[];
   butNotes: string[];
-  /** Why this beat / lost to competitors (explainability layer) */
   whyNotOthers?: string[];
-  /** One-line tradeoff vs next-best (or vs winner for non-#1) */
   vsNext?: string;
   eliminatedCompetitors?: string[];
 }
@@ -420,14 +411,8 @@ export interface ChooseResult {
   plainSummary: string;
   confidence: FindingConfidence;
   counterfactualHints: string[];
-  /** Headline tradeoff for marketing / share */
   tradeoffSummary?: string;
-  /** Non-knot termination surfaced by construction axes (splice / crimp) */
   termination?: import("@/domain/material").TerminationAdvice;
-  /**
-   * Parallel Candidate Termination track — may include splice, crimp, twist,
-   * mechanical options. Knot ranking remains the primary list.
-   */
   terminationCandidates?: import("@/domain/termination").TerminationCandidate[];
 }
 
@@ -496,6 +481,16 @@ export const CONNECTION_LABELS: Record<ConnectionJob, string> = {
   "loop-to-loop": "Loop → loop",
   "line-to-loop": "Line → loop (fixed end loop)",
   "hook-snell": "Snell → hook shank",
+  "rope-to-cleat": "Rope → cleat",
+  "rope-to-bollard": "Rope → bollard / piling",
+  "rope-to-ring": "Rope → ring or shackle",
+  "fixed-eye": "Fixed eye in the end",
+  "loop-over-post": "Loop dropped over a post",
+  "rope-to-rope": "Rope → rope join",
+  "unequal-rope-join": "Unequal diameter join",
+  "load-transfer": "Load transfer / snubber",
+  stopper: "Stopper in the end",
+  "shorten-line": "Shorten under load",
 };
 
 export const CONNECTION_GROUPS: { title: string; jobs: ConnectionJob[] }[] = [
@@ -527,6 +522,7 @@ export const CATEGORY_LABELS: Record<KnotCategory, string> = {
   "backing-to-line": "Backing to line",
   specialty: "Specialty",
   utility: "Utility",
+  rope: "Rope work",
 };
 
 export const MATERIAL_LABELS: Record<LineMaterial, string> = {
@@ -537,6 +533,12 @@ export const MATERIAL_LABELS: Record<LineMaterial, string> = {
   backing: "Backing",
   wire: "Wire",
   mixed: "Mixed",
+  polyester: "Polyester",
+  nylon: "Nylon rope",
+  polypropylene: "Polypropylene",
+  dyneema: "Dyneema / HMPE",
+  aramid: "Aramid core",
+  natural: "Natural fibre",
 };
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
@@ -580,7 +582,6 @@ export const RETIE_LABELS: Record<RetieDecision, string> = {
   "cannot-verify": "Cannot verify — insufficient evidence; do not trust this inspection",
 };
 
-/** Legacy selector input — bridged for API compatibility */
 export interface KnotSelectorInput {
   purpose: string;
   category?: KnotCategory | "any";

@@ -10,16 +10,16 @@ import {
 } from "@/domain/types";
 import type { DomainOption } from "@/domain/domain";
 
-const GROUP_OF = new Map<string, string>();
-for (const g of CONNECTION_GROUPS) for (const j of g.jobs) GROUP_OF.set(j, g.title);
-
-export const FISHING_CONNECTIONS: DomainOption[] = Object.entries(CONNECTION_LABELS).map(
-  ([id, label]) => ({ id, label, group: GROUP_OF.get(id) ?? "Other" }),
+export const FISHING_CONNECTIONS: DomainOption[] = CONNECTION_GROUPS.flatMap((g) =>
+  g.jobs.map((id) => ({ id, label: CONNECTION_LABELS[id], group: g.title })),
 );
 
-export const FISHING_MATERIALS: DomainOption[] = Object.entries(MATERIAL_LABELS)
-  .filter(([id]) => id !== "mixed")
-  .map(([id, label]) => ({ id, label }));
+const FISHING_MATERIAL_IDS = ["mono", "fluoro", "braid", "fly-line", "backing", "wire"] as const;
+
+export const FISHING_MATERIALS: DomainOption[] = FISHING_MATERIAL_IDS.map((id) => ({
+  id,
+  label: MATERIAL_LABELS[id],
+}));
 
 export const FISHING_DIAMETERS: DomainOption[] = Object.entries(DIAMETER_LABELS).map(
   ([id, label]) => ({ id, label }),

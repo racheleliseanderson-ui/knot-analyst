@@ -17,7 +17,13 @@ export type StructuralJob =
   | "loop-to-loop"
   | "line-to-loop"
   | "line-to-spool"
-  | "snell";
+  | "snell"
+  | "make-fast"
+  | "rope-join"
+  | "rope-loop"
+  | "stopper"
+  | "load-transfer"
+  | "shorten-line";
 
 export interface ConnectionSides {
   structuralJob: StructuralJob;
@@ -101,15 +107,71 @@ const PRESETS: Record<ConnectionJob, ConnectionSides> = {
     mainRole: "main-line",
     isJoin: false,
   },
+  "rope-to-cleat": {
+    structuralJob: "make-fast",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "rope-to-bollard": {
+    structuralJob: "make-fast",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "rope-to-ring": {
+    structuralJob: "make-fast",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "fixed-eye": {
+    structuralJob: "rope-loop",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "loop-over-post": {
+    structuralJob: "rope-loop",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "rope-to-rope": {
+    structuralJob: "rope-join",
+    mainRole: "main-line",
+    secondaryRole: "leader",
+    isJoin: true,
+  },
+  "unequal-rope-join": {
+    structuralJob: "rope-join",
+    mainRole: "main-line",
+    secondaryRole: "leader",
+    isJoin: true,
+  },
+  "load-transfer": {
+    structuralJob: "load-transfer",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  stopper: {
+    structuralJob: "stopper",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "shorten-line": {
+    structuralJob: "shorten-line",
+    mainRole: "main-line",
+    isJoin: false,
+  },
 };
 
 export function connectionSides(job: ConnectionJob): ConnectionSides {
-  return PRESETS[job];
+  const p = PRESETS[job];
+  if (!p) {
+    return { structuralJob: "terminal-to-hardware", mainRole: "main-line", isJoin: false };
+  }
+  return p;
 }
 
 export function isJoinJob(job: ConnectionJob | undefined): boolean {
   if (!job) return false;
-  return PRESETS[job].isJoin;
+  return connectionSides(job).isJoin;
 }
 
 /** Dual-write fields derived from a convenience connection preset. */
@@ -121,7 +183,7 @@ export function dualWriteFromConnection(job: ConnectionJob): {
   secondaryMaterialHint?: LineMaterial;
   isJoin: boolean;
 } {
-  const p = PRESETS[job];
+  const p = connectionSides(job);
   return {
     structuralJob: p.structuralJob,
     mainRole: p.mainRole,

@@ -3,8 +3,8 @@
  * Schema 2.0: normalizes dual-write connection metadata and mm→diameter bands
  * before elimination; attaches parallel Candidate Termination list.
  */
-import { KNOTS } from "@/data/catalog";
-import type { ChooseInput, ChooseResult, FindingConfidence } from "@/domain/types";
+import { catalogPoolFor } from "@/data/catalog";
+import type { ChooseInput, ChooseResult, FindingConfidence, Knot } from "@/domain/types";
 import {
   APPLICATION_ID,
   CONNECTION_LABELS,
@@ -52,9 +52,10 @@ export function normalizeChooseInput(input: ChooseInput): ChooseInput {
   return next;
 }
 
-export function runChooser(input: ChooseInput): ChooseResult {
+export function runChooser(input: ChooseInput, pool?: Knot[]): ChooseResult {
   const normalized = normalizeChooseInput(input);
-  const { survivors, eliminated } = eliminateKnots(KNOTS, normalized);
+  const knots = pool ?? catalogPoolFor(normalized.connection);
+  const { survivors, eliminated } = eliminateKnots(knots, normalized);
   let ranked = rankSurvivors(survivors, normalized);
   ranked = annotateExplainability(ranked, eliminated);
 

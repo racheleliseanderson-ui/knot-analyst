@@ -1,172 +1,323 @@
 {
-  "engineBaseline": "mech-intel-1.2.2",
-  "note": "Flat-input fingerprints captured before Schema 2.0. Deeper MaterialSpec axes must not change these when unspecified.",
+  "engineBaseline": "mech-intel-1.3.0",
+  "note": "Fishing-only pool fingerprints after batch 6 (Bristol, Double-Double Uni, loop-to-loop, Willis, Kryston). Boating catalog is isolated and must not appear here.",
   "cases": {
     "braid-fluoro-ideal": {
-      "top": ["fg:85", "alberto:81", "albright:71", "double-uni:69"],
-      "elim": 15,
+      "top": [
+        "fg:85",
+        "slim-beauty:82",
+        "alberto:81",
+        "aussie-quickie:78",
+        "bristol:77"
+      ],
+      "elim": 48,
       "conf": "high",
       "term": null
     },
     "braid-cold-wind": {
-      "top": ["double-uni:76", "alberto:74", "albright:70", "fg:57"],
-      "elim": 15,
+      "top": [
+        "double-uni:76",
+        "alberto:74",
+        "slim-beauty:74",
+        "aussie-quickie:74",
+        "bristol:73"
+      ],
+      "elim": 48,
       "conf": "moderate",
       "term": null
     },
     "jig-palomar": {
-      "top": ["palomar:83", "uni-knot:82", "san-diego-jam:75"],
-      "elim": 16,
+      "top": [
+        "palomar:83",
+        "uni-knot:82",
+        "berkley-braid:77",
+        "eye-crosser:76",
+        "fish-n-fool:76"
+      ],
+      "elim": 49,
       "conf": "high",
       "term": null
     },
     "loop-swing": {
-      "top": ["palomar:78", "uni-knot:77", "non-slip-mono-loop:77", "trilene:74", "rapala:74"],
-      "elim": 12,
+      "top": [
+        "homer-rhode:79",
+        "palomar:78",
+        "kryston-loop:78",
+        "uni-knot:77",
+        "non-slip-mono-loop:77"
+      ],
+      "elim": 41,
       "conf": "moderate",
       "term": null
     },
     "leader-tippet": {
-      "top": ["double-uni:80", "surgeons:80", "blood:73"],
-      "elim": 16,
+      "top": [
+        "double-uni:80",
+        "surgeons:80",
+        "orvis-tippet:78",
+        "seaguar:78",
+        "j-knot:78"
+      ],
+      "elim": 50,
       "conf": "high",
       "term": null
     },
     "beginner-hook": {
-      "top": ["palomar:85", "uni-knot:83", "improved-clinch:80", "trilene:76", "san-diego-jam:74"],
-      "elim": 12,
+      "top": [
+        "palomar:85",
+        "uni-knot:83",
+        "improved-clinch:80",
+        "davy:80",
+        "double-davy:80"
+      ],
+      "elim": 33,
       "conf": "high",
       "term": null
     },
     "night-dock-light": {
-      "top": ["palomar:83", "uni-knot:80", "san-diego-jam:72"],
-      "elim": 16,
+      "top": [
+        "palomar:83",
+        "uni-knot:80",
+        "berkley-braid:75",
+        "eye-crosser:75",
+        "fish-n-fool:75"
+      ],
+      "elim": 49,
       "conf": "high",
       "term": null
     },
     "small-eye-fluoro": {
-      "top": ["uni-knot:80", "trilene:78", "san-diego-jam:77", "improved-clinch:76", "non-slip-mono-loop:76"],
-      "elim": 13,
+      "top": [
+        "uni-knot:80",
+        "trilene:78",
+        "davy:78",
+        "double-davy:78",
+        "egg-loop:78"
+      ],
+      "elim": 35,
       "conf": "high",
       "term": null
     },
     "surf-heavy-leader": {
-      "top": ["alberto:79", "fg:78", "albright:71"],
-      "elim": 16,
-      "conf": "moderate",
+      "top": [
+        "slim-beauty:80",
+        "alberto:79",
+        "fg:78",
+        "aussie-quickie:77",
+        "bristol:76"
+      ],
+      "elim": 50,
+      "conf": "high",
       "term": null
     },
     "fly-line-leader": {
-      "top": [],
-      "elim": 19,
+      "top": [
+        "nail-knot:83",
+        "needle-knot:80",
+        "loop-to-loop:76"
+      ],
+      "elim": 53,
       "conf": "high",
       "term": null
     },
     "snell-bait": {
-      "top": ["snell:77"],
-      "elim": 18,
+      "top": [
+        "egg-loop:78",
+        "uni-snell:78",
+        "easy-snell:78",
+        "knotless:78",
+        "snell:77"
+      ],
+      "elim": 51,
       "conf": "moderate",
       "term": null
     },
     "spool-arbor": {
-      "top": ["uni-knot:80", "arbor-knot:79"],
-      "elim": 17,
+      "top": [
+        "uni-knot:80",
+        "arbor-knot:79"
+      ],
+      "elim": 54,
       "conf": "high",
       "term": null
     },
     "ice-jig-micro": {
-      "top": ["uni-knot:81", "improved-clinch:78", "trilene:74", "non-slip-mono-loop:73", "san-diego-jam:71"],
-      "elim": 13,
+      "top": [
+        "uni-knot:81",
+        "improved-clinch:78",
+        "centauri:78",
+        "world-fair:78",
+        "baja:75"
+      ],
+      "elim": 42,
       "conf": "high",
       "term": null
     },
     "kayak-drift-retie": {
-      "top": ["double-uni:78", "alberto:76", "albright:71", "fg:64"],
-      "elim": 15,
+      "top": [
+        "double-uni:78",
+        "slim-beauty:78",
+        "alberto:76",
+        "aussie-quickie:76",
+        "bristol:75"
+      ],
+      "elim": 47,
       "conf": "moderate",
       "term": null
     },
     "offshore-heavy-mono": {
-      "top": ["double-uni:78", "surgeons:78", "blood:77", "albright:75"],
-      "elim": 15,
+      "top": [
+        "double-uni:78",
+        "surgeons:78",
+        "blood:77",
+        "orvis-tippet:77",
+        "seaguar:77"
+      ],
+      "elim": 49,
       "conf": "moderate",
       "term": null
     },
     "topwater-loop": {
-      "top": ["palomar:78", "uni-knot:77", "non-slip-mono-loop:77", "trilene:74", "rapala:74"],
-      "elim": 12,
+      "top": [
+        "homer-rhode:79",
+        "palomar:78",
+        "kryston-loop:78",
+        "uni-knot:77",
+        "non-slip-mono-loop:77"
+      ],
+      "elim": 41,
       "conf": "moderate",
       "term": null
     },
     "toothy-wire-trace": {
       "top": [],
-      "elim": 19,
+      "elim": 56,
       "conf": "high",
       "term": null
     },
     "dropshot-tag": {
-      "top": ["uni-knot:80", "trilene:78", "san-diego-jam:77", "improved-clinch:76", "non-slip-mono-loop:76"],
-      "elim": 13,
+      "top": [
+        "uni-knot:80",
+        "trilene:78",
+        "davy:78",
+        "double-davy:78",
+        "egg-loop:78"
+      ],
+      "elim": 35,
       "conf": "high",
       "term": null
     },
     "tippet-ring-swap": {
-      "top": ["uni-knot:81", "improved-clinch:78", "trilene:75", "san-diego-jam:72"],
-      "elim": 15,
+      "top": [
+        "uni-knot:81",
+        "clinch:79",
+        "world-fair:79",
+        "improved-clinch:78",
+        "trilene:75"
+      ],
+      "elim": 48,
       "conf": "high",
       "term": null
     },
     "shock-tippet-join": {
-      "top": ["double-uni:68"],
-      "elim": 18,
+      "top": [
+        "double-uni:68"
+      ],
+      "elim": 55,
       "conf": "moderate",
       "term": null
     },
     "double-line-topshot": {
-      "top": ["bimini-twist:71"],
-      "elim": 18,
-      "conf": "moderate",
+      "top": [
+        "slim-beauty:81",
+        "australian-plait:80",
+        "spider-hitch:77",
+        "bristol:77",
+        "double-double-uni:77"
+      ],
+      "elim": 50,
+      "conf": "high",
       "term": null
     },
     "loop-to-loop-swap": {
-      "top": ["surgeons-loop:82", "perfection-loop:81"],
-      "elim": 17,
+      "top": [
+        "surgeons-loop:82",
+        "perfection-loop:81",
+        "loop-to-loop:78"
+      ],
+      "elim": 53,
       "conf": "high",
       "term": null
     },
     "night-snell-circle": {
-      "top": ["snell:76"],
-      "elim": 18,
+      "top": [
+        "easy-snell:77",
+        "snell:76",
+        "egg-loop:76",
+        "uni-snell:76",
+        "knotless:76"
+      ],
+      "elim": 51,
       "conf": "moderate",
       "term": null
     },
     "hollow-core-topshot": {
-      "top": ["fg:78", "alberto:75", "double-uni:70", "albright:67"],
-      "elim": 15,
+      "top": [
+        "fg:78",
+        "slim-beauty:76",
+        "alberto:75",
+        "aussie-quickie:73",
+        "willis:73"
+      ],
+      "elim": 47,
       "conf": "moderate",
       "term": "splice"
     },
     "flat-braid-leader": {
-      "top": ["fg:85", "alberto:81", "albright:71", "double-uni:69"],
-      "elim": 15,
+      "top": [
+        "fg:85",
+        "slim-beauty:82",
+        "alberto:81",
+        "aussie-quickie:78",
+        "bristol:77"
+      ],
+      "elim": 48,
       "conf": "high",
       "term": null
     },
     "flat-terminal-mono": {
-      "top": ["palomar:82", "uni-knot:81", "improved-clinch:77", "trilene:76", "non-slip-mono-loop:74"],
-      "elim": 12,
+      "top": [
+        "palomar:82",
+        "uni-knot:81",
+        "davy:79",
+        "double-davy:79",
+        "orvis:79"
+      ],
+      "elim": 33,
       "conf": "high",
       "term": null
     },
     "blood-similar": {
-      "top": ["double-uni:79", "surgeons:78", "albright:75", "blood:73"],
-      "elim": 15,
+      "top": [
+        "double-uni:79",
+        "surgeons:78",
+        "orvis-tippet:76",
+        "seaguar:76",
+        "j-knot:76"
+      ],
+      "elim": 49,
       "conf": "moderate",
       "term": null
     },
     "extreme-mismatch-guides": {
-      "top": ["fg:85", "alberto:81", "albright:71"],
-      "elim": 16,
+      "top": [
+        "fg:85",
+        "slim-beauty:82",
+        "alberto:81",
+        "aussie-quickie:78",
+        "bristol:77"
+      ],
+      "elim": 50,
       "conf": "high",
       "term": null
     }
