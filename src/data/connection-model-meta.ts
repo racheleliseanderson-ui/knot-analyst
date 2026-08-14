@@ -5,6 +5,7 @@
  */
 import type { LineMaterial } from "@/domain/types";
 import { CONNECTION_MODEL_META_TERMINAL } from "@/data/connection-model-meta-terminal";
+import { CONNECTION_MODEL_META_BATCH4 } from "@/data/connection-model-meta-batch4";
 
 export type ConditionAbility = "excellent" | "good" | "fair" | "poor" | "impractical";
 export type RetieTempo = "instant" | "fast" | "moderate" | "slow" | "dock-only";
@@ -365,6 +366,7 @@ const CONNECTION_MODEL_META_CORE: Record<string, ConnectionModelMeta> = {
 export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
   ...CONNECTION_MODEL_META_CORE,
   ...CONNECTION_MODEL_META_TERMINAL,
+  ...CONNECTION_MODEL_META_BATCH4,
 };
 
 export function getConnectionModelMeta(id: string): ConnectionModelMeta | undefined {
