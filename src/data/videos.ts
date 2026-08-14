@@ -1,6 +1,7 @@
 /**
  * Selected tying videos — one per knot, merged into the catalog at load.
  * Nothing here loads until the reader presses play (see VideoEmbed).
+ * Only real, cited YouTube ids. Missing ids stay absent rather than invented.
  */
 import type { KnotContent, KnotVideo } from "@/domain/types";
 
@@ -88,6 +89,78 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
     id: "y1d0LikjiC4",
     title: "How to tie the Arbor Knot — line to spool",
     channel: "Fishing Tutorials",
+  },
+  yucatan: {
+    provider: "youtube",
+    id: "2tRMHCGU3BQ",
+    title: "Yucatan knot — braid to fluorocarbon leader",
+    channel: "Fishing knots Channel",
+  },
+  "slim-beauty": {
+    provider: "youtube",
+    id: "DHsvtarwZ_8",
+    title: "Slim Beauty Knot | How To",
+    channel: "Orvis Guide to Fly Fishing",
+  },
+  davy: {
+    provider: "youtube",
+    id: "-NTVZAZ0xQA",
+    title: "The Davy Knot (and Double Davy)",
+    channel: "tightlinevideo",
+  },
+  "double-davy": {
+    provider: "youtube",
+    id: "-NTVZAZ0xQA",
+    title: "The Davy Knot (and Double Davy)",
+    channel: "tightlinevideo",
+  },
+  orvis: {
+    provider: "youtube",
+    id: "IWtZLnvRUQY",
+    title: "The ORVIS Knot",
+    channel: "The Orvis Company",
+  },
+  "orvis-tippet": {
+    provider: "youtube",
+    id: "GytDgOTfIWY",
+    title: "Orvis Tippet Knot | How To",
+    channel: "Orvis Guide to Fly Fishing",
+  },
+  "berkley-braid": {
+    provider: "youtube",
+    id: "Gbbiz0Nk9lI",
+    title: "How to Tie a Berkley Braid Knot",
+    channel: "Next Level Angling",
+  },
+  rapala: {
+    provider: "youtube",
+    id: "m_jrLaWEi5c",
+    title: "How to tie a Rapala Fishing Knot",
+    channel: "Take Me Fishing",
+  },
+  albright: {
+    provider: "youtube",
+    id: "py0Pg-Chq9U",
+    title: "How to tie an Albright knot",
+    channel: "Take Me Fishing",
+  },
+  "surgeons-loop": {
+    provider: "youtube",
+    id: "RKmkdLA70AE",
+    title: "How to tie a Surgeon's Loop Knot",
+    channel: "Take Me Fishing",
+  },
+  "easy-snell": {
+    provider: "youtube",
+    id: "nxn8iWQ6QH0",
+    title: "How to tie an Easy Snell Knot",
+    channel: "Take Me Fishing",
+  },
+  trilene: {
+    provider: "youtube",
+    id: "t1PTCknd-nk",
+    title: "How To Tie The Trilene Knot",
+    channel: "WhyKnot",
   },
 };
 

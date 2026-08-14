@@ -23,6 +23,9 @@ import { UTILITY_KNOTS } from "../src/data/knots/utility";
 import { SEED_BATCH_2 } from "../src/data/knots/seed-batch-2";
 import { SEED_BATCH_3_TERMINAL } from "../src/data/knots/seed-batch-3-terminal";
 import { SEED_BATCH_4 } from "../src/data/knots/seed-batch-4";
+import { HOW_TO, MICRO } from "../src/data/how-to";
+import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "../src/data/how-to-extras";
+import { KNOT_VIDEOS } from "../src/data/videos";
 import type { KnotContent } from "../src/domain/types";
 
 const VALID_JOBS = new Set([
@@ -163,6 +166,31 @@ function checkMechanicsContract(id: string) {
   if (!m.observations?.length) fail(`${id}: observations required`);
 }
 
+function checkTieBuild(id: string, c: KnotContent) {
+  const how = HOW_TO[id] ?? HOW_TO_EXTRAS[id];
+  if (!how) {
+    fail(`${id}: missing HOW_TO / HOW_TO_EXTRAS (Tie mode before/seat/notes)`);
+    return;
+  }
+  if (!how.beforeYouStart?.length) fail(`${id}: how-to beforeYouStart required`);
+  if (!how.seatingSequence || how.seatingSequence.length < 3) fail(`${id}: how-to seatingSequence needs ≥3 phases`);
+  if (!how.fieldNotes?.length) fail(`${id}: how-to fieldNotes required`);
+
+  const micro = { ...(MICRO_EXTRAS[id] ?? {}), ...(MICRO[id] ?? {}) };
+  if (!Object.keys(micro).length) {
+    fail(`${id}: missing MICRO / MICRO_EXTRAS (step look / failure / fix)`);
+    return;
+  }
+  const extraCount = how.extraSteps?.length ?? 0;
+  const maxOrder = Math.max(...c.steps.map((s) => s.order), 0) + extraCount;
+  for (let n = 1; n <= maxOrder; n++) {
+    const m = micro[n];
+    if (!m?.look || !m.failureMode || !m.quickFix) {
+      fail(`${id}: micro step ${n} needs look + failureMode + quickFix`);
+    }
+  }
+}
+
 const mechIds = Object.keys(ALL_MECHANICS);
 const metaIds = Object.keys(CONNECTION_MODEL_META);
 
@@ -171,6 +199,7 @@ for (const id of mechIds) {
   else checkMeta(id, CONNECTION_MODEL_META[id]);
   if (!contentIds.has(id)) fail(`MECHANICS[${id}] missing KnotContent`);
   else checkContent(id, contentById.get(id)!);
+  if (contentById.has(id)) checkTieBuild(id, contentById.get(id)!);
   checkMechanicsContract(id);
 }
 
@@ -186,6 +215,8 @@ for (const id of contentIds) {
 if (failed === 0) {
   ok(`${mechIds.length} modelled connections fully schema-checked`);
   ok(`${contentIds.size} content entries fully field-checked`);
+  ok(`${contentIds.size} Tie-mode how-to + micro builds checked`);
+  ok(`${Object.keys(KNOT_VIDEOS).length} cited videos attached (optional — never invented)`);
   ok(`${Object.keys(MODEL_SOURCES).length} sources registered`);
 }
 
