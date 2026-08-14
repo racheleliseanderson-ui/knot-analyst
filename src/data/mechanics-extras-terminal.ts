@@ -1,9 +1,9 @@
 /**
- * Terminal seed batch 3 — mechanical profiles.
- * Merged via mechanics.ts
+ * Terminal seed batch 3 — mechanical profiles (full gold-standard).
+ * connectionFamilies must be valid ConnectionJob values only.
  */
 import type { MechanicsBundle } from "@/data/mechanics-profiles";
-import type { CompletenessFlags, FieldFitProfile } from "@/domain/types";
+import type { CompletenessFlags, FieldFitProfile, ConnectionJob, LineMaterial, DiameterRelation, DiagramKind } from "@/domain/types";
 
 const FULL: CompletenessFlags = {
   atAGlance: true, mechanics: true, diagram: true, tyingSteps: true,
@@ -41,13 +41,21 @@ function baseJoinObs(p: string) {
   ];
 }
 
-function term(id: string, summary: string, families: string[], materials: string[], wraps: [number, number], diagram: string = "terminal-eye"): MechanicsBundle {
+function term(
+  id: string,
+  summary: string,
+  families: ConnectionJob[],
+  materials: LineMaterial[],
+  wraps: [number, number],
+  diagram: DiagramKind = "terminal-eye",
+  extra?: Partial<MechanicsBundle["contract"]>,
+): MechanicsBundle {
   return {
     contract: {
-      connectionFamilies: families as MechanicsBundle["contract"]["connectionFamilies"],
-      permittedMaterials: materials as MechanicsBundle["contract"]["permittedMaterials"],
-      mainMaterials: materials as MechanicsBundle["contract"]["mainMaterials"],
-      diameterRelationships: ["similar", "main-thinner", "main-thicker"],
+      connectionFamilies: families,
+      permittedMaterials: materials,
+      mainMaterials: materials,
+      diameterRelationships: ["similar", "main-thinner", "main-thicker"] as DiameterRelation[],
       guidePassage: "good",
       finishedGeometry: "wrap-stack",
       loopBehavior: "none",
@@ -57,9 +65,13 @@ function term(id: string, summary: string, families: string[], materials: string
       tensionRequirements: "moderate",
       failureSensitiveStages: ["wrap count", "tag path", "seat"],
       hardExclusions: [],
+      ...extra,
     },
     fieldFit: {
-      ...terminalFit({ connectionJobFit: 85, materialCompatibility: 80, fieldTieability: 72, retieSpeed: 75, loadBehavior: 82, guidePassage: 80 }),
+      ...terminalFit({
+        connectionJobFit: 85, materialCompatibility: 80, fieldTieability: 72,
+        retieSpeed: 75, loadBehavior: 82, guidePassage: 80,
+      }),
       strengths: ["Documented terminal job from Hook the Horizon library"],
       weaknesses: ["Technique-sensitive seating"],
     },
@@ -81,22 +93,96 @@ function term(id: string, summary: string, families: string[], materials: string
       cosmeticIrregularities: [],
     },
     observations: baseJoinObs(id),
-    diagramKind: diagram as MechanicsBundle["diagramKind"],
+    diagramKind: diagram,
     mechanicsSummary: summary,
     completeness: FULL,
   };
 }
 
 export const MECHANICS_EXTRAS_TERMINAL: Record<string, MechanicsBundle> = {
-  "berkley-braid": term("berkley-braid", "Doubled-braid Uni-style barrel locked at the eye. Braid-primary terminal.", ["line-to-hook", "line-to-lure"], ["braid"], [5, 8], "terminal-uni"),
-  davy: term("davy", "Fast compact tippet hitch for small flies.", ["line-to-hook", "fly-hook"], ["mono", "fluoro"], [1, 3]),
-  "double-davy": term("double-davy", "Davy with extra security pass for larger flies.", ["line-to-hook", "fly-hook"], ["mono", "fluoro"], [2, 4]),
-  "egg-loop": term("egg-loop", "Shank-wrap bait loop for egg and bait presentations.", ["snell-hook", "line-to-hook"], ["mono", "fluoro"], [5, 12], "terminal-snell"),
-  orvis: term("orvis", "Compact Orvis terminal for tippet and light flies.", ["line-to-hook", "fly-hook"], ["mono", "fluoro"], [3, 6]),
-  pitzen: term("pitzen", "Compact high-retention tippet terminal with precise tag path.", ["line-to-hook", "fly-hook"], ["mono", "fluoro"], [4, 7]),
-  turle: term("turle", "Traditional fly terminal seating around the eye for alignment.", ["line-to-hook", "fly-hook"], ["mono", "fluoro"], [2, 5]),
-  baja: term("baja", "Heavy mono/fluoro terminal for stout leaders.", ["line-to-hook", "line-to-lure"], ["mono", "fluoro"], [5, 8]),
-  clinch: term("clinch", "Basic clinch without the improved pass — speed over security.", ["line-to-hook", "line-to-swivel"], ["mono", "fluoro"], [5, 7]),
-  "uni-snell": term("uni-snell", "Uni-barrel compressed along the hook shank for on-axis pull.", ["snell-hook"], ["mono", "fluoro"], [5, 10], "terminal-snell"),
-  "easy-snell": term("easy-snell", "Simplified parallel shank wraps for consistent snell geometry.", ["snell-hook"], ["mono", "fluoro"], [5, 10], "terminal-snell"),
+  "berkley-braid": term(
+    "berkley-braid",
+    "Doubled-braid Uni-style barrel locked at the eye. Braid-primary terminal.",
+    ["line-to-hook", "line-to-lure"],
+    ["braid"],
+    [5, 8],
+    "terminal-uni",
+    { eyeMustPassDoubledLine: true },
+  ),
+  davy: term(
+    "davy",
+    "Fast compact tippet hitch for small flies.",
+    ["line-to-hook"],
+    ["mono", "fluoro"],
+    [1, 3],
+  ),
+  "double-davy": term(
+    "double-davy",
+    "Davy with extra security pass for larger flies.",
+    ["line-to-hook"],
+    ["mono", "fluoro"],
+    [2, 4],
+  ),
+  "egg-loop": term(
+    "egg-loop",
+    "Shank-wrap bait loop for egg and bait presentations.",
+    ["hook-snell", "line-to-hook"],
+    ["mono", "fluoro"],
+    [5, 12],
+    "terminal-snell",
+    { loadDirection: "snell-shank" },
+  ),
+  orvis: term(
+    "orvis",
+    "Compact Orvis terminal for tippet and light flies.",
+    ["line-to-hook"],
+    ["mono", "fluoro"],
+    [3, 6],
+  ),
+  pitzen: term(
+    "pitzen",
+    "Compact high-retention tippet terminal with precise tag path.",
+    ["line-to-hook"],
+    ["mono", "fluoro"],
+    [4, 7],
+  ),
+  turle: term(
+    "turle",
+    "Traditional fly terminal seating around the eye for alignment.",
+    ["line-to-hook"],
+    ["mono", "fluoro"],
+    [2, 5],
+  ),
+  baja: term(
+    "baja",
+    "Heavy mono/fluoro terminal for stout leaders.",
+    ["line-to-hook", "line-to-lure"],
+    ["mono", "fluoro"],
+    [5, 8],
+  ),
+  clinch: term(
+    "clinch",
+    "Basic clinch without the improved pass — speed over security.",
+    ["line-to-hook", "line-to-swivel"],
+    ["mono", "fluoro"],
+    [5, 7],
+  ),
+  "uni-snell": term(
+    "uni-snell",
+    "Uni-barrel compressed along the hook shank for on-axis pull.",
+    ["hook-snell"],
+    ["mono", "fluoro"],
+    [5, 10],
+    "terminal-snell",
+    { loadDirection: "snell-shank" },
+  ),
+  "easy-snell": term(
+    "easy-snell",
+    "Simplified parallel shank wraps for consistent snell geometry.",
+    ["hook-snell"],
+    ["mono", "fluoro"],
+    [5, 10],
+    "terminal-snell",
+    { loadDirection: "snell-shank" },
+  ),
 };
