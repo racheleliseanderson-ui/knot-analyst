@@ -1,5 +1,6 @@
-import type { Knot, KnotCategory, KnotContent, LineMaterial } from "@/domain/types";
+import type { Knot, KnotCategory, KnotContent, LineMaterial, ConnectionJob } from "@/domain/types";
 import { ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
+import type { DomainId } from "@/domain/domain";
 import { TERMINAL_KNOTS } from "@/data/knots/terminal";
 import { LINE_TO_LINE_KNOTS } from "@/data/knots/line-to-line";
 import { LOOP_KNOTS } from "@/data/knots/loops";
@@ -8,6 +9,8 @@ import { SEED_BATCH_2 } from "@/data/knots/seed-batch-2";
 import { SEED_BATCH_3_TERMINAL } from "@/data/knots/seed-batch-3-terminal";
 import { SEED_BATCH_4 } from "@/data/knots/seed-batch-4";
 import { SEED_BATCH_5_TERMINAL } from "@/data/knots/seed-batch-5-terminal";
+import { SEED_BATCH_6 } from "@/data/knots/seed-batch-6";
+import { BOATING_BATCH_1 } from "@/data/knots/boating-batch-1";
 import { getMechanics } from "@/data/mechanics";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
@@ -16,7 +19,7 @@ import {
   getConnectionModelMeta,
 } from "@/data/connection-model-meta";
 
-const RAW: KnotContent[] = [
+const FISHING_RAW: KnotContent[] = [
   ...TERMINAL_KNOTS,
   ...LINE_TO_LINE_KNOTS,
   ...LOOP_KNOTS,
@@ -25,7 +28,10 @@ const RAW: KnotContent[] = [
   ...SEED_BATCH_3_TERMINAL,
   ...SEED_BATCH_4,
   ...SEED_BATCH_5_TERMINAL,
+  ...SEED_BATCH_6,
 ];
+
+const BOATING_RAW: KnotContent[] = [...BOATING_BATCH_1];
 
 function hydrate(raw: KnotContent): Knot {
   const content = applyVideo(applyHowTo(raw));
@@ -48,10 +54,40 @@ function hydrate(raw: KnotContent): Knot {
   };
 }
 
-export const KNOTS: Knot[] = RAW.map(hydrate);
+/** Fishing modelled connections. Default pool — goldens stay fishing-only. */
+export const FISHING_KNOTS: Knot[] = FISHING_RAW.map(hydrate);
+
+/** Boating modelled connections. Isolated so fishing Decide never scores rope work. */
+export const BOATING_KNOTS: Knot[] = BOATING_RAW.map(hydrate);
+
+/** Backward-compatible alias of the fishing catalog. */
+export const KNOTS: Knot[] = FISHING_KNOTS;
+
+const BOATING_CONNECTION_JOBS = new Set<ConnectionJob>([
+  "rope-to-cleat",
+  "rope-to-bollard",
+  "rope-to-ring",
+  "fixed-eye",
+  "loop-over-post",
+  "rope-to-rope",
+  "unequal-rope-join",
+  "load-transfer",
+  "stopper",
+  "shorten-line",
+]);
+
+export function knotsForDomain(id: DomainId): Knot[] {
+  return id === "boating" ? BOATING_KNOTS : FISHING_KNOTS;
+}
+
+/** Pool for a connection job. Counterfactuals inherit isolation from the job. */
+export function catalogPoolFor(connection?: ConnectionJob): Knot[] {
+  if (connection && BOATING_CONNECTION_JOBS.has(connection)) return BOATING_KNOTS;
+  return FISHING_KNOTS;
+}
 
 export function getKnot(id: string): Knot | undefined {
-  return KNOTS.find((k) => k.id === id);
+  return FISHING_KNOTS.find((k) => k.id === id) ?? BOATING_KNOTS.find((k) => k.id === id);
 }
 
 export function knotsByCategory(category: KnotCategory): Knot[] {
@@ -102,6 +138,7 @@ export function catalogMeta() {
   return {
     version: KNOT_CATALOG_VERSION,
     count: KNOTS.length,
+    boatingCount: BOATING_KNOTS.length,
     engine: ENGINE_VERSION,
     layers: ["hard-constraint", "field-fit", "finished-diagnostic"],
     categories: {
@@ -109,6 +146,7 @@ export function catalogMeta() {
       "line-to-line": knotsByCategory("line-to-line").length,
       loop: knotsByCategory("loop").length,
       specialty: knotsByCategory("specialty").length,
+      rope: BOATING_KNOTS.length,
     },
     completeness: {
       withDecisionModel: KNOTS.filter((k) => k.completeness.decisionModel).length,

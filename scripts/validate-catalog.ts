@@ -11,6 +11,8 @@ import { MECHANICS_EXTRAS } from "../src/data/mechanics-extras";
 import { MECHANICS_EXTRAS_TERMINAL } from "../src/data/mechanics-extras-terminal";
 import { MECHANICS_EXTRAS_BATCH4 } from "../src/data/mechanics-extras-batch4";
 import { MECHANICS_EXTRAS_BATCH5 } from "../src/data/mechanics-extras-batch5";
+import { MECHANICS_EXTRAS_BATCH6 } from "../src/data/mechanics-extras-batch6";
+import { MECHANICS_EXTRAS_BOATING } from "../src/data/mechanics-extras-boating";
 import {
   CONNECTION_MODEL_META,
   MODEL_SOURCES,
@@ -25,6 +27,8 @@ import { SEED_BATCH_2 } from "../src/data/knots/seed-batch-2";
 import { SEED_BATCH_3_TERMINAL } from "../src/data/knots/seed-batch-3-terminal";
 import { SEED_BATCH_4 } from "../src/data/knots/seed-batch-4";
 import { SEED_BATCH_5_TERMINAL } from "../src/data/knots/seed-batch-5-terminal";
+import { SEED_BATCH_6 } from "../src/data/knots/seed-batch-6";
+import { BOATING_BATCH_1 } from "../src/data/knots/boating-batch-1";
 import { HOW_TO, MICRO } from "../src/data/how-to";
 import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "../src/data/how-to-extras";
 import { KNOT_VIDEOS } from "../src/data/videos";
@@ -44,6 +48,16 @@ const VALID_JOBS = new Set([
   "loop-to-loop",
   "line-to-loop",
   "hook-snell",
+  "rope-to-cleat",
+  "rope-to-bollard",
+  "rope-to-ring",
+  "fixed-eye",
+  "loop-over-post",
+  "rope-to-rope",
+  "unequal-rope-join",
+  "load-transfer",
+  "stopper",
+  "shorten-line",
 ]);
 
 const ALL_MECHANICS = {
@@ -52,6 +66,8 @@ const ALL_MECHANICS = {
   ...MECHANICS_EXTRAS_TERMINAL,
   ...MECHANICS_EXTRAS_BATCH4,
   ...MECHANICS_EXTRAS_BATCH5,
+  ...MECHANICS_EXTRAS_BATCH6,
+  ...MECHANICS_EXTRAS_BOATING,
 };
 
 const ALL_CONTENT: KnotContent[] = [
@@ -63,6 +79,8 @@ const ALL_CONTENT: KnotContent[] = [
   ...SEED_BATCH_3_TERMINAL,
   ...SEED_BATCH_4,
   ...SEED_BATCH_5_TERMINAL,
+  ...SEED_BATCH_6,
+  ...BOATING_BATCH_1,
 ];
 
 const contentById = new Map(ALL_CONTENT.map((k) => [k.id, k]));
@@ -79,6 +97,7 @@ const CATEGORIES = new Set([
   "backing-to-line",
   "specialty",
   "utility",
+  "rope",
 ]);
 const DIFFICULTY = new Set(["beginner", "intermediate", "advanced"]);
 

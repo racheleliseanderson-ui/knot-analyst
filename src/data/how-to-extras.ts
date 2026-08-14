@@ -40,6 +40,19 @@ const COLD_DARK: string[] = [
   "Wrong twice in a row means the material or the hardware is fighting you. Change one, not your technique.",
 ];
 
+const ROPE_DRESS: SeatingPhase[] = [
+  { phase: "Form", action: "Build the structure loose enough to see every turn.", tension: "None. Shape first." },
+  { phase: "Dress", action: "Nest every turn. Crossed parts will walk or jam.", tension: "Light — hold the shape." },
+  { phase: "Set", action: "Load the standing part so the intended turns take the strain.", tension: "Working load, not a snatch." },
+  { phase: "Check", action: "Confirm the lock still breaks or inspects as the job requires.", tension: "None extra." },
+];
+
+const ROPE_NOTES: string[] = [
+  "Dress is the lock. A pretty knot that is not dressed is not finished.",
+  "HMPE usually wants a splice, not a hitch you learned in polyester.",
+  "If you cannot break or inspect it under the load you expect, it is the wrong job.",
+];
+
 function ht(
   before: string[],
   steps: Record<number, StepDepth>,
@@ -457,6 +470,243 @@ export const HOW_TO_EXTRAS: Record<string, HowTo> = {
       4: { expectedResult: "Stacked crossings, compact lock, test pull holds.", detail: "A rolled crossing is a retie." },
     },
   ),
+  bristol: ht(
+    [
+      "A Bristol on one strand is a different, weaker knot. The double must already exist.",
+      "Leader wraps both legs. Missing a leg is a fail.",
+      "Test the double and the Bristol separately before you trust the system.",
+    ],
+    {
+      1: { expectedResult: "Load-bearing double already formed.", detail: "Do not start the Bristol until the double exists." },
+      2: { expectedResult: "Leader through the doubled section, long working tag.", detail: "A short tag cannot wrap both legs and return." },
+      3: { expectedResult: "Even leader wraps on both main-line legs, return through the opening.", detail: "Crossed wraps or a missed return is not a Bristol." },
+      4: { expectedResult: "Leader barrel seated, both the double and the join hold a hard pull.", detail: "If either side walks, cut and restart." },
+    },
+  ),
+  "double-double-uni": ht(
+    [
+      "This is not a basic Double Uni. The braid side is doubled through the whole barrel.",
+      "More wraps on the braid side. Fewer on the leader.",
+      "Bulk will click in micro guides. That is a job mismatch, not a seating error.",
+    ],
+    {
+      1: { expectedResult: "Overlap with the working braid doubled.", detail: "Single-strand braid is the other knot." },
+      2: { expectedResult: "Uni barrel of the doubled braid around both lines.", detail: "About eight wraps. Count them." },
+      3: { expectedResult: "Leader Uni of five to six wraps.", detail: "Closing one side first hinges the join." },
+      4: { expectedResult: "Both barrels butted, bulk inspected, tags short.", detail: "A gap between barrels is a hinge." },
+    },
+  ),
+  "loop-to-loop": ht(
+    [
+      "This is an assembly, not a knot. Strength is the weaker finished loop.",
+      "Girth-hitch assembly cinches one loop and cuts the other. That is a fail.",
+      "Inspect factory loops for coating damage before you commit the leader.",
+    ],
+    {
+      1: { expectedResult: "Both loops sound — no crushed coating, no frayed splice.", detail: "A damaged factory loop is not a connection." },
+      2: { expectedResult: "Leader loop through the fly-line loop.", detail: "Wrong first pass becomes a girth hitch." },
+      3: { expectedResult: "Entire leader through its own loop.", detail: "Only the tippet through is unfinished." },
+      4: { expectedResult: "Matching U-shapes. Neither loop cinched.", detail: "If one loop collapsed around the other, undo." },
+    },
+    [
+      "Handshake, not a hitch. Matching U-shapes are the only finished look.",
+      "A damaged factory loop is replaced, not 'made good' by the handshake.",
+      "Oversized leader loops click in the guides. Size the loops to the system.",
+    ],
+    [
+      { phase: "Inspect", action: "Check both loops for coating damage and a sound knot or splice.", tension: "None." },
+      { phase: "Assemble", action: "Leader loop through fly-line loop, then the whole leader through its own loop.", tension: "None until the handshake is formed." },
+      { phase: "Dress", action: "Pull into matching U-shapes.", tension: "Light, even, both loops opening together." },
+      { phase: "Check", action: "Confirm neither loop has cinched. If one collapsed, undo.", tension: "A firm pull, not a snatch." },
+    ],
+  ),
+  willis: ht(
+    [
+      "Lead-core sheath only. Solid braid is the wrong material.",
+      "The lead must come out clean. A cut sheath will not trap.",
+      "Insertion length is the grip. Short traps walk.",
+    ],
+    {
+      1: { expectedResult: "Lead broken at the intended transition.", detail: "A ragged break can cut the sheath." },
+      2: { expectedResult: "Hollow intact sheath, lead fully extracted.", detail: "Lead left under the grip is a fail." },
+      3: { expectedResult: "Mono inserted deep; sheath milked uniformly.", detail: "Shallow insertion will walk on the first fish." },
+      4: { expectedResult: "Lengthwise pull holds; sheath undamaged.", detail: "If the leader moves, cut back and restart." },
+    },
+    [
+      "This is a finger-trap, not a barrel. Damage to the sheath is a cut-off.",
+      "Do not use on solid braid. The trap has nothing to contract onto.",
+      "Dock job. Do not start this in a wind with cold hands.",
+    ],
+    [
+      { phase: "Break", action: "Break the lead at the transition without nicking the sheath.", tension: "Sharp bend, not a pull." },
+      { phase: "Extract", action: "Slide the lead out, leaving intact hollow braid.", tension: "Gentle. The sheath is the knot." },
+      { phase: "Insert", action: "Feed mono deep and milk the sheath down the leader.", tension: "Even contraction, no bunching." },
+      { phase: "Prove", action: "Pull lengthwise and inspect. Movement is a retie.", tension: "Hard test pull." },
+    ],
+  ),
+  "kryston-loop": ht(
+    [
+      "Nylon only. Fluoro is a documented skip — use Kreh/Rapala there.",
+      "The return path is not a Kreh path. Reversed is a slip loop.",
+      "Set loop size before the close. You cannot open it after.",
+    ],
+    {
+      1: { expectedResult: "Loose mono loop at the intended distance.", detail: "Loop size is decided now." },
+      2: { expectedResult: "Tag through the hook or lure eye.", detail: "Hardware on, loop still open." },
+      3: { expectedResult: "Tag through the Kryston crossing, not a Kreh path.", detail: "Wrong return is a different knot." },
+      4: { expectedResult: "Open loop of the intended size after a wet close.", detail: "If it cinches, it is not this knot." },
+    },
+  ),
+  "cleat-hitch": ht(
+    [
+      "First turn on the far horn — the one opposite the incoming load.",
+      "The lock must still break by hand. A jammed hitch is the wrong finish.",
+      "One clean figure-eight is enough on a working cleat. Extra locks jam under surge.",
+    ],
+    {
+      1: { expectedResult: "Full turn around the base on the far horn.", detail: "Near-horn first turn is the usual jam." },
+      2: { expectedResult: "Figure-eights across both horns.", detail: "One cross is enough; two if the line is light." },
+      3: { expectedResult: "Twisted locking hitch under the last cross, parts parallel.", detail: "A lock you cannot break by hand is a jam." },
+      4: { expectedResult: "Dressed hitch that still casts off under load.", detail: "If it will not break, remake it." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "round-turn-two-half-hitches": ht(
+    [
+      "The round turn takes the load. The half hitches only lock.",
+      "Both hitches in the same direction so they nest.",
+      "HMPE needs extra turns or a splice. Do not treat it like polyester.",
+    ],
+    {
+      1: { expectedResult: "Full round turn on the bollard or ring.", detail: "Half hitches without the turn will walk." },
+      2: { expectedResult: "First half hitch around the standing part.", detail: "This hitch only locks. It does not carry." },
+      3: { expectedResult: "Second half hitch nested in the same direction.", detail: "Opposite directions will walk." },
+      4: { expectedResult: "Hitches dressed up to the turn.", detail: "Loose hitches walk under surge." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "clove-hitch": ht(
+    [
+      "Temporary only. Documented walk-off under cycling load.",
+      "Turns must stack. A spread clove is already walking.",
+      "Not an overnight mooring plan. Back it up or switch jobs.",
+    ],
+    {
+      1: { expectedResult: "First turn around the spar.", detail: "This is half a hitch, not a hitch." },
+      2: { expectedResult: "Second turn crossed over the first.", detail: "Same-side turns are not a clove." },
+      3: { expectedResult: "Working end tucked under the second turn, both turns stacked.", detail: "Loose dress is a walk." },
+      4: { expectedResult: "Watched hitch, or backed up if the load will cycle.", detail: "Leaving it unattended is the wrong job." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "anchor-bend": ht(
+    [
+      "Round turn through the ring first. That turn is the hitch.",
+      "Working end through both turns, then a half hitch.",
+      "Seize a standing job. An unseized soak can work loose.",
+    ],
+    {
+      1: { expectedResult: "Round turn through the ring.", detail: "A single pass is not this hitch." },
+      2: { expectedResult: "Working end tucked through both turns.", detail: "Missing a turn leaves a slip." },
+      3: { expectedResult: "Half hitch on the standing part.", detail: "The half hitch only locks." },
+      4: { expectedResult: "Hard dress. Tail seized if this stays on the ring.", detail: "Unseized standing jobs work loose wet." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  bowline: ht(
+    [
+      "The collar must sit tight. An undressed bowline can capsize.",
+      "Backup the tail on a serious job.",
+      "Not an HMPE knot. Splice that fibre.",
+    ],
+    {
+      1: { expectedResult: "Small loop in the standing part, working end up through it.", detail: "Wrong loop direction is a cowboy bowline — dress it or restart." },
+      2: { expectedResult: "Working end around the standing part.", detail: "Around the wrong part never forms a collar." },
+      3: { expectedResult: "Working end back down through the small loop.", detail: "Leaving it up is unfinished." },
+      4: { expectedResult: "Collar tight, tail long enough, backup if the job is serious.", detail: "An open collar can capsize under cyclic load." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "figure-8-loop": ht(
+    [
+      "Bight first. Eye size is decided before the eight.",
+      "Both strands must nest. A crossed eight is a different, weaker knot.",
+      "It can jam after a hard snatch. Do not pick this if you must untie it.",
+    ],
+    {
+      1: { expectedResult: "Bight long enough for the finished eye.", detail: "Too short and the eight eats the loop." },
+      2: { expectedResult: "Clean figure-eight in the bight.", detail: "A twisted eight will not dress." },
+      3: { expectedResult: "Both parts nested, eye the size you wanted.", detail: "You cannot resize after a hard set." },
+      4: { expectedResult: "Both strands parallel and inspectable.", detail: "A crossed eight is a retie." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "sheet-bend": ht(
+    [
+      "Bight in the thicker rope if they differ.",
+      "Tails must exit the same side. Opposite tails is a left-handed sheet bend and will slip.",
+      "Not a splice. Not an HMPE join.",
+    ],
+    {
+      1: { expectedResult: "Bight in the thicker or standing rope.", detail: "Bight in the thin rope is the usual spill." },
+      2: { expectedResult: "Second rope up through the bight.", detail: "Wrong direction is still recoverable — continue around." },
+      3: { expectedResult: "Around both parts, tucked under its own standing part.", detail: "Missing the tuck is a hitch, not a bend." },
+      4: { expectedResult: "Both tails same side, dressed.", detail: "Opposite tails — retie." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "double-sheet-bend": ht(
+    [
+      "Bight in the thicker rope. Always.",
+      "Two turns of the thinner rope before the tuck.",
+      "Tails same side, same as a single sheet bend.",
+    ],
+    {
+      1: { expectedResult: "Bight in the thicker rope.", detail: "Thin-rope bight will spill." },
+      2: { expectedResult: "Thinner rope up through the bight.", detail: "Leave working room for two turns." },
+      3: { expectedResult: "Two turns around the bight, then the tuck.", detail: "One turn is a single sheet bend — the mismatch job needs two." },
+      4: { expectedResult: "Hard dress, tails same side.", detail: "Opposite tails slip the same as a single." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "rolling-hitch": ht(
+    [
+      "Directional. Two turns on the load side.",
+      "Pull must be along the standing part, not away from it.",
+      "Slides first. If it walks on the test, add a turn or change the surface.",
+    ],
+    {
+      1: { expectedResult: "Two turns on the load side of the standing part.", detail: "Turns on the wrong side will not grip." },
+      2: { expectedResult: "Third turn crossing.", detail: "A clove here is the wrong hitch." },
+      3: { expectedResult: "Working end tucked under the last turn.", detail: "The tuck sets the direction." },
+      4: { expectedResult: "Dressed toward the load; slide-test holds.", detail: "If it walks, do not trust it." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "figure-8-stopper": ht(
+    [
+      "Stopper only. Not a join.",
+      "It must be larger than the block or fairlead after dress.",
+      "A loose eight pulls through. Dress it compact.",
+    ],
+    {
+      1: { expectedResult: "First loop of the figure-eight in the tail.", detail: "An overhand here is a different, jammier stopper." },
+      2: { expectedResult: "Eight completed, tail through.", detail: "Unfinished eights pull through." },
+      3: { expectedResult: "Compact eight larger than the opening.", detail: "Size is the job." },
+      4: { expectedResult: "Short tail. Not loaded as a join.", detail: "If you need a join, pick a join." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
 };
 
 /** Micro inspect for every modelled id that core MICRO does not already cover. */
@@ -739,5 +989,95 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
     2: ["Loop folded back over the doubled line.", "If it will not fold, the loop is too short.", "Start longer."],
     3: ["Tag through both openings.", "One opening is unfinished.", "Complete the second pass."],
     4: ["Stacked crossings, compact lock.", "A rolled crossing is a retie.", "Wet and close again, or start over."],
+  }),
+  bristol: mx({
+    1: ["Load-bearing double already formed.", "A Bristol on one strand is a different knot.", "Tie the double first."],
+    2: ["Leader through both legs, long tag.", "A short tag cannot wrap and return.", "Restart with more leader."],
+    3: ["Even wraps on both legs, return through the opening.", "A missed return or a crossed wrap is a fail.", "Unwrap and relay."],
+    4: ["Barrel seated; double and join both hold.", "If either side walks, the system is unfinished.", "Retie the failed side."],
+  }),
+  "double-double-uni": mx({
+    1: ["Working braid doubled through the overlap.", "Single-strand braid is the other knot.", "Double it before the Uni."],
+    2: ["Doubled-braid barrel around both lines.", "Too few wraps walk on slick braid.", "Count about eight."],
+    3: ["Leader barrel formed, still open.", "Closing one side first hinges the join.", "Form both, then close."],
+    4: ["Barrels butted, tags short.", "A gap is a hinge.", "Seat until they kiss."],
+  }),
+  "loop-to-loop": mx({
+    1: ["Both loops sound.", "Crushed coating is a cut-off.", "Replace the damaged loop."],
+    2: ["Leader loop through the fly-line loop.", "Wrong first pass becomes a girth hitch.", "Undo and restart the handshake."],
+    3: ["Whole leader through its own loop.", "Only the tippet through is unfinished.", "Pass the entire leader."],
+    4: ["Matching U-shapes, neither loop cinched.", "One loop collapsed around the other is a girth hitch.", "Undo and reassemble."],
+  }),
+  willis: mx({
+    1: ["Lead broken at the transition, sheath intact.", "A ragged break can cut the sheath.", "Cut back and break again."],
+    2: ["Hollow sheath, lead fully out.", "Lead left under the grip will not trap.", "Extract the rest."],
+    3: ["Mono deep in the sheath, milked even.", "A short trap walks.", "Insert deeper."],
+    4: ["Lengthwise pull holds, sheath undamaged.", "Movement now is movement on the fish.", "Cut back and restart."],
+  }),
+  "kryston-loop": mx({
+    1: ["Loose mono loop, size already decided.", "Fluoro in the hand is the wrong material.", "Switch to nylon or to Kreh."],
+    2: ["Tag through the eye, loop still open.", "Hardware trapped in a tight loop is the wrong sequence.", "Open it back up."],
+    3: ["Kryston crossing, not a Kreh path.", "Reversed return is a slip loop.", "Retrace the documented path."],
+    4: ["Loop still open after a wet close.", "A cinched loop is not this knot.", "Retie."],
+  }),
+  "cleat-hitch": mx({
+    1: ["Full turn on the far horn.", "Near-horn first turn jams under surge.", "Remake from the far horn."],
+    2: ["Figure-eights across both horns.", "A pile of extra crosses jams.", "One clean cross is enough."],
+    3: ["Locking hitch under the last cross, parts parallel.", "A lock you cannot break by hand is a jam.", "Remake the lock."],
+    4: ["Dressed, still cast-offable.", "If it will not break, it is the wrong finish.", "Remake."],
+  }),
+  "round-turn-two-half-hitches": mx({
+    1: ["Full round turn on the spar.", "Half hitches without the turn will walk.", "Add the turn."],
+    2: ["First half hitch on the standing part.", "This hitch only locks.", "Do not skip the turn to 'save rope'."],
+    3: ["Second hitch nested, same direction.", "Opposite directions walk.", "Untie the second and match the first."],
+    4: ["Hitches dressed up to the turn.", "Loose hitches walk under surge.", "Slide them up, then set."],
+  }),
+  "clove-hitch": mx({
+    1: ["First turn on the spar.", "A loose first turn is already walking.", "Keep it stacked."],
+    2: ["Second turn crossed over.", "Same-side turns are not a clove.", "Cross over."],
+    3: ["Working end tucked, turns stacked.", "A spread clove is walking.", "Dress both turns together."],
+    4: ["Watched, or backed up.", "Unattended on a tide is the wrong job.", "Switch to round turn and two half hitches."],
+  }),
+  "anchor-bend": mx({
+    1: ["Round turn through the ring.", "A single pass is not this hitch.", "Take the second pass."],
+    2: ["Working end through both turns.", "Missing a turn leaves a slip.", "Tuck through both."],
+    3: ["Half hitch on the standing part.", "No lock hitch will work loose wet.", "Add it."],
+    4: ["Hard dress; tail seized if standing.", "Unseized soak can walk.", "Seize the tail."],
+  }),
+  bowline: mx({
+    1: ["Small loop, working end up through it.", "Wrong loop direction is a cowboy — dress or restart.", "Check the collar will form on the standing part."],
+    2: ["Working end around the standing part.", "Around the wrong part never forms a collar.", "Retrace."],
+    3: ["Working end back down the hole.", "Left up is unfinished.", "Complete the return."],
+    4: ["Collar tight, tail long enough.", "An open collar can capsize.", "Dress and backup."],
+  }),
+  "figure-8-loop": mx({
+    1: ["Bight long enough for the eye.", "Too short and the eight eats the loop.", "Start longer."],
+    2: ["Clean figure-eight in the bight.", "A twist will not dress.", "Untwist or restart."],
+    3: ["Both parts nested, eye sized.", "You cannot resize after a hard set.", "Dress now."],
+    4: ["Both strands parallel.", "A crossed eight is a retie.", "Untie and retie a clean eight."],
+  }),
+  "sheet-bend": mx({
+    1: ["Bight in the thicker rope.", "Thin-rope bight will spill.", "Swap which rope makes the bight."],
+    2: ["Second rope up through the bight.", "Wrong first direction is still recoverable.", "Continue around both parts."],
+    3: ["Tucked under its own standing part.", "Missing the tuck is not a bend.", "Complete the tuck."],
+    4: ["Tails same side, dressed.", "Opposite tails slip.", "Retie."],
+  }),
+  "double-sheet-bend": mx({
+    1: ["Bight in the thicker rope.", "Thin-rope bight will spill.", "Swap the bight."],
+    2: ["Thinner rope up through the bight.", "Leave room for two turns.", "Start with more tag."],
+    3: ["Two turns, then the tuck.", "One turn is a single sheet bend.", "Add the second turn."],
+    4: ["Hard dress, tails same side.", "Opposite tails slip.", "Retie."],
+  }),
+  "rolling-hitch": mx({
+    1: ["Two turns on the load side.", "Turns on the wrong side will not grip.", "Restart on the load side."],
+    2: ["Third turn crossing.", "A clove here is the wrong hitch.", "Make the rolling third turn."],
+    3: ["Working end tucked under the last turn.", "The tuck sets the direction.", "Retrace the tuck."],
+    4: ["Dressed toward the load; slide-test holds.", "If it walks, do not trust it.", "Add a turn or change the surface."],
+  }),
+  "figure-8-stopper": mx({
+    1: ["First loop of a figure-eight.", "An overhand is a different, jammier stopper.", "Form the eight."],
+    2: ["Eight completed, tail through.", "Unfinished eights pull through.", "Complete the eight."],
+    3: ["Compact eight larger than the opening.", "Too small and it pulls through.", "Retie larger."],
+    4: ["Short tail. Not loaded as a join.", "A stopper asked to join will fail.", "Pick a join if you need a join."],
   }),
 };

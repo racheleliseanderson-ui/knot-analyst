@@ -10,6 +10,7 @@ import { useT } from "@/i18n";
 import { useDomain } from "@/domain/context";
 import { Bullets, Chip, Meter, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
 import { runChooser } from "@/engine/chooser";
+import { knotsForDomain } from "@/data/catalog";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
 import { generateDecisionPacket, type PacketVariant } from "@/lib/decision-packet";
 import { PresetBar } from "@/components/instrument/preset-bar";
@@ -335,8 +336,8 @@ function DecideMode() {
   const selectedRegion = activeRegion(regions, regionBroadId, regionFineId);
 
   const result = useMemo(
-    () => (ran && input.connection ? runChooser(input as ChooseInput) : null),
-    [ran, input],
+    () => (ran && input.connection ? runChooser(input as ChooseInput, knotsForDomain(domain.id)) : null),
+    [ran, input, domain.id],
   );
   const card = result ? buildDecisionCard(result) : null;
   const tradeoffs = result ? detectTradeoffs(result) : [];
@@ -741,7 +742,7 @@ function DecideMode() {
 
   return (
     <Shell>
-      {domain.id !== "fishing" ? (
+      {domain.id !== "fishing" && knotsForDomain(domain.id).length === 0 ? (
         <div className="mb-6 rounded-lg border border-caution/40 bg-caution/8 px-4 py-3 no-print">
           <MicroLabel className="text-caution">{t("boating.title")}</MicroLabel>
           <p className="mt-1.5 max-w-2xl text-[0.8125rem] leading-relaxed text-foreground/85">

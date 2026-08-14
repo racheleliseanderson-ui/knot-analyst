@@ -9,7 +9,7 @@ import {
   PRODUCT_TAGLINE,
   PUBLISHER_NAME,
 } from "@/domain/brand";
-import { KNOTS } from "@/data/catalog";
+import { knotsForDomain } from "@/data/catalog";
 import { DomainSwitch } from "@/components/instrument/domain-switch";
 import { LocaleSwitch } from "@/components/instrument/locale-switch";
 import { AppearanceMenu } from "@/components/instrument/appearance-menu";
@@ -120,7 +120,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
           </div>
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
             {APPLICATION_ID} · {ENGINE_VERSION} · catalog {KNOT_CATALOG_VERSION} ·{" "}
-            {KNOTS.length} modelled connections · {domain.label}
+            {knotsForDomain(domain.id).length} modelled connections · {domain.label}
           </p>
         </div>
       </footer>

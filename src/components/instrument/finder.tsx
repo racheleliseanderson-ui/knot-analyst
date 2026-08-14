@@ -9,7 +9,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Search, X } from "lucide-react";
-import { KNOTS } from "@/data/catalog";
+import { knotsForDomain } from "@/data/catalog";
+import { useDomain } from "@/domain/context";
 import { FAILURE_PLAYS } from "@/data/failure-playbook";
 import { MATERIAL_LABELS } from "@/domain/types";
 import { useScenarios } from "@/lib/overlay";
@@ -151,6 +152,7 @@ function FilterChip({
 export function Finder({ open, onClose }: { open: boolean; onClose: () => void }) {
   const t = useT();
   const navigate = useNavigate();
+  const domain = useDomain();
   const scenarios = useScenarios();
   const [q, setQ] = useState("");
   const [active, setActive] = useState(0);
@@ -174,7 +176,7 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
         go: () => navigate({ to: "/", search: { scenario: s.id, run: true } }),
       });
     }
-    for (const k of KNOTS) {
+    for (const k of knotsForDomain(domain.id)) {
       items.push({
         id: `kn:${k.id}`,
         group: "finder.knots",
@@ -198,7 +200,7 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
       });
     }
     return items;
-  }, [scenarios, navigate]);
+  }, [scenarios, navigate, domain.id]);
 
   const knotFacets = useMemo(() => {
     const cats = new Set<string>();

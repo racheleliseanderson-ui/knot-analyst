@@ -1,12 +1,9 @@
 /**
- * Boating & Sailing — vocabulary, venues, dimensions and material axes are live.
- * The mechanical catalog for rope work is not modelled yet, so `knots` is empty
- * on purpose: the instrument fails closed rather than scoring guesses.
- *
- * Phase 7 gate: do not author knot/termination content until Fishing Schema 2.0
- * regression stays green (see scripts/schema-regression.ts).
+ * Boating & Sailing — vocabulary, venues, dimensions and the first modelled
+ * rope-work catalog. Fishing Decide stays on the fishing pool.
  */
 import type { KnotDomain } from "@/domain/domain";
+import { BOATING_BATCH_1 } from "@/data/knots/boating-batch-1";
 import { BOATING_DIMENSIONS } from "./dimensions";
 import { BOATING_MATERIAL_PRESETS } from "./materials";
 import { BOATING_TERMS } from "./terms";
@@ -25,5 +22,5 @@ export const BOATING_DOMAIN: KnotDomain = {
   venues: BOATING_VENUES,
   scenarios: [],
   failurePlays: [],
-  knots: [],
+  knots: [...BOATING_BATCH_1],
 };

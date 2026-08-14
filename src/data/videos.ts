@@ -312,6 +312,96 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
     title: "Knot Wars Palomar Knot Vs. World's Fair Knot",
     channel: "NorthAmericanFishing",
   },
+  bristol: {
+    provider: "youtube",
+    id: "5L37U0kmdrQ",
+    title: "How To Tie: Bristol Knot",
+    channel: "Get Fishing",
+  },
+  "double-double-uni": {
+    provider: "youtube",
+    id: "zMLa0vHZzMs",
+    title: "How to Tie the Double-Double Uni Knot [braid line to fluorocarbon leader]",
+    channel: "Salt Strong",
+  },
+  "loop-to-loop": {
+    provider: "youtube",
+    id: "95oDmAbtZtE",
+    title: "Quick Fly Fishing Tip: Loop to Loop Leader Fly Line Connection",
+    channel: "Murray's Fly Shop",
+  },
+  willis: {
+    provider: "youtube",
+    id: "ge0VCeJOdc4",
+    title: "How to tie a Willis Knot a/k/a \"The Leadcore Knot\"",
+    channel: "vikingrainmaker",
+  },
+  "kryston-loop": {
+    provider: "youtube",
+    id: "TFA62Y6kzpw",
+    title: "Easiest Fishing Loop Knot To Tie and Mistakes people make (Kryston Loop knot tutorial)",
+    channel: "raWr Fishing",
+  },
+  "cleat-hitch": {
+    provider: "youtube",
+    id: "KaF9lFn0Inw",
+    title: "A Perfect Cleat Hitch",
+    channel: "Maryland School of Sailing",
+  },
+  "round-turn-two-half-hitches": {
+    provider: "youtube",
+    id: "rCm2mYNQ_HM",
+    title: "ROUND TURN WITH TWO HALF HITCHES",
+    channel: "America's Boating Channel",
+  },
+  "clove-hitch": {
+    provider: "youtube",
+    id: "2w1TuV-fIsY",
+    title: "CLOVE HITCH",
+    channel: "America's Boating Channel",
+  },
+  "anchor-bend": {
+    provider: "youtube",
+    id: "gqgz4P1tMzw",
+    title: "How to Tie an Anchor Hitch Knot",
+    channel: "AnimatedKnots",
+  },
+  bowline: {
+    provider: "youtube",
+    id: "-rGROTyDv88",
+    title: "Best way to tie a bowline knot for sailing with troubleshooting & variations",
+    channel: "Jessica and Ryan Adventures",
+  },
+  "figure-8-loop": {
+    provider: "youtube",
+    id: "kbB85p_uJsE",
+    title: "Rock Climbing: How to Tie a Figure 8 Knot on a Bight",
+    channel: "REI",
+  },
+  "sheet-bend": {
+    provider: "youtube",
+    id: "x3reZ3NuGaQ",
+    title: "How to Tie the Sheet Bend Knot",
+    channel: "Howcast",
+  },
+  "double-sheet-bend": {
+    provider: "youtube",
+    id: "pvn-06IedQ4",
+    title: "How to Tie the Double Sheet Bend",
+    channel: "Bob Hansler",
+  },
+  "rolling-hitch": {
+    provider: "youtube",
+    id: "OWEbxfymbK0",
+    title: "How To Tie a Rolling Hitch",
+    channel: "Ardent Training",
+  },
+  "figure-8-stopper": {
+    provider: "youtube",
+    id: "6b_K87c5pWY",
+    title: "Figure Eight Stopper Knots",
+    channel: "Knot Knut",
+  },
 };
 
 export function applyVideo(content: KnotContent): KnotContent {

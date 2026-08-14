@@ -9,7 +9,7 @@
 export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
-export const KNOT_CATALOG_VERSION = "2026-08-14.4";
+export const KNOT_CATALOG_VERSION = "2026-08-14.6";
 export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
 export const ENGINE_VERSION = "mech-intel-1.3.0";
 
@@ -26,7 +26,17 @@ export type ConnectionJob =
   | "double-line-to-leader"
   | "loop-to-loop"
   | "line-to-loop"
-  | "hook-snell";
+  | "hook-snell"
+  | "rope-to-cleat"
+  | "rope-to-bollard"
+  | "rope-to-ring"
+  | "fixed-eye"
+  | "loop-over-post"
+  | "rope-to-rope"
+  | "unequal-rope-join"
+  | "load-transfer"
+  | "stopper"
+  | "shorten-line";
 
 export type LineMaterial =
   | "mono"
@@ -35,7 +45,13 @@ export type LineMaterial =
   | "fly-line"
   | "backing"
   | "wire"
-  | "mixed";
+  | "mixed"
+  | "polyester"
+  | "nylon"
+  | "polypropylene"
+  | "dyneema"
+  | "aramid"
+  | "natural";
 
 export type DiameterRelation =
   | "similar"
@@ -53,7 +69,8 @@ export type KnotCategory =
   | "leader-to-tippet"
   | "backing-to-line"
   | "specialty"
-  | "utility";
+  | "utility"
+  | "rope";
 
 export type FindingSeverity = "info" | "watch" | "stop";
 export type FindingConfidence = "low" | "moderate" | "high";
@@ -297,6 +314,11 @@ export type DiagramKind =
   | "double-line"
   | "fly-line-coil"
   | "arbor-spool"
+  | "rope-cleat"
+  | "rope-hitch"
+  | "rope-bend"
+  | "rope-loop"
+  | "rope-stopper"
   | "generic";
 
 /** Schematics the renderer draws as first-class families. `generic` is fallback only. */
@@ -314,6 +336,11 @@ export const MODELLED_DIAGRAM_KINDS = [
   "double-line",
   "fly-line-coil",
   "arbor-spool",
+  "rope-cleat",
+  "rope-hitch",
+  "rope-bend",
+  "rope-loop",
+  "rope-stopper",
 ] as const satisfies readonly DiagramKind[];
 
 export interface Knot extends KnotContent {
@@ -454,6 +481,16 @@ export const CONNECTION_LABELS: Record<ConnectionJob, string> = {
   "loop-to-loop": "Loop → loop",
   "line-to-loop": "Line → loop (fixed end loop)",
   "hook-snell": "Snell → hook shank",
+  "rope-to-cleat": "Rope → cleat",
+  "rope-to-bollard": "Rope → bollard / piling",
+  "rope-to-ring": "Rope → ring or shackle",
+  "fixed-eye": "Fixed eye in the end",
+  "loop-over-post": "Loop dropped over a post",
+  "rope-to-rope": "Rope → rope join",
+  "unequal-rope-join": "Unequal diameter join",
+  "load-transfer": "Load transfer / snubber",
+  stopper: "Stopper in the end",
+  "shorten-line": "Shorten under load",
 };
 
 export const CONNECTION_GROUPS: { title: string; jobs: ConnectionJob[] }[] = [
@@ -485,6 +522,7 @@ export const CATEGORY_LABELS: Record<KnotCategory, string> = {
   "backing-to-line": "Backing to line",
   specialty: "Specialty",
   utility: "Utility",
+  rope: "Rope work",
 };
 
 export const MATERIAL_LABELS: Record<LineMaterial, string> = {
@@ -495,6 +533,12 @@ export const MATERIAL_LABELS: Record<LineMaterial, string> = {
   backing: "Backing",
   wire: "Wire",
   mixed: "Mixed",
+  polyester: "Polyester",
+  nylon: "Nylon rope",
+  polypropylene: "Polypropylene",
+  dyneema: "Dyneema / HMPE",
+  aramid: "Aramid core",
+  natural: "Natural fibre",
 };
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
