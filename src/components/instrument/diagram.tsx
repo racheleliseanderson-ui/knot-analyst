@@ -72,10 +72,12 @@ function focusTransform(kind: DiagramKind, step?: number, enabled?: boolean) {
 function toneFor(from: number, step?: number) {
   // State is encoded twice — colour AND weight/dash — so it survives
   // greyscale, colour blindness and print.
+  // Subtle contrast bump: future slightly quieter, past slightly quieter,
+  // so the active step reads more clearly without changing the system.
   if (step === undefined) return { stroke: LINE, opacity: 1, scale: 1, ghost: false };
-  if (from > step) return { stroke: GHOST, opacity: 0.3, scale: 0.7, ghost: true };
+  if (from > step) return { stroke: GHOST, opacity: 0.22, scale: 0.7, ghost: true };
   if (from === step) return { stroke: HOT, opacity: 1, scale: 1.6, ghost: false };
-  return { stroke: LINE, opacity: 0.6, scale: 1, ghost: false };
+  return { stroke: LINE, opacity: 0.52, scale: 1, ghost: false };
 }
 
 function Seg({
@@ -389,7 +391,7 @@ export function KnotDiagram({ kind, step, className, title, focus, description }
           height="180"
           fill="url(#ki-grid)"
           className="text-muted-foreground"
-          opacity={0.14}
+          opacity={0.17}
         />
         <g
           aria-hidden="true"

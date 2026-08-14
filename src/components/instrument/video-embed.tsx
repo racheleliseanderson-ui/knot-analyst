@@ -57,6 +57,9 @@ export function VideoEmbed({ video, knotName }: { video: KnotVideo; knotName: st
       <p className="mt-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
         {video.channel}
       </p>
+      <p className="mt-2 text-[0.6875rem] leading-snug text-muted-foreground">
+        External video from a creator we follow — not produced by us.
+      </p>
       <a
         href={watchUrl}
         target="_blank"
