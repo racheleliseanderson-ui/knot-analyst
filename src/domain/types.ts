@@ -9,7 +9,7 @@
 export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
-export const KNOT_CATALOG_VERSION = "2026-08-14.6";
+export const KNOT_CATALOG_VERSION = "2026-08-14.7";
 export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
 export const ENGINE_VERSION = "mech-intel-1.3.0";
 
@@ -36,7 +36,9 @@ export type ConnectionJob =
   | "unequal-rope-join"
   | "load-transfer"
   | "stopper"
-  | "shorten-line";
+  | "shorten-line"
+  | "mid-line-loop"
+  | "tension-line";
 
 export type LineMaterial =
   | "mono"
@@ -491,6 +493,8 @@ export const CONNECTION_LABELS: Record<ConnectionJob, string> = {
   "load-transfer": "Load transfer / snubber",
   stopper: "Stopper in the end",
   "shorten-line": "Shorten under load",
+  "mid-line-loop": "Mid-line loop",
+  "tension-line": "Tension / lash a line",
 };
 
 export const CONNECTION_GROUPS: { title: string; jobs: ConnectionJob[] }[] = [

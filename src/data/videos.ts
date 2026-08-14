@@ -402,6 +402,66 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
     title: "Figure Eight Stopper Knots",
     channel: "Knot Knut",
   },
+  "water-bowline": {
+    provider: "youtube",
+    id: "pDhqEtfWCcg",
+    title: "Strong Secure Water Bowline - How To Tie One",
+    channel: "WhyKnot",
+  },
+  "bowline-on-a-bight": {
+    provider: "youtube",
+    id: "JzE89JBmLwo",
+    title: "Learn How To Tie A Bowline On A Bight",
+    channel: "WhyKnot",
+  },
+  "alpine-butterfly": {
+    provider: "youtube",
+    id: "Qc89VZ9JkN0",
+    title: "This Knot is a GAMECHANGER! - The Alpine Butterfly Knot.",
+    channel: "The Bear Essentials",
+  },
+  "cow-hitch": {
+    provider: "youtube",
+    id: "-V_Qt15yPis",
+    title: "Learn How To Tie The Lark's Head Knot Mid Line",
+    channel: "WhyKnot",
+  },
+  "buntline-hitch": {
+    provider: "youtube",
+    id: "MdcBntXMbyY",
+    title: "Learn How To Tie A Buntline Hitch Knot",
+    channel: "WhyKnot",
+  },
+  "icicle-hitch": {
+    provider: "youtube",
+    id: "stSVqdQFtfs",
+    title: "How to Tie an Icicle Hitch (Rope End Method)",
+    channel: "AnimatedKnots",
+  },
+  "truckers-hitch": {
+    provider: "youtube",
+    id: "T8dUP_xGa3g",
+    title: "How To Tie A Trucker's Hitch",
+    channel: "Brandon Nelson",
+  },
+  "zeppelin-bend": {
+    provider: "youtube",
+    id: "Ln-n02POucU",
+    title: "How to Tie the Zeppelin Knot (EASY & SECURE Bend Knot)",
+    channel: "TheKnotsManual",
+  },
+  "carrick-bend": {
+    provider: "youtube",
+    id: "uUFlP8jjdKE",
+    title: "Learn How To Tie A Carrick Bend/Pretzel Knot",
+    channel: "WhyKnot",
+  },
+  "ashley-stopper": {
+    provider: "youtube",
+    id: "C8Txxs2hyRo",
+    title: "Ashley Stopper Knot Tutorial",
+    channel: "MeZillch",
+  },
 };
 
 export function applyVideo(content: KnotContent): KnotContent {

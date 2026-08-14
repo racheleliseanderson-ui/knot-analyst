@@ -707,6 +707,156 @@ export const HOW_TO_EXTRAS: Record<string, HowTo> = {
     ROPE_NOTES,
     ROPE_DRESS,
   ),
+  "water-bowline": ht(
+    [
+      "The extra security is a clove collar, not more bulk.",
+      "If the two loops are not a clove, it is a plain bowline with extra rope.",
+      "Still not an HMPE knot. Splice that fibre.",
+    ],
+    {
+      1: { expectedResult: "Two overlapping loops sitting as a clove hitch in the standing part.", detail: "That clove is the water collar." },
+      2: { expectedResult: "Working end up through both clove loops.", detail: "Missing a loop is unfinished." },
+      3: { expectedResult: "Around the standing part and back down the clove.", detail: "Left up is a slip." },
+      4: { expectedResult: "Clove dressed tight against the standing part.", detail: "A loose clove is just a fat bowline." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "bowline-on-a-bight": ht(
+    [
+      "Both ends are already occupied. This is a mid-line pair of loops.",
+      "The bight must finish around both standing parts.",
+      "Three-way load belongs on an Alpine Butterfly, not this.",
+    ],
+    {
+      1: { expectedResult: "Long bight where the loops must sit.", detail: "A short bight cannot finish the wrap-around." },
+      2: { expectedResult: "Bight passed through a loop in the doubled rope.", detail: "This is only half the knot." },
+      3: { expectedResult: "Opened bight passed around the whole knot.", detail: "If it sits on one standing part, restart." },
+      4: { expectedResult: "Two dressed loops, bight around both standings.", detail: "Unequal undressed loops will capsize." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "alpine-butterfly": ht(
+    [
+      "Mid-line only. An end-loop is a different job.",
+      "Wrap order is the knot. Wrong order is a slip loop.",
+      "Dress by loading the loop and both standing parts.",
+    ],
+    {
+      1: { expectedResult: "Two wraps on the hand — fingertip turn, then thumb turn.", detail: "One wrap is not this knot." },
+      2: { expectedResult: "Fingertip turn wrapped around the other two.", detail: "Lifting the wrong turn inverts the body." },
+      3: { expectedResult: "Structure slid off with wrap order intact.", detail: "A scramble here is a retie." },
+      4: { expectedResult: "Square body, loop standing, both standings leaving opposite sides.", detail: "A twist is a retie." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "cow-hitch": ht(
+    [
+      "Both legs must share the load. One-legged load walks.",
+      "A finished eye dropped over a post is the job.",
+      "Not an overnight mooring plan.",
+    ],
+    {
+      1: { expectedResult: "Bight around the post or through the ring.", detail: "A single pass is not this hitch." },
+      2: { expectedResult: "Both legs through the bight.", detail: "One leg through is a girth that will walk." },
+      3: { expectedResult: "Hitch square, both legs leaving together.", detail: "A twisted hitch is already walking." },
+      4: { expectedResult: "Both legs loaded.", detail: "If only one leg will take the strain, switch hitch." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "buntline-hitch": ht(
+    [
+      "The second clove turn sits inside — toward the ring. That is why it jams.",
+      "If you must undo it after a snatch, this is the wrong hitch.",
+      "Outside second turn is two half hitches, not a buntline.",
+    ],
+    {
+      1: { expectedResult: "Working end through the ring.", detail: "Leave enough tail for the clove." },
+      2: { expectedResult: "Clove on the standing part, second turn toward the ring.", detail: "Outside turn is the other hitch." },
+      3: { expectedResult: "Clove dressed up to the ring.", detail: "A floating clove will walk, then jam in the wrong place." },
+      4: { expectedResult: "Standing attachment you do not expect to break by hand.", detail: "Need a release? Use round turn and two half hitches." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "icicle-hitch": ht(
+    [
+      "Turns go away from the pull. Toward the pull is a different, weaker hitch.",
+      "Set perpendicular first, then load along the spar.",
+      "If a rolling hitch already holds, you do not need this.",
+    ],
+    {
+      1: { expectedResult: "Four or five turns away from the pull.", detail: "Too few turns on a slick surface walk." },
+      2: { expectedResult: "Working end back alongside the standing part, bight behind.", detail: "No bight means you cannot finish." },
+      3: { expectedResult: "Bight over both ends and over the spar end.", detail: "Missing the spar end is unfinished." },
+      4: { expectedResult: "Set perpendicular, then along-spar load holds.", detail: "If it walks on the test, add a turn." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "truckers-hitch": ht(
+    [
+      "This is a system: loop, purchase, lock. The lock is the fail point.",
+      "The directional loop must face the purchase so it does not spill.",
+      "Not a chain snubber. That is a rolling or icicle hitch.",
+    ],
+    {
+      1: { expectedResult: "Line around the far anchor and back.", detail: "No far point, no purchase." },
+      2: { expectedResult: "Directional loop in the standing part facing the purchase.", detail: "A collapsing loop dumps the tension." },
+      3: { expectedResult: "Tail through the loop, line under working tension.", detail: "This is the 2:1. Do not lock yet." },
+      4: { expectedResult: "Two nested half hitches locking the tension.", detail: "Walk away without the lock and the line goes slack." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "zeppelin-bend": ht(
+    [
+      "Six in one rope, nine in the other. Working ends opposite.",
+      "Same-side tails are a different, weaker bend.",
+      "Similar diameters. A mismatch is a double sheet bend.",
+    ],
+    {
+      1: { expectedResult: "First rope looped like a 6, working end on top.", detail: "The 6 is half the lock." },
+      2: { expectedResult: "Second rope looped like a 9, working end opposite.", detail: "Same-side ends will not lock." },
+      3: { expectedResult: "Each working end through the centre of both loops.", detail: "Missing a loop is unfinished." },
+      4: { expectedResult: "Two interlocked loops, tails opposite, standing parts loaded.", detail: "If it looks like a sheet bend, restart." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "carrick-bend": ht(
+    [
+      "Lattice, not a pile. Broken over-under is a tangle, not a bend.",
+      "Seize both tails on a standing hawser.",
+      "Small soft line wants a Zeppelin, not this.",
+    ],
+    {
+      1: { expectedResult: "Loop in the first rope, tail under its standing part.", detail: "Tail over is the wrong lattice start." },
+      2: { expectedResult: "Second rope woven under-over through that loop.", detail: "Count the overs." },
+      3: { expectedResult: "Second tail across the loop and under itself.", detail: "Missing the under-itself dumps the lattice." },
+      4: { expectedResult: "Standing parts pulled; tails seized if this stays.", detail: "An unseized hawser can walk." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
+  "ashley-stopper": ht(
+    [
+      "Three lobes on the underside. Two lobes is an overhand.",
+      "Stopper only. Not a join.",
+      "Use when a figure-8 pulls through the block.",
+    ],
+    {
+      1: { expectedResult: "Loose overhand, long working tail.", detail: "A short tail cannot form the third lobe." },
+      2: { expectedResult: "Tail back through the overhand on the documented path.", detail: "Wrong return is still an overhand." },
+      3: { expectedResult: "Collar showing three distinct lobes.", detail: "Two lobes — keep following." },
+      4: { expectedResult: "Compact three-lobe stopper larger than the opening.", detail: "If it pulls through, it is unfinished or too small." },
+    },
+    ROPE_NOTES,
+    ROPE_DRESS,
+  ),
 };
 
 /** Micro inspect for every modelled id that core MICRO does not already cover. */
@@ -1079,5 +1229,65 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
     2: ["Eight completed, tail through.", "Unfinished eights pull through.", "Complete the eight."],
     3: ["Compact eight larger than the opening.", "Too small and it pulls through.", "Retie larger."],
     4: ["Short tail. Not loaded as a join.", "A stopper asked to join will fail.", "Pick a join if you need a join."],
+  }),
+  "water-bowline": mx({
+    1: ["Two loops sitting as a clove in the standing part.", "Random loops are not a clove collar.", "Form the clove first."],
+    2: ["Working end up through both clove loops.", "Missing a loop is unfinished.", "Go through both."],
+    3: ["Around the standing part and back down.", "Left up is a slip.", "Complete the return."],
+    4: ["Clove dressed tight.", "A loose clove is a fat bowline.", "Dress the clove, not just the eye."],
+  }),
+  "bowline-on-a-bight": mx({
+    1: ["Long mid-line bight.", "Too short to finish the wrap-around.", "Start longer."],
+    2: ["Bight through the loop in the doubled rope.", "This is only half.", "Continue."],
+    3: ["Opened bight around the whole knot.", "Sitting on one standing part is unfinished.", "Pass it around both."],
+    4: ["Two loops, bight around both standings.", "A one-sided bight will capsize.", "Retie."],
+  }),
+  "alpine-butterfly": mx({
+    1: ["Two wraps — fingertip then thumb.", "One wrap is the wrong knot.", "Make the second wrap."],
+    2: ["Fingertip turn wrapped around the others.", "Wrong turn inverts the body.", "Lift the fingertip turn."],
+    3: ["Slid off with order intact.", "A scramble is a retie.", "Restart the wraps."],
+    4: ["Square body, both standings opposite.", "A twist is a slip waiting.", "Load all three parts."],
+  }),
+  "cow-hitch": mx({
+    1: ["Bight around the post or through the ring.", "A single pass is not this hitch.", "Use a bight."],
+    2: ["Both legs through the bight.", "One leg will walk.", "Feed both."],
+    3: ["Hitch square, legs together.", "A twist is already walking.", "Dress it square."],
+    4: ["Both legs loaded.", "One-leg load slips.", "Switch hitch or load both."],
+  }),
+  "buntline-hitch": mx({
+    1: ["Working end through the ring.", "Short tail cannot finish the clove.", "Leave more tail."],
+    2: ["Clove with the second turn toward the ring.", "Outside turn is two half hitches.", "Put the second turn inside."],
+    3: ["Clove dressed to the ring.", "A floating clove walks, then jams wrong.", "Slide it up."],
+    4: ["Standing hitch you do not expect to break by hand.", "Need a release? Wrong hitch.", "Use round turn and two half hitches."],
+  }),
+  "icicle-hitch": mx({
+    1: ["Four or five turns away from the pull.", "Toward the pull will not grip.", "Reverse the turns."],
+    2: ["Working end back, bight behind the spar.", "No bight, no finish.", "Leave the bight."],
+    3: ["Bight over both ends and the spar end.", "Missing the spar end is unfinished.", "Pass it over the end."],
+    4: ["Set perpendicular, then along-spar hold.", "If it walks, do not trust it.", "Add a turn."],
+  }),
+  "truckers-hitch": mx({
+    1: ["Line around the far point and back.", "No far point, no purchase.", "Rethread the far point."],
+    2: ["Directional loop facing the purchase.", "A spilling loop dumps tension.", "Remake the loop."],
+    3: ["Tail through, line under working tension.", "Locking before tension wastes the 2:1.", "Pull first."],
+    4: ["Two nested half hitches locking it.", "No lock, line goes slack.", "Tie the lock before you walk away."],
+  }),
+  "zeppelin-bend": mx({
+    1: ["First rope looped like a 6.", "A random bight is not the 6.", "Form the 6."],
+    2: ["Second rope like a 9, working end opposite.", "Same-side ends will not lock.", "Flip the 9."],
+    3: ["Each working end through both loops.", "Missing a loop is unfinished.", "Through the centre."],
+    4: ["Two interlocked loops, tails opposite.", "If it looks like a sheet bend, restart.", "Retie the 6-and-9."],
+  }),
+  "carrick-bend": mx({
+    1: ["First loop, tail under its standing part.", "Tail over starts the wrong lattice.", "Restart the loop."],
+    2: ["Second rope under-over through that loop.", "Broken lattice is a tangle.", "Count the overs."],
+    3: ["Second tail under itself.", "Missing that under dumps the bend.", "Tuck under itself."],
+    4: ["Standings pulled; tails seized if standing.", "Unseized hawser can walk.", "Seize both tails."],
+  }),
+  "ashley-stopper": mx({
+    1: ["Loose overhand, long tail.", "Short tail cannot make the third lobe.", "Start longer."],
+    2: ["Tail back through on the documented path.", "Wrong return stays an overhand.", "Retrace."],
+    3: ["Three distinct lobes.", "Two lobes is unfinished.", "Keep following the path."],
+    4: ["Compact three-lobe stopper larger than the opening.", "Pulls through if too small or loose.", "Retie larger."],
   }),
 };
