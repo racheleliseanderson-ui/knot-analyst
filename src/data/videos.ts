@@ -258,6 +258,60 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
     title: "How to Tie your Plaited Double Rigging for Game Fish",
     channel: "Fishing Adventures Hawkes Bay",
   },
+  centauri: {
+    provider: "youtube",
+    id: "Dqc3lDvl5i4",
+    title: "Very simple and strong knot | Centauri knot!",
+    channel: "Regz Adventure",
+  },
+  "eye-crosser": {
+    provider: "youtube",
+    id: "ci6GqBMH5U4",
+    title: "How to Tie the Eye Crosser Knot | Fishing Knots",
+    channel: "Take Me Fishing",
+  },
+  "fish-n-fool": {
+    provider: "youtube",
+    id: "YNSJ5-sCtbw",
+    title: "How to Tie the IMPROVED Uni Knot (FishNFool)",
+    channel: "Just The Lip Fishing",
+  },
+  "harvey-dry-fly": {
+    provider: "youtube",
+    id: "nnVTS_TRoUA",
+    title: "How to Tie a Harvey Dry Fly Knot | Fishing Knots",
+    channel: "Take Me Fishing",
+  },
+  jacks: {
+    provider: "youtube",
+    id: "GCv8nCLRNfY",
+    title: "Jack's Knot - Easiest Fishing Knot Tying Instructions",
+    channel: "InTheRiffle",
+  },
+  jansik: {
+    provider: "youtube",
+    id: "gdKrEBgpYa4",
+    title: "How to Tie a Jansik Knot",
+    channel: "Take Me Fishing",
+  },
+  knotless: {
+    provider: "youtube",
+    id: "xOeGDu3goMU",
+    title: "How To Tie a Knotless Knot or Hair Rig",
+    channel: "Fishing Tutorials",
+  },
+  nanofil: {
+    provider: "youtube",
+    id: "r1lxxLrtGZI",
+    title: "Best knot for tying Berkley NanoFil",
+    channel: "Scott Turnage Unplugged",
+  },
+  "world-fair": {
+    provider: "youtube",
+    id: "Qddcm_Dv2Ew",
+    title: "Knot Wars Palomar Knot Vs. World's Fair Knot",
+    channel: "NorthAmericanFishing",
+  },
 };
 
 export function applyVideo(content: KnotContent): KnotContent {

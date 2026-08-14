@@ -340,6 +340,123 @@ export const HOW_TO_EXTRAS: Record<string, HowTo> = {
       3: { expectedResult: "End locked, double holds under a hard test pull." },
     },
   ),
+  centauri: ht(
+    [
+      "Nylon only. This collar will not grip braid.",
+      "Three open loops, then the tag through all three. Closing early kinks the mono.",
+      "The same collar can slide to a spool arbor — that is a secondary job, not a high-load backing plan.",
+    ],
+    {
+      1: { expectedResult: "First loop held open around the standing line.", detail: "If it flips, restart. Reversed loops will not form a collar." },
+      2: { expectedResult: "Three open loops stacked in order.", detail: "A collapsed middle loop is the usual failure." },
+      3: { expectedResult: "Tag through all three; collar forming on the standing line.", detail: "Pull the tag gently. A yank kinks nylon." },
+      4: { expectedResult: "Collar butted to the eye or arbor.", detail: "Set, then trim. Do not fish a floating collar." },
+    },
+  ),
+  "eye-crosser": ht(
+    [
+      "The eye must accept two passes without pinching.",
+      "Keep the two eye strands parallel. A cross in the eye scores the line.",
+      "Braid needs a harder test pull than nylon.",
+    ],
+    {
+      1: { expectedResult: "Long working tag through the eye.", detail: "Short tags cannot form the lock." },
+      2: { expectedResult: "Two parallel strands in the eye.", detail: "If they twist, pull out and restart." },
+      3: { expectedResult: "Lock around the doubled section, tag path correct.", detail: "Wrong side of the lock is a slip." },
+      4: { expectedResult: "Compact seat at the eye after a hard test pull.", detail: "Braid that walks now will walk on the fish." },
+    },
+  ),
+  "fish-n-fool": ht(
+    [
+      "This is a Uni barrel after a second eye pass — not a Palomar.",
+      "More wraps on slick braid. Fewer on thick nylon.",
+      "The barrel must slide to the eye. A barrel that closes mid-line is unfinished.",
+    ],
+    {
+      1: { expectedResult: "Two clean eye passes, strands parallel.", detail: "A crossed second pass is the usual weak side." },
+      2: { expectedResult: "Uni loop formed with the tag.", detail: "If the loop captures the hook, restart." },
+      3: { expectedResult: "Even wraps inside the Uni loop.", detail: "Under-wrapped braid walks." },
+      4: { expectedResult: "Barrel butted to the eye after a test pull.", detail: "Trim only after the lock." },
+    },
+  ),
+  "harvey-dry-fly": ht(
+    [
+      "Turned-eye dry flies only. A straight eye is the wrong fly.",
+      "The job is tippet angle, not peak retention.",
+      "If the knot rolls around the eye, the presentation is already lost.",
+    ],
+    {
+      1: { expectedResult: "Confirmed up- or down-turned eye.", detail: "Straight-eye flies belong on Davy/Orvis." },
+      2: { expectedResult: "Two working loops held beside the standing tippet.", detail: "Lost loops mean a Turle-shaped mess." },
+      3: { expectedResult: "Tag through both loops twice.", detail: "One pass will not hold the angle." },
+      4: { expectedResult: "Knot parked on the intended side; tippet exit angle correct.", detail: "If the fly pulls nose-down, retie." },
+    },
+  ),
+  jacks: ht(
+    [
+      "The crossing must stay centered. A twist to one side is a different knot.",
+      "Do not improvise a second turn.",
+      "Braid is out of scope.",
+    ],
+    {
+      1: { expectedResult: "Tag doubled back parallel to the standing tippet.", detail: "Short tags hide the crossing." },
+      2: { expectedResult: "Documented crossing formed, not a random hitch.", detail: "Wrong order is a slip." },
+      3: { expectedResult: "Tag through the crossing in the documented direction.", detail: "Wrong side will not seat." },
+      4: { expectedResult: "Compact lock centered at the eye.", detail: "If it twists, retie or step to Orvis." },
+    },
+  ),
+  jansik: ht(
+    [
+      "Light mono/fluoro and a roomy eye. Three passes will not fit a tiny fly eye.",
+      "Keep the three eye strands parallel.",
+      "Heavy stiff leader will not close this lock.",
+    ],
+    {
+      1: { expectedResult: "Three passes, two working loops behind the eye.", detail: "Two passes is a different knot." },
+      2: { expectedResult: "Eye strands parallel, not twisted.", detail: "A twist scores the line at the eye." },
+      3: { expectedResult: "Tag through both working loops.", detail: "Missing one loop is an unlock." },
+      4: { expectedResult: "Compact lock at the eye after a wet close.", detail: "If it will not close, the eye is too small." },
+    },
+  ),
+  knotless: ht(
+    [
+      "Hair length is set before any wrap. You cannot fix it after the column.",
+      "This is a hair rig, not a lure terminal.",
+      "Even shank wraps. A wrap that walks onto the bend dumps the bait.",
+    ],
+    {
+      1: { expectedResult: "Hair length set beyond the bend.", detail: "Measure it now. Later is too late." },
+      2: { expectedResult: "Hair and tag laid along the shank.", detail: "If the hair leaves the shank, restart." },
+      3: { expectedResult: "Even 6–10 wraps toward the bend.", detail: "Crossed wraps walk." },
+      4: { expectedResult: "Standing hooklink back through the eye; turn angle correct.", detail: "Wrong exit direction is a missed hook-turn." },
+    },
+  ),
+  nanofil: ht(
+    [
+      "This is a Double Palomar. One overhand pass is the usual slip on fused superline.",
+      "The eye must take doubled fused line.",
+      "Pull-test for slip. NanoFil walks a lazy seat.",
+    ],
+    {
+      1: { expectedResult: "Doubled loop through the eye.", detail: "A single strand is the wrong knot." },
+      2: { expectedResult: "Loose overhand in the doubled line.", detail: "Do not cinch this yet." },
+      3: { expectedResult: "Working loop through that overhand a second time.", detail: "Skipping this pass is a Palomar — and it will slip." },
+      4: { expectedResult: "Hardware through the large loop; even seat; slip-test holds.", detail: "If it walks, retie. Do not fish it." },
+    },
+  ),
+  "world-fair": ht(
+    [
+      "Nylon or fluoro only. Not a braid knot.",
+      "Both return openings matter. Missing one rolls the lock.",
+      "Wet before the close. A dry cinch scores fluoro.",
+    ],
+    {
+      1: { expectedResult: "Doubled loop through the eye.", detail: "Short loops hide the fold." },
+      2: { expectedResult: "Protruding loop folded back over the doubled line.", detail: "If it will not fold clean, lengthen the loop." },
+      3: { expectedResult: "Tag through both documented openings.", detail: "One opening is an unfinished knot." },
+      4: { expectedResult: "Stacked crossings, compact lock, test pull holds.", detail: "A rolled crossing is a retie." },
+    },
+  ),
 };
 
 /** Micro inspect for every modelled id that core MICRO does not already cover. */
@@ -568,5 +685,59 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
     1: ["Long doubled section.", "Too short a double cannot be plaited tightly.", "Start longer."],
     2: ["Tight even plait.", "A loose plait is not a double.", "Rebuild tighter."],
     3: ["End locked, hard test pull holds.", "Incomplete lock unravels in the guides.", "Lock, then pull."],
+  }),
+  centauri: mx({
+    1: ["First loop open around the standing line.", "A flipped first loop will not form a collar.", "Restart the first loop."],
+    2: ["Three open loops stacked.", "A collapsed middle loop is the usual failure.", "Hold all three before the tag pass."],
+    3: ["Tag through all three; collar forming.", "A yank kinks nylon.", "Pull the tag gently."],
+    4: ["Collar butted to the eye or arbor.", "A floating collar walks.", "Slide, set, then trim."],
+  }),
+  "eye-crosser": mx({
+    1: ["Long working tag through the eye.", "Short tags cannot form the lock.", "Leave more tag."],
+    2: ["Two parallel strands in the eye.", "A cross in the eye scores the line.", "Withdraw and restart the second pass."],
+    3: ["Lock around the doubled section.", "Wrong side of the lock is a slip.", "Retrace the documented path."],
+    4: ["Compact seat after a hard test pull.", "Braid that walks now will walk on the fish.", "Retie before you fish it."],
+  }),
+  "fish-n-fool": mx({
+    1: ["Two clean eye passes, strands parallel.", "A crossed second pass is the weak side.", "Restart the second pass."],
+    2: ["Uni loop formed with the tag.", "A loop that captures the hook is the wrong structure.", "Restart the Uni loop."],
+    3: ["Even wraps inside the Uni loop.", "Under-wrapped braid walks.", "Add wraps before the seat."],
+    4: ["Barrel butted to the eye.", "A mid-line barrel is unfinished.", "Slide it to the eye as a unit."],
+  }),
+  "harvey-dry-fly": mx({
+    1: ["Turned-eye fly confirmed.", "A straight eye is the wrong fly.", "Switch fly or switch knot."],
+    2: ["Two working loops held.", "Lost loops become a Turle-shaped mess.", "Restart the loops."],
+    3: ["Tag through both loops twice.", "One pass will not hold the angle.", "Make the second pass."],
+    4: ["Knot parked on the intended side; exit angle correct.", "Nose-down means the presentation is lost.", "Retie."],
+  }),
+  jacks: mx({
+    1: ["Tag doubled back parallel.", "Short tags hide the crossing.", "Leave more tag."],
+    2: ["Documented crossing formed.", "A random hitch is a different knot.", "Restart the crossing."],
+    3: ["Tag through in the documented direction.", "Wrong side will not seat.", "Retrace."],
+    4: ["Compact lock centered at the eye.", "A twist to one side is a fail.", "Retie or step to Orvis."],
+  }),
+  jansik: mx({
+    1: ["Three passes, two working loops.", "Two passes is a different knot.", "Make the third pass."],
+    2: ["Eye strands parallel.", "A twist scores the line.", "Untwist or restart."],
+    3: ["Tag through both working loops.", "Missing one loop is an unlock.", "Capture both."],
+    4: ["Compact lock at the eye.", "If it will not close, the eye is too small.", "Move to Trilene or Orvis."],
+  }),
+  knotless: mx({
+    1: ["Hair length set beyond the bend.", "You cannot fix length after the column.", "Set it now."],
+    2: ["Hair and tag on the shank.", "Hair off the shank will not trap.", "Relay it."],
+    3: ["Even 6–10 wraps toward the bend.", "Crossed wraps walk onto the bend.", "Dress them."],
+    4: ["Standing line back through the eye; turn angle correct.", "Wrong exit is a missed hook-turn.", "Reverse the exit and retie."],
+  }),
+  nanofil: mx({
+    1: ["Doubled loop through the eye.", "A single strand is the wrong knot.", "Double it."],
+    2: ["Loose overhand in the doubled line.", "Cinching now traps the hardware.", "Leave it open."],
+    3: ["Second pass through that overhand.", "One pass is a Palomar — it will slip on NanoFil.", "Make the second pass."],
+    4: ["Hardware through the large loop; slip-test holds.", "A walk now is a walk on the fish.", "Retie. Do not fish it."],
+  }),
+  "world-fair": mx({
+    1: ["Doubled loop through the eye.", "Short loops hide the fold.", "Lengthen the loop."],
+    2: ["Loop folded back over the doubled line.", "If it will not fold, the loop is too short.", "Start longer."],
+    3: ["Tag through both openings.", "One opening is unfinished.", "Complete the second pass."],
+    4: ["Stacked crossings, compact lock.", "A rolled crossing is a retie.", "Wet and close again, or start over."],
   }),
 };

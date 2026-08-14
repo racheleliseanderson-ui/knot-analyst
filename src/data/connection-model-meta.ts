@@ -6,6 +6,7 @@
 import type { LineMaterial } from "@/domain/types";
 import { CONNECTION_MODEL_META_TERMINAL } from "@/data/connection-model-meta-terminal";
 import { CONNECTION_MODEL_META_BATCH4 } from "@/data/connection-model-meta-batch4";
+import { CONNECTION_MODEL_META_BATCH5 } from "@/data/connection-model-meta-batch5";
 
 export type ConditionAbility = "excellent" | "good" | "fair" | "poor" | "impractical";
 export type RetieTempo = "instant" | "fast" | "moderate" | "slow" | "dock-only";
@@ -75,6 +76,11 @@ export const MODEL_SOURCES: Record<string, { title: string; url?: string; note?:
   "field-practice": {
     title: "Common offshore / inshore field practice (cross-checked)",
     note: "Used only when multiple independent sources agree on band shape.",
+  },
+  netknots: {
+    title: "NetKnots fishing knot references",
+    url: "https://www.netknots.com/fishing_knots",
+    note: "Structural / application authority; strength claims treated as bands and cross-checked.",
   },
 };
 
@@ -367,6 +373,7 @@ export const CONNECTION_MODEL_META: Record<string, ConnectionModelMeta> = {
   ...CONNECTION_MODEL_META_CORE,
   ...CONNECTION_MODEL_META_TERMINAL,
   ...CONNECTION_MODEL_META_BATCH4,
+  ...CONNECTION_MODEL_META_BATCH5,
 };
 
 export function getConnectionModelMeta(id: string): ConnectionModelMeta | undefined {

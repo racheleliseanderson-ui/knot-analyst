@@ -10,6 +10,7 @@ import { MECHANICS } from "../src/data/mechanics-profiles";
 import { MECHANICS_EXTRAS } from "../src/data/mechanics-extras";
 import { MECHANICS_EXTRAS_TERMINAL } from "../src/data/mechanics-extras-terminal";
 import { MECHANICS_EXTRAS_BATCH4 } from "../src/data/mechanics-extras-batch4";
+import { MECHANICS_EXTRAS_BATCH5 } from "../src/data/mechanics-extras-batch5";
 import {
   CONNECTION_MODEL_META,
   MODEL_SOURCES,
@@ -23,6 +24,7 @@ import { UTILITY_KNOTS } from "../src/data/knots/utility";
 import { SEED_BATCH_2 } from "../src/data/knots/seed-batch-2";
 import { SEED_BATCH_3_TERMINAL } from "../src/data/knots/seed-batch-3-terminal";
 import { SEED_BATCH_4 } from "../src/data/knots/seed-batch-4";
+import { SEED_BATCH_5_TERMINAL } from "../src/data/knots/seed-batch-5-terminal";
 import { HOW_TO, MICRO } from "../src/data/how-to";
 import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "../src/data/how-to-extras";
 import { KNOT_VIDEOS } from "../src/data/videos";
@@ -49,6 +51,7 @@ const ALL_MECHANICS = {
   ...MECHANICS_EXTRAS,
   ...MECHANICS_EXTRAS_TERMINAL,
   ...MECHANICS_EXTRAS_BATCH4,
+  ...MECHANICS_EXTRAS_BATCH5,
 };
 
 const ALL_CONTENT: KnotContent[] = [
@@ -59,6 +62,7 @@ const ALL_CONTENT: KnotContent[] = [
   ...SEED_BATCH_2,
   ...SEED_BATCH_3_TERMINAL,
   ...SEED_BATCH_4,
+  ...SEED_BATCH_5_TERMINAL,
 ];
 
 const contentById = new Map(ALL_CONTENT.map((k) => [k.id, k]));
