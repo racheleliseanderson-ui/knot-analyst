@@ -162,6 +162,102 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
     title: "How To Tie The Trilene Knot",
     channel: "WhyKnot",
   },
+  snell: {
+    provider: "youtube",
+    id: "-_ftAGkewfE",
+    title: "Easy Way To Snell A Hook - How To Tie A Hook To Fishing Line.",
+    channel: "WhyKnot",
+  },
+  "spider-hitch": {
+    provider: "youtube",
+    id: "FXTZxfbc3-Y",
+    title: "Easiest Way To Tie A Spider Hitch Loop Knot",
+    channel: "Salt Strong",
+  },
+  "nail-knot": {
+    provider: "youtube",
+    id: "_I0u9URCbNM",
+    title: "Nail Knot Tutorial - Attach your leader to your fly line with this method!",
+    channel: "Mad River Outfitters",
+  },
+  "egg-loop": {
+    provider: "youtube",
+    id: "hNcNZpyyHF8",
+    title: "Fishing Knots: Egg Loop Knot - How to Tie an Egg Loop Knot",
+    channel: "Fishthatwontquit",
+  },
+  pitzen: {
+    provider: "youtube",
+    id: "-N_cnZVXxas",
+    title: "Pitzen Knot Tying Instructions - RIO Products",
+    channel: "InTheRiffle",
+  },
+  turle: {
+    provider: "youtube",
+    id: "lKQ_NhnxihM",
+    title: "Turle Knot Tying Instructions - RIO Products",
+    channel: "InTheRiffle",
+  },
+  baja: {
+    provider: "youtube",
+    id: "ACOA2ZS0pwg",
+    title: "Baja Knot (aka - Perfection Loop) Tying Instructions - Fishing Knots",
+    channel: "InTheRiffle",
+  },
+  clinch: {
+    provider: "youtube",
+    id: "8wIrY92cmTU",
+    title: "The Easiest Fishing Knot in 60 Seconds",
+    channel: "Dieter Melhorn Fishing",
+  },
+  "uni-snell": {
+    provider: "youtube",
+    id: "3xTLs_-Q-fg",
+    title: "The Uni Knot Snell - Learn to Tie!",
+    channel: "Saltwater Experience - Tom Rowland Podcast",
+  },
+  seaguar: {
+    provider: "youtube",
+    id: "OKXhkj8VWWU",
+    title: "Jim's Seaguar Knot",
+    channel: "Bud Onstad",
+  },
+  "j-knot": {
+    provider: "youtube",
+    id: "nasG2Wy8wD8",
+    title: "J Knot- My Go to Knot for Braided Line to Fluorocarbon Leader- Saltwater Experience",
+    channel: "Saltwater Experience - Tom Rowland Podcast",
+  },
+  "aussie-quickie": {
+    provider: "youtube",
+    id: "qU1XmRGIOmg",
+    title: "Aussie Quickie Knot- Braided Line To Fluorocarbon- Saltwater Experience",
+    channel: "Saltwater Experience - Tom Rowland Podcast",
+  },
+  "needle-knot": {
+    provider: "youtube",
+    id: "-b-JR039AxY",
+    title: "A short film showing how to tie a Needle Knot",
+    channel: "RIO Products",
+  },
+  "homer-rhode": {
+    provider: "youtube",
+    id: "uwh-_qMnHBw",
+    title: "Homer Rhode Loop Knot- Heavy Leader- Saltwater Experience",
+    channel: "Saltwater Experience - Tom Rowland Podcast",
+  },
+  "king-sling": {
+    provider: "youtube",
+    id: "A7fUOLvrAN0",
+    title: "How to Tie a King Sling Loop Knot",
+    channel: "TacticalBassin",
+  },
+  "australian-plait": {
+    provider: "youtube",
+    id: "QdD1_zy1iMI",
+    title: "How to Tie your Plaited Double Rigging for Game Fish",
+    channel: "Fishing Adventures Hawkes Bay",
+  },
 };
 
 export function applyVideo(content: KnotContent): KnotContent {
