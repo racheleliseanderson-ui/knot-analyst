@@ -255,7 +255,7 @@ export const BOATING_BATCH_1: KnotContent[] = [
     aliases: ["Becket bend", "Weaver's knot"],
     category: "rope",
     bestFor: ["rope-join"],
-    goodFor: "Join two ropes of similar diameter. The classic bend.",
+    goodFor: "Join two ropes of similar diameter. The classic bend — tails same side, bight in the thicker rope.",
     notIdealFor: ["Large diameter mismatch (use double sheet bend)", "Slick HMPE", "A permanent join (splice)"],
     lineMaterials: [...rope],
     strengthRetentionTypical: "Typically cited ~45–65% — a working bend, not a high-retention splice.",
