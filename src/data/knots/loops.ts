@@ -11,6 +11,8 @@ export const LOOP_KNOTS: KnotContent[] = [
       "Compact fixed loop at the end of a leader or line — ideal for loop-to-loop connections in fly systems.",
     notIdealFor: ["Creating a free-swinging lure loop at the eye (use Non-Slip Mono Loop)"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Compact fixed end loop; typically 85–95% when the loop sequence is correct.",
     difficulty: "beginner",
     materialsNeeded: ["Line or leader end"],
     howToSummary:
@@ -74,6 +76,8 @@ export const LOOP_KNOTS: KnotContent[] = [
       "Very fast fixed loop — bulkier than a Perfection Loop but easier under pressure or with cold hands.",
     notIdealFor: ["When the absolute smallest loop knot is required"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Bulky reliable loop; typically 85–95% of the doubled line when two passes seat.",
     difficulty: "beginner",
     materialsNeeded: ["Line end"],
     howToSummary: "Double the line, tie a double (or triple) overhand with the bight, and seat.",
@@ -118,6 +122,8 @@ export const LOOP_KNOTS: KnotContent[] = [
       "Creates a strong double-line loop used in big-game and light-tackle leader systems. Advanced and time-consuming but highly regarded when done correctly.",
     notIdealFor: ["Quick bankside re-ties", "Beginners without practice gear"],
     lineMaterials: ["mono", "fluoro", "braid"],
+    strengthRetentionTypical:
+      "Class double. Published tests commonly near full line when the sleeve is dense and locked — treat as a high band, technique-sensitive.",
     difficulty: "advanced",
     materialsNeeded: ["Long enough line section", "Space to twist under tension"],
     toolsHelpful: ["Rod holder or partner for tension"],

@@ -90,6 +90,7 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Coils stacked evenly against the eye, no gap, no crossover.",
       },
       5: {
+        detail: "Trim after the seat, not during it. A tag sucked into the stack can cut the line at the eye.",
         expectedResult: "Short square tag pointing away from the coil stack.",
       },
     },
@@ -103,7 +104,10 @@ export const HOW_TO: Record<string, HowTo> = {
       "Keep the tag long enough to pass back through two openings, not one.",
     ],
     steps: {
-      1: { expectedResult: "Tag through the eye with working length to spare." },
+      1: {
+        detail: "Leave enough tag for the wraps and both tucks. A short tag is the usual unfinished clinch.",
+        expectedResult: "Tag through the eye with working length to spare.",
+      },
       2: {
         detail:
           "Count the wraps out loud. An uncounted clinch is the most common cause of an unexplained pull-out.",
@@ -129,8 +133,14 @@ export const HOW_TO: Record<string, HowTo> = {
       "Works on almost anything with an eye; the barrel is what does the gripping.",
     ],
     steps: {
-      1: { expectedResult: "Tag doubled back alongside the standing line." },
-      2: { expectedResult: "An open loop with both lines running parallel through it." },
+      1: {
+        detail: "The tag has to double back long enough to form the barrel. Short here and you cannot wrap both strands.",
+        expectedResult: "Tag doubled back alongside the standing line.",
+      },
+      2: {
+        detail: "The open loop is the barrel. Both strands must run through it — wrapping one strand is a different knot.",
+        expectedResult: "An open loop with both lines running parallel through it.",
+      },
       3: {
         detail: "Wraps go around both strands, inside the loop. Around one strand is a different, weaker knot.",
         expectedResult: "Even turns encircling both strands.",
@@ -155,12 +165,18 @@ export const HOW_TO: Record<string, HowTo> = {
         detail: "Two passes spread eye contact over two strands, which is where the abrasion resistance comes from.",
         expectedResult: "A small double loop at the eye.",
       },
-      2: { expectedResult: "Even wrap barrel above the double loop." },
+      2: {
+        detail: "Count the wraps. Crossed wraps on a double-pass eye concentrate load on one turn.",
+        expectedResult: "Even wrap barrel above the double loop.",
+      },
       3: {
         detail: "The tag returns through both eye loops together. Through one only and it unwinds under load.",
         expectedResult: "Tag captured by both loops.",
       },
-      4: { expectedResult: "Barrel closed, double loop snug on the eye, tag outward." },
+      4: {
+        detail: "Moisten before the close. A dry seat on fluoro glazes the double loop.",
+        expectedResult: "Barrel closed, double loop snug on the eye, tag outward.",
+      },
     },
     seatingSequence: WET_SET,
     fieldNotes: COLD_DARK,
@@ -176,8 +192,14 @@ export const HOW_TO: Record<string, HowTo> = {
         detail: "This overhand is the anchor and defines the finished loop. Place it deliberately.",
         expectedResult: "A loose overhand with a clear opening.",
       },
-      2: { expectedResult: "Hardware on the line, tag back through the overhand." },
-      3: { expectedResult: "Even wraps around the standing line." },
+      2: {
+        detail: "The tag must re-enter the original overhand. Missing it is a slip loop.",
+        expectedResult: "Hardware on the line, tag back through the overhand.",
+      },
+      3: {
+        detail: "More wraps on light line. Too few and the loop walks under the first load.",
+        expectedResult: "Even wraps around the standing line.",
+      },
       4: {
         detail: "Seat the overhand first, then the wraps. Reversed order closes the loop on the eye.",
         expectedResult: "Open loop of the intended size, knot body compact above it.",
@@ -193,9 +215,18 @@ export const HOW_TO: Record<string, HowTo> = {
       "Mono and fluoro.",
     ],
     steps: {
-      1: { expectedResult: "Open overhand sitting up the standing line." },
-      2: { expectedResult: "Tag through the eye and back through the overhand." },
-      3: { expectedResult: "Three or more even turns up the standing line." },
+      1: {
+        detail: "The overhand sits well up the standing line so the lure can swing. Too close and the loop dies.",
+        expectedResult: "Open overhand sitting up the standing line.",
+      },
+      2: {
+        detail: "Through the eye, then back through the same overhand. Missing the overhand is not this knot.",
+        expectedResult: "Tag through the eye and back through the overhand.",
+      },
+      3: {
+        detail: "Three or more even turns. Under-wrapping light line lets the loop walk.",
+        expectedResult: "Three or more even turns up the standing line.",
+      },
       4: {
         detail: "Work the tag back down through the overhand and the new loop before any tension goes on.",
         expectedResult: "Loop open and fixed, knot body neat, tag short.",
@@ -211,7 +242,10 @@ export const HOW_TO: Record<string, HowTo> = {
       "Deciding the standing-line side now determines how the hook rides later.",
     ],
     steps: {
-      1: { expectedResult: "Line through the eye with a long tag along the shank." },
+      1: {
+        detail: "A short tag cannot finish at the eye. Restart with more working length.",
+        expectedResult: "Line through the eye with a long tag along the shank.",
+      },
       2: {
         detail: "Each wrap must land beside the last. An overlapping wrap becomes a pressure point under load.",
         expectedResult: "A tidy sleeve of wraps along the shank.",
@@ -219,6 +253,10 @@ export const HOW_TO: Record<string, HowTo> = {
       3: {
         detail: "The pull direction sets the hook rotation. Load the standing line, not the tag.",
         expectedResult: "Wraps compressed against the eye, standing line exiting straight.",
+      },
+      4: {
+        detail: "On-axis pull only. Loading the tag instead of the standing line twists the hook.",
+        expectedResult: "Parallel wraps to the eye, standing line exiting straight, tag short.",
       },
     },
     seatingSequence: WET_SET,
@@ -231,14 +269,24 @@ export const HOW_TO: Record<string, HowTo> = {
       "Large diameter mismatch is the usual cause of a double uni that separates.",
     ],
     steps: {
-      1: { expectedResult: "Two lines lying parallel with a long overlap." },
-      2: { expectedResult: "First barrel formed on one line, still open." },
-      3: { expectedResult: "Second barrel formed, mirrored on the other line." },
+      1: {
+        detail: "Short overlap starves one barrel. Restart with more working room.",
+        expectedResult: "Two lines lying parallel with a long overlap.",
+      },
+      2: {
+        detail: "The first barrel wraps both strands. Wrapping only one is a different knot.",
+        expectedResult: "First barrel formed on one line, still open.",
+      },
+      3: {
+        detail: "Mirror the first barrel. Unequal turn counts on a mismatch let one side slip.",
+        expectedResult: "Second barrel formed, mirrored on the other line.",
+      },
       4: {
         detail: "Close each barrel on its own line first. Only then pull the standing lines to bring them together.",
         expectedResult: "Two closed barrels sliding toward each other.",
       },
       5: {
+        detail: "A gap between barrels is a hinge. Seat until they kiss, then trim.",
         expectedResult: "Barrels butted face to face, both tags exiting outward.",
       },
     },
@@ -260,7 +308,10 @@ export const HOW_TO: Record<string, HowTo> = {
         detail: "Alternating weaves are what lock the braid onto the leader. A missed alternation unravels the whole sequence.",
         expectedResult: "A tight, even plait climbing the leader.",
       },
-      3: { expectedResult: "Half hitches locking the plait, braid gripping without slipping." },
+      3: {
+        detail: "The lock hitches are the fail point. A plait without them creeps on the first hard pull.",
+        expectedResult: "Half hitches locking the plait, braid gripping without slipping.",
+      },
       4: {
         detail: "Test by pulling hard before trimming. An FG that slips will do it on the first hard pull, not the twentieth.",
         expectedResult: "A slim tapered join that passes a guide without a click.",
@@ -286,13 +337,26 @@ export const HOW_TO: Record<string, HowTo> = {
       "Bulkier than an FG but far faster to tie in the field.",
     ],
     steps: {
-      1: { expectedResult: "A long open bight in the leader." },
-      2: { expectedResult: "Braid wrapped up the doubled leader in even turns." },
+      1: {
+        detail: "The leader bight has to stay open the whole sequence. A collapsed bight is a restart.",
+        expectedResult: "A long open bight in the leader.",
+      },
+      2: {
+        detail: "Even turns up the doubled leader. Loose early wraps walk later.",
+        expectedResult: "Braid wrapped up the doubled leader in even turns.",
+      },
       3: {
         detail: "The return wraps travel back over the first set. Both directions are needed for the join to hold.",
         expectedResult: "Two wrap layers, tidy, no crossing.",
       },
-      4: { expectedResult: "Braid exits back through the bight, join compact and tapered." },
+      4: {
+        detail: "Re-enter the bight the same direction the braid entered. Reverse direction dumps the lock.",
+        expectedResult: "Braid exits back through the bight, join compact and tapered.",
+      },
+      5: {
+        detail: "Trim only after a hard test pull. An Alberto that walks now will walk on the fish.",
+        expectedResult: "Short tags, compact tapered join, test pull holds.",
+      },
     },
     seatingSequence: WET_SET,
     fieldNotes: COLD_DARK,
@@ -304,9 +368,18 @@ export const HOW_TO: Record<string, HowTo> = {
       "Keep the wraps captive on the bight — off the end and the join is gone.",
     ],
     steps: {
-      1: { expectedResult: "Bight in the heavier line, lighter line laid alongside." },
-      2: { expectedResult: "Ten or more even wraps over both bight legs." },
-      3: { expectedResult: "Light line exiting the bight the same side it entered." },
+      1: {
+        detail: "Bight in the heavier line. A bight in the light line is the wrong join.",
+        expectedResult: "Bight in the heavier line, lighter line laid alongside.",
+      },
+      2: {
+        detail: "Ten or more even wraps. Too few and the light line walks off the bight.",
+        expectedResult: "Ten or more even wraps over both bight legs.",
+      },
+      3: {
+        detail: "Same-side exit as the entry. Opposite-side exit is unfinished.",
+        expectedResult: "Light line exiting the bight the same side it entered.",
+      },
       4: {
         detail: "Slide the wrap block toward the closed end before setting. It must not sit near the open end.",
         expectedResult: "Wrap block seated mid-bight, both tags exiting cleanly.",
@@ -322,10 +395,22 @@ export const HOW_TO: Record<string, HowTo> = {
       "Long tags — the twists eat length as they close.",
     ],
     steps: {
-      1: { expectedResult: "Two lines crossed with generous overlap." },
-      2: { expectedResult: "Even wraps on the first side." },
-      3: { expectedResult: "Matching wraps on the second side." },
-      4: { expectedResult: "Both tags through the central opening, opposite directions." },
+      1: {
+        detail: "Generous overlap. Short tags cannot complete equal wraps on both sides.",
+        expectedResult: "Two lines crossed with generous overlap.",
+      },
+      2: {
+        detail: "Count the first side aloud. Unequal counts make an uneven barrel.",
+        expectedResult: "Even wraps on the first side.",
+      },
+      3: {
+        detail: "Match the first side. A large diameter step belongs on a different join.",
+        expectedResult: "Matching wraps on the second side.",
+      },
+      4: {
+        detail: "Opposite-direction tags through the centre. Same-direction tags will not lock.",
+        expectedResult: "Both tags through the central opening, opposite directions.",
+      },
       5: {
         detail: "Pull both standing lines together. Pulling tags first locks the twists before they can gather.",
         expectedResult: "Symmetrical barrel, tags exiting opposite sides.",
@@ -341,8 +426,14 @@ export const HOW_TO: Record<string, HowTo> = {
       "Two passes standard, three for slick or mismatched material.",
     ],
     steps: {
-      1: { expectedResult: "Lines lying parallel with a long overlap." },
-      2: { expectedResult: "A loose overhand containing both lines." },
+      1: {
+        detail: "Long overlap. Short overlap starves the passes.",
+        expectedResult: "Lines lying parallel with a long overlap.",
+      },
+      2: {
+        detail: "Both lines through the overhand. One line through is a plain overhand and a weak point.",
+        expectedResult: "A loose overhand containing both lines.",
+      },
       3: {
         detail: "Each additional pass must carry both lines. One line through is a plain overhand and a weak point.",
         expectedResult: "Two or three complete passes, loop still open.",
@@ -362,10 +453,22 @@ export const HOW_TO: Record<string, HowTo> = {
       "Mono and fluoro; awkward in braid.",
     ],
     steps: {
-      1: { expectedResult: "First loop formed, tag crossing behind." },
-      2: { expectedResult: "Second loop in front of the first." },
-      3: { expectedResult: "Tag laid between the two loops." },
-      4: { expectedResult: "Second loop pulled through the first." },
+      1: {
+        detail: "First-loop direction is the lock. Wrong direction makes a slip loop.",
+        expectedResult: "First loop formed, tag crossing behind.",
+      },
+      2: {
+        detail: "Second loop in front of the first. Stacked in the wrong order will not lock.",
+        expectedResult: "Second loop in front of the first.",
+      },
+      3: {
+        detail: "The tag parks between the two loops. Left outside, it never locks.",
+        expectedResult: "Tag laid between the two loops.",
+      },
+      4: {
+        detail: "The front loop comes through the first. Pulling the wrong loop inverts the knot.",
+        expectedResult: "Second loop pulled through the first.",
+      },
       5: {
         detail: "Pull the loop and standing line apart, not the tag. The tag only locks the structure.",
         expectedResult: "Loop standing straight in line with the standing line.",
@@ -381,9 +484,18 @@ export const HOW_TO: Record<string, HowTo> = {
       "Two passes minimum.",
     ],
     steps: {
-      1: { expectedResult: "Doubled line of the intended loop length." },
-      2: { expectedResult: "Loose overhand in the doubled line." },
-      3: { expectedResult: "A second full pass through the same overhand." },
+      1: {
+        detail: "Loop size is decided by the doubled length. You cannot fix it after the seat.",
+        expectedResult: "Doubled line of the intended loop length.",
+      },
+      2: {
+        detail: "Keep the overhand open. A tight overhand will not take the second pass.",
+        expectedResult: "Loose overhand in the doubled line.",
+      },
+      3: {
+        detail: "A second full pass. Single pass is a weak overhand loop.",
+        expectedResult: "A second full pass through the same overhand.",
+      },
     },
     extraSteps: [
       {
@@ -411,12 +523,18 @@ export const HOW_TO: Record<string, HowTo> = {
       "Everything depends on the twists staying under tension while they roll back.",
     ],
     steps: {
-      1: { expectedResult: "A long doubled section with a counted twist column." },
+      1: {
+        detail: "Count the twists under unchanging tension. A slackened Bimini cannot be recovered.",
+        expectedResult: "A long doubled section with a counted twist column.",
+      },
       2: {
         detail: "Spreading the loop feeds the twists back over themselves. Lose the spread and the column collapses.",
         expectedResult: "Twists rolling back in a tight even sleeve.",
       },
-      3: { expectedResult: "Sleeve fully packed with no gaps to the base." },
+      3: {
+        detail: "Gaps in the sleeve mean the lock will not hold. Pack it to the base before you hitch.",
+        expectedResult: "Sleeve fully packed with no gaps to the base.",
+      },
       4: {
         detail: "Lock with hitches before releasing tension, not after.",
         expectedResult: "Locked column, loop retaining full length.",
@@ -442,9 +560,18 @@ export const HOW_TO: Record<string, HowTo> = {
       "Nothing here is load-bearing against a fish; it is anti-slip insurance.",
     ],
     steps: {
-      1: { expectedResult: "Line around the arbor, tag alongside the standing line." },
-      2: { expectedResult: "Overhand tied on the standing line." },
-      3: { expectedResult: "Second overhand in the tag, acting as a stopper." },
+      1: {
+        detail: "Around the arbor, tag back alongside the standing line. Braid on bare metal will slip whatever you tie.",
+        expectedResult: "Line around the arbor, tag alongside the standing line.",
+      },
+      2: {
+        detail: "This overhand has to slide. Do not cinch it yet.",
+        expectedResult: "Overhand tied on the standing line.",
+      },
+      3: {
+        detail: "No stopper and the first knot walks off the arbor.",
+        expectedResult: "Second overhand in the tag, acting as a stopper.",
+      },
       4: {
         detail: "Pull the standing line so the first knot slides down and the stopper jams against it.",
         expectedResult: "Both knots butted together against the arbor.",
@@ -464,9 +591,18 @@ export const HOW_TO: Record<string, HowTo> = {
       "Decide the drop position before you twist.",
     ],
     steps: {
-      1: { expectedResult: "A loop formed mid-line at the chosen position." },
-      2: { expectedResult: "Even twists on both sides of the loop." },
-      3: { expectedResult: "Centre opening held clear with a finger or tool." },
+      1: {
+        detail: "Position cannot be moved after the twists. Decide the drop first.",
+        expectedResult: "A loop formed mid-line at the chosen position.",
+      },
+      2: {
+        detail: "Even twists on both sides. Uneven twists lie the dropper along the line.",
+        expectedResult: "Even twists on both sides of the loop.",
+      },
+      3: {
+        detail: "A collapsed centre will not take the loop. Keep a finger in it.",
+        expectedResult: "Centre opening held clear with a finger or tool.",
+      },
       4: {
         detail: "Push the loop through the centre opening and hold it while pulling both standing lines apart.",
         expectedResult: "Loop standing perpendicular to the line, twists even on both sides.",
@@ -482,10 +618,22 @@ export const HOW_TO: Record<string, HowTo> = {
       "Leave enough tag to make the return pass twice.",
     ],
     steps: {
-      1: { expectedResult: "Line through the eye, doubled back." },
-      2: { expectedResult: "Even wraps back up the doubled line." },
-      3: { expectedResult: "Tag through the loop at the eye." },
-      4: { expectedResult: "Tag through the large loop just formed." },
+      1: {
+        detail: "A short double cannot take the return passes. Leave more tag.",
+        expectedResult: "Line through the eye, doubled back.",
+      },
+      2: {
+        detail: "Wraps run back up the doubled line, away from the eye. Toward the eye is the wrong direction.",
+        expectedResult: "Even wraps back up the doubled line.",
+      },
+      3: {
+        detail: "First return is through the loop at the eye. Missing it is a different knot.",
+        expectedResult: "Tag through the loop at the eye.",
+      },
+      4: {
+        detail: "Second return is through the large loop just formed. One pass is unfinished.",
+        expectedResult: "Tag through the large loop just formed.",
+      },
       5: {
         detail: "Seat slowly and watch the wraps roll down as a block. Uneven roll means one wrap is crossed.",
         expectedResult: "Compact wrap block against the eye, tag outward.",
@@ -623,7 +771,11 @@ export function applyHowTo(content: KnotContent): KnotContent {
 
   if (extra?.extraSteps?.length) {
     const base = steps.reduce((max, s) => Math.max(max, s.order), 0);
-    extra.extraSteps.forEach((s, i) => steps.push({ ...s, order: base + i + 1 }));
+    extra.extraSteps.forEach((s, i) => {
+      const order = base + i + 1;
+      const m = micro?.[order];
+      steps.push(m ? { ...s, order, ...m } : { ...s, order });
+    });
   }
 
   return {

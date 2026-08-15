@@ -7,11 +7,14 @@ export const BOATING_CONNECTIONS: DomainOption[] = [
   { id: "rope-to-ring", label: "Rope → ring or shackle", group: "Make fast" },
   { id: "fixed-eye", label: "Fixed eye in the end", group: "Loops" },
   { id: "loop-over-post", label: "Loop dropped over a post", group: "Loops" },
+  { id: "mid-line-loop", label: "Mid-line loop", group: "Loops" },
   { id: "rope-to-rope", label: "Rope → rope join", group: "Joins" },
   { id: "unequal-rope-join", label: "Unequal diameter join", group: "Joins" },
   { id: "load-transfer", label: "Load transfer / snubber", group: "Working" },
+  { id: "tension-line", label: "Tension / lash a line", group: "Working" },
   { id: "stopper", label: "Stopper in the end", group: "Working" },
   { id: "shorten-line", label: "Shorten under load", group: "Working" },
+  { id: "reef-or-bind", label: "Reef / bind", group: "Bind" },
 ];
 
 export const BOATING_MATERIALS: DomainOption[] = [

@@ -22,7 +22,7 @@ import {
   DIAMETER_LABELS,
   DIMENSION_LABELS,
 } from "@/domain/types";
-import { resolveMaterial, type MaterialSpec } from "@/domain/material";
+import { resolveMaterial, type MaterialPreset, type MaterialSpec } from "@/domain/material";
 import { FISHING_MATERIAL_PRESETS } from "@/domains/fishing/materials";
 import { dualWriteFromConnection, isJoinJob } from "@/domain/connection-preset";
 import { mergeVenueConditions, resolveLegacyVenue } from "@/domain/venue";
@@ -104,12 +104,14 @@ function MaterialDetail({
   category,
   spec,
   onChange,
+  presets,
 }: {
   category: LineMaterial | undefined;
   spec: MaterialSpec | undefined;
   onChange: (next: MaterialSpec | undefined) => void;
+  presets: Record<string, MaterialPreset>;
 }) {
-  const preset = category ? FISHING_MATERIAL_PRESETS[category] : undefined;
+  const preset = category ? presets[category] : undefined;
   if (!preset?.disclosure) return null;
 
   const current = spec ?? preset.spec;
@@ -129,7 +131,7 @@ function MaterialDetail({
                   onClick={() => {
                     const nextVal = active ? "unspecified" : o.id;
                     onChange(
-                      resolveMaterial(category, FISHING_MATERIAL_PRESETS, {
+                      resolveMaterial(category, presets, {
                         construction: current.construction,
                         treatment: current.treatment,
                         fiber: current.fiber,
@@ -229,6 +231,7 @@ function DecideMode() {
   const navigate = useNavigate();
   const t = useT();
   const domain = useDomain();
+  const materialPresets = domain.materialAxes ?? FISHING_MATERIAL_PRESETS;
   const venues = domain.venues ?? [];
   const platforms = domain.platforms ?? [];
   const regions = domain.regions ?? [];
@@ -390,7 +393,7 @@ function DecideMode() {
                                     patch.mainMaterial = dual.mainMaterialHint;
                                     patch.mainSpec = resolveMaterial(
                                       dual.mainMaterialHint,
-                                      FISHING_MATERIAL_PRESETS,
+                                      materialPresets,
                                       { role: dual.mainRole },
                                     );
                                     selPatch.main = dual.mainMaterialHint;
@@ -400,7 +403,7 @@ function DecideMode() {
                                       patch.secondaryMaterial = dual.secondaryMaterialHint;
                                       patch.secondarySpec = resolveMaterial(
                                         dual.secondaryMaterialHint,
-                                        FISHING_MATERIAL_PRESETS,
+                                        materialPresets,
                                         {
                                           ...(dual.secondaryRole ? { role: dual.secondaryRole } : {}),
                                         },
@@ -460,7 +463,7 @@ function DecideMode() {
                                     mainMaterial: on ? undefined : m.base,
                                     mainSpec: on
                                       ? undefined
-                                      : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS, {
+                                      : resolveMaterial(m.base, materialPresets, {
                                           ...(input.mainRole ? { role: input.mainRole } : {}),
                                         }),
                                   },
@@ -475,6 +478,7 @@ function DecideMode() {
                         <MaterialDetail
                           category={input.mainMaterial}
                           spec={input.mainSpec}
+                          presets={materialPresets}
                           onChange={(next) => set({ mainSpec: next })}
                         />
                       </div>
@@ -509,7 +513,7 @@ function DecideMode() {
                                           secondaryMaterial: on ? undefined : m.base,
                                           secondarySpec: on
                                             ? undefined
-                                            : resolveMaterial(m.base, FISHING_MATERIAL_PRESETS, {
+                                            : resolveMaterial(m.base, materialPresets, {
                                                 ...(input.secondaryRole
                                                   ? { role: input.secondaryRole }
                                                   : {}),
@@ -526,6 +530,7 @@ function DecideMode() {
                               <MaterialDetail
                                 category={input.secondaryMaterial}
                                 spec={input.secondarySpec}
+                                presets={materialPresets}
                                 onChange={(next) => set({ secondarySpec: next })}
                               />
                             </div>
