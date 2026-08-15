@@ -201,6 +201,8 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     goodFor: "Strong mono/fluoro terminal using a double pass through the eye.",
     notIdealFor: ["Tiny eyes", "Braid without testing"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Typically cited high 80s–90s on mono/fluoro when the double pass seats; not a braid primary.",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Hook or lure"],
     howToSummary: "Double pass through eye, wraps, tag through both loops, seat.",
@@ -246,6 +248,8 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     goodFor: "Fixed-size non-slip loop for free-swinging lures and flies.",
     notIdealFor: ["Maximum slim fixed eye connections"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Working-loop class, typically mid-80s to mid-90s when wraps are even; the job is swing, not peak retention.",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Lure or fly"],
     howToSummary: "Overhand, through eye, wraps around standing, tag back through overhand, set loop size, seat.",
@@ -291,6 +295,8 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     goodFor: "Loop knot popular for hardbaits so the lure can swing freely.",
     notIdealFor: ["Fine tippet fly work where a smaller loop knot is preferred"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Same working-loop family as Kreh/non-slip; mid-80s to mid-90s when the return path is correct.",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Lure"],
     howToSummary:
@@ -337,6 +343,8 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     goodFor: "Aligns pull with the hook point via shank wraps — classic bait-hook connection.",
     notIdealFor: ["Quick lure changes", "Ring-eye-only presentations where a simple eye knot is enough"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "High when shank wraps are even and finish at the eye; geometry is the job as much as raw retention.",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Hook with shank suitable for snelling"],
     howToSummary: "Secure line with parallel wraps along the hook shank so load travels on-axis with the point.",

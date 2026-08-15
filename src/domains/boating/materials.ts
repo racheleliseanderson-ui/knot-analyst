@@ -1,7 +1,6 @@
 /**
- * Boating material axes — vocabulary only.
- * No mechanical catalog yet: knots remain empty so the instrument fails closed.
- * Ready for Phase 7 catalog authoring without Fishing schema exceptions.
+ * Boating material axes — construction / fibre disclosure for Decide.
+ * Catalog lives in data/knots/boating-batch-*.ts.
  */
 import type { MaterialPreset } from "@/domain/material";
 import { CONSTRUCTION_LABELS, FIBER_LABELS, TREATMENT_LABELS } from "@/domain/material";

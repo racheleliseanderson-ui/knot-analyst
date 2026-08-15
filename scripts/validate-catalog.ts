@@ -13,6 +13,8 @@ import { MECHANICS_EXTRAS_BATCH4 } from "../src/data/mechanics-extras-batch4";
 import { MECHANICS_EXTRAS_BATCH5 } from "../src/data/mechanics-extras-batch5";
 import { MECHANICS_EXTRAS_BATCH6 } from "../src/data/mechanics-extras-batch6";
 import { MECHANICS_EXTRAS_BOATING } from "../src/data/mechanics-extras-boating";
+import { MECHANICS_EXTRAS_BOATING_2 } from "../src/data/mechanics-extras-boating-2";
+import { MECHANICS_EXTRAS_BOATING_3 } from "../src/data/mechanics-extras-boating-3";
 import {
   CONNECTION_MODEL_META,
   MODEL_SOURCES,
@@ -29,6 +31,8 @@ import { SEED_BATCH_4 } from "../src/data/knots/seed-batch-4";
 import { SEED_BATCH_5_TERMINAL } from "../src/data/knots/seed-batch-5-terminal";
 import { SEED_BATCH_6 } from "../src/data/knots/seed-batch-6";
 import { BOATING_BATCH_1 } from "../src/data/knots/boating-batch-1";
+import { BOATING_BATCH_2 } from "../src/data/knots/boating-batch-2";
+import { BOATING_BATCH_3 } from "../src/data/knots/boating-batch-3";
 import { HOW_TO, MICRO } from "../src/data/how-to";
 import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "../src/data/how-to-extras";
 import { KNOT_VIDEOS } from "../src/data/videos";
@@ -58,6 +62,9 @@ const VALID_JOBS = new Set([
   "load-transfer",
   "stopper",
   "shorten-line",
+  "mid-line-loop",
+  "tension-line",
+  "reef-or-bind",
 ]);
 
 const ALL_MECHANICS = {
@@ -68,6 +75,8 @@ const ALL_MECHANICS = {
   ...MECHANICS_EXTRAS_BATCH5,
   ...MECHANICS_EXTRAS_BATCH6,
   ...MECHANICS_EXTRAS_BOATING,
+  ...MECHANICS_EXTRAS_BOATING_2,
+  ...MECHANICS_EXTRAS_BOATING_3,
 };
 
 const ALL_CONTENT: KnotContent[] = [
@@ -81,6 +90,8 @@ const ALL_CONTENT: KnotContent[] = [
   ...SEED_BATCH_5_TERMINAL,
   ...SEED_BATCH_6,
   ...BOATING_BATCH_1,
+  ...BOATING_BATCH_2,
+  ...BOATING_BATCH_3,
 ];
 
 const contentById = new Map(ALL_CONTENT.map((k) => [k.id, k]));
@@ -165,6 +176,9 @@ function checkContent(id: string, c: KnotContent) {
   if (!DIFFICULTY.has(c.difficulty)) fail(`${id}: difficulty invalid`);
   if (!Array.isArray(c.materialsNeeded) || c.materialsNeeded.length < 1) fail(`${id}: materialsNeeded required`);
   if (!c.howToSummary || c.howToSummary.length < 20) fail(`${id}: howToSummary too thin`);
+  if (!c.strengthRetentionTypical || c.strengthRetentionTypical.length < 16) {
+    fail(`${id}: strengthRetentionTypical required (cited band, not a single figure)`);
+  }
   if (!Array.isArray(c.steps) || c.steps.length < 3) fail(`${id}: steps need ≥3`);
   if (!Array.isArray(c.commonMistakes) || c.commonMistakes.length < 1) fail(`${id}: commonMistakes required`);
   if (!Array.isArray(c.diagnostics) || c.diagnostics.length < 1) fail(`${id}: diagnostics required`);
@@ -204,6 +218,20 @@ function checkTieBuild(id: string, c: KnotContent) {
   if (!how.beforeYouStart?.length) fail(`${id}: how-to beforeYouStart required`);
   if (!how.seatingSequence || how.seatingSequence.length < 3) fail(`${id}: how-to seatingSequence needs ≥3 phases`);
   if (!how.fieldNotes?.length) fail(`${id}: how-to fieldNotes required`);
+
+  const stepDepth = how.steps ?? {};
+  for (const s of c.steps) {
+    const d = stepDepth[s.order];
+    if (!d?.detail) fail(`${id}: how-to step ${s.order} needs detail`);
+    if (!d?.expectedResult) fail(`${id}: how-to step ${s.order} needs expectedResult`);
+  }
+  if (how.extraSteps?.length) {
+    how.extraSteps.forEach((s, i) => {
+      const n = Math.max(...c.steps.map((x) => x.order), 0) + i + 1;
+      if (!s.detail) fail(`${id}: extraStep ${n} needs detail`);
+      if (!s.expectedResult) fail(`${id}: extraStep ${n} needs expectedResult`);
+    });
+  }
 
   const micro = { ...(MICRO_EXTRAS[id] ?? {}), ...(MICRO[id] ?? {}) };
   if (!Object.keys(micro).length) {

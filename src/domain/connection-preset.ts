@@ -23,7 +23,10 @@ export type StructuralJob =
   | "rope-loop"
   | "stopper"
   | "load-transfer"
-  | "shorten-line";
+  | "shorten-line"
+  | "mid-line-loop"
+  | "tension-line"
+  | "reef-or-bind";
 
 export interface ConnectionSides {
   structuralJob: StructuralJob;
@@ -158,6 +161,22 @@ const PRESETS: Record<ConnectionJob, ConnectionSides> = {
     structuralJob: "shorten-line",
     mainRole: "main-line",
     isJoin: false,
+  },
+  "mid-line-loop": {
+    structuralJob: "mid-line-loop",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "tension-line": {
+    structuralJob: "tension-line",
+    mainRole: "main-line",
+    isJoin: false,
+  },
+  "reef-or-bind": {
+    structuralJob: "reef-or-bind",
+    mainRole: "main-line",
+    secondaryRole: "leader",
+    isJoin: true,
   },
 };
 

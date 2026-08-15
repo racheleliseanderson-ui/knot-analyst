@@ -11,6 +11,8 @@ export const UTILITY_KNOTS: KnotContent[] = [
       "Attaches line or backing to a bare reel arbor. A rig-up knot: it only has to resist spool slip while the first wraps bed down.",
     notIdealFor: ["Any load-bearing terminal or line-to-line job"],
     lineMaterials: ["mono", "fluoro", "braid", "backing"],
+    strengthRetentionTypical:
+      "Spool grip only — not a fighting-strength figure. Band is 'will not slip the arbor,' not line-break.",
     difficulty: "beginner",
     materialsNeeded: ["Reel with bail open", "Line spool"],
     howToSummary:
@@ -80,6 +82,8 @@ export const UTILITY_KNOTS: KnotContent[] = [
       "Builds a standing loop part-way along a line so a hook or weight can hang off-axis from the main run. The loop projects sideways rather than lying along the load path.",
     notIdealFor: ["Terminal strength jobs", "Braid, which will not hold the twist column"],
     lineMaterials: ["mono", "fluoro"],
+    strengthRetentionTypical:
+      "Mid-line drop. Typical cited 70–85% of the main at the drop; the job is a standing loop, not peak retention.",
     difficulty: "intermediate",
     materialsNeeded: ["Section of standing line, both ends free to twist"],
     howToSummary:

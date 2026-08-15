@@ -39,13 +39,17 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Cleat Hitch", url: "https://www.animatedknots.com/cleat-hitch-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      { type: "article", title: "Animated Knots — Cleat Hitch", url: "https://www.animatedknots.com/cleat-hitch-knot", source: "Animated Knots by Grog", vetted: true },
+      { type: "article", title: "Hook the Horizon — The Cleat Hitch", url: "https://hookthehorizon.blog/cleat-hitch/", source: "Hook the Horizon", vetted: true },
+    ],
     relatedKnots: ["round-turn-two-half-hitches", "bowline"],
     tags: ["boating", "make-fast", "dock"],
     reviewedOn: "2026-08-14",
     sources: [
       { title: "Animated Knots — Cleat Hitch", url: "https://www.animatedknots.com/cleat-hitch-knot" },
       { title: "BoatUS — How to Tie a Cleat Hitch" },
+      { title: "Hook the Horizon — The Cleat Hitch", url: "https://hookthehorizon.blog/cleat-hitch/" },
     ],
   },
   {
@@ -83,7 +87,10 @@ export const BOATING_BATCH_1: KnotContent[] = [
     relatedKnots: ["clove-hitch", "anchor-bend", "cleat-hitch"],
     tags: ["boating", "make-fast"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Round Turn and Two Half Hitches" }],
+    sources: [
+      { title: "Animated Knots — Round Turn and Two Half Hitches" },
+      { title: "Hook the Horizon — Round Turn and Two Half Hitches", url: "https://hookthehorizon.blog/round-turn-two-half-hitches/" },
+    ],
   },
   {
     id: "clove-hitch",
@@ -120,7 +127,10 @@ export const BOATING_BATCH_1: KnotContent[] = [
     relatedKnots: ["round-turn-two-half-hitches", "rolling-hitch"],
     tags: ["boating", "make-fast", "temporary"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Clove Hitch" }],
+    sources: [
+      { title: "Animated Knots — Clove Hitch" },
+      { title: "Hook the Horizon — The Clove Hitch", url: "https://hookthehorizon.blog/clove-hitch/" },
+    ],
   },
   {
     id: "anchor-bend",
@@ -157,7 +167,10 @@ export const BOATING_BATCH_1: KnotContent[] = [
     relatedKnots: ["round-turn-two-half-hitches", "bowline"],
     tags: ["boating", "make-fast", "ring"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Anchor Bend" }],
+    sources: [
+      { title: "Animated Knots — Anchor Bend" },
+      { title: "Hook the Horizon — The Anchor Bend", url: "https://hookthehorizon.blog/anchor-bend/" },
+    ],
   },
   {
     id: "bowline",
@@ -194,7 +207,10 @@ export const BOATING_BATCH_1: KnotContent[] = [
     relatedKnots: ["figure-8-loop", "sheet-bend"],
     tags: ["boating", "loop", "fixed-eye"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Bowline (typical 60% class)" }],
+    sources: [
+      { title: "Animated Knots — Bowline (typical 60% class)" },
+      { title: "Hook the Horizon — The Bowline", url: "https://hookthehorizon.blog/bowline/" },
+    ],
   },
   {
     id: "figure-8-loop",
@@ -268,7 +284,10 @@ export const BOATING_BATCH_1: KnotContent[] = [
     relatedKnots: ["double-sheet-bend", "bowline"],
     tags: ["boating", "join"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Sheet Bend" }],
+    sources: [
+      { title: "Animated Knots — Sheet Bend" },
+      { title: "Hook the Horizon — The Sheet Bend", url: "https://hookthehorizon.blog/sheet-bend/" },
+    ],
   },
   {
     id: "double-sheet-bend",
@@ -342,7 +361,10 @@ export const BOATING_BATCH_1: KnotContent[] = [
     relatedKnots: ["clove-hitch", "round-turn-two-half-hitches"],
     tags: ["boating", "snubber", "hitch"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Rolling Hitch" }],
+    sources: [
+      { title: "Animated Knots — Rolling Hitch" },
+      { title: "Hook the Horizon — The Rolling Hitch", url: "https://hookthehorizon.blog/rolling-hitch/" },
+    ],
   },
   {
     id: "figure-8-stopper",
@@ -379,6 +401,9 @@ export const BOATING_BATCH_1: KnotContent[] = [
     relatedKnots: ["figure-8-loop"],
     tags: ["boating", "stopper"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Figure 8" }],
+    sources: [
+      { title: "Animated Knots — Figure 8" },
+      { title: "Hook the Horizon — The Figure-Eight Stopper", url: "https://hookthehorizon.blog/figure-eight-stopper/" },
+    ],
   },
 ];
