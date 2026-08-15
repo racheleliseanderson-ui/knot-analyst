@@ -265,7 +265,10 @@ export const BOATING_BATCH_2: KnotContent[] = [
     relatedKnots: ["rolling-hitch", "icicle-hitch"],
     tags: ["boating", "tension", "lashing"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Trucker's Hitch", url: "https://www.animatedknots.com/truckers-hitch-knot" }],
+    sources: [
+      { title: "Animated Knots — Trucker's Hitch", url: "https://www.animatedknots.com/truckers-hitch-knot" },
+      { title: "Hook the Horizon — The Trucker's Hitch", url: "https://hookthehorizon.blog/truckers-hitch/" },
+    ],
   },
   {
     id: "zeppelin-bend",

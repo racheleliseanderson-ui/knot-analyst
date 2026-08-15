@@ -9,7 +9,7 @@
 export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
-export const KNOT_CATALOG_VERSION = "2026-08-14.9";
+export const KNOT_CATALOG_VERSION = "2026-08-14.10";
 export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
 export const ENGINE_VERSION = "mech-intel-1.3.0";
 

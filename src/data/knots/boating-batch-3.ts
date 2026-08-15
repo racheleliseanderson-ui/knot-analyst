@@ -156,7 +156,10 @@ export const BOATING_BATCH_3: KnotContent[] = [
     relatedKnots: ["truckers-hitch", "rolling-hitch"],
     tags: ["boating", "tension", "adjustable"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Animated Knots — Midshipman's Hitch (taut-line alias)", url: "https://www.animatedknots.com/midshipmans-hitch-knot" }],
+    sources: [
+      { title: "Animated Knots — Midshipman's Hitch (taut-line alias)", url: "https://www.animatedknots.com/midshipmans-hitch-knot" },
+      { title: "Hook the Horizon — The Taut-Line Hitch", url: "https://hookthehorizon.blog/taut-line-hitch/" },
+    ],
   },
   {
     id: "hunters-bend",
