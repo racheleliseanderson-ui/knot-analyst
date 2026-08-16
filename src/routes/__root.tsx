@@ -84,6 +84,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Hook the Horizon · Knot Analyst" },
       { name: "theme-color", content: "#111c24" },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Hook the Horizon · Knot Analyst" },
+      { property: "og:title", content: "Knot Analyst — Decide the connection" },
+      {
+        property: "og:description",
+        content:
+          "A mechanical decision instrument for fishing, boating and sailing connections. Invalid options never score.",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: "https://i0.wp.com/hookthehorizon.blog/wp-content/uploads/2026/08/AdobeStock_1419406694.jpeg?resize=1200%2C630&ssl=1" },
       { property: "og:image:width", content: "1200" },
