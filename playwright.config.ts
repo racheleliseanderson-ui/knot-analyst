@@ -12,7 +12,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 2 : 0,
-  workers: process.env['CI'] ? 2 : undefined,
+  // Capped: unbounded workers starve the single worker-runtime server and the
+  // resulting timeouts read as failures that are not the app's fault.
+  workers: process.env['CI'] ? 2 : 4,
   reporter: process.env['CI'] ? [["github"], ["list"]] : [["list"]],
   timeout: 60_000,
   expect: { timeout: 10_000 },
