@@ -66,6 +66,9 @@ one image plan. Philosophy preserved: decision + diagnosis instrument, not a kno
 Freeze the exact commit produced by the GitHub sync of this generation and port only the
 rows classed PORT above. Do not merge the repository wholesale.
 
+Freeze record, verification evidence, dependency inventory, security posture and rollback:
+see `handoff/FREEZE.md`. Port destinations: see `handoff/PORT-MAP.md`.
+
 ## Behavior added (must be re-tested in canonical)
 
 1. **Trade-off surfacing** — declared conditions that fight the winning geometry are named on their
