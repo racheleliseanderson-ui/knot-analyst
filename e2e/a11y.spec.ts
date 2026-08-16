@@ -73,18 +73,18 @@ test.describe("Mobile accessibility smoke", () => {
     // The rail is a named tablist with exactly one selected step.
     const rail = page.getByRole("tablist", { name: /decision steps/i });
     await expect(rail).toBeVisible();
-    const tabs = page.getByRole("tab");
+    const tabs = rail.getByRole("tab");
     const count = await tabs.count();
     expect(count).toBeGreaterThan(1);
-    await expect(page.locator('[role="tab"][aria-selected="true"]')).toHaveCount(1);
-    await expect(page.locator('[role="tab"][aria-current="step"]')).toHaveCount(1);
+    await expect(rail.locator('[role="tab"][aria-selected="true"]')).toHaveCount(1);
+    await expect(rail.locator('[role="tab"][aria-current="step"]')).toHaveCount(1);
 
     // A later step can be selected from the keyboard alone.
     const target = tabs.nth(1);
     await target.focus();
     await page.keyboard.press("Enter");
     await expect(target).toHaveAttribute("aria-selected", "true");
-    await expect(page.locator('[role="tab"][aria-selected="true"]')).toHaveCount(1);
+    await expect(rail.locator('[role="tab"][aria-selected="true"]')).toHaveCount(1);
 
     // Rail controls stay thumb-sized.
     for (let i = 0; i < count; i++) {
