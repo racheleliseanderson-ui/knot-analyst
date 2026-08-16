@@ -10,7 +10,10 @@ import { expect, test, type Page } from "@playwright/test";
 const failOnPageErrors = (page: Page, sink: string[]) => {
   page.on("pageerror", (e) => sink.push(String(e)));
   page.on("console", (m) => {
-    if (m.type() === "error") sink.push(m.text());
+    // Resource 404s (favicon and friends) are not app errors.
+    if (m.type() === "error" && !m.text().includes("Failed to load resource")) {
+      sink.push(m.text());
+    }
   });
 };
 
@@ -58,7 +61,8 @@ test.describe("Decide", () => {
   });
 
   test("changing a field condition re-runs the model", async ({ page }) => {
-    await page.goto("/?scenario=braid-fluoro-ideal&run=true");
+    await page.goto("/");
+    await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
     await expect(page.getByText("Knot decision card")).toBeVisible();
 
     const before = await page.getByText(/\d+%/).first().innerText();
