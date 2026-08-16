@@ -60,7 +60,10 @@ test.describe("Decide", () => {
     expect(errors).toEqual([]);
   });
 
-  test("changing a field condition re-runs the model", async ({ page }) => {
+  // Conditions live behind the guided stepper on phones; the desktop column
+  // exposes the whole instrument at once.
+  test("changing a field condition re-runs the model", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop", "desktop instrument column only");
     await page.goto("/");
     await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
     await expect(page.getByText("Knot decision card")).toBeVisible();
