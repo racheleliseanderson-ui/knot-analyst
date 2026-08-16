@@ -67,13 +67,15 @@ test.describe("Decide", () => {
 
     const before = await page.getByText(/\d+%/).first().innerText();
 
+    // Changing a condition invalidates the standing answer — it does not
+    // silently keep showing a result the model no longer stands behind.
     const lowLight = page.getByRole("button", { name: /low light/i }).first();
-    if (await lowLight.count()) {
-      await lowLight.click();
-      const rerun = page.getByRole("button", { name: /re-?run/i }).first();
-      if (await rerun.isVisible().catch(() => false)) await rerun.click();
-      await expect(page.getByText("Knot decision card")).toBeVisible();
-    }
+    await expect(lowLight).toBeVisible();
+    await lowLight.click();
+    await expect(page.getByText("Knot decision card")).toHaveCount(0);
+
+    await page.getByRole("button", { name: /^(re-?run|run)\b/i }).first().click();
+    await expect(page.getByText("Knot decision card")).toBeVisible();
 
     const after = await page.getByText(/\d+%/).first().innerText();
     expect(after).toMatch(/\d+%/);
