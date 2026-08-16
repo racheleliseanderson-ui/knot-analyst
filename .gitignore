@@ -34,3 +34,8 @@ dist-ssr
 # e2e artifacts
 test-results/
 playwright-report/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
