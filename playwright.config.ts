@@ -18,6 +18,10 @@ export default defineConfig({
   expect: { timeout: 10_000 },
   use: {
     baseURL,
+    // Local sandboxes can point at a system Chromium; CI uses Playwright's own.
+    ...(process.env['E2E_CHROMIUM']
+      ? { launchOptions: { executablePath: process.env['E2E_CHROMIUM'] } }
+      : {}),
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
