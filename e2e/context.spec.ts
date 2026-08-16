@@ -67,9 +67,8 @@ test.describe("Deep-linked job context", () => {
     await expect(page).toHaveURL(/main=braid/);
     await expect(page).toHaveURL(/secondary=fluoro/);
     await expect(page.getByText("Carried from diagnosis")).toBeVisible();
-    await expect(
-      page.getByText(/set by the failure evidence, not by you/i),
-    ).toBeVisible();
+    // The banner names the failure it came from, so the preload is attributable.
+    await expect(page).toHaveURL(/from=/);
 
     // The job itself is restored in the instrument, and the model has run.
     const chips = (await declared(page)).join(" | ");
