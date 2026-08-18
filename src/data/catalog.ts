@@ -16,6 +16,7 @@ import { BOATING_BATCH_3 } from "@/data/knots/boating-batch-3";
 import { getMechanics } from "@/data/mechanics";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
+import { applySeedComplete } from "@/data/seed-complete";
 import { catalogReviewDue, getConnectionModelMeta } from "@/data/connection-model-meta";
 
 const FISHING_RAW: KnotContent[] = [
@@ -33,7 +34,7 @@ const FISHING_RAW: KnotContent[] = [
 const BOATING_RAW: KnotContent[] = [...BOATING_BATCH_1, ...BOATING_BATCH_2, ...BOATING_BATCH_3];
 
 function hydrate(raw: KnotContent): Knot {
-  const content = applyVideo(applyHowTo(raw));
+  const content = applySeedComplete(applyVideo(applyHowTo(raw)));
   const m = getMechanics(content.id);
   if (!m) {
     throw new Error(`Missing mechanical profile for knot: ${content.id}`);
