@@ -41,8 +41,8 @@ export const Route = createFileRoute("/tie/$knotId")({
     <Shell>
       <p className="text-sm text-muted-foreground">
         No modelled procedure for that connection.{" "}
-        <Link to="/" className="text-accent underline underline-offset-4">
-          Back to Decide
+        <Link to="/library" className="text-accent underline underline-offset-4">
+          Back to Library
         </Link>
       </p>
     </Shell>
@@ -78,6 +78,13 @@ function TieMode() {
           >
             Print tie card
           </button>
+          <Link
+            to="/diagram/$knotId"
+            params={{ knotId: knot.id }}
+            className="min-h-[44px] inline-flex items-center font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground no-print"
+          >
+            All diagrams
+          </Link>
         </div>
       </div>
 
@@ -89,7 +96,9 @@ function TieMode() {
               <Bullets items={knot.beforeYouStart} marker="·" />
               <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-hairline pt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
                 <span>Line + hardware: {knot.materialsNeeded.join(", ")}</span>
-                {knot.toolsHelpful?.length ? <span>Tools: {knot.toolsHelpful.join(", ")}</span> : null}
+                {knot.toolsHelpful?.length ? (
+                  <span>Tools: {knot.toolsHelpful.join(", ")}</span>
+                ) : null}
               </div>
             </Panel>
           ) : null}

@@ -9,6 +9,7 @@ const en = {
   "nav.decide": "Decide",
   "nav.diagnose": "Diagnose",
   "nav.data": "Data",
+  "nav.library": "Library",
   "nav.search": "Search",
   "nav.searchHint": "Search scenarios, knots, symptoms",
   "domain.fishing": "Fishing",
@@ -40,7 +41,8 @@ const en = {
   "region.fine": "More specific",
   "region.fineHint": "Optional second tap. Finer priors for abrasion, wire-watch, and hands.",
   "region.prior": "Regional prior",
-  "region.override": "These notes bias judgment only. Field chips and the constraint engine still decide.",
+  "region.override":
+    "These notes bias judgment only. Field chips and the constraint engine still decide.",
   "region.none": "No region declared",
   "region.fieldNote": "Regional field note",
   "finder.placeholder": "Scenario, knot or symptom…",
@@ -52,7 +54,20 @@ const en = {
   "boating.title": "Boating & Sailing — vocabulary live, catalog in modelling",
   "boating.body":
     "Rope terminology, connections, constructions and venues are active so the instrument speaks the right language. The mechanical catalog for rope work is not modelled yet, so nothing is scored — this instrument does not guess.",
-  "skip": "Skip to content",
+  skip: "Skip to content",
+  "library.mode": "Mode 05 · Library",
+  "library.title": "Modelled connections",
+  "library.lede":
+    "Every fishing and boating connection already in the catalogue. Open a diagram or the tying procedure — no Decide form.",
+  "library.search": "Search Palomar, bowline, FG…",
+  "library.empty": "Nothing matches. Switch discipline or try another name.",
+  "library.all": "All jobs",
+  "library.jobs": "Filter by job",
+  "library.tie": "Tie",
+  "library.openPlayer": "Open step player",
+  "library.lookFor": "Look for",
+  "library.related": "Related connections",
+  "library.plates": "plates",
 } as const;
 
 type Key = keyof typeof en;
@@ -61,6 +76,7 @@ const es: Record<Key, string> = {
   "nav.decide": "Decidir",
   "nav.diagnose": "Diagnosticar",
   "nav.data": "Datos",
+  "nav.library": "Biblioteca",
   "nav.search": "Buscar",
   "nav.searchHint": "Buscar escenarios, nudos, síntomas",
   "domain.fishing": "Pesca",
@@ -92,7 +108,8 @@ const es: Record<Key, string> = {
   "region.fine": "Más específico",
   "region.fineHint": "Segundo toque opcional. Priores más finos de abrasión, wire-watch y manos.",
   "region.prior": "Prior regional",
-  "region.override": "Estas notas solo orientan el criterio. Los chips y el motor de restricciones deciden.",
+  "region.override":
+    "Estas notas solo orientan el criterio. Los chips y el motor de restricciones deciden.",
   "region.none": "Sin región declarada",
   "region.fieldNote": "Nota de campo regional",
   "finder.placeholder": "Escenario, nudo o síntoma…",
@@ -104,7 +121,20 @@ const es: Record<Key, string> = {
   "boating.title": "Náutica y vela — vocabulario activo, catálogo en modelado",
   "boating.body":
     "La terminología de cabo, las conexiones, las construcciones y los lugares ya están activos para que el instrumento hable el idioma correcto. El catálogo mecánico de cabo aún no está modelado, así que no se puntúa nada — este instrumento no adivina.",
-  "skip": "Ir al contenido",
+  skip: "Ir al contenido",
+  "library.mode": "Modo 05 · Biblioteca",
+  "library.title": "Conexiones modeladas",
+  "library.lede":
+    "Todas las conexiones de pesca y náutica ya en el catálogo. Abre un diagrama o el procedimiento — sin formulario de Decidir.",
+  "library.search": "Buscar Palomar, as de guía, FG…",
+  "library.empty": "Nada coincide. Cambia de disciplina o prueba otro nombre.",
+  "library.all": "Todos los trabajos",
+  "library.jobs": "Filtrar por trabajo",
+  "library.tie": "Atar",
+  "library.openPlayer": "Abrir el procedimiento",
+  "library.lookFor": "Busca",
+  "library.related": "Conexiones relacionadas",
+  "library.plates": "placas",
 };
 
 const DICTS: Record<Locale, Record<Key, string>> = { en, es };
