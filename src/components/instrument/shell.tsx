@@ -118,7 +118,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             </p>
           </div>
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
-            {APPLICATION_ID} · {ENGINE_VERSION} · catalog {KNOT_CATALOG_VERSION} ·{" "}
+            {APPLICATION_ID} · {ENGINE_VERSION} · {KNOT_CATALOG_VERSION} ·{" "}
             {knotsForDomain(domain.id).length} knots · {domain.label}
           </p>
         </div>

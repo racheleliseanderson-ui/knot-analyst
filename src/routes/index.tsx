@@ -358,11 +358,11 @@ function DecideMode() {
   const steps: DecideStep[] = [
     {
       id: "connection",
-      label: "Connection",
+      label: "The job",
       ready: true,
       node: (
                   <Panel className="p-5">
-                    <StepHead index="01" title="Connection" hint="What is physically being joined." />
+                    <StepHead index="01" title="The job" hint="What is physically being joined." />
                     <div className="space-y-4">
                       {connectionGroups.map((g) => (
                         <div key={g.title}>
@@ -441,8 +441,8 @@ function DecideMode() {
                   <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
                     <StepHead
                       index="02"
-                      title="Material system"
-                      hint="Materials decide what is even permitted."
+                      title="Line and leader"
+                      hint="The line decides what is even allowed."
                       state={input.connection ? "open" : "locked"}
                     />
                     <div className="space-y-4">
@@ -603,8 +603,8 @@ function DecideMode() {
                   <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
                     <StepHead
                       index="03"
-                      title="Field conditions"
-                      hint="Only declared conditions carry weight."
+                      title="On the water"
+                      hint="Only the conditions you tap count."
                       state={input.connection ? "open" : "locked"}
                     />
                     <div className="flex flex-wrap gap-1.5">
@@ -733,7 +733,7 @@ function DecideMode() {
       ]
         .filter(Boolean)
         .join(" · ")
-    : "No connection declared — nothing can score yet";
+    : "Pick a job first — we will not guess";
 
   const runNow = () => {
     setRan(true);
@@ -800,7 +800,7 @@ function DecideMode() {
             <h1 className="mt-2 text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.02em]">
               State the job.
               <br />
-              <span className="text-muted-foreground">The model states the constraint.</span>
+              <span className="text-muted-foreground">We’ll say what holds.</span>
             </h1>
           </div>
 
@@ -900,7 +900,7 @@ function DecideMode() {
                       {(
                         [
                           ["brief", "Brief", "One sheet: the call and its compromises"],
-                          ["field", "Field packet", "Adds options, readout, eliminations and the tying procedure"],
+                          ["field", "Field packet", "Adds the other knots, why they lost, and how to tie the one that won"],
                         ] as [PacketVariant, string, string][]
                       ).map(([kind, label, hint]) => {
                         const busy = packetState === "working" && packetKind === kind;
@@ -1034,7 +1034,7 @@ function DecideMode() {
                           ))}
                         </div>
                         <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
-                          Same constraints. Switch candidates without re-running — compare field fit and trade-offs side by side in your head.
+                          Same rules. Switch knots without running it again — hold the trade-offs side by side.
                         </p>
                       </div>
                     ) : null}
@@ -1060,7 +1060,7 @@ function DecideMode() {
                             params={{ knotId: activeOption.knot.id }}
                             className="mt-4 inline-flex items-center gap-2 rounded-md border border-accent/50 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent/10 no-print"
                           >
-                            Tie it — step player + diagram
+                            Tie it — steps and diagram
                           </Link>
                         ) : null}
                       </div>
@@ -1132,7 +1132,7 @@ function DecideMode() {
                         suppressHydrationWarning
                         className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70"
                       >
-                        {result.eliminated.length} candidates eliminated on hard constraints ·{" "}
+                        {result.eliminated.length} knots ruled out ·{" "}
                         engine {result.engineVersion} ·{" "}
                         {result.generatedAt.slice(0, 19).replace("T", " ")}Z
                       </p>
@@ -1143,7 +1143,7 @@ function DecideMode() {
 
               {tradeoffs.length ? (
                 <Panel className="p-6">
-                  <MicroLabel className="mb-4">Conflicting constraints</MicroLabel>
+                  <MicroLabel className="mb-4">These fight each other</MicroLabel>
                   <div className="space-y-5">
                     {tradeoffs.map((t) => (
                       <div key={t.id} className="border-l-2 border-caution/60 pl-4">
@@ -1312,7 +1312,7 @@ function DecideMode() {
                     className="flex w-full items-center justify-between gap-4 text-left"
                   >
                     <MicroLabel>
-                      Eliminated on hard constraints — {result.eliminated.length}
+                      Ruled out — {result.eliminated.length}
                     </MicroLabel>
                     <span className="font-mono text-xs text-muted-foreground">
                       {showEliminated ? "hide" : "show"}

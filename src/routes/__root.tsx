@@ -92,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "A mechanical decision instrument for fishing, boating and sailing connections. Invalid options never score.",
+          "Pick the fishing or boat knot for the job, the line, and the water. If a knot does not fit, we will not recommend it.",
       },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: "https://i0.wp.com/hookthehorizon.blog/wp-content/uploads/2026/08/AdobeStock_1419406694.jpeg?resize=1200%2C630&ssl=1" },

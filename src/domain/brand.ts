@@ -11,8 +11,8 @@
  */
 export const PUBLISHER_NAME = "Hook the Horizon";
 export const PRODUCT_NAME = "Knot Analyst";
-export const PRODUCT_TAGLINE = "Connection intelligence for fishing, boating & sailing";
+export const PRODUCT_TAGLINE = "The right knot for the job";
 export const PRODUCT_MONOGRAM = "KA";
 export const PRODUCT_META_TITLE = `${PRODUCT_NAME} — Decide the connection | ${PUBLISHER_NAME}`;
 export const PRODUCT_META_DESCRIPTION =
-  "A mechanical decision instrument for fishing connections. State the job, the materials and the conditions; invalid options never score.";
+  "Pick the fishing or boat knot for the job, the line, and the water. If a knot does not fit, we will not recommend it.";
