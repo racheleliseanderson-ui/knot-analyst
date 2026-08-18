@@ -1,9 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 
 /**
- * Library (mode 05) and diagram plates (mode 06).
- * Contract: the modelled catalogue is browsable without a Decide form,
- * domain isolation holds, and every card opens plates + the step player.
+ * Library (mode 05) and diagram pages (mode 06).
+ * The knots are browsable without running Decide, domain isolation holds,
+ * and every card opens diagrams plus how to tie it.
  */
 
 const failOnPageErrors = (page: Page, sink: string[]) => {
@@ -16,16 +16,15 @@ const failOnPageErrors = (page: Page, sink: string[]) => {
 };
 
 test.describe("Library", () => {
-  test("lists the modelled catalogue without a Decide form", async ({ page }) => {
+  test("lists the knots without running Decide", async ({ page }) => {
     const errors: string[] = [];
     failOnPageErrors(page, errors);
 
     await page.goto("/library");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/modelled connections/i);
-    await expect(page.getByText(/decide form/i)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/the knots/i);
+    await expect(page.getByText(/don’t have to run decide first/i)).toBeVisible();
     await expect(page.getByText("Knot decision card")).toHaveCount(0);
-    await expect(page.getByText(/\d+ here/i)).toBeVisible();
-    await expect(page.getByText(/\d+ modelled/i)).toBeVisible();
+    await expect(page.getByText(/\d+ of \d+ knots/i)).toBeVisible();
 
     const cards = page.locator("article");
     expect(await cards.count()).toBeGreaterThan(40);
@@ -71,7 +70,7 @@ test.describe("Library", () => {
     await expect(page.getByText("Finished structure")).toBeVisible();
     await expect(page.getByText(/^Step 01$/)).toBeVisible();
 
-    await page.getByRole("link", { name: /open step player/i }).click();
+    await page.getByRole("link", { name: /how to tie it/i }).click();
     await expect(page).toHaveURL(/\/tie\/palomar/);
     await expect(page.getByRole("link", { name: /all diagrams/i })).toBeVisible();
     expect(errors).toEqual([]);

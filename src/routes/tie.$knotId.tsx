@@ -40,7 +40,7 @@ export const Route = createFileRoute("/tie/$knotId")({
   notFoundComponent: () => (
     <Shell>
       <p className="text-sm text-muted-foreground">
-        No modelled procedure for that connection.{" "}
+        No tying steps for that knot.{" "}
         <Link to="/library" className="text-accent underline underline-offset-4">
           Back to Library
         </Link>

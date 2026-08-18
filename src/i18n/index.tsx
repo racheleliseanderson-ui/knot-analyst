@@ -56,18 +56,18 @@ const en = {
     "Rope terminology, connections, constructions and venues are active so the instrument speaks the right language. The mechanical catalog for rope work is not modelled yet, so nothing is scored — this instrument does not guess.",
   skip: "Skip to content",
   "library.mode": "Mode 05 · Library",
-  "library.title": "Modelled connections",
+  "library.title": "The knots",
   "library.lede":
-    "Every fishing and boating connection already in the catalogue. Open a diagram or the tying procedure — no Decide form.",
+    "Every fishing and boat knot we cover. Open a diagram or the steps — you don’t have to run Decide first.",
   "library.search": "Search Palomar, bowline, FG…",
-  "library.empty": "Nothing matches. Switch discipline or try another name.",
-  "library.all": "All jobs",
-  "library.jobs": "Filter by job",
+  "library.empty": "Nothing matches. Switch to fishing or boating, or try another name.",
+  "library.all": "All knots",
+  "library.jobs": "Filter by kind",
   "library.tie": "Tie",
-  "library.openPlayer": "Open step player",
+  "library.openPlayer": "How to tie it",
   "library.lookFor": "Look for",
-  "library.related": "Related connections",
-  "library.plates": "plates",
+  "library.related": "Related knots",
+  "library.plates": "steps",
 } as const;
 
 type Key = keyof typeof en;
@@ -123,18 +123,18 @@ const es: Record<Key, string> = {
     "La terminología de cabo, las conexiones, las construcciones y los lugares ya están activos para que el instrumento hable el idioma correcto. El catálogo mecánico de cabo aún no está modelado, así que no se puntúa nada — este instrumento no adivina.",
   skip: "Ir al contenido",
   "library.mode": "Modo 05 · Biblioteca",
-  "library.title": "Conexiones modeladas",
+  "library.title": "Los nudos",
   "library.lede":
-    "Todas las conexiones de pesca y náutica ya en el catálogo. Abre un diagrama o el procedimiento — sin formulario de Decidir.",
+    "Todos los nudos de pesca y de barco que cubrimos. Abre un diagrama o los pasos — no hace falta pasar por Decidir primero.",
   "library.search": "Buscar Palomar, as de guía, FG…",
-  "library.empty": "Nada coincide. Cambia de disciplina o prueba otro nombre.",
-  "library.all": "Todos los trabajos",
-  "library.jobs": "Filtrar por trabajo",
+  "library.empty": "Nada coincide. Cambia a pesca o a náutica, o prueba otro nombre.",
+  "library.all": "Todos los nudos",
+  "library.jobs": "Filtrar por tipo",
   "library.tie": "Atar",
-  "library.openPlayer": "Abrir el procedimiento",
+  "library.openPlayer": "Cómo atarlo",
   "library.lookFor": "Busca",
-  "library.related": "Conexiones relacionadas",
-  "library.plates": "placas",
+  "library.related": "Nudos relacionados",
+  "library.plates": "pasos",
 };
 
 const DICTS: Record<Locale, Record<Key, string>> = { en, es };

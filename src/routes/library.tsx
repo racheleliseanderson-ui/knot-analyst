@@ -24,17 +24,16 @@ export const Route = createFileRoute("/library")({
   },
   head: () => ({
     meta: [
-      { title: "Library — modelled connections | Knot Analyst" },
+      { title: "Library — fishing and boat knots | Knot Analyst" },
       {
         name: "description",
         content:
-          "Browse every modelled fishing and boating connection. Open diagrams or the tying procedure — no Decide form required.",
+          "Browse the fishing and boat knots. Open a diagram or the steps. You don’t have to run Decide first.",
       },
-      { property: "og:title", content: "Library — modelled connections" },
+      { property: "og:title", content: "Library — fishing and boat knots" },
       {
         property: "og:description",
-        content:
-          "The full Knot Analyst catalogue, searchable by name, alias and job. Diagrams and the step player are one tap away.",
+        content: "Search by name or kind. Open a diagram or start tying — no questionnaire.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -107,7 +106,7 @@ function LibraryMode() {
           </p>
         </div>
         <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
-          {domain.label} · {pool.length} here · {total} modelled
+          {domain.label} · {pool.length} of {total} knots
         </p>
       </div>
 
