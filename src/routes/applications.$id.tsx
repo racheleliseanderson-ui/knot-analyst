@@ -210,7 +210,7 @@ function KnotPage({ id }: { id: string }) {
           </div>
         </Panel>
         <Panel className="p-5">
-          <MicroLabel>Sourced duals</MicroLabel>
+          <MicroLabel>Same pattern, different job</MicroLabel>
           {duals.length ? (
             <ul className="mt-3 space-y-3">
               {duals.map((d) => (

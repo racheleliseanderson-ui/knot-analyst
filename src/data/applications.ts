@@ -115,7 +115,7 @@ export const WORLD_GROUP_LABELS: Record<WorldGroup, string> = {
   physical: "Physical rope",
   life: "Life science",
   material: "Material / culture",
-  cousin: "Cousin math — not rope",
+  cousin: "Not rope",
 };
 
 const SRC = {
@@ -202,7 +202,7 @@ const SRC = {
   wikiReef: {
     title: "Reef knot (Wikipedia)",
     url: "https://en.wikipedia.org/wiki/Reef_knot",
-    note: "Binding knot. Capsizes. Opposite-throw pair is the granny — not modelled here.",
+    note: "Binding knot. Capsizes. Opposite-throw pair is the granny — not in these knots.",
   },
 } as const satisfies Record<string, ApplicationSource>;
 
@@ -394,7 +394,7 @@ const CLASS_PROFILE: Record<TangleClass, ClassProfile> = {
     holdsBy: ["interlock", "constriction"],
     notes: [
       "Reef / square is a binding knot around a parcel. Opposite-direction throws lock; same-direction throws are a granny and walk.",
-      "Johanns et al. (2023) locate that difference in friction, geometry and plastic set — not in crossing count. Granny is not modelled in this catalog.",
+      "Johanns et al. (2023) locate that difference in friction, geometry and plastic set — not in crossing count. Granny is not among these knots.",
     ],
     doesNot: [
       "Reef is not a bend for two working ropes under load. Seamanship already forbids that job.",
@@ -686,9 +686,9 @@ export const WORLD_ESSAYS: WorldEssay[] = [
     id: "surgical-throws",
     title: "Surgical throws — square vs granny",
     group: "physical",
-    lede: "The one life-science paper that is actually about a knot already in this catalog.",
+    lede: "The one life-science paper that is actually about a knot we already cover.",
     meaning:
-      "Johanns et al. (Science Advances, 2023) show that square / reef throws lock and granny throws walk because of friction, geometry and plastic set — not because one has more crossings. Alternating throw direction is the lock. Same-direction throws are the granny. The granny is not modelled here; the reef knot is.",
+      "Johanns et al. (Science Advances, 2023) show that square / reef throws lock and granny throws walk because of friction, geometry and plastic set — not because one has more crossings. Alternating throw direction is the lock. Same-direction throws are the granny. Granny is not among these knots; the reef knot is.",
     predicts: [
       "Opposite-direction throws seat flat and lock.",
       "Same-direction throws walk under load.",
@@ -722,7 +722,7 @@ export const WORLD_ESSAYS: WorldEssay[] = [
       "It does not describe wet fluoro or a glazed seat.",
       "It does not hand a constraint to Decide.",
     ],
-    notFor: ["Any modelled fishing or sailing connection", "A Decide or Diagnose input"],
+    notFor: ["Any fishing or boat knot we cover", "A Decide or Diagnose input"],
     sources: [SRC.vazquez, SRC.wikiTopoisomerase],
     relatedKnotIds: [],
     neverScoresDecide: true,
@@ -787,11 +787,11 @@ export const WORLD_ESSAYS: WorldEssay[] = [
       "Local wiggling of a world-line does not change the braid class.",
     ],
     doesNot: [
-      "It does not rank knots in this catalog.",
+      "It does not rank the knots we cover.",
       "It does not say a Palomar is ‘topologically protected’.",
       "It does not belong in Decide, Diagnose, or a manufacturer rating.",
     ],
-    notFor: ["Any modelled connection in this instrument", "Any scoring path"],
+    notFor: ["Any fishing or boat knot we cover", "Any scoring path"],
     sources: [SRC.nayak, SRC.quantinuum],
     relatedKnotIds: [],
     neverScoresDecide: true,
@@ -813,7 +813,7 @@ export const WORLD_ESSAYS: WorldEssay[] = [
       "It does not describe DNA or a suture.",
       "It does not score Decide.",
     ],
-    notFor: ["Any rope, leader or terminal in this catalog", "A Decide or Diagnose input"],
+    notFor: ["Any rope, leader or terminal we cover", "A Decide or Diagnose input"],
     sources: [SRC.kleckner, SRC.wikiKnot],
     relatedKnotIds: [],
     neverScoresDecide: true,

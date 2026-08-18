@@ -40,7 +40,7 @@ test.describe("Applications", () => {
     await expect(page.getByText(/same crossing pattern/i)).toBeVisible();
     await expect(page.getByText(/does not pick a knot/i).first()).toBeVisible();
 
-    await page.getByRole("link", { name: /open step player/i }).click();
+    await page.getByRole("link", { name: /how to tie it/i }).click();
     await expect(page).toHaveURL(/\/tie\/bowline/);
     expect(errors).toEqual([]);
   });
