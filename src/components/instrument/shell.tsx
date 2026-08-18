@@ -84,6 +84,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
             <ModeLink to="/compare" label="Compare" code="03" />
             <ModeLink to="/library" label={t("nav.library")} code="05" />
+            <ModeLink to="/applications" label={t("nav.applications")} code="07" />
             <ModeLink to="/admin" label={t("nav.data")} code="04" />
             <button
               type="button"
@@ -111,7 +112,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
           <div className="max-w-md space-y-1">
             <p className="text-xs leading-relaxed text-muted-foreground">
               Run Decide or Diagnose when you need a call or something failed. Or just open a knot
-              and tie it. Unsuitable recommendations fail closed.
+              and tie it. Applications never picks a knot for you.
             </p>
             <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/60">
               {PRODUCT_NAME} · {PRODUCT_TAGLINE}

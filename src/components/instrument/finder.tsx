@@ -13,12 +13,13 @@ import { knotsForDomain } from "@/data/catalog";
 import { useDomain } from "@/domain/context";
 import { playsForDomain } from "@/data/failure-playbook";
 import { startersForDomain } from "@/data/diagnose-starters";
+import { WORLD_ESSAYS } from "@/data/applications";
 import { MATERIAL_LABELS } from "@/domain/types";
 import { useScenarios } from "@/lib/overlay";
 import { useT } from "@/i18n";
 import { cn } from "@/lib/utils";
 
-type Group = "finder.scenarios" | "finder.knots" | "finder.symptoms";
+type Group = "finder.scenarios" | "finder.knots" | "finder.symptoms" | "finder.applications";
 
 interface Hit {
   id: string;
@@ -45,6 +46,10 @@ const ALIASES: Record<string, string> = {
   bimini: "bimini twist",
   slim: "slim beauty",
   "no name": "no-name",
+  dna: "dna topology",
+  granny: "surgical throws",
+  bayman: "physical hitch",
+  jones: "topological quantum",
 };
 
 /** One-character slip tolerance — cheap, bounded, and only for whole words. */
@@ -113,6 +118,7 @@ const GROUP_FILTERS: { id: Group; label: string }[] = [
   { id: "finder.scenarios", label: "Scenarios" },
   { id: "finder.knots", label: "Knots" },
   { id: "finder.symptoms", label: "Symptoms" },
+  { id: "finder.applications", label: "Applications" },
 ];
 
 const RECENTS_KEY = "ki-finder-recents";
@@ -208,6 +214,18 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
         go: () => navigate({ to: "/diagnose", search: { event: p.id } }),
       });
     }
+    for (const w of WORLD_ESSAYS) {
+      items.push({
+        id: `ap:${w.id}`,
+        group: "finder.applications",
+        label: w.title,
+        sub: "Applications",
+        hay: `${w.title} ${w.lede} ${w.meaning} ${w.id} ${w.group}`
+          .toLowerCase()
+          .replace(/-/g, " "),
+        go: () => navigate({ to: "/applications/$id", params: { id: w.id } }),
+      });
+    }
     return items;
   }, [scenarios, navigate, domain.id]);
 
@@ -244,6 +262,7 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
       "finder.scenarios": 0,
       "finder.knots": 0,
       "finder.symptoms": 0,
+      "finder.applications": 0,
     };
     for (const h of all) {
       if (!q.trim() || score(h.hay, q) >= 0) map[h.group] += 1;

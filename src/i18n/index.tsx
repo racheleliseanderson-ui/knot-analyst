@@ -10,8 +10,9 @@ const en = {
   "nav.diagnose": "Diagnose",
   "nav.data": "Data",
   "nav.library": "Library",
+  "nav.applications": "Applications",
   "nav.search": "Search",
-  "nav.searchHint": "Search scenarios, knots, symptoms",
+  "nav.searchHint": "Search scenarios, knots, symptoms, applications",
   "domain.fishing": "Fishing",
   "domain.boating": "Boating & Sailing",
   "domain.label": "On the water",
@@ -44,11 +45,12 @@ const en = {
   "region.override": "These notes only color the picture. What you tap still decides.",
   "region.none": "No region picked",
   "region.fieldNote": "Note for this water",
-  "finder.placeholder": "Scenario, knot or symptom…",
+  "finder.placeholder": "Scenario, knot, symptom or application…",
   "finder.empty": "Nothing matches. Try a material, a job, or what went wrong.",
   "finder.scenarios": "Scenarios",
   "finder.knots": "Knots",
   "finder.symptoms": "Symptoms",
+  "finder.applications": "Applications",
   "finder.close": "Close search",
   "boating.title": "No boat knots loaded",
   "boating.body":
@@ -67,6 +69,23 @@ const en = {
   "library.lookFor": "Look for",
   "library.related": "Related knots",
   "library.plates": "steps",
+  "applications.mode": "Mode 07 · Applications",
+  "applications.title": "Where the theory applies",
+  "applications.lede":
+    "What the physics actually says about these knots — and what it must never pick for you. This page does not run Decide.",
+  "applications.search": "Search bowline, hitch, DNA, granny…",
+  "applications.empty": "Nothing matches. Switch to fishing or boating, or try another kind.",
+  "applications.world": "World atlas",
+  "applications.allWorld": "All essays",
+  "applications.connections": "The knots",
+  "applications.classes": "Filter by how it holds",
+  "applications.allClasses": "All kinds",
+  "applications.diagram": "Diagrams",
+  "applications.isolation":
+    "This page does not pick a knot for you. DNA, molecules, quantum braids and vortices stay off Decide.",
+  "applications.noDual":
+    "No sourced twin among these knots. Related knots stay on the Library card.",
+  "applications.noKnot": "This essay is not about a fishing or boat knot we cover.",
 } as const;
 
 type Key = keyof typeof en;
@@ -76,8 +95,9 @@ const es: Record<Key, string> = {
   "nav.diagnose": "Diagnosticar",
   "nav.data": "Datos",
   "nav.library": "Biblioteca",
+  "nav.applications": "Aplicaciones",
   "nav.search": "Buscar",
-  "nav.searchHint": "Buscar escenarios, nudos, síntomas",
+  "nav.searchHint": "Buscar escenarios, nudos, síntomas, aplicaciones",
   "domain.fishing": "Pesca",
   "domain.boating": "Náutica y vela",
   "domain.label": "En el agua",
@@ -110,11 +130,12 @@ const es: Record<Key, string> = {
   "region.override": "Estas notas solo colorean el cuadro. Lo que tocas sigue decidiendo.",
   "region.none": "Sin región",
   "region.fieldNote": "Nota para esta agua",
-  "finder.placeholder": "Escenario, nudo o síntoma…",
+  "finder.placeholder": "Escenario, nudo, síntoma o aplicación…",
   "finder.empty": "Nada coincide. Prueba con un material, un trabajo o lo que falló.",
   "finder.scenarios": "Escenarios",
   "finder.knots": "Nudos",
   "finder.symptoms": "Síntomas",
+  "finder.applications": "Aplicaciones",
   "finder.close": "Cerrar la búsqueda",
   "boating.title": "Sin nudos de barco cargados",
   "boating.body":
@@ -133,6 +154,23 @@ const es: Record<Key, string> = {
   "library.lookFor": "Busca",
   "library.related": "Nudos relacionados",
   "library.plates": "pasos",
+  "applications.mode": "Modo 07 · Aplicaciones",
+  "applications.title": "Dónde aplica la teoría",
+  "applications.lede":
+    "Lo que la física dice de verdad sobre estos nudos — y lo que nunca debe elegirte el nudo. Esta página no ejecuta Decidir.",
+  "applications.search": "Buscar as de guía, cote, ADN, nudo de abuela…",
+  "applications.empty": "Nada coincide. Cambia a pesca o a náutica, o prueba otro tipo.",
+  "applications.world": "Atlas mundial",
+  "applications.allWorld": "Todos los ensayos",
+  "applications.connections": "Los nudos",
+  "applications.classes": "Filtrar por cómo sujeta",
+  "applications.allClasses": "Todos los tipos",
+  "applications.diagram": "Diagramas",
+  "applications.isolation":
+    "Esta página no te elige un nudo. ADN, moléculas, trenzas cuánticas y vórtices quedan fuera de Decidir.",
+  "applications.noDual":
+    "Sin gemelo citado entre estos nudos. Los relacionados siguen en la ficha de Biblioteca.",
+  "applications.noKnot": "Este ensayo no trata un nudo de pesca o de barco que cubramos.",
 };
 
 const DICTS: Record<Locale, Record<Key, string>> = { en, es };

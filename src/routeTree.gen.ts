@@ -15,6 +15,8 @@ import { Route as CompareRouteImport } from './routes/compare'
 import { Route as DiagnoseRouteImport } from './routes/diagnose'
 import { Route as DiagramKnotIdRouteImport } from './routes/diagram.$knotId'
 import { Route as LibraryRouteImport } from './routes/library'
+import { Route as ApplicationsRouteImport } from './routes/applications'
+import { Route as ApplicationsIdRouteImport } from './routes/applications.$id'
 import { Route as TieKnotIdRouteImport } from './routes/tie.$knotId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -47,6 +49,16 @@ const LibraryRoute = LibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApplicationsRoute = ApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsIdRoute = ApplicationsIdRouteImport.update({
+  id: '/applications/$id',
+  path: '/applications/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TieKnotIdRoute = TieKnotIdRouteImport.update({
   id: '/tie/$knotId',
   path: '/tie/$knotId',
@@ -60,6 +72,8 @@ export interface FileRoutesByFullPath {
   '/diagnose': typeof DiagnoseRoute
   '/diagram/$knotId': typeof DiagramKnotIdRoute
   '/library': typeof LibraryRoute
+  '/applications': typeof ApplicationsRoute
+  '/applications/$id': typeof ApplicationsIdRoute
   '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +83,8 @@ export interface FileRoutesByTo {
   '/diagnose': typeof DiagnoseRoute
   '/diagram/$knotId': typeof DiagramKnotIdRoute
   '/library': typeof LibraryRoute
+  '/applications': typeof ApplicationsRoute
+  '/applications/$id': typeof ApplicationsIdRoute
   '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRoutesById {
@@ -79,6 +95,8 @@ export interface FileRoutesById {
   '/diagnose': typeof DiagnoseRoute
   '/diagram/$knotId': typeof DiagramKnotIdRoute
   '/library': typeof LibraryRoute
+  '/applications': typeof ApplicationsRoute
+  '/applications/$id': typeof ApplicationsIdRoute
   '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +108,8 @@ export interface FileRouteTypes {
     | '/diagnose'
     | '/diagram/$knotId'
     | '/library'
+    | '/applications'
+    | '/applications/$id'
     | '/tie/$knotId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +119,8 @@ export interface FileRouteTypes {
     | '/diagnose'
     | '/diagram/$knotId'
     | '/library'
+    | '/applications'
+    | '/applications/$id'
     | '/tie/$knotId'
   id:
     | '__root__'
@@ -108,6 +130,8 @@ export interface FileRouteTypes {
     | '/diagnose'
     | '/diagram/$knotId'
     | '/library'
+    | '/applications'
+    | '/applications/$id'
     | '/tie/$knotId'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +142,8 @@ export interface RootRouteChildren {
   DiagnoseRoute: typeof DiagnoseRoute
   DiagramKnotIdRoute: typeof DiagramKnotIdRoute
   LibraryRoute: typeof LibraryRoute
+  ApplicationsRoute: typeof ApplicationsRoute
+  ApplicationsIdRoute: typeof ApplicationsIdRoute
   TieKnotIdRoute: typeof TieKnotIdRoute
 }
 
@@ -165,6 +191,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/applications': {
+      id: '/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications/$id': {
+      id: '/applications/$id'
+      path: '/applications/$id'
+      fullPath: '/applications/$id'
+      preLoaderRoute: typeof ApplicationsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tie/$knotId': {
       id: '/tie/$knotId'
       path: '/tie/$knotId'
@@ -182,6 +222,8 @@ const rootRouteChildren: RootRouteChildren = {
   DiagnoseRoute: DiagnoseRoute,
   DiagramKnotIdRoute: DiagramKnotIdRoute,
   LibraryRoute: LibraryRoute,
+  ApplicationsRoute: ApplicationsRoute,
+  ApplicationsIdRoute: ApplicationsIdRoute,
   TieKnotIdRoute: TieKnotIdRoute,
 }
 export const routeTree = rootRouteImport
