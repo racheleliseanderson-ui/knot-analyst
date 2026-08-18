@@ -11,7 +11,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { Search, X } from "lucide-react";
 import { knotsForDomain } from "@/data/catalog";
 import { useDomain } from "@/domain/context";
-import { FAILURE_PLAYS } from "@/data/failure-playbook";
+import { playsForDomain } from "@/data/failure-playbook";
+import { startersForDomain } from "@/data/diagnose-starters";
 import { MATERIAL_LABELS } from "@/domain/types";
 import { useScenarios } from "@/lib/overlay";
 import { useT } from "@/i18n";
@@ -39,6 +40,8 @@ const ALIASES: Record<string, string> = {
   du: "double uni",
   pk: "palomar",
   "wind knot": "tangle",
+  pigtail: "curly slip",
+  "riding turn": "winch override",
   bimini: "bimini twist",
   slim: "slim beauty",
   "no name": "no-name",
@@ -189,13 +192,19 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
         go: () => navigate({ to: "/tie/$knotId", params: { knotId: k.id } }),
       });
     }
-    for (const p of FAILURE_PLAYS) {
+    for (const p of playsForDomain(domain.id)) {
+      const starterBits = startersForDomain(domain.id)
+        .filter((s) => s.input.event === p.id)
+        .map((s) => `${s.title} ${s.line}`)
+        .join(" ");
       items.push({
         id: `fp:${p.id}`,
         group: "finder.symptoms",
         label: p.title,
         sub: "Diagnose",
-        hay: `${p.title} ${p.id}`.toLowerCase().replace(/-/g, " "),
+        hay: `${p.title} ${p.plain} ${p.meaning} ${p.id} ${starterBits}`
+          .toLowerCase()
+          .replace(/-/g, " "),
         go: () => navigate({ to: "/diagnose", search: { event: p.id } }),
       });
     }
@@ -245,9 +254,7 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
   const hits = useMemo(() => {
     const pool = all.filter(passes);
     if (!q.trim()) {
-      const recent = recents
-        .map((id) => pool.find((h) => h.id === id))
-        .filter(Boolean) as Hit[];
+      const recent = recents.map((id) => pool.find((h) => h.id === id)).filter(Boolean) as Hit[];
       const rest = pool
         .filter((h) => !recent.includes(h))
         .filter((h) => (groups.length || knotFiltersOn ? true : h.group === "finder.scenarios"));
@@ -348,7 +355,11 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
 
         {/* Filters */}
         <div className="border-b border-hairline px-4 py-2">
-          <div className="ki-rail flex gap-1.5 overflow-x-auto" role="group" aria-label="Result type">
+          <div
+            className="ki-rail flex gap-1.5 overflow-x-auto"
+            role="group"
+            aria-label="Result type"
+          >
             {GROUP_FILTERS.map((g) => (
               <FilterChip
                 key={g.id}
@@ -406,9 +417,7 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
               lastGroup = h.group;
               return (
                 <li key={h.id}>
-                  {header ? (
-                    <div className="label-micro px-4 pb-1 pt-3">{t(header)}</div>
-                  ) : null}
+                  {header ? <div className="label-micro px-4 pb-1 pt-3">{t(header)}</div> : null}
                   <button
                     id={`ki-hit-${h.id}`}
                     type="button"

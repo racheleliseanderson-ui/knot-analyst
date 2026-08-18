@@ -27,7 +27,14 @@ export interface TackleHandoffPayload {
   url: string;
 }
 
-const CONNECTION_BREAKS: BreakLocation[] = ["in-knot", "at-tag", "leader-join"];
+const CONNECTION_BREAKS: BreakLocation[] = [
+  "in-knot",
+  "at-tag",
+  "leader-join",
+  "at-shank",
+  "at-loop",
+  "at-cleat",
+];
 
 const CONNECTION_EVENTS: FailureEvent[] = [
   "broke-under-load",
@@ -36,6 +43,22 @@ const CONNECTION_EVENTS: FailureEvent[] = [
   "bulky-guides",
   "keeps-failing",
   "hard-to-tie",
+  "pigtail-left",
+  "loop-collapsed",
+  "join-walked",
+  "girth-cinched",
+  "shank-walked",
+  "coating-peeled",
+  "walked-off",
+  "capsized",
+  "jammed-uncleatable",
+  "unequal-slip",
+  "stopper-pulled",
+  "self-cut",
+  "double-line-unravelled",
+  "reef-spilled",
+  "grip-slipped",
+  "cleat-dumped",
 ];
 
 /**

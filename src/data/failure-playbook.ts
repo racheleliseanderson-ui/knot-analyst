@@ -1,7 +1,18 @@
 /**
  * Field failure playbook — "why isn't this working?"
- * Independent of Knot Finder library filtering. Connection-first diagnosis.
+ * Independent of library filtering. Symptom first, knot name last.
+ *
+ * Forensic notes (cited field practice, not invented ratings):
+ * - A curly “pigtail” / corkscrew end is the classic sign of a slip, not a
+ *   clean break (Northland; Salt Strong field write-ups).
+ * - A glazed / melted curl is friction heat from a dry cinch.
+ * - A clean diagonal often means a nick, guide, or teeth — not the knot.
+ * - Fuzzy braid is abrasion. Hardware that is empty with a curly stub is a
+ *   complete walk-off.
  */
+
+import type { DomainId } from "@/domain/domain";
+import { EXTRA_FAILURE_PLAYS } from "@/data/failure-plays-extra";
 
 export type FailureEvent =
   | "broke-under-load"
@@ -11,7 +22,33 @@ export type FailureEvent =
   | "bulky-guides"
   | "dead-action"
   | "hard-to-tie"
-  | "unsure-setup";
+  | "unsure-setup"
+  | "pigtail-left"
+  | "clean-sever"
+  | "frayed-through"
+  | "bitten-off"
+  | "loop-collapsed"
+  | "join-walked"
+  | "wind-tangle"
+  | "coating-peeled"
+  | "arbor-slipped"
+  | "hardware-opened"
+  | "girth-cinched"
+  | "shank-walked"
+  | "walked-off"
+  | "capsized"
+  | "jammed-uncleatable"
+  | "chafe-at-fairlead"
+  | "unequal-slip"
+  | "stopper-pulled"
+  | "self-cut"
+  | "tip-wrap"
+  | "double-line-unravelled"
+  | "reef-spilled"
+  | "grip-slipped"
+  | "riding-turn"
+  | "cleat-dumped"
+  | "shock-parted";
 
 export type BreakLocation =
   | "in-knot"
@@ -19,32 +56,51 @@ export type BreakLocation =
   | "at-tag"
   | "above-knot"
   | "leader-join"
+  | "at-guides"
+  | "at-shank"
+  | "at-loop"
+  | "at-arbor"
+  | "in-leader"
+  | "at-fairlead"
+  | "at-cleat"
+  | "at-tiptop"
+  | "at-winch"
   | "unknown";
+
+/** What the recovered end actually looks like — forensic, not a knot name. */
+export type EndLook =
+  | "curly-pigtail"
+  | "clean-diagonal"
+  | "glazed-melt"
+  | "fuzzy-frayed"
+  | "mushroomed"
+  | "knot-gone"
+  | "knot-still-on";
+
+export type SymptomGroup = "load" | "forensic" | "geometry" | "system" | "rope";
 
 export interface FailurePlay {
   id: FailureEvent;
+  domain: DomainId | "both";
+  group: SymptomGroup;
   title: string;
   plain: string;
-  /** What this usually means mechanically */
   meaning: string;
-  /** First questions to ask yourself */
   questions: string[];
-  /** Likely root causes (ranked for field use) */
   likelyCauses: string[];
-  /** Immediate checks */
   checks: string[];
-  /** Concrete fixes */
   fixes: string[];
-  /** When to cut and start over */
   retieWhen: string;
-  /** Soft link into Decide path */
   decideHint?: string;
   breakLocations?: BreakLocation[];
+  sources: { title: string; note?: string }[];
 }
 
-export const FAILURE_PLAYS: FailurePlay[] = [
+const CORE: FailurePlay[] = [
   {
     id: "broke-under-load",
+    domain: "both",
+    group: "load",
     title: "It broke under load",
     plain: "The connection failed when a fish, snag, or hard set pulled.",
     meaning:
@@ -74,11 +130,24 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Replace damaged hardware before trusting the next connection",
     ],
     retieWhen: "Always after a hard failure. Do not re-cinch a partially failed knot.",
-    decideHint: "If the same knot keeps failing on this material, pick a better family for the connection.",
+    decideHint:
+      "If the same knot keeps failing on this material, pick a better family for the connection.",
     breakLocations: ["in-knot", "at-eye", "at-tag", "above-knot", "leader-join", "unknown"],
+    sources: [
+      {
+        title: "Salt Strong — knot fail taxonomy",
+        note: "A good knot breaks before it unravels; a bad knot leaves a curly tag.",
+      },
+      {
+        title: "Northland — slip vs break forensics",
+        note: "Pigtail = slip. Melt curl = friction. Clean cut is often not the knot.",
+      },
+    ],
   },
   {
     id: "slipped-or-pulled",
+    domain: "both",
+    group: "load",
     title: "It slipped or the tag pulled",
     plain: "The knot looked tied, then walked, opened, or the tag came free.",
     meaning:
@@ -99,17 +168,31 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Count wraps against the knot’s normal range",
       "Look for tag movement under a light steady pull",
       "Check whether barrels or coils butted together",
+      "Compare the stub to a pigtail vs a clean break",
     ],
     fixes: [
       "Retie with correct wrap count and a deliberate seat",
       "On joins, match family to diameter relation (not just “what I know”)",
       "For braid→leader, prefer a proven join (FG / Alberto / Double Uni by conditions)",
+      "Leave enough tag to lock, then trim after the test pull",
     ],
     retieWhen: "Any visible slip under a test pull means cut it off.",
     decideHint: "Slip-prone materials need a different ranking than “easy terminal knots.”",
+    sources: [
+      {
+        title: "Northland — pig’s tail as total slip",
+        note: "Empty hardware + corkscrew stub is a walk-off, not a break.",
+      },
+      {
+        title: "Field practice — braid wrap count",
+        note: "Slick braid punishes under-wraps; cited as a slip driver, not a rating.",
+      },
+    ],
   },
   {
     id: "wont-seat",
+    domain: "both",
+    group: "geometry",
     title: "It won’t seat or looks wrong",
     plain: "Coils won’t settle, the knot stays open, or geometry looks off.",
     meaning:
@@ -130,16 +213,27 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Compare finished shape to a known-good photo or diagram for that knot",
       "Confirm both line exits and tag path",
       "Verify hardware eye size vs doubled-line knots",
+      "Feel for glaze — a dry fluoro seat often scores before it looks wrong",
     ],
     fixes: [
       "Cut off and retie — do not force a half-seated knot",
       "Switch to a compact single-pass terminal if the eye is tiny",
       "Slow the last pull; keep wraps aligned with a thumbnail",
+      "Wet fluoro and mono before the final seat",
     ],
     retieWhen: "If it does not seat cleanly, it is not finished. Retie now.",
+    decideHint: "A knot that will not seat is unfinished — do not rank it as if it were tied.",
+    sources: [
+      {
+        title: "Common fluoro seating practice",
+        note: "Dry fluoro cinches glaze; wet + slow seat is the standing correction.",
+      },
+    ],
   },
   {
     id: "keeps-failing",
+    domain: "both",
+    group: "system",
     title: "It keeps failing after I retie",
     plain: "Same break or slip pattern even with fresh ties.",
     meaning:
@@ -160,17 +254,27 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Change one variable at a time: new line section, then hardware, then knot family",
       "Practice the suspect stage slowly with cheap line",
       "Ask whether the connection job actually needs a different family",
+      "Compare the broken ends — identical stubs mean the same miss, not bad luck",
     ],
     fixes: [
       "Run Decide for this exact connection + materials + conditions",
       "Switch hardware if the eye is sharp or undersized",
       "Pick a more inspectable knot when light or hands are bad",
+      "Trim farther back than feels comfortable if the line is compromised",
     ],
     retieWhen: "Stop stacking identical retries. Change the system, then retie.",
     decideHint: "Use Decide so Layer 1 can eliminate knots that should never have been candidates.",
+    sources: [
+      {
+        title: "Field practice — change one variable",
+        note: "Identical retries diagnose nothing. Line, then hardware, then family.",
+      },
+    ],
   },
   {
     id: "bulky-guides",
+    domain: "fishing",
+    group: "geometry",
     title: "Too bulky / hangs in the guides",
     plain: "Casts tick, hang, or the join will not pass cleanly.",
     meaning:
@@ -190,17 +294,27 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Pull the connection slowly through the first guides by hand",
       "Trim tags cleanly after a proper seat",
       "Compare join options by profile, not just “strength %” lore",
+      "Cotton-ball the stripper if it also cuts, not just ticks",
     ],
     fixes: [
       "For braid→leader that must cast through guides, prefer slim joins when skill allows",
       "If you need speed in bad weather, accept a bulkier but reliable join and manage leader length",
       "Keep tags short and clean after inspection",
+      "Turn guide-passage on before you re-rank",
     ],
     retieWhen: "If it hangs every cast, cut and rebuild with a guide-aware choice.",
     decideHint: "Turn on “must pass guides” when ranking — bulk should not win silently.",
+    sources: [
+      {
+        title: "Common braid-to-leader guide practice",
+        note: "Slim joins exist for a reason; bulk is a constraint, not a vanity metric.",
+      },
+    ],
   },
   {
     id: "dead-action",
+    domain: "fishing",
+    group: "geometry",
     title: "Lure action feels dead",
     plain: "The bait won’t swing, walk, or track the way it should.",
     meaning:
@@ -214,20 +328,34 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Tight terminal knot when a free-swing loop is needed",
       "Oversized hardware stack killing motion",
       "Wrong hook orientation / snell geometry for the presentation",
+      "Loop that already collapsed into a noose",
     ],
     checks: [
       "Hang the lure and watch for free movement at the eye",
       "Confirm whether the technique needs a fixed loop",
+      "See whether a split ring is already doing the swing job",
+      "Look for a noose tight on the eye — that is a collapsed loop",
     ],
     fixes: [
       "Retie with a non-slip / open loop family when free action is the job",
       "Use a tight terminal only when you want a solid, pinned connection",
+      "Drop extra hardware if the stack is what killed the walk",
+      "If the loop cinched, treat it as loop-collapsed — do not loosen it",
     ],
-    retieWhen: "If action is the product, rebuild the connection for motion — don’t force a tight knot.",
+    retieWhen:
+      "If action is the product, rebuild the connection for motion — don’t force a tight knot.",
     decideHint: "Mark free-swing / open action when deciding terminal knots.",
+    sources: [
+      {
+        title: "Loop-knot field practice (Kreh / Rapala / Homer Rhode family)",
+        note: "A tight terminal pins the eye; a non-slip loop is the action job.",
+      },
+    ],
   },
   {
     id: "hard-to-tie",
+    domain: "both",
+    group: "system",
     title: "I can’t tie it cleanly in the field",
     plain: "Wind, cold hands, low light, or complexity keeps producing messy results.",
     meaning:
@@ -241,20 +369,33 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Advanced knot under bad field conditions",
       "Too many stages for frequent reties",
       "Proficiency gap on a high-skill join",
+      "Wind or low light hiding a missed wrap",
     ],
     checks: [
       "Honestly rate your clean success rate in these conditions",
       "Count how many times you’ll retie this session",
+      "Can you still see both exits and the tag?",
+      "Are gloves or numb fingers hiding the dress?",
     ],
     fixes: [
       "Rank by field-tieability and retie speed, not folklore strength charts",
       "Practice the advanced option at home; fish the inspectable option today",
+      "Declare cold / wind / low light so Decide can down-rank complexity",
+      "Cut a messy result. Do not fish a guess.",
     ],
     retieWhen: "Any messy result under stress → cut and use a simpler valid knot.",
     decideHint: "Set cold hands / wind / low light / frequent reties before ranking.",
+    sources: [
+      {
+        title: "Field-fit over bench-perfect",
+        note: "A seated simple family beats a rushed advanced one. Not a strength claim.",
+      },
+    ],
   },
   {
     id: "unsure-setup",
+    domain: "both",
+    group: "system",
     title: "I’m not sure what I should be tying",
     plain: "You need a decision for this connection — not a library browse.",
     meaning:
@@ -268,19 +409,29 @@ export const FAILURE_PLAYS: FailurePlay[] = [
       "Starting from a knot name instead of a connection job",
       "Copying a friend’s knot without matching materials",
       "Treating strength % as a universal ranking",
+      "No declared job, so nothing can fail closed",
     ],
     checks: [
-      "Name the connection in plain words (line→hook, braid→leader, etc.)",
+      "Name the connection in plain words (line→hook, braid→leader, rope→cleat)",
       "Note materials on both sides",
+      "Name the hard constraints — guides, free action, tiny eyes, cyclic tide",
+      "Say whether you can still inspect the last connection",
     ],
     fixes: [
       "Run Decide with connection + materials + conditions",
       "Learn fewer knots well; expand only when a new job appears",
+      "If the standing connection was a guess, cut it before the next load",
+      "Do not browse the library hoping a name will decide for you",
     ],
     retieWhen: "If the current knot was a guess, cut it and decide properly before the next cast.",
     decideHint: "Start Decide from the connection — invalid options never get a score.",
+    sources: [
+      { title: "Instrument philosophy", note: "Connection first. A knot name is not a diagnosis." },
+    ],
   },
 ];
+
+export const FAILURE_PLAYS: FailurePlay[] = [...CORE, ...EXTRA_FAILURE_PLAYS];
 
 export const BREAK_LOCATION_LABELS: Record<BreakLocation, string> = {
   "in-knot": "Broke inside the knot coils",
@@ -288,8 +439,39 @@ export const BREAK_LOCATION_LABELS: Record<BreakLocation, string> = {
   "at-tag": "Failed at the tag / finish",
   "above-knot": "Line failed above the knot",
   "leader-join": "Failed at the leader / line join",
+  "at-guides": "Cut or ticked at the guides",
+  "at-shank": "Walked or failed on the shank",
+  "at-loop": "Failed at the loop lock",
+  "at-arbor": "Let go at the spool arbor",
+  "in-leader": "Parted in the leader body",
+  "at-fairlead": "Chafed at a fairlead / chock",
+  "at-cleat": "Failed or jammed at the cleat",
+  "at-tiptop": "Wrapped or cut at the tip-top",
+  "at-winch": "Override / riding turn on the winch",
   unknown: "Not sure where it failed",
 };
+
+export const END_LOOK_LABELS: Record<EndLook, { label: string; hint: string }> = {
+  "curly-pigtail": { label: "Curly / pigtail", hint: "classic slip" },
+  "clean-diagonal": { label: "Clean diagonal", hint: "nick, teeth, or guide" },
+  "glazed-melt": { label: "Glazed / melted", hint: "dry friction heat" },
+  "fuzzy-frayed": { label: "Fuzzy / frayed", hint: "abrasion" },
+  mushroomed: { label: "Mushroomed", hint: "crush or shock" },
+  "knot-gone": { label: "Knot gone", hint: "walked off hardware" },
+  "knot-still-on": { label: "Knot still on", hint: "line failed, knot held" },
+};
+
+export const SYMPTOM_GROUP_LABELS: Record<SymptomGroup, string> = {
+  load: "Under load",
+  forensic: "What you recovered",
+  geometry: "Structure / action",
+  system: "System",
+  rope: "Rope work",
+};
+
+export function playsForDomain(id: DomainId): FailurePlay[] {
+  return FAILURE_PLAYS.filter((p) => p.domain === "both" || p.domain === id);
+}
 
 export function getFailurePlay(id: FailureEvent): FailurePlay | undefined {
   return FAILURE_PLAYS.find((p) => p.id === id);

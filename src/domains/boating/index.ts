@@ -2,6 +2,7 @@
  * Boating & Sailing — vocabulary, venues, and modelled rope-work catalog.
  * Fishing Decide stays on the fishing pool.
  */
+import { playsForDomain } from "@/data/failure-playbook";
 import type { KnotDomain } from "@/domain/domain";
 import { BOATING_BATCH_1 } from "@/data/knots/boating-batch-1";
 import { BOATING_BATCH_2 } from "@/data/knots/boating-batch-2";
@@ -24,6 +25,6 @@ export const BOATING_DOMAIN: KnotDomain = {
   dimensions: BOATING_DIMENSIONS,
   venues: BOATING_VENUES,
   scenarios: BOATING_SCENARIOS,
-  failurePlays: [],
+  failurePlays: playsForDomain("boating"),
   knots: [...BOATING_BATCH_1, ...BOATING_BATCH_2, ...BOATING_BATCH_3],
 };

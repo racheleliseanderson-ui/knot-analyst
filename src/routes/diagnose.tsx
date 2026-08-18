@@ -1,23 +1,35 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Shell } from "@/components/instrument/shell";
-import { Bullets, Chip, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
+import {
+  Bullets,
+  Chip,
+  MicroLabel,
+  Panel,
+  StepHead,
+  Verdict,
+} from "@/components/instrument/primitives";
 import { runTroubleshoot, type TroubleshootInput } from "@/engine/troubleshoot";
 import { diagnosisToDecide, encodeInput } from "@/lib/handoff";
-import { FAILURE_PLAYS, type BreakLocation, type FailureEvent } from "@/data/failure-playbook";
-import type { ConnectionJob, DiameterRelation, LineMaterial, RetieDecision } from "@/domain/types";
-import { isJoinJob } from "@/domain/connection-preset";
 import {
-  CONNECTION_GROUPS,
-  CONNECTION_LABELS,
-  DIAMETER_LABELS,
-  MATERIAL_LABELS,
-  RETIE_LABELS,
-} from "@/domain/types";
+  END_LOOK_LABELS,
+  SYMPTOM_GROUP_LABELS,
+  playsForDomain,
+  type BreakLocation,
+  type EndLook,
+  type FailureEvent,
+  type SymptomGroup,
+} from "@/data/failure-playbook";
+import { startersForDomain } from "@/data/diagnose-starters";
+import { useDomain } from "@/domain/context";
+import { useConnectionGroups, useMaterialOptions } from "@/lib/overlay";
+import type { DiameterRelation, RetieDecision } from "@/domain/types";
+import { isJoinJob } from "@/domain/connection-preset";
+import { DIAMETER_LABELS, RETIE_LABELS } from "@/domain/types";
 
 export const Route = createFileRoute("/diagnose")({
   validateSearch: (s: Record<string, unknown>): { event?: string } => ({
-    event: typeof s['event'] === "string" ? (s['event'] as string) : undefined,
+    event: typeof s["event"] === "string" ? (s["event"] as string) : undefined,
   }),
   head: () => ({
     meta: [
@@ -25,7 +37,7 @@ export const Route = createFileRoute("/diagnose")({
       {
         name: "description",
         content:
-          "Symptom-first failure diagnosis for fishing connections: break location, material system and connection type narrow the cause, then hand the full context to the decision model.",
+          "Symptom-first failure diagnosis: break location, recovered-end forensics, and the material system narrow the cause. Fishing and rope work stay on their own discipline.",
       },
       { property: "og:title", content: "Diagnose a failed connection" },
       {
@@ -40,16 +52,36 @@ export const Route = createFileRoute("/diagnose")({
   component: DiagnoseMode,
 });
 
-const LOCATIONS: { id: BreakLocation; label: string; hint: string }[] = [
+const FISHING_LOCATIONS: { id: BreakLocation; label: string; hint: string }[] = [
   { id: "in-knot", label: "In the knot", hint: "curled or pigtailed end" },
   { id: "at-eye", label: "At the eye", hint: "clean cut at hardware" },
   { id: "at-tag", label: "At the tag", hint: "finish let go" },
   { id: "above-knot", label: "Above the knot", hint: "line damage, not knot" },
   { id: "leader-join", label: "At the join", hint: "braid/leader barrel" },
+  { id: "at-guides", label: "At the guides", hint: "tick, cut, or crack" },
+  { id: "at-shank", label: "On the shank", hint: "snell walked" },
+  { id: "at-loop", label: "At the loop", hint: "collapse or girth" },
+  { id: "at-arbor", label: "At the arbor", hint: "spool dumped" },
+  { id: "in-leader", label: "In the leader", hint: "teeth or nick" },
+  { id: "at-tiptop", label: "At the tip-top", hint: "helicopter wrap" },
   { id: "unknown", label: "Unknown", hint: "never recovered the end" },
 ];
 
-const MATERIALS: LineMaterial[] = ["mono", "fluoro", "braid", "fly-line", "backing", "wire"];
+const BOATING_LOCATIONS: { id: BreakLocation; label: string; hint: string }[] = [
+  { id: "in-knot", label: "In the hitch / bend", hint: "structure failed" },
+  { id: "at-tag", label: "At the tail", hint: "finish walked" },
+  { id: "at-cleat", label: "At the cleat", hint: "jam or dump" },
+  { id: "at-fairlead", label: "At the fairlead", hint: "chafe" },
+  { id: "at-loop", label: "At the eye", hint: "capsize" },
+  { id: "at-winch", label: "At the winch", hint: "riding turn" },
+  { id: "above-knot", label: "On the standing part", hint: "chafe, not the hitch" },
+  { id: "unknown", label: "Unknown", hint: "never recovered" },
+];
+
+const END_LOOKS = Object.entries(END_LOOK_LABELS) as [EndLook, { label: string; hint: string }][];
+
+const GROUP_ORDER: SymptomGroup[] = ["forensic", "load", "geometry", "system", "rope"];
+
 const DIAMETERS: DiameterRelation[] = [
   "similar",
   "main-thinner",
@@ -57,90 +89,44 @@ const DIAMETERS: DiameterRelation[] = [
   "main-thicker",
   "extreme-mismatch",
 ];
-const STARTERS: { id: string; title: string; line: string; input: TroubleshootInput }[] = [
-  {
-    id: "braid-fluoro-pop",
-    title: "Braid → fluoro let go at the join",
-    line: "Join · braid to fluoro · big diameter gap",
-    input: {
-      event: "broke-under-load",
-      breakLocation: "leader-join",
-      connection: "braid-to-leader",
-      mainMaterial: "braid",
-      secondaryMaterial: "fluoro",
-      diameterRelation: "main-much-thinner",
-    },
-  },
-  {
-    id: "cold-wind-slip",
-    title: "Tag pulled in cold wind",
-    line: "Terminal · braid · rushed retie",
-    input: {
-      event: "slipped-or-pulled",
-      breakLocation: "at-tag",
-      connection: "line-to-lure",
-      mainMaterial: "braid",
-    },
-  },
-  {
-    id: "dead-bait",
-    title: "Free-swinging bait stopped working",
-    line: "Terminal · mono · action killed",
-    input: {
-      event: "dead-action",
-      connection: "line-to-lure",
-      mainMaterial: "mono",
-    },
-  },
-  {
-    id: "jig-pressure",
-    title: "Jig popped off under pressure",
-    line: "Terminal · braid to jig eye",
-    input: {
-      event: "broke-under-load",
-      breakLocation: "at-eye",
-      connection: "line-to-lure",
-      mainMaterial: "braid",
-    },
-  },
-  {
-    id: "wont-seat",
-    title: "Fluoro will not seat clean",
-    line: "Join · stiff fluoro · glazing",
-    input: {
-      event: "wont-seat",
-      breakLocation: "in-knot",
-      connection: "leader-to-leader",
-      mainMaterial: "fluoro",
-      secondaryMaterial: "fluoro",
-      diameterRelation: "similar",
-    },
-  },
-  {
-    id: "guides",
-    title: "Join keeps ticking through guides",
-    line: "Join · bulk under cast load",
-    input: {
-      event: "bulky-guides",
-      connection: "braid-to-leader",
-      mainMaterial: "braid",
-      secondaryMaterial: "mono",
-      diameterRelation: "main-much-thinner",
-    },
-  },
-];
 
 const retieTone = (d: RetieDecision) =>
-  d === "retie-now" ? "stop" : d === "retie-recommended" || d === "watch" ? "watch" : d === "cosmetic" ? "ok" : "unknown";
+  d === "retie-now"
+    ? "stop"
+    : d === "retie-recommended" || d === "watch"
+      ? "watch"
+      : d === "cosmetic"
+        ? "ok"
+        : "unknown";
 
 function DiagnoseMode() {
   const navigate = useNavigate();
+  const domain = useDomain();
+  const plays = useMemo(() => playsForDomain(domain.id), [domain.id]);
+  const starters = useMemo(() => startersForDomain(domain.id), [domain.id]);
+  const locations = domain.id === "boating" ? BOATING_LOCATIONS : FISHING_LOCATIONS;
+  const connectionGroups = useConnectionGroups();
+  const materials = useMaterialOptions();
   const search = Route.useSearch();
-  const seeded = FAILURE_PLAYS.some((p) => p.id === search.event)
+  const seeded = plays.some((p) => p.id === search.event)
     ? ({ event: search.event as FailureEvent } as Partial<TroubleshootInput>)
     : {};
   const [input, setInput] = useState<Partial<TroubleshootInput>>(seeded);
   const [ran, setRan] = useState(false);
+
+  const grouped = useMemo(() => {
+    const map = new Map<SymptomGroup, typeof plays>();
+    for (const p of plays) {
+      const list = map.get(p.group) ?? [];
+      list.push(p);
+      map.set(p.group, list);
+    }
+    return GROUP_ORDER.filter((g) => map.has(g)).map((g) => ({
+      group: g,
+      label: SYMPTOM_GROUP_LABELS[g],
+      plays: map.get(g)!,
+    }));
+  }, [plays]);
 
   const set = (patch: Partial<TroubleshootInput>) => {
     setInput((prev) => ({ ...prev, ...patch }));
@@ -148,7 +134,7 @@ function DiagnoseMode() {
   };
 
   const loadStarter = (id: string) => {
-    const s = STARTERS.find((x) => x.id === id);
+    const s = starters.find((x) => x.id === id);
     if (!s) return;
     setInput(s.input);
     setRan(true);
@@ -158,6 +144,22 @@ function DiagnoseMode() {
     () => (ran && input.event ? runTroubleshoot(input as TroubleshootInput) : null),
     [ran, input],
   );
+
+  const groupedStarters = useMemo(() => {
+    const map = new Map<SymptomGroup, typeof starters>();
+    for (const s of starters) {
+      const play = plays.find((p) => p.id === s.input.event);
+      const g = play?.group ?? "system";
+      const list = map.get(g) ?? [];
+      list.push(s);
+      map.set(g, list);
+    }
+    return GROUP_ORDER.filter((g) => map.has(g)).map((g) => ({
+      group: g,
+      label: SYMPTOM_GROUP_LABELS[g],
+      starters: map.get(g)!,
+    }));
+  }, [starters, plays]);
 
   const isJoin = isJoinJob(input.connection);
 
@@ -216,11 +218,23 @@ function DiagnoseMode() {
 
           <Panel className="p-5">
             <StepHead index="01" title="Symptom" hint="What actually happened on the water." />
-            <div className="grid gap-1.5">
-              {FAILURE_PLAYS.map((p) => (
-                <Chip key={p.id} tone="signal" active={input.event === p.id} onClick={() => set({ event: p.id as FailureEvent })}>
-                  {p.title}
-                </Chip>
+            <div className="space-y-4">
+              {grouped.map((g) => (
+                <div key={g.group}>
+                  <MicroLabel className="mb-2">{g.label}</MicroLabel>
+                  <div className="grid gap-1.5">
+                    {g.plays.map((p) => (
+                      <Chip
+                        key={p.id}
+                        tone="signal"
+                        active={input.event === p.id}
+                        onClick={() => set({ event: p.id })}
+                      >
+                        {p.title}
+                      </Chip>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </Panel>
@@ -233,12 +247,14 @@ function DiagnoseMode() {
               state={input.event ? "open" : "locked"}
             />
             <div className="flex flex-wrap gap-1.5">
-              {LOCATIONS.map((l) => (
+              {locations.map((l) => (
                 <Chip
                   key={l.id}
                   disabled={!input.event}
                   active={input.breakLocation === l.id}
-                  onClick={() => set({ breakLocation: input.breakLocation === l.id ? undefined : l.id })}
+                  onClick={() =>
+                    set({ breakLocation: input.breakLocation === l.id ? undefined : l.id })
+                  }
                 >
                   <span className="block">{l.label}</span>
                   <span className="block text-[0.6875rem] text-muted-foreground">{l.hint}</span>
@@ -250,6 +266,28 @@ function DiagnoseMode() {
           <Panel className={input.event ? "p-5" : "p-5 opacity-45"}>
             <StepHead
               index="03"
+              title="What the end looks like"
+              hint="Forensic. Optional — but it outranks the knot you meant to tie."
+              state={input.event ? "open" : "locked"}
+            />
+            <div className="flex flex-wrap gap-1.5">
+              {END_LOOKS.map(([id, meta]) => (
+                <Chip
+                  key={id}
+                  disabled={!input.event}
+                  active={input.endLook === id}
+                  onClick={() => set({ endLook: input.endLook === id ? undefined : id })}
+                >
+                  <span className="block">{meta.label}</span>
+                  <span className="block text-[0.6875rem] text-muted-foreground">{meta.hint}</span>
+                </Chip>
+              ))}
+            </div>
+          </Panel>
+
+          <Panel className={input.event ? "p-5" : "p-5 opacity-45"}>
+            <StepHead
+              index="04"
               title="Connection & materials"
               hint="Refines the cause. Never a library filter."
               state={input.event ? "open" : "locked"}
@@ -257,30 +295,43 @@ function DiagnoseMode() {
             <div className="space-y-4">
               <div>
                 <MicroLabel className="mb-2">Connection under stress</MicroLabel>
-                <div className="flex flex-wrap gap-1.5">
-                  {CONNECTION_GROUPS.flatMap((g) => g.jobs).map((j) => (
-                    <Chip
-                      key={j}
-                      disabled={!input.event}
-                      active={input.connection === j}
-                      onClick={() => set({ connection: input.connection === j ? undefined : j })}
-                    >
-                      {CONNECTION_LABELS[j]}
-                    </Chip>
+                <div className="space-y-3">
+                  {connectionGroups.map((g) => (
+                    <div key={g.title}>
+                      <p className="mb-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                        {g.title}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {g.jobs.map((j) => (
+                          <Chip
+                            key={j.key}
+                            disabled={!input.event}
+                            active={input.connection === j.base}
+                            onClick={() =>
+                              set({ connection: input.connection === j.base ? undefined : j.base })
+                            }
+                          >
+                            {j.label}
+                          </Chip>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
               <div>
-                <MicroLabel className="mb-2">Main line</MicroLabel>
+                <MicroLabel className="mb-2">Main {domain.terms.line}</MicroLabel>
                 <div className="flex flex-wrap gap-1.5">
-                  {MATERIALS.map((m) => (
+                  {materials.map((m) => (
                     <Chip
-                      key={m}
+                      key={m.key}
                       disabled={!input.event}
-                      active={input.mainMaterial === m}
-                      onClick={() => set({ mainMaterial: input.mainMaterial === m ? undefined : m })}
+                      active={input.mainMaterial === m.base}
+                      onClick={() =>
+                        set({ mainMaterial: input.mainMaterial === m.base ? undefined : m.base })
+                      }
                     >
-                      {MATERIAL_LABELS[m]}
+                      {m.label}
                     </Chip>
                   ))}
                 </div>
@@ -293,21 +344,25 @@ function DiagnoseMode() {
                         Two-sided job
                       </p>
                       <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                        Declare the leader / second line so the diagnosis can separate join failure from main-line failure.
+                        Declare the leader / second line so the diagnosis can separate join failure
+                        from main-line failure.
                       </p>
                     </div>
                     <div>
-                      <MicroLabel className="mb-2">Leader / second line · required</MicroLabel>
+                      <MicroLabel className="mb-2">{domain.terms.secondary} · required</MicroLabel>
                       <div className="flex flex-wrap gap-1.5">
-                        {MATERIALS.map((m) => (
+                        {materials.map((m) => (
                           <Chip
-                            key={m}
-                            active={input.secondaryMaterial === m}
+                            key={m.key}
+                            active={input.secondaryMaterial === m.base}
                             onClick={() =>
-                              set({ secondaryMaterial: input.secondaryMaterial === m ? undefined : m })
+                              set({
+                                secondaryMaterial:
+                                  input.secondaryMaterial === m.base ? undefined : m.base,
+                              })
                             }
                           >
-                            {MATERIAL_LABELS[m]}
+                            {m.label}
                           </Chip>
                         ))}
                       </div>
@@ -320,7 +375,9 @@ function DiagnoseMode() {
                             key={d}
                             active={input.diameterRelation === d}
                             onClick={() =>
-                              set({ diameterRelation: input.diameterRelation === d ? undefined : d })
+                              set({
+                                diameterRelation: input.diameterRelation === d ? undefined : d,
+                              })
                             }
                           >
                             {DIAMETER_LABELS[d]}
@@ -335,11 +392,45 @@ function DiagnoseMode() {
                       Single-side job
                     </p>
                     <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                      No second line for this connection. Pick a line-to-line join if the failure was at a leader splice or tippet.
+                      No second line for this connection. Pick a line-to-line join if the failure
+                      was at a leader splice or tippet.
                     </p>
                   </div>
                 )
               ) : null}
+              <div>
+                <MicroLabel className="mb-2">Field conditions (optional)</MicroLabel>
+                <div className="flex flex-wrap gap-1.5">
+                  <Chip
+                    disabled={!input.event}
+                    active={!!input.coldHands}
+                    onClick={() => set({ coldHands: input.coldHands ? undefined : true })}
+                  >
+                    Cold / wet hands
+                  </Chip>
+                  <Chip
+                    disabled={!input.event}
+                    active={!!input.windy}
+                    onClick={() => set({ windy: input.windy ? undefined : true })}
+                  >
+                    Wind
+                  </Chip>
+                  <Chip
+                    disabled={!input.event}
+                    active={!!input.lowLight}
+                    onClick={() => set({ lowLight: input.lowLight ? undefined : true })}
+                  >
+                    Low light
+                  </Chip>
+                  <Chip
+                    disabled={!input.event}
+                    active={!!input.surge}
+                    onClick={() => set({ surge: input.surge ? undefined : true })}
+                  >
+                    {domain.id === "boating" ? "Tide / surge" : "Surf / current"}
+                  </Chip>
+                </div>
+              </div>
               <div>
                 <MicroLabel className="mb-2">Field notes (optional)</MicroLabel>
                 <textarea
@@ -371,18 +462,27 @@ function DiagnoseMode() {
                 <p className="mb-5 text-[0.875rem] text-muted-foreground">
                   One tap loads a realistic failure and runs the diagnosis.
                 </p>
-                <div className="grid gap-px overflow-hidden rounded-lg bg-hairline sm:grid-cols-2">
-                  {STARTERS.map((s) => (
-                    <button
-                      key={s.id}
-                      onClick={() => loadStarter(s.id)}
-                      className="bg-card px-5 py-4 text-left transition-colors hover:bg-surface-2"
-                    >
-                      <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent/80">
-                        {s.line}
-                      </p>
-                      <p className="mt-2 text-[0.9375rem] font-medium tracking-tight">{s.title}</p>
-                    </button>
+                <div className="space-y-5">
+                  {groupedStarters.map((g) => (
+                    <div key={g.group}>
+                      <MicroLabel className="mb-2">{g.label}</MicroLabel>
+                      <div className="grid gap-px overflow-hidden rounded-lg bg-hairline sm:grid-cols-2">
+                        {g.starters.map((s) => (
+                          <button
+                            key={s.id}
+                            onClick={() => loadStarter(s.id)}
+                            className="bg-card px-5 py-4 text-left transition-colors hover:bg-surface-2"
+                          >
+                            <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent/80">
+                              {s.line}
+                            </p>
+                            <p className="mt-2 text-[0.9375rem] font-medium tracking-tight">
+                              {s.title}
+                            </p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </Panel>
@@ -391,7 +491,9 @@ function DiagnoseMode() {
                 <Bullets
                   marker="→"
                   items={[
+                    "The recovered end outranks the knot you intended — pigtail is slip, clean cut is usually not.",
                     "Break location separates line damage from knot geometry from hardware damage.",
+                    "A tip wrap, riding turn, bite-off, or shock snap is often not a knot-family failure.",
                     "Material system separates user error from a family that was never rated for that line.",
                     "Connection type weights the causes; it does not filter a catalog.",
                     "Anything the model cannot verify is reported as unverified, not as a pass.",
@@ -445,15 +547,15 @@ function DiagnoseMode() {
                 <div className="grid gap-px bg-hairline sm:grid-cols-3">
                   <div className="bg-card px-6 py-5">
                     <MicroLabel className="mb-3">Likely causes</MicroLabel>
-                    <Bullets items={result.likelyCauses.slice(0, 5)} />
+                    <Bullets items={result.likelyCauses.slice(0, 6)} />
                   </div>
                   <div className="bg-card px-6 py-5">
                     <MicroLabel className="mb-3">Check now</MicroLabel>
-                    <Bullets items={result.checks.slice(0, 5)} marker="?" />
+                    <Bullets items={result.checks.slice(0, 6)} marker="?" />
                   </div>
                   <div className="bg-card px-6 py-5">
                     <MicroLabel className="mb-3">Retie guidance</MicroLabel>
-                    <Bullets items={result.fixes.slice(0, 5)} marker="→" />
+                    <Bullets items={result.fixes.slice(0, 6)} marker="→" />
                   </div>
                 </div>
               </Panel>
@@ -524,7 +626,9 @@ function DiagnoseMode() {
                         }
                       >
                         <p className="text-[0.9375rem] font-medium tracking-tight">{f.title}</p>
-                        <p className="mt-1 text-[0.8125rem] text-muted-foreground">{f.observation}</p>
+                        <p className="mt-1 text-[0.8125rem] text-muted-foreground">
+                          {f.observation}
+                        </p>
                         <p className="mt-1.5 text-[0.875rem] leading-relaxed text-foreground/85">
                           {f.implication}
                         </p>

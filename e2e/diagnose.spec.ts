@@ -38,6 +38,24 @@ test.describe("Diagnose", () => {
     await expect(page.getByText("Diagnosis card")).toBeVisible();
   });
 
+  test("a forensic starter treats the recovered end as evidence", async ({ page }) => {
+    await page.goto("/diagnose");
+    await page.getByRole("button", { name: /empty hook, curly pigtail/i }).first().click();
+
+    await expect(page.getByText("Diagnosis card")).toBeVisible();
+    await expect(page.getByText(/recovered end is evidence|pigtail|curly/i).first()).toBeVisible();
+    await expect(page.getByText(/retie now|cut it off/i).first()).toBeVisible();
+  });
+
+  test("boating discipline shows rope symptoms and a riding-turn starter", async ({ page }) => {
+    await page.goto("/diagnose");
+    await page.getByRole("radio", { name: /boating/i }).click();
+    await expect(page.getByRole("button", { name: /riding turn|sheet jammed/i }).first()).toBeVisible();
+    await page.getByRole("button", { name: /sheet jammed as a riding turn/i }).click();
+    await expect(page.getByText("Diagnosis card")).toBeVisible();
+    await expect(page.getByText(/handling|not a.*family|winch/i).first()).toBeVisible();
+  });
+
   test("handoff carries the failure into Decide", async ({ page }) => {
     await page.goto("/diagnose");
     await page.getByRole("button", { name: /let go at the join/i }).first().click();
@@ -49,3 +67,4 @@ test.describe("Diagnose", () => {
     await expect(page.getByText("Knot decision card")).toBeVisible();
   });
 });
+
