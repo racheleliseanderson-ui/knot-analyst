@@ -16,10 +16,7 @@ import { BOATING_BATCH_3 } from "@/data/knots/boating-batch-3";
 import { getMechanics } from "@/data/mechanics";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
-import {
-  catalogReviewDue,
-  getConnectionModelMeta,
-} from "@/data/connection-model-meta";
+import { catalogReviewDue, getConnectionModelMeta } from "@/data/connection-model-meta";
 
 const FISHING_RAW: KnotContent[] = [
   ...TERMINAL_KNOTS,
@@ -99,10 +96,11 @@ export function knotsByCategory(category: KnotCategory): Knot[] {
   return KNOTS.filter((k) => k.category === category);
 }
 
-export function searchKnots(query: string): Knot[] {
+export function searchKnots(query: string, domain?: DomainId): Knot[] {
   const q = query.trim().toLowerCase();
-  if (!q) return KNOTS;
-  return KNOTS.filter((k) => {
+  const pool = domain ? knotsForDomain(domain) : KNOTS;
+  if (!q) return pool;
+  return pool.filter((k) => {
     const hay = [
       k.name,
       ...k.aliases,

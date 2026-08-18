@@ -3,12 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { APPLICATION_ID, ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
-import {
-  PRODUCT_MONOGRAM,
-  PRODUCT_NAME,
-  PRODUCT_TAGLINE,
-  PUBLISHER_NAME,
-} from "@/domain/brand";
+import { PRODUCT_MONOGRAM, PRODUCT_NAME, PRODUCT_TAGLINE, PUBLISHER_NAME } from "@/domain/brand";
 import { knotsForDomain } from "@/data/catalog";
 import { DomainSwitch } from "@/components/instrument/domain-switch";
 import { LocaleSwitch } from "@/components/instrument/locale-switch";
@@ -88,6 +83,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             <ModeLink to="/" label={t("nav.decide")} code="01" />
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
             <ModeLink to="/compare" label="Compare" code="03" />
+            <ModeLink to="/library" label={t("nav.library")} code="05" />
             <ModeLink to="/admin" label={t("nav.data")} code="04" />
             <button
               type="button"
@@ -104,15 +100,18 @@ export function Shell({ children, className }: { children: ReactNode; className?
         </div>
       </header>
       <Finder open={finderOpen} onClose={() => setFinderOpen(false)} />
-      <main id="ki-main" className={cn("mx-auto max-w-[1240px] px-5 pb-24 pt-8 sm:px-8", className)}>
+      <main
+        id="ki-main"
+        className={cn("mx-auto max-w-[1240px] px-5 pb-24 pt-8 sm:px-8", className)}
+      >
         {children}
       </main>
       <footer className="border-t border-hairline no-print">
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-3 px-5 py-6 sm:px-8">
           <div className="max-w-md space-y-1">
             <p className="text-xs leading-relaxed text-muted-foreground">
-              A decision and diagnosis instrument, not a knot library. Invalid options never score.
-              Unsuitable recommendations fail closed.
+              Decide and diagnose first. The modelled catalogue is also browsable without a form.
+              Invalid options never score. Unsuitable recommendations fail closed.
             </p>
             <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/60">
               {PRODUCT_NAME} · {PRODUCT_TAGLINE}

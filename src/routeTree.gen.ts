@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as DiagnoseRouteImport } from './routes/diagnose'
+import { Route as DiagramKnotIdRouteImport } from './routes/diagram.$knotId'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as TieKnotIdRouteImport } from './routes/tie.$knotId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +37,16 @@ const DiagnoseRoute = DiagnoseRouteImport.update({
   path: '/diagnose',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DiagramKnotIdRoute = DiagramKnotIdRouteImport.update({
+  id: '/diagram/$knotId',
+  path: '/diagram/$knotId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TieKnotIdRoute = TieKnotIdRouteImport.update({
   id: '/tie/$knotId',
   path: '/tie/$knotId',
@@ -46,6 +58,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/compare': typeof CompareRoute
   '/diagnose': typeof DiagnoseRoute
+  '/diagram/$knotId': typeof DiagramKnotIdRoute
+  '/library': typeof LibraryRoute
   '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +67,8 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/compare': typeof CompareRoute
   '/diagnose': typeof DiagnoseRoute
+  '/diagram/$knotId': typeof DiagramKnotIdRoute
+  '/library': typeof LibraryRoute
   '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRoutesById {
@@ -61,14 +77,38 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/compare': typeof CompareRoute
   '/diagnose': typeof DiagnoseRoute
+  '/diagram/$knotId': typeof DiagramKnotIdRoute
+  '/library': typeof LibraryRoute
   '/tie/$knotId': typeof TieKnotIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/compare' | '/diagnose' | '/tie/$knotId'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/compare'
+    | '/diagnose'
+    | '/diagram/$knotId'
+    | '/library'
+    | '/tie/$knotId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/compare' | '/diagnose' | '/tie/$knotId'
-  id: '__root__' | '/' | '/admin' | '/compare' | '/diagnose' | '/tie/$knotId'
+  to:
+    | '/'
+    | '/admin'
+    | '/compare'
+    | '/diagnose'
+    | '/diagram/$knotId'
+    | '/library'
+    | '/tie/$knotId'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/compare'
+    | '/diagnose'
+    | '/diagram/$knotId'
+    | '/library'
+    | '/tie/$knotId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +116,8 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   CompareRoute: typeof CompareRoute
   DiagnoseRoute: typeof DiagnoseRoute
+  DiagramKnotIdRoute: typeof DiagramKnotIdRoute
+  LibraryRoute: typeof LibraryRoute
   TieKnotIdRoute: typeof TieKnotIdRoute
 }
 
@@ -109,6 +151,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiagnoseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/diagram/$knotId': {
+      id: '/diagram/$knotId'
+      path: '/diagram/$knotId'
+      fullPath: '/diagram/$knotId'
+      preLoaderRoute: typeof DiagramKnotIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tie/$knotId': {
       id: '/tie/$knotId'
       path: '/tie/$knotId'
@@ -124,6 +180,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   CompareRoute: CompareRoute,
   DiagnoseRoute: DiagnoseRoute,
+  DiagramKnotIdRoute: DiagramKnotIdRoute,
+  LibraryRoute: LibraryRoute,
   TieKnotIdRoute: TieKnotIdRoute,
 }
 export const routeTree = rootRouteImport
