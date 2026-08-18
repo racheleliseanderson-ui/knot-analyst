@@ -32,7 +32,7 @@ export const Route = createFileRoute("/applications/$id")({
         { title: `${name} — applications | Knot Analyst` },
         {
           name: "description",
-          content: `What theory actually says about ${name} — and what it must not score.`,
+          content: `What the physics says about ${name} — and what it must not pick for you.`,
         },
         { property: "og:title", content: `${name} — applications` },
         { property: "og:type", content: "article" },
@@ -62,7 +62,7 @@ function IsolationBanner({ text }: { text: string }) {
   return (
     <Panel className="mb-8 px-4 py-3">
       <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary/80">
-        Never scores Decide
+        Does not pick a knot
       </p>
       <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">{text}</p>
     </Panel>

@@ -17,17 +17,17 @@ const failOnPageErrors = (page: Page, sink: string[]) => {
 };
 
 test.describe("Applications", () => {
-  test("lists the world atlas and modelled notes without a Decide form", async ({ page }) => {
+  test("lists the world atlas and knot notes without running Decide", async ({ page }) => {
     const errors: string[] = [];
     failOnPageErrors(page, errors);
 
     await page.goto("/applications");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/theory that applies/i);
-    await expect(page.getByText(/never scores decide/i).first()).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/where the theory applies/i);
+    await expect(page.getByText(/does not run decide/i).first()).toBeVisible();
     await expect(page.getByText("Knot decision card")).toHaveCount(0);
     await expect(page.getByText(/physical hitch theory/i).first()).toBeVisible();
     await expect(page.getByText(/dna topology/i).first()).toBeVisible();
-    await expect(page.getByText(/\d+ modelled/i)).toBeVisible();
+    await expect(page.getByText(/\d+ of \d+ knots/i)).toBeVisible();
     expect(errors).toEqual([]);
   });
 
@@ -38,7 +38,7 @@ test.describe("Applications", () => {
     await page.goto("/applications/bowline");
     await expect(page.getByRole("heading", { name: "Bowline" })).toBeVisible();
     await expect(page.getByText(/same crossing pattern/i)).toBeVisible();
-    await expect(page.getByText(/never scores decide/i).first()).toBeVisible();
+    await expect(page.getByText(/does not pick a knot/i).first()).toBeVisible();
 
     await page.getByRole("link", { name: /open step player/i }).click();
     await expect(page).toHaveURL(/\/tie\/bowline/);
@@ -52,7 +52,7 @@ test.describe("Applications", () => {
     await page.goto("/applications/dna-topology");
     await expect(page.getByRole("heading", { name: /dna topology/i })).toBeVisible();
     await expect(page.getByText(/does not tell you which fishing knot/i)).toBeVisible();
-    await expect(page.getByText(/does not map onto a modelled/i)).toBeVisible();
+    await expect(page.getByText(/not about a fishing or boat knot/i)).toBeVisible();
 
     await page.goto("/applications/physical-hitches");
     await expect(page.getByRole("link", { name: /cleat hitch/i })).toBeVisible();

@@ -34,17 +34,17 @@ export const Route = createFileRoute("/applications")({
   },
   head: () => ({
     meta: [
-      { title: "Applications — theory that applies | Knot Analyst" },
+      { title: "Applications — where the theory applies | Knot Analyst" },
       {
         name: "description",
         content:
-          "What knot theory actually says about the modelled connections — and what it must never score. No Decide form.",
+          "What the physics actually says about these knots — and what it must never pick for you. This page does not run Decide.",
       },
-      { property: "og:title", content: "Applications — theory that applies" },
+      { property: "og:title", content: "Applications — where the theory applies" },
       {
         property: "og:description",
         content:
-          "Physical hitch theory, duals, and a world atlas that cannot hand off into Decide.",
+          "Physical hitch theory, twins like bowline and sheet bend, and a world atlas that cannot pick a knot for you.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -126,7 +126,7 @@ function ApplicationsMode() {
           </p>
         </div>
         <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
-          {domain.label} · {rows.length} here · {total} modelled · {WORLD_ESSAYS.length} world
+          {domain.label} · {rows.length} of {total} knots · {WORLD_ESSAYS.length} essays
         </p>
       </div>
 
@@ -199,7 +199,7 @@ function ApplicationsMode() {
                 className="panel block min-h-28 p-4 hover:border-primary/40"
               >
                 <span className="font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground">
-                  {WORLD_GROUP_LABELS[w.group]} · never scores Decide
+                  {WORLD_GROUP_LABELS[w.group]} · does not pick a knot
                 </span>
                 <span className="mt-1 block text-[1.05rem] font-semibold tracking-tight">
                   {w.title}
