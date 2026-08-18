@@ -16,6 +16,8 @@ import { OverlayProvider } from "../lib/overlay";
 import { PREFS_BOOT_SCRIPT, PrefsProvider } from "../lib/prefs";
 import { DomainProvider } from "../domain/context";
 
+const ADSENSE_CLIENT = "ca-pub-8542391068454821";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -112,6 +114,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
       },
     ],
+    scripts: import.meta.env.PROD
+      ? [
+          {
+            async: true,
+            src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
+            crossOrigin: "anonymous",
+          },
+        ]
+      : [],
   }),
   shellComponent: RootShell,
   component: RootComponent,
