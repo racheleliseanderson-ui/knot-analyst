@@ -2945,11 +2945,23 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
     1: [
       "Round turn through the ring.",
       "A single pass is not this hitch.",
-      "Take the second pass.",
+      "Take the second pass through the ring before any hitch.",
     ],
-    2: ["Working end through both turns.", "Missing a turn leaves a slip.", "Tuck through both."],
-    3: ["Half hitch on the standing part.", "No lock hitch will work loose wet.", "Add it."],
-    4: ["Hard dress; tail seized if standing.", "Unseized soak can walk.", "Seize the tail."],
+    2: [
+      "Working end through both turns.",
+      "Missing a turn leaves a slip.",
+      "Tuck the working end through both turns, not one.",
+    ],
+    3: [
+      "Half hitch on the standing part.",
+      "No lock hitch will work loose wet.",
+      "Add the locking half hitch on the standing part.",
+    ],
+    4: [
+      "Hard dress; tail seized if standing.",
+      "Unseized soak can walk.",
+      "Seize the tail if this hitch will stand overnight.",
+    ],
   }),
   bowline: mx({
     1: [
@@ -2994,10 +3006,26 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
     4: ["Tails same side, dressed.", "Opposite tails slip.", "Retie."],
   }),
   "double-sheet-bend": mx({
-    1: ["Bight in the thicker rope.", "Thin-rope bight will spill.", "Swap the bight."],
-    2: ["Thinner rope up through the bight.", "Leave room for two turns.", "Start with more tag."],
-    3: ["Two turns, then the tuck.", "One turn is a single sheet bend.", "Add the second turn."],
-    4: ["Hard dress, tails same side.", "Opposite tails slip.", "Retie."],
+    1: [
+      "Bight in the thicker rope.",
+      "Thin-rope bight will spill.",
+      "Swap which rope makes the bight — thicker rope always.",
+    ],
+    2: [
+      "Thinner rope up through the bight.",
+      "Leave room for two turns.",
+      "Start with more tag so two turns can sit without crowding.",
+    ],
+    3: [
+      "Two turns, then the tuck.",
+      "One turn is a single sheet bend.",
+      "Add the second turn around the bight before the tuck.",
+    ],
+    4: [
+      "Hard dress, tails same side.",
+      "Opposite tails slip.",
+      "Retie with both tails exiting the same side.",
+    ],
   }),
   "rolling-hitch": mx({
     1: [
@@ -3096,12 +3124,24 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
   "cow-hitch": mx({
     1: [
       "Bight around the post or through the ring.",
-      "A single pass is not this hitch.",
-      "Use a bight.",
+      "A single pass is a girth that walks the first time one leg takes the snatch.",
+      "Use a bight around the post — a single pass is not this hitch.",
     ],
-    2: ["Both legs through the bight.", "One leg will walk.", "Feed both."],
-    3: ["Hitch square, legs together.", "A twist is already walking.", "Dress it square."],
-    4: ["Both legs loaded.", "One-leg load slips.", "Switch hitch or load both."],
+    2: [
+      "Both legs through the bight.",
+      "One leg through the bight leaves a girth that walks under cyclic load.",
+      "Feed both legs through the bight before you dress.",
+    ],
+    3: [
+      "Hitch square, legs together.",
+      "A twisted hitch is already walking — both legs must leave together.",
+      "Dress it square so both legs leave as a pair.",
+    ],
+    4: [
+      "Both legs loaded.",
+      "Load on only one leg turns this into a slipping girth — switch hitch.",
+      "Load both legs, or switch to a hitch that holds on one.",
+    ],
   }),
   "buntline-hitch": mx({
     1: ["Working end through the ring.", "Short tail cannot finish the clove.", "Leave more tail."],
@@ -3154,21 +3194,25 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
     ],
   }),
   "zeppelin-bend": mx({
-    1: ["First rope looped like a 6.", "A random bight is not the 6.", "Form the 6."],
+    1: [
+      "First rope looped like a 6.",
+      "A random bight is not the 6.",
+      "Form the first rope as a 6, not a random bight.",
+    ],
     2: [
       "Second rope like a 9, working end opposite.",
       "Same-side ends will not lock.",
-      "Flip the 9.",
+      "Flip the 9 so the working ends leave opposite sides.",
     ],
     3: [
       "Each working end through both loops.",
       "Missing a loop is unfinished.",
-      "Through the centre.",
+      "Pass each working end through the centre of both loops.",
     ],
     4: [
       "Two interlocked loops, tails opposite.",
       "If it looks like a sheet bend, restart.",
-      "Retie the 6-and-9.",
+      "Retie the 6-and-9 — a sheet-bend look is the wrong bend.",
     ],
   }),
   "carrick-bend": mx({
@@ -3190,13 +3234,25 @@ export const MICRO_EXTRAS: Record<string, Micro> = {
     ],
   }),
   "ashley-stopper": mx({
-    1: ["Loose overhand, long tail.", "Short tail cannot make the third lobe.", "Start longer."],
-    2: ["Tail back through on the documented path.", "Wrong return stays an overhand.", "Retrace."],
-    3: ["Three distinct lobes.", "Two lobes is unfinished.", "Keep following the path."],
+    1: [
+      "Loose overhand, long tail.",
+      "Short tail cannot make the third lobe.",
+      "Start with a longer tail so the third lobe can form.",
+    ],
+    2: [
+      "Tail back through on the documented path.",
+      "Wrong return stays an overhand.",
+      "Retrace the documented path — a wrong return stays an overhand.",
+    ],
+    3: [
+      "Three distinct lobes.",
+      "Two lobes is unfinished.",
+      "Keep following the path until three distinct lobes appear.",
+    ],
     4: [
       "Compact three-lobe stopper larger than the opening.",
       "Pulls through if too small or loose.",
-      "Retie larger.",
+      "Retie larger so the three lobes cannot pull through the opening.",
     ],
   }),
   "yosemite-bowline": mx({

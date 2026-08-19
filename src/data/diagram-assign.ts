@@ -57,8 +57,12 @@ export const DIAGRAM_KIND_BY_KNOT: Partial<Record<string, DiagramKind>> = {
   "zeppelin-bend": "rope-bend-zeppelin",
   "hunters-bend": "rope-bend-zeppelin",
   "carrick-bend": "rope-bend-carrick",
+  "sheet-bend": "rope-bend",
+  "double-sheet-bend": "rope-bend-double",
   "reef-knot": "rope-reef",
 
   "ashley-stopper": "rope-stopper-ashley",
+  "figure-8-stopper": "rope-stopper",
+  "estar-stopper": "rope-stopper-estar",
   "heaving-line-knot": "rope-heaving",
 };

@@ -7,10 +7,12 @@
  *
  * Presentation only — it renders an existing ChooseResult, it never re-scores.
  */
-import type { ChooseResult } from "@/domain/types";
+import type { jsPDF } from "jspdf";
+import type { ChooseResult, DiagramKind } from "@/domain/types";
 import { DIMENSION_LABELS } from "@/domain/types";
 import type { Counterfactual, DecisionCard, Tradeoff } from "@/engine/advisor";
 import { getKnot } from "@/data/catalog";
+import { failsWhenFor } from "@/data/connection-model-meta";
 import { diagramStepNote } from "@/components/instrument/diagram";
 
 export type PacketVariant = "brief" | "field";
@@ -29,6 +31,114 @@ export const PACKET_NOTES: Record<PacketVariant, string> = {
 const INK = { r: 17, g: 28, b: 36 };
 const MUTED = { r: 104, g: 118, b: 128 };
 const BRASS = { r: 168, g: 118, b: 40 };
+
+/** Compact line-art of the winning geometry. Presentation only — never re-scores. */
+function drawPacketSchematic(
+  doc: jsPDF,
+  kind: DiagramKind,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+) {
+  doc.setFillColor(244, 246, 247);
+  doc.rect(x, y, w, h, "F");
+  doc.setDrawColor(216, 220, 224);
+  doc.setLineWidth(0.5);
+  doc.rect(x, y, w, h, "S");
+
+  const ox = x + 28;
+  const oy = y + h / 2;
+  const teal = { r: 60, g: 106, b: 122 };
+  const brass = BRASS;
+  const ink = INK;
+
+  const stand = (x1: number, y1: number, x2: number, y2: number) => {
+    doc.setDrawColor(teal.r, teal.g, teal.b);
+    doc.setLineWidth(1.6);
+    doc.line(x1, y1, x2, y2);
+  };
+  const work = (x1: number, y1: number, x2: number, y2: number, width = 2) => {
+    doc.setDrawColor(brass.r, brass.g, brass.b);
+    doc.setLineWidth(width);
+    doc.line(x1, y1, x2, y2);
+  };
+  const coils = (cx: number, cy: number, n: number, pitch = 10, amp = 11) => {
+    for (let i = 0; i < n; i++) {
+      const px = cx + i * pitch;
+      work(px, cy - amp, px + pitch / 2, cy + amp, 2.1);
+      work(px + pitch / 2, cy + amp, px + pitch, cy - amp, 2.1);
+    }
+  };
+  const caption = (t: string) => {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7);
+    doc.setTextColor(MUTED.r, MUTED.g, MUTED.b);
+    doc.text(t.toUpperCase(), x + w - 12, y + 14, { align: "right", charSpace: 1.1 });
+  };
+
+  stand(ox, oy, ox + 210, oy);
+
+  if (kind === "rope-bend-double") {
+    caption("Double sheet bend");
+    work(ox + 40, oy - 16, ox + 110, oy - 16, 3.2);
+    work(ox + 110, oy - 16, ox + 110, oy + 16, 3.2);
+    work(ox + 110, oy + 16, ox + 40, oy + 16, 3.2);
+    coils(ox + 70, oy, 2, 14, 18);
+    work(ox + 100, oy, ox + 100, oy + 22, 1.6);
+  } else if (kind.startsWith("rope-bend")) {
+    caption(
+      kind.includes("zeppelin") ? "6 and 9" : kind.includes("carrick") ? "Lattice" : "Sheet bend",
+    );
+    work(ox + 40, oy - 16, ox + 110, oy - 16, 3.2);
+    work(ox + 110, oy - 16, ox + 110, oy + 16, 3.2);
+    work(ox + 110, oy + 16, ox + 40, oy + 16, 3.2);
+    coils(ox + 78, oy, 1, 16, 16);
+    work(ox + 94, oy, ox + 94, oy + 20, 1.6);
+  } else if (kind === "rope-stopper-estar") {
+    caption("Estar — extra turns");
+    coils(ox + 90, oy, 4, 12, 14);
+    doc.setDrawColor(ink.r, ink.g, ink.b);
+    doc.setLineWidth(0.8);
+    doc.rect(ox + 170, oy - 14, 18, 28, "S");
+  } else if (kind.startsWith("rope-stopper")) {
+    caption(kind.includes("ashley") ? "Three lobes" : "Figure-8 stopper");
+    coils(ox + 100, oy, kind.includes("ashley") ? 3 : 2, 12, 13);
+    doc.setDrawColor(ink.r, ink.g, ink.b);
+    doc.setLineWidth(0.8);
+    doc.rect(ox + 170, oy - 14, 18, 28, "S");
+  } else if (kind.startsWith("rope-hitch") || kind === "rope-cleat" || kind === "rope-trucker") {
+    caption(kind === "rope-cleat" ? "Far horn first" : "Turns take the load");
+    doc.setDrawColor(ink.r, ink.g, ink.b);
+    doc.setLineWidth(1.1);
+    doc.circle(ox + 70, oy, 14, "S");
+    coils(ox + 88, oy, 3, 11, 12);
+  } else if (kind.startsWith("rope-loop") || kind === "loop-fixed" || kind === "loop-nonslip") {
+    caption("Fixed eye");
+    doc.setDrawColor(brass.r, brass.g, brass.b);
+    doc.setLineWidth(2);
+    doc.circle(ox + 70, oy, 16, "S");
+    coils(ox + 96, oy, 2, 12, 10);
+  } else if (kind.startsWith("braid-leader") || kind.startsWith("line-")) {
+    caption(kind.includes("fg") ? "Braid on leader" : "Join");
+    coils(ox + 80, oy, 5, 10, 11);
+  } else if (kind.startsWith("terminal-palomar")) {
+    caption("Doubled through the eye");
+    doc.setDrawColor(ink.r, ink.g, ink.b);
+    doc.setLineWidth(1);
+    doc.circle(ox + 54, oy, 8, "S");
+    coils(ox + 70, oy, 3, 11, 12);
+  } else if (kind.startsWith("terminal")) {
+    caption("Wraps to the eye");
+    doc.setDrawColor(ink.r, ink.g, ink.b);
+    doc.setLineWidth(1);
+    doc.circle(ox + 54, oy, 8, "S");
+    coils(ox + 70, oy, 4, 10, 11);
+  } else {
+    caption("Finished structure");
+    coils(ox + 90, oy, 4, 11, 12);
+  }
+}
 
 export interface PacketInput {
   result: ChooseResult;
@@ -292,7 +402,10 @@ export async function generateDecisionPacket({
     body(knot.howToSummary, 9.5, MUTED);
     y += 4;
     body(diagramStepNote(knot.diagramKind), 8.5, MUTED);
-    y += 8;
+    y += 6;
+    ensure(78);
+    drawPacketSchematic(doc, knot.diagramKind, M, y, CW, 70);
+    y += 82;
 
     if (knot.beforeYouStart?.length) {
       micro("Before you start");
@@ -358,10 +471,11 @@ export async function generateDecisionPacket({
       }
     }
 
-    if (knot.commonMistakes.length) {
+    const failModes = failsWhenFor(knot.id, knot.commonMistakes);
+    if (failModes.length) {
       rule();
-      micro("Common mistakes");
-      bullets(knot.commonMistakes.slice(0, 8), "×");
+      micro("Fails when");
+      bullets(failModes.slice(0, 8), "!");
     }
     if (knot.fieldNotes?.length) {
       rule();
@@ -370,14 +484,14 @@ export async function generateDecisionPacket({
     }
 
     rule();
-    micro("Verify before you fish");
+    micro("Verify before you load it");
     bullets(
       [
-        "Wraps lie in one direction with no crossovers.",
-        "Tag exits where the fingerprint says it should.",
-        "Structure seated wet, under steady load — not jerked.",
-        "Tag trimmed close, no nick in the standing line.",
-      ],
+        knot.fingerprint.expectedGeometry,
+        knot.fingerprint.expectedSeatingPattern,
+        knot.fingerprint.expectedTagOrientation,
+        knot.fingerprint.expectedFinishingStructure,
+      ].filter(Boolean),
       "[ ]",
     );
   }

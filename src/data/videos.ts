@@ -200,9 +200,9 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   },
   baja: {
     provider: "youtube",
-    id: "ACOA2ZS0pwg",
-    title: "Baja Knot (aka - Perfection Loop) Tying Instructions - Fishing Knots",
-    channel: "InTheRiffle",
+    id: "emuODMY19H0",
+    title: "How to tie the Baja Knot — heavy fluoro or mono leader",
+    channel: "Hooks and Knots",
   },
   clinch: {
     provider: "youtube",
@@ -218,9 +218,9 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   },
   seaguar: {
     provider: "youtube",
-    id: "OKXhkj8VWWU",
-    title: "Jim's Seaguar Knot",
-    channel: "Bud Onstad",
+    id: "8wwN07o8RIk",
+    title: "Tying the Seaguar / Lefty Kreh knot",
+    channel: "RichZFishes!",
   },
   "j-knot": {
     provider: "youtube",
@@ -308,15 +308,15 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   },
   "world-fair": {
     provider: "youtube",
-    id: "Qddcm_Dv2Ew",
-    title: "Knot Wars Palomar Knot Vs. World's Fair Knot",
+    id: "kekqJpQiAuc",
+    title: "Palomar vs World's Fair knot — Knot Wars 2008 (shows the World's Fair tie)",
     channel: "NorthAmericanFishing",
   },
   bristol: {
     provider: "youtube",
-    id: "5L37U0kmdrQ",
-    title: "How To Tie: Bristol Knot",
-    channel: "Get Fishing",
+    id: "70wSxW5IMxE",
+    title: "How to Tie an Improved Bristol Knot",
+    channel: "Sport Fishing Magazine",
   },
   "double-double-uni": {
     provider: "youtube",
@@ -392,15 +392,15 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   },
   "rolling-hitch": {
     provider: "youtube",
-    id: "OWEbxfymbK0",
-    title: "How To Tie a Rolling Hitch",
-    channel: "Ardent Training",
+    id: "OX_kU_jYecU",
+    title: "Learn How To Tie A Rolling Hitch Knot",
+    channel: "WhyKnot",
   },
   "figure-8-stopper": {
     provider: "youtube",
-    id: "6b_K87c5pWY",
-    title: "Figure Eight Stopper Knots",
-    channel: "Knot Knut",
+    id: "EtzeIQjcKEs",
+    title: "How to tie a Figure 8 knot (stopper)",
+    channel: "AnimatedKnots",
   },
   "water-bowline": {
     provider: "youtube",
@@ -446,9 +446,9 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   },
   "zeppelin-bend": {
     provider: "youtube",
-    id: "Ln-n02POucU",
-    title: "How to Tie the Zeppelin Knot (EASY & SECURE Bend Knot)",
-    channel: "TheKnotsManual",
+    id: "juRF-MNaLrs",
+    title: "The Zeppelin Bend Knot",
+    channel: "WhyKnot",
   },
   "carrick-bend": {
     provider: "youtube",
@@ -458,9 +458,9 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   },
   "ashley-stopper": {
     provider: "youtube",
-    id: "C8Txxs2hyRo",
-    title: "Ashley Stopper Knot Tutorial",
-    channel: "MeZillch",
+    id: "Fmxd-5T4UBU",
+    title: "Ashley Stopper Knot | How to Tie the Ashley Stopper Knot",
+    channel: "AnimatedKnots",
   },
   "yosemite-bowline": {
     provider: "youtube",
@@ -482,9 +482,9 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   },
   "midshipmans-hitch": {
     provider: "youtube",
-    id: "LveOF6QHhFw",
-    title: "How to Tie the Midshipman's hitch IN 60 SECONDS!!",
-    channel: "Jason's Knot Channel",
+    id: "5SiMoqbxxOo",
+    title: "How to Tie the Midshipman's Hitch",
+    channel: "AnimatedKnots",
   },
   "hunters-bend": {
     provider: "youtube",

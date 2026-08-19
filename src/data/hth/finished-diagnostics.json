@@ -1,0 +1,932 @@
+{
+  "schema_version": "1.0.0",
+  "verified_date": "2026-08-09",
+  "purpose": "Provide inspectable correct-versus-wrong finished-state cues for the most failure-sensitive canonical profiles. These are diagnostic cues, not universal strength claims.",
+  "profiles": {
+    "fg-knot": {
+      "correct": [
+        "braid weave is evenly tensioned around a straight leader",
+        "locking half-hitches are compact and do not walk",
+        "leader is not visibly crushed or kinked"
+      ],
+      "wrong": [
+        "loose or alternating-open braid coils",
+        "weave slides before the locks engage",
+        "leader shows deep deformation, whitening, or a sharp kink"
+      ],
+      "consequence": "slip, guide impact, or leader damage under load",
+      "visual_priority": "p0"
+    },
+    "alberto-knot": {
+      "correct": [
+        "outbound and return wraps stay ordered",
+        "tag exits through the leader loop in the required direction",
+        "finished barrel is compact without crossed braid"
+      ],
+      "wrong": [
+        "return wraps cross randomly over outbound wraps",
+        "tag exits the wrong side of the opening",
+        "barrel can be pushed or telescoped after seating"
+      ],
+      "consequence": "slip or uneven load concentration",
+      "visual_priority": "p0"
+    },
+    "double-uni-knot": {
+      "correct": [
+        "two barrels seat against each other cleanly",
+        "braid side has enough wraps for the material",
+        "no tag movement appears under a hard pull test"
+      ],
+      "wrong": [
+        "one barrel remains open while the other is tight",
+        "braid wraps are too few or crossed",
+        "barrels pass through or separate instead of meeting"
+      ],
+      "consequence": "braid creep or asymmetric failure",
+      "visual_priority": "p0"
+    },
+    "blood-knot": {
+      "correct": [
+        "two wrap columns are balanced",
+        "center tags exit in opposite directions",
+        "coils draw into a straight, symmetrical junction"
+      ],
+      "wrong": [
+        "one side has collapsed or overlapping wraps",
+        "tags exit the same direction",
+        "diameter mismatch forces one coil to bury under the other"
+      ],
+      "consequence": "uneven leader turnover and concentrated stress",
+      "visual_priority": "p0"
+    },
+    "bristol-knot": {
+      "correct": [
+        "leader wraps lie evenly around the doubled line",
+        "leader returns through the opening cleanly",
+        "finished knot stays streamlined against the double line"
+      ],
+      "wrong": [
+        "leader wraps cross or bunch",
+        "the doubled line is twisted through the barrel",
+        "knot leaves a pronounced snagging shoulder"
+      ],
+      "consequence": "slip, abrasion, or poor guide passage",
+      "visual_priority": "p1"
+    },
+    "yucatan-knot": {
+      "correct": [
+        "doubled main-line wraps are tight and ordered",
+        "leader exits back in line after seating",
+        "wrap count matches material behavior"
+      ],
+      "wrong": [
+        "braid has too few wraps and can creep",
+        "leader is trapped at an angle",
+        "wraps reverse or cross during the final pull"
+      ],
+      "consequence": "leader slip or unstable high-load connection",
+      "visual_priority": "p0"
+    },
+    "bimini-twist": {
+      "correct": [
+        "twist column is uniform under tension",
+        "reverse wraps progress without gaps",
+        "finished double-line loop has two balanced legs"
+      ],
+      "wrong": [
+        "twist column contains loose sections",
+        "reverse wraps stack or jump",
+        "one loop leg bears visibly more load than the other"
+      ],
+      "consequence": "uneven load sharing or twist collapse",
+      "visual_priority": "p0"
+    },
+    "spider-hitch": {
+      "correct": [
+        "loop legs emerge evenly",
+        "wrap bundle is compact",
+        "braid uses the higher practical wrap count required by the material"
+      ],
+      "wrong": [
+        "short wrap bundle in slick braid",
+        "one leg pulls ahead of the other",
+        "hitch opens or rolls when the loop is spread"
+      ],
+      "consequence": "rapid slip or reduced durability",
+      "visual_priority": "p1"
+    },
+    "palomar-knot": {
+      "correct": [
+        "doubled strands remain parallel",
+        "overhand section is not crossed over itself",
+        "final loop seats around the eye/hardware without trapping against the hook point or split ring"
+      ],
+      "wrong": [
+        "doubled strands cross before cinching",
+        "loop catches around part of the lure or hook incorrectly",
+        "knot seats with one strand visibly tighter than the other"
+      ],
+      "consequence": "uneven loading and premature breakage",
+      "visual_priority": "p0"
+    },
+    "improved-clinch-knot": {
+      "correct": [
+        "wraps spiral neatly without overlap",
+        "tag returns through both required openings",
+        "coil slides fully to the eye during seating"
+      ],
+      "wrong": [
+        "wraps stack or cross",
+        "tag misses the final tuck",
+        "coil stops above the eye and leaves an open gap"
+      ],
+      "consequence": "unraveling, slippage, or heat-damaged seating",
+      "visual_priority": "p0"
+    },
+    "uni-grinner-knot": {
+      "correct": [
+        "wraps form a clean barrel",
+        "barrel slides to the eye without crossing",
+        "braid receives enough wraps and passes a hard slip test"
+      ],
+      "wrong": [
+        "barrel contains crossed wraps",
+        "tag creeps after load testing",
+        "coil stops partially open before reaching the hardware"
+      ],
+      "consequence": "creep or sudden terminal failure",
+      "visual_priority": "p0"
+    },
+    "fish-n-fool-knot": {
+      "correct": [
+        "two eye passes stay parallel",
+        "Uni-family wraps are orderly",
+        "barrel seats against the doubled eye contact without crossing"
+      ],
+      "wrong": [
+        "eye passes cross inside or outside the eye",
+        "barrel is tied on only one effective eye pass",
+        "tag shifts after seating"
+      ],
+      "consequence": "abrasion at the eye or reduced slip resistance",
+      "visual_priority": "p1"
+    },
+    "nanofil-knot": {
+      "correct": [
+        "fused line remains doubled through the Palomar-style structure",
+        "double-overhand section is clean",
+        "hardware passes through the loop without twisting the doubled strands"
+      ],
+      "wrong": [
+        "ordinary single-overhand Palomar is substituted",
+        "slick strands cross or separate during seating",
+        "tag movement appears under a firm pull test"
+      ],
+      "consequence": "slip in slick fused superline",
+      "visual_priority": "p0"
+    },
+    "snell-knot-traditional": {
+      "correct": [
+        "wraps lie side by side on the shank",
+        "line exits the hook eye in the intended orientation",
+        "coil does not climb toward the eye under load"
+      ],
+      "wrong": [
+        "wraps cross or overlap",
+        "leader exits the wrong side of the eye for the intended hook orientation",
+        "short tag begins pulling into the wraps"
+      ],
+      "consequence": "hook misalignment or coil slip",
+      "visual_priority": "p0"
+    },
+    "snell-knot-uni-version": {
+      "correct": [
+        "Uni barrel lies cleanly on the hook shank",
+        "line exits through the eye in the intended direction",
+        "wraps remain compact during a load test"
+      ],
+      "wrong": [
+        "barrel rolls around the shank",
+        "line exits the eye in a direction that twists the hook",
+        "braid or slick line creeps through too few wraps"
+      ],
+      "consequence": "misalignment or shank-wrap slip",
+      "visual_priority": "p0"
+    },
+    "haywire-twist": {
+      "correct": [
+        "true haywire twists precede barrel wraps",
+        "wire strands rotate around each other rather than one strand merely wrapping the other",
+        "tag is fatigue-broken cleanly rather than cut into a sharp burr"
+      ],
+      "wrong": [
+        "only barrel wraps are formed",
+        "wire is kinked sharply at the eye",
+        "cut tag leaves a dangerous sharp burr"
+      ],
+      "consequence": "wire fatigue, connection failure, or handling injury",
+      "visual_priority": "p0"
+    },
+    "needle-knot": {
+      "correct": [
+        "leader sits centered in a compatible fly-line core",
+        "core/coating is not split",
+        "external securing turns are compact and smooth"
+      ],
+      "wrong": [
+        "leader is forced into incompatible construction",
+        "coating splits around the insertion point",
+        "leader exits off-center or can be pulled from the core before final seating"
+      ],
+      "consequence": "fly-line damage or transition pullout",
+      "visual_priority": "p0"
+    },
+    "kryston-non-slip-loop-knot": {
+      "correct": [
+        "loop remains the intended size after seating",
+        "wraps form cleanly in the reviewed mono-first system",
+        "tag and standing line leave the knot without crossed coils"
+      ],
+      "wrong": [
+        "fluorocarbon is substituted despite the documented warning",
+        "loop size changes under a pull test",
+        "coils bunch or invert"
+      ],
+      "consequence": "unstable loop or material-specific failure",
+      "visual_priority": "p1"
+    },
+    "seaguar-knot": {
+      "correct": [
+        "mono and fluorocarbon loops twist together evenly",
+        "both line ends/leader pass through the shared opening as required",
+        "figure-eight-like finished junction is compact"
+      ],
+      "wrong": [
+        "braid is substituted for the mono-main system",
+        "loops are twisted unevenly",
+        "one material cuts across the other at a sharp angle"
+      ],
+      "consequence": "unstable mono-to-fluoro junction",
+      "visual_priority": "p1"
+    },
+    "loop-to-loop-connection": {
+      "correct": [
+        "two finished loops interlock squarely",
+        "load is shared across the intended loop legs",
+        "connection can be separated without visible twist damage"
+      ],
+      "wrong": [
+        "one loop collapses into an accidental girth-hitch orientation",
+        "loops are twisted before loading",
+        "worn or damaged loop is reused"
+      ],
+      "consequence": "localized wear, distortion, or premature loop failure",
+      "visual_priority": "p1"
+    },
+    "non-slip-loop-kreh-loop": {
+      "correct": [
+        "loop holds the intended size after seating",
+        "wraps form cleanly around the standing line",
+        "tag returns through the overhand from the same side it exited"
+      ],
+      "wrong": [
+        "loop shrinks or collapses under a pull test",
+        "wraps reverse or bunch during the final draw",
+        "tag exits the overhand on the wrong path"
+      ],
+      "consequence": "unstable loop size or sudden terminal failure",
+      "visual_priority": "p1"
+    },
+    "rapala-knot": {
+      "correct": [
+        "fixed loop size is preserved after seating",
+        "wraps around the standing line stay ordered",
+        "final tuck locks without collapsing the loop"
+      ],
+      "wrong": [
+        "loop closes under load",
+        "wraps cross or stack",
+        "final tuck is omitted or reversed"
+      ],
+      "consequence": "lost lure action or knot collapse",
+      "visual_priority": "p1"
+    },
+    "albright-special": {
+      "correct": [
+        "main-line wraps stay ordered around the doubled leader",
+        "tag exits cleanly after the wrap series",
+        "finished junction is compact without telescoping"
+      ],
+      "wrong": [
+        "wraps cross or reverse mid-series",
+        "leader loop is twisted through the barrel",
+        "junction can be pushed open after seating"
+      ],
+      "consequence": "slip under load or bulky guide hang",
+      "visual_priority": "p1"
+    },
+    "surgeons-knot": {
+      "correct": [
+        "two overhand passes seat squarely",
+        "both tags exit cleanly",
+        "finished knot is compact without crossed strands"
+      ],
+      "wrong": [
+        "only one pass is completed",
+        "strands cross inside the overhand",
+        "knot remains open or asymmetric after pull"
+      ],
+      "consequence": "uneven junction or reduced holding power",
+      "visual_priority": "p1"
+    },
+    "nail-knot": {
+      "correct": [
+        "barrel wraps lie tightly on the fly line or leader tube",
+        "leader exits in line without a shoulder",
+        "coils do not telescope when loaded"
+      ],
+      "wrong": [
+        "wraps are loose or spaced",
+        "leader exits at an angle creating a snag shoulder",
+        "barrel slides when the leader is pulled"
+      ],
+      "consequence": "pullout or abrasive guide contact",
+      "visual_priority": "p1"
+    },
+    "clinch-knot": {
+      "correct": [
+        "Neat spiral wraps seated to the eye",
+        "Tag exits cleanly without reverse wraps",
+        "Coil remains closed after pull test"
+      ],
+      "wrong": [
+        "Open gap above the eye",
+        "Crossed or reverse wraps",
+        "Tag pulled back through incorrectly"
+      ],
+      "consequence": "An open clinch fails on the first solid hookset.",
+      "visual_priority": "p2"
+    },
+    "trilene-knot": {
+      "correct": [
+        "Double pass through the eye is visible",
+        "Ordered coil seats fully",
+        "Both eye passes remain parallel"
+      ],
+      "wrong": [
+        "Single pass only",
+        "Crossed eye passes",
+        "Coil not seated"
+      ],
+      "consequence": "Missing the double pass removes the Trilene advantage.",
+      "visual_priority": "p2"
+    },
+    "davy-knot": {
+      "correct": [
+        "Compact half-hitch structure at the eye",
+        "Tag exits in the intended direction",
+        "Knot stays small after seating"
+      ],
+      "wrong": [
+        "Open hitch that walks on the eye",
+        "Reversed tag path",
+        "Oversized unfinished form"
+      ],
+      "consequence": "A walking Davy slips free under tippet-class loads.",
+      "visual_priority": "p2"
+    },
+    "double-davy-knot": {
+      "correct": [
+        "Second pass completes before the final draw",
+        "Compact seat at the eye",
+        "Tag controlled and short"
+      ],
+      "wrong": [
+        "Only one pass completed",
+        "Open asymmetric hitch",
+        "Tag creep after seating"
+      ],
+      "consequence": "Incomplete double structure reverts to a weaker single Davy.",
+      "visual_priority": "p2"
+    },
+    "orvis-knot": {
+      "correct": [
+        "Figure-eight style seat looks compact",
+        "Tag and standing line exit cleanly",
+        "No open loops after pull test"
+      ],
+      "wrong": [
+        "Open figure-eight that did not draw down",
+        "Crossed legs at the eye",
+        "Tag reversed"
+      ],
+      "consequence": "An undrawn Orvis can open on the first fish.",
+      "visual_priority": "p2"
+    },
+    "pitzen-knot": {
+      "correct": [
+        "Ordered wraps with the distinctive Pitzen draw path",
+        "Coil seats tightly to the eye",
+        "Tag exits controlled"
+      ],
+      "wrong": [
+        "Lost wrap order during the draw",
+        "Open coil above the eye",
+        "Tag trapped in the wrong path"
+      ],
+      "consequence": "A misdrawn Pitzen loses the strength that justifies the knot.",
+      "visual_priority": "p2"
+    },
+    "san-diego-jam-knot": {
+      "correct": [
+        "Long ordered wrap column for the material",
+        "Clean seat after the final tuck",
+        "No reverse wraps"
+      ],
+      "wrong": [
+        "Too few wraps for braid",
+        "Final tuck skipped",
+        "Crossed wrap column"
+      ],
+      "consequence": "Short wrap count on braid is a common San Diego Jam failure.",
+      "visual_priority": "p2"
+    },
+    "berkley-braid-knot": {
+      "correct": [
+        "Doubled braid structure remains ordered",
+        "Wraps seat without springing open",
+        "Tag controlled after draw"
+      ],
+      "wrong": [
+        "Single-line substitute on slick braid",
+        "Open springy wraps",
+        "Tag creep"
+      ],
+      "consequence": "Braid needs the doubled structure to hold under shock loads.",
+      "visual_priority": "p2"
+    },
+    "perfection-loop": {
+      "correct": [
+        "Loop size holds after seating",
+        "Final tuck sits in the classic perfection geometry",
+        "Standing line exits in-line with the loop"
+      ],
+      "wrong": [
+        "Loop collapses under light load",
+        "Final tuck in the wrong gap",
+        "Twisted loop legs"
+      ],
+      "consequence": "A collapsed perfection loop becomes a weak overhand.",
+      "visual_priority": "p2"
+    },
+    "surgeons-end-loop": {
+      "correct": [
+        "Double overhand completed on the doubled line",
+        "Loop size stable after draw",
+        "Tags exit cleanly"
+      ],
+      "wrong": [
+        "Single overhand only",
+        "Loop size changes under load",
+        "Open asymmetric knot"
+      ],
+      "consequence": "Incomplete double overhand fails as a fixed loop.",
+      "visual_priority": "p2"
+    },
+    "dropper-loop": {
+      "correct": [
+        "Loop stands perpendicular after seating",
+        "Wraps ordered around the standing line",
+        "Loop size matches intended dropper length"
+      ],
+      "wrong": [
+        "Loop lies flat and collapses",
+        "Too few twists before the pull-through",
+        "Standing line nicked by the pull"
+      ],
+      "consequence": "A collapsed dropper loop fouls flies and weakens the leader.",
+      "visual_priority": "p2"
+    },
+    "homer-rhode-loop-knot": {
+      "correct": [
+        "Fixed loop preserved for lure action",
+        "Wraps ordered on the standing line",
+        "Loop does not close under load"
+      ],
+      "wrong": [
+        "Loop closes to the eye",
+        "Wraps reverse mid-build",
+        "Tag path incorrect"
+      ],
+      "consequence": "A closed Homer Rhode removes free lure swing.",
+      "visual_priority": "p2"
+    },
+    "arbor-knot": {
+      "correct": [
+        "Overhand on standing line seats against the spool arbor",
+        "Tag overhand stops slip under spool tension",
+        "Line cinches to the arbor without spinning free"
+      ],
+      "wrong": [
+        "Missing tag stopper overhand",
+        "Knot not drawn to the arbor",
+        "Wrong direction relative to spool spin"
+      ],
+      "consequence": "A bad arbor knot slips and dumps the spool under the first run.",
+      "visual_priority": "p2"
+    },
+    "100-percent-arbor-knot": {
+      "correct": [
+        "Enhanced arbor structure fully seated",
+        "No slip under spool tension test",
+        "Tags controlled"
+      ],
+      "wrong": [
+        "Incomplete second hitch",
+        "Spins on the arbor under tension",
+        "Tags too short"
+      ],
+      "consequence": "Incomplete arbor structure can free-spool under hard runs.",
+      "visual_priority": "p2"
+    },
+    "double-double-uni-knot": {
+      "correct": [
+        "Both doubled sides form compact barrels",
+        "Barrels meet squarely",
+        "Tags exit cleanly"
+      ],
+      "wrong": [
+        "One side single-line only",
+        "Open barrel on either side",
+        "Barrels do not meet"
+      ],
+      "consequence": "Missing the double on one side creates an asymmetric weak join.",
+      "visual_priority": "p2"
+    },
+    "slim-beauty-knot": {
+      "correct": [
+        "Bimini or double-line side present as intended",
+        "Ordered wraps with slim profile",
+        "Tags trimmed clean"
+      ],
+      "wrong": [
+        "No double-line foundation",
+        "Crossed wraps bulk the junction",
+        "Open return wraps"
+      ],
+      "consequence": "Without the double-line foundation the slim profile fails under load.",
+      "visual_priority": "p2"
+    },
+    "j-knot": {
+      "correct": [
+        "Ordered multi-wrap join with clean exits",
+        "Junction stays slim after seating",
+        "No reverse wraps"
+      ],
+      "wrong": [
+        "Lost wrap count",
+        "Bulky crossed column",
+        "Tags reversed"
+      ],
+      "consequence": "A crossed J Knot becomes a cutting join under diameter step.",
+      "visual_priority": "p2"
+    },
+    "aussie-quickie": {
+      "correct": [
+        "Quick wrap structure fully completed",
+        "Seated without open loops",
+        "Tags controlled"
+      ],
+      "wrong": [
+        "Stopped mid-sequence",
+        "Open loops after draw",
+        "Wrong material pairing"
+      ],
+      "consequence": "An incomplete quick join can dump a fish on the first run.",
+      "visual_priority": "p2"
+    },
+    "easy-snell-knot": {
+      "correct": [
+        "Side-by-side shank wraps",
+        "Intended eye exit orientation",
+        "Hook alignment stable after pull"
+      ],
+      "wrong": [
+        "Overlapped wraps",
+        "Wrong eye exit",
+        "Coil climbs to the eye"
+      ],
+      "consequence": "A bad snell points the hook off-line and weakens the set.",
+      "visual_priority": "p2"
+    },
+    "knotless-knot": {
+      "correct": [
+        "Hair or bait attachment path correct",
+        "Shank wraps ordered",
+        "Exit direction matches intended presentation"
+      ],
+      "wrong": [
+        "Hair trapped under wraps incorrectly",
+        "Overlapped shank wraps",
+        "Wrong exit"
+      ],
+      "consequence": "Misbuilt knotless geometry ruins hair presentation and strength.",
+      "visual_priority": "p2"
+    },
+    "egg-loop-knot": {
+      "correct": [
+        "Loop sized for bait holds after seating",
+        "Shank wraps ordered",
+        "Loop does not collapse"
+      ],
+      "wrong": [
+        "Loop collapses under light tension",
+        "Wraps climb the shank",
+        "Uneven loop legs"
+      ],
+      "consequence": "A collapsed egg loop dumps bait on the first cast.",
+      "visual_priority": "p2"
+    },
+    "king-sling": {
+      "correct": [
+        "Fixed loop geometry preserved",
+        "Wraps ordered",
+        "Loop action free at the lure"
+      ],
+      "wrong": [
+        "Loop closes to the eye",
+        "Crossed wraps",
+        "Tag path wrong"
+      ],
+      "consequence": "Closed loop removes the free-swing action the knot is for.",
+      "visual_priority": "p2"
+    },
+    "australian-plait": {
+      "correct": [
+        "Plaited double-line section uniform",
+        "Locking finish secure",
+        "Legs share load"
+      ],
+      "wrong": [
+        "Loose plait with gaps",
+        "Uneven legs",
+        "Incomplete lock"
+      ],
+      "consequence": "A gappy plait concentrates load on one leg and fails early.",
+      "visual_priority": "p2"
+    },
+    "orvis-tippet-knot": {
+      "correct": [
+        "Tippet join seats compactly",
+        "Tags exit cleanly",
+        "No cutting angle at the junction"
+      ],
+      "wrong": [
+        "Open join after draw",
+        "Tags reverse",
+        "Twisted core"
+      ],
+      "consequence": "A poorly seated tippet join is a classic dry-fly failure point.",
+      "visual_priority": "p2"
+    },
+    "willis-knot": {
+      "correct": [
+        "Ordered wraps with intended return path",
+        "Compact slim junction",
+        "Tags controlled"
+      ],
+      "wrong": [
+        "Crossed wrap column",
+        "Open return",
+        "Lost wrap count"
+      ],
+      "consequence": "Crossed Willis wraps become a cutting join under load.",
+      "visual_priority": "p2"
+    },
+    "baja-knot": {
+      "correct": [
+        "Terminal structure fully completed for the eye",
+        "Seated coil without gaps",
+        "Tag controlled"
+      ],
+      "wrong": [
+        "Open seat above the eye",
+        "Incomplete sequence",
+        "Crossed wraps"
+      ],
+      "consequence": "An incomplete Baja terminal can dump a lure on the cast.",
+      "visual_priority": "p2"
+    },
+    "centauri-knot": {
+      "correct": [
+        "Distinctive Centauri geometry seated",
+        "Clean tag exit",
+        "No open loops"
+      ],
+      "wrong": [
+        "Misdrawn final geometry",
+        "Open loops",
+        "Tag reverse"
+      ],
+      "consequence": "A misdrawn Centauri loses the geometry that gives it strength.",
+      "visual_priority": "p2"
+    },
+    "turle-knot": {
+      "correct": [
+        "Loop seats behind a down-eye or turned-up eye as intended",
+        "Knot draws up cleanly on the eye neck",
+        "Fly rides true"
+      ],
+      "wrong": [
+        "Used on a straight-eye where it does not seat",
+        "Loop not fully drawn",
+        "Fly cocks off-angle"
+      ],
+      "consequence": "Wrong eye type or incomplete seat ruins fly tracking.",
+      "visual_priority": "p2"
+    },
+    "world-fair-knot": {
+      "correct": [
+        "Completed figure geometry seated at the eye",
+        "Tag controlled",
+        "No open segments"
+      ],
+      "wrong": [
+        "Incomplete figure",
+        "Open seat",
+        "Crossed segments"
+      ],
+      "consequence": "Incomplete World Fair geometry fails early under tippet loads.",
+      "visual_priority": "p2"
+    },
+    "jacks-knot": {
+      "correct": [
+        "Full sequence completed",
+        "Compact seat",
+        "Tag controlled"
+      ],
+      "wrong": [
+        "Stopped mid-sequence",
+        "Open seat",
+        "Crossed wraps"
+      ],
+      "consequence": "An incomplete Jack's Knot is unreliable on the first fish.",
+      "visual_priority": "p2"
+    },
+    "eye-crosser-knot": {
+      "correct": [
+        "Eye-crossing path completed as designed",
+        "Seated without open loops",
+        "Tag exit correct"
+      ],
+      "wrong": [
+        "Missed eye cross",
+        "Open loops",
+        "Tag reverse"
+      ],
+      "consequence": "Missing the eye-cross path removes the knot's holding geometry.",
+      "visual_priority": "p2"
+    },
+    "harvey-dry-fly-knot": {
+      "correct": [
+        "Dry-fly terminal geometry seated small and clean",
+        "Fly rides true",
+        "Tag short and controlled"
+      ],
+      "wrong": [
+        "Bulky unfinished form",
+        "Fly cocked",
+        "Open seat"
+      ],
+      "consequence": "A bulky Harvey terminal kills dry-fly drift and can fail on take.",
+      "visual_priority": "p2"
+    },
+    "jansik-special": {
+      "correct": [
+        "Multiple eye passes ordered",
+        "Compact final structure",
+        "Parallel strands where intended"
+      ],
+      "wrong": [
+        "Lost eye-pass count",
+        "Crossed strands",
+        "Open final structure"
+      ],
+      "consequence": "Lost pass count on a Jansik Special is a sudden failure mode.",
+      "visual_priority": "p2"
+    },
+    "riffle-hitch": {
+      "correct": [
+        "Hitch orientation matches intended wake direction",
+        "Holds position behind the eye",
+        "Does not flip under light tension"
+      ],
+      "wrong": [
+        "Hitch on the wrong side of the eye",
+        "Slides around the eye",
+        "Too loose to hold orientation"
+      ],
+      "consequence": "Wrong hitch side wakes the fly the wrong way\u2014or not at all.",
+      "visual_priority": "p2"
+    },
+    "bobber-stopper-knot": {
+      "correct": [
+        "Stopper grips the line without cutting",
+        "Position holds after cast pressure",
+        "Coils neat and short"
+      ],
+      "wrong": [
+        "Stopper slides freely",
+        "Over-tight coils damage line",
+        "Too few wraps"
+      ],
+      "consequence": "A sliding stopper ruins depth control; an over-tight one nicks main line.",
+      "visual_priority": "p2"
+    },
+    "offshore-swivel-knot": {
+      "correct": [
+        "Double-line foundation present",
+        "Ordered wraps on the swivel eye",
+        "Seated without open loops"
+      ],
+      "wrong": [
+        "Single-line only on heavy tackle",
+        "Crossed wraps",
+        "Incomplete lock"
+      ],
+      "consequence": "Single-line offshore connections are a classic big-fish failure.",
+      "visual_priority": "p2"
+    },
+    "strike-indicator-double-uni": {
+      "correct": [
+        "Two compact barrels for indicator join",
+        "Barrels meet cleanly",
+        "Tags controlled"
+      ],
+      "wrong": [
+        "One open barrel",
+        "Barrels do not meet",
+        "Tags reverse"
+      ],
+      "consequence": "An open indicator join dumps the indicator mid-drift.",
+      "visual_priority": "p2"
+    },
+    "strike-indicator-loop-knot": {
+      "correct": [
+        "Loop holds indicator as intended",
+        "Size stable after seating",
+        "No collapse under cast"
+      ],
+      "wrong": [
+        "Loop collapses",
+        "Indicator trapped incorrectly",
+        "Open unfinished loop"
+      ],
+      "consequence": "A collapsed indicator loop loses the fly's depth reference.",
+      "visual_priority": "p2"
+    },
+    "tenkara-level-line-connection": {
+      "correct": [
+        "Level line and tippet join seats cleanly",
+        "No cutting angle",
+        "Connection slim enough for the rod"
+      ],
+      "wrong": [
+        "Bulky unfinished join",
+        "Wrong material pairing",
+        "Open loops"
+      ],
+      "consequence": "A bulky tenkara join kills presentation and can fail on soft tippet.",
+      "visual_priority": "p2"
+    },
+    "tenkara-traditional-line-connection": {
+      "correct": [
+        "Traditional join geometry completed",
+        "Seated without open segments",
+        "Tags controlled"
+      ],
+      "wrong": [
+        "Incomplete traditional sequence",
+        "Open segments",
+        "Misaligned legs"
+      ],
+      "consequence": "Incomplete traditional tenkara joins fail on the first solid take.",
+      "visual_priority": "p2"
+    },
+    "knot-tyer-nail-knot": {
+      "correct": [
+        "Tool-formed barrel tight on host",
+        "In-line leader exit",
+        "No telescope after load"
+      ],
+      "wrong": [
+        "Loose tool wraps",
+        "Angled exit shoulder",
+        "Host coating damage"
+      ],
+      "consequence": "A loose tool nail knot slides or cuts the host under load.",
+      "visual_priority": "p2"
+    }
+  },
+  "render_rule": "Show correct cues and wrong cues together. Where visual_priority is p0, produce a dedicated original correct-vs-wrong SVG before public release; p1 may launch with textual inspection cues if the base instructional SVG is already clear."
+}

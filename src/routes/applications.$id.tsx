@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Shell } from "@/components/instrument/shell";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
+import { FailureModesPanel } from "@/components/instrument/failure-modes";
+import { HthInspectPlates } from "@/components/instrument/hth-plate";
 import { getKnot } from "@/data/catalog";
 import {
   EXTRA_DOMAIN_LABELS,
@@ -85,7 +87,7 @@ function WorldPage({ id }: { id: string }) {
         ← {t("applications.title")}
       </Link>
       <div className="mb-6 mt-4">
-        <MicroLabel>Mode 07 · {WORLD_GROUP_LABELS[w.group]}</MicroLabel>
+        <MicroLabel>Mode 05 · {WORLD_GROUP_LABELS[w.group]}</MicroLabel>
         <h1 className="mt-2 text-[2rem] font-semibold leading-none tracking-[-0.03em]">
           {w.title}
         </h1>
@@ -172,7 +174,7 @@ function KnotPage({ id }: { id: string }) {
       </Link>
       <div className="mb-6 mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <MicroLabel>Mode 07 · {TANGLE_LABELS[a.tangleClass]}</MicroLabel>
+          <MicroLabel>Mode 05 · {TANGLE_LABELS[a.tangleClass]}</MicroLabel>
           <h1 className="mt-2 text-[2rem] font-semibold leading-none tracking-[-0.03em]">
             {k.name}
           </h1>
@@ -216,6 +218,12 @@ function KnotPage({ id }: { id: string }) {
           </p>
         </div>
       </div>
+      <div className="mb-6">
+        <HthInspectPlates knotId={k.id} name={k.name} />
+      </div>
+      <div className="mb-6">
+        <FailureModesPanel knot={k} />
+      </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <Panel className="p-5">
           <MicroLabel>What holds it</MicroLabel>
@@ -245,7 +253,7 @@ function KnotPage({ id }: { id: string }) {
                     <Link
                       to="/applications/$id"
                       params={{ id: d.knotId }}
-                      className="w-[72px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40"
+                      className="w-[96px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40"
                     >
                       <KnotDiagram
                         kind={d.knot.diagramKind}

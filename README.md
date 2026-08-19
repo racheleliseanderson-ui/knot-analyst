@@ -1,12 +1,24 @@
 # Knot Analyst
 
+A decision and diagnosis instrument for fishing and boat connections — not a how-to library.
+
+- Live: https://knot.hookthehorizon.blog/
+- Vercel: https://knot-analyst.vercel.app
+- GitHub: https://github.com/racheleliseanderson-ui/knot-analyst
+
+Catalog `2026-08-19.5` · 86 modelled connections (56 fishing · 30 boating).
+
+---
+
 Improve this existing live application:
 
 Use the current live version as the baseline. Do not start from scratch — elevate what already exists.
 
-Current Vercel Application: https://knot-intelligence.vercel.app/
+Current Vercel Application: https://knot-analyst.vercel.app
 
-Git Hub Repo https://github.com/racheleliseanderson-ui/knot-intelligence
+Canonical site: https://knot.hookthehorizon.blog/
+
+GitHub: https://github.com/racheleliseanderson-ui/knot-analyst
 
 Upgrade Knot Analyst (Hook the Horizon) into a high-end, precise decision + diagnosis instrument for fishing connections while strictly preserving its core philosophy.
 
@@ -76,7 +88,7 @@ Make the experience smoother and more valuable:
 
 Keep the precise, mechanical, slightly dry field voice. Avoid tutorial fluff or generic knot advice. The tool should feel like a sharp, trustworthy connection analyst that respects real conditions and constraints.
 
-Start from the current live application[](https://knot-intelligence.vercel.app/) and the existing repository as the baseline. Elevate the intelligence, visual quality, and workflow while keeping the rigorous “not a library” character intact.Please complete full GitHub handoff new directory.
+Start from the current live application ([knot.hookthehorizon.blog](https://knot.hookthehorizon.blog/)) and the existing repository as the baseline. Elevate the intelligence, visual quality, and workflow while keeping the rigorous “not a library” character intact.
 
 This project was built with [Lovable](https://lovable.dev).
 
@@ -93,8 +105,8 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git clone https://github.com/racheleliseanderson-ui/knot-analyst.git
+cd knot-analyst
 npm i
 npm run dev
 ```

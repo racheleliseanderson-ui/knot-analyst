@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 560" role="img" aria-labelledby="title desc">
+<title id="title">Needle Knot correct versus wrong finished-knot diagnostic</title>
+<desc id="desc">Needle Knot finished-state diagnostic. Correct: leader sits centered in a compatible fly-line core; core/coating is not split; external securing turns are compact and smooth. Wrong: leader is forced into incompatible construction; coating splits around the insertion point; leader exits off-center or can be pulled from the core before final seating. Consequence: fly-line damage or transition pullout.</desc>
+<style>
+  .bg{fill:#F7F5EF}.panel{fill:#fff;stroke:#D8D4CA;stroke-width:2}.good-head{fill:#0F5660}.bad-head{fill:#8C3426}.head{font:700 20px system-ui,sans-serif;fill:#fff;letter-spacing:.06em}.title{font:800 28px system-ui,sans-serif;fill:#071827}.caption{font:600 16px system-ui,sans-serif;fill:#12202B}.note{font:500 14px system-ui,sans-serif;fill:#424546}.leader,.braid,.wire,.lock,.tag,.barrel{fill:none;stroke:#0F5660;stroke-width:10;stroke-linecap:round;stroke-linejoin:round}.leader{stroke:#071827}.braid{stroke:#176F78;stroke-width:8}.hardware{fill:none;stroke:#071827;stroke-width:10;stroke-linecap:round;stroke-linejoin:round}.wire{stroke:#355133;stroke-width:8}.lock,.tag,.barrel{stroke:#C7A257;stroke-width:7}.leader-bad,.braid-bad,.wire-bad,.tag-bad,.flyline-bad{fill:none;stroke:#8C3426;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 10}.error,.split,.sharp{fill:none;stroke:#8C3426;stroke-width:7;stroke-linecap:round}.gap{stroke:#8C3426;stroke-width:4;stroke-dasharray:6 6}.flyline{fill:#EAF0F2;stroke:#071827;stroke-width:8}.flyline-bad{fill:#FFF3E8}.center{fill:#0F5660}.badge-good{fill:#E8F2EF}.badge-bad{fill:#FBE8E1}.badge-text{font:800 13px system-ui,sans-serif;letter-spacing:.05em;fill:#071827}
+</style>
+<rect class="bg" width="1160" height="560"/>
+<text x="50" y="52" class="title">Needle Knot — finished-state check</text>
+<rect x="30" y="82" width="535" height="408" rx="18" class="panel"/><rect x="595" y="82" width="535" height="408" rx="18" class="panel"/>
+<rect x="30" y="82" width="535" height="52" rx="18" class="good-head"/><rect x="595" y="82" width="535" height="52" rx="18" class="bad-head"/>
+<text x="54" y="116" class="head">CORRECT</text><text x="619" y="116" class="head">WRONG / RETIE</text>
+<path d="M120 222 H380 V278 H120 Z" class="flyline"/><line x1="95" y1="250" x2="335" y2="250" class="leader"/><circle cx="335" cy="250" r="5" class="center"/><path d="M700 222 H960 V278 H700 Z" class="flyline-bad"/><path d="M675 260 Q790 230,915 265" class="leader-bad"/><path d="M880 222 l18 16 -12 16 18 16" class="split"/><line x1="898" y1="256" x2="922" y2="280" class="error"/><line x1="922" y1="256" x2="898" y2="280" class="error"/>
+<rect x="54" y="366" width="487" height="52" rx="12" class="badge-good"/><rect x="619" y="366" width="487" height="52" rx="12" class="badge-bad"/>
+<text x="72" y="397" class="caption">Leader centered in a compatible fly-line core</text><text x="637" y="397" class="caption">Split coating, off-center exit, or loose insertion</text>
+<text x="54" y="454" class="note">The transition should be centered and smooth without damaging the coating.</text><text x="619" y="454" class="note">Consequence: fly-line damage or transition pullout</text>
+<text x="30" y="530" class="note">Hook the Horizon original diagnostic schematic · finished-state inspection only · not a substitute for the tying sequence</text>
+</svg>

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Shell } from "@/components/instrument/shell";
 import {
   Bullets,
@@ -17,6 +17,8 @@ import {
 import { runChooser } from "@/engine/chooser";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { diagnosisToDecide, encodeInput } from "@/lib/handoff";
+import { tackleHandoffFromDiagnosis } from "@/lib/tackle-handoff";
+import { knotsForDomain, getKnot } from "@/data/catalog";
 import {
   END_LOOK_LABELS,
   SYMPTOM_GROUP_LABELS,
@@ -30,12 +32,13 @@ import { startersForDomain } from "@/data/diagnose-starters";
 import { useDomain } from "@/domain/context";
 import { useConnectionGroups, useMaterialOptions } from "@/lib/overlay";
 import type { DiameterRelation, RetieDecision } from "@/domain/types";
+import { CATEGORY_LABELS, DIAMETER_LABELS, RETIE_LABELS } from "@/domain/types";
 import { isJoinJob } from "@/domain/connection-preset";
-import { DIAMETER_LABELS, RETIE_LABELS } from "@/domain/types";
 
 export const Route = createFileRoute("/diagnose")({
-  validateSearch: (s: Record<string, unknown>): { event?: string } => ({
+  validateSearch: (s: Record<string, unknown>): { event?: string; knot?: string } => ({
     event: typeof s["event"] === "string" ? (s["event"] as string) : undefined,
+    knot: typeof s["knot"] === "string" ? (s["knot"] as string) : undefined,
   }),
   head: () => ({
     meta: [
@@ -114,11 +117,20 @@ function DiagnoseMode() {
   const connectionGroups = useConnectionGroups();
   const materials = useMaterialOptions();
   const search = Route.useSearch();
-  const seeded = plays.some((p) => p.id === search.event)
-    ? ({ event: search.event as FailureEvent } as Partial<TroubleshootInput>)
-    : {};
+  const seeded: Partial<TroubleshootInput> = {
+    ...(plays.some((p) => p.id === search.event) ? { event: search.event as FailureEvent } : {}),
+    ...(search.knot && getKnot(search.knot) ? { knotId: search.knot } : {}),
+  };
   const [input, setInput] = useState<Partial<TroubleshootInput>>(seeded);
   const [ran, setRan] = useState(false);
+
+  const firstDomain = useRef(domain.id);
+  useEffect(() => {
+    if (firstDomain.current === domain.id) return;
+    firstDomain.current = domain.id;
+    setInput({});
+    setRan(false);
+  }, [domain.id]);
 
   const grouped = useMemo(() => {
     const map = new Map<SymptomGroup, typeof plays>();
@@ -168,6 +180,33 @@ function DiagnoseMode() {
   }, [starters, plays]);
 
   const isJoin = isJoinJob(input.connection);
+
+  const namedKnots = useMemo(() => {
+    const pool = knotsForDomain(domain.id);
+    const matched = input.connection
+      ? pool.filter(
+          (k) =>
+            k.contract.connectionFamilies.includes(input.connection!) ||
+            k.bestFor.includes(input.connection!),
+        )
+      : pool;
+    const base = matched.length ? matched : pool;
+    if (input.knotId && !base.some((k) => k.id === input.knotId)) {
+      const extra = getKnot(input.knotId);
+      if (extra) return [extra, ...base];
+    }
+    return base;
+  }, [domain.id, input.connection, input.knotId]);
+
+  const namedByCategory = useMemo(() => {
+    const map = new Map<string, typeof namedKnots>();
+    for (const k of namedKnots) {
+      const list = map.get(k.category) ?? [];
+      list.push(k);
+      map.set(k.category, list);
+    }
+    return [...map.entries()];
+  }, [namedKnots]);
 
   const handoff = () => {
     if (!result) return;
@@ -220,6 +259,12 @@ function DiagnoseMode() {
               <br />
               <span className="text-muted-foreground">Not from a knot name.</span>
             </h1>
+            {search.knot && getKnot(search.knot) ? (
+              <p className="mt-3 max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground">
+                Named {getKnot(search.knot)!.name} so we can overlay its failure modes. Pick the
+                symptom first — the recovered end still outranks the name.
+              </p>
+            ) : null}
           </div>
 
           <Panel className="p-5">
@@ -350,8 +395,8 @@ function DiagnoseMode() {
                         Two-sided job
                       </p>
                       <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                        Declare the leader / second line so the diagnosis can separate join failure
-                        from main-line failure.
+                        Declare the {domain.terms.secondary} so the diagnosis can separate join
+                        failure from main-{domain.terms.line} failure.
                       </p>
                     </div>
                     <div>
@@ -446,6 +491,34 @@ function DiagnoseMode() {
                   placeholder="Pigtail on the tag, braid felt slick, seated dry in a hurry…"
                   className="w-full resize-none rounded-md border border-input bg-surface-2/40 px-3 py-2 text-[0.875rem] text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-accent/70"
                 />
+              </div>
+              <div>
+                <MicroLabel className="mb-2">Knot you tied (optional)</MicroLabel>
+                <p className="mb-2 text-[0.75rem] leading-relaxed text-muted-foreground">
+                  Names a family so we can overlay its failure modes. The recovered end still
+                  outranks this name. Not a library filter.
+                </p>
+                <select
+                  value={input.knotId ?? ""}
+                  disabled={!input.event}
+                  onChange={(e) => set({ knotId: e.target.value || undefined })}
+                  aria-label="Knot you tied"
+                  className="min-h-11 w-full rounded-md border border-input bg-surface-2/40 px-3 text-[0.875rem] text-foreground outline-none focus-visible:border-accent/70 disabled:opacity-40"
+                >
+                  <option value="">Not named — start from the failure</option>
+                  {namedByCategory.map(([cat, knots]) => (
+                    <optgroup
+                      key={cat}
+                      label={CATEGORY_LABELS[cat as keyof typeof CATEGORY_LABELS] ?? cat}
+                    >
+                      {knots.map((k) => (
+                        <option key={k.id} value={k.id}>
+                          {k.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
               </div>
             </div>
           </Panel>
@@ -555,7 +628,7 @@ function DiagnoseMode() {
                     <KnotDiagram
                       kind={result.relatedKnot.diagramKind}
                       title={`${result.relatedKnot.name} — finished structure`}
-                      className="aspect-[400/180] w-full sm:aspect-[400/150]"
+                      className="aspect-[400/180] w-full"
                     />
                     <div className="border-t border-hairline px-6 py-3">
                       <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
@@ -569,6 +642,12 @@ function DiagnoseMode() {
                           Fingerprint: {result.knotCheck.retieDecision.replace(/-/g, " ")}. The
                           recovered end still outranks this name.
                         </p>
+                      ) : null}
+                      {result.failsWhen?.length ? (
+                        <div className="mt-3">
+                          <MicroLabel className="mb-2">Fails when</MicroLabel>
+                          <Bullets items={result.failsWhen.slice(0, 4)} marker="!" />
+                        </div>
                       ) : null}
                     </div>
                   </div>
@@ -638,6 +717,25 @@ function DiagnoseMode() {
                     Compare failed setup vs corrected
                   </button>
                 </div>
+                {(() => {
+                  const tackle = tackleHandoffFromDiagnosis(input, result);
+                  if (!tackle.connectionIsWeakestLink) return null;
+                  return (
+                    <div className="mt-4">
+                      <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
+                        {tackle.reason}
+                      </p>
+                      <a
+                        href={tackle.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 inline-block text-[0.875rem] text-accent underline underline-offset-4"
+                      >
+                        Check this as the weakest link in Tackle
+                      </a>
+                    </div>
+                  );
+                })()}
               </Panel>
 
               <ReplacementCandidates result={result} />

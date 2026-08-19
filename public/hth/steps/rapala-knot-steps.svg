@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 720" role="img" aria-labelledby="title desc">
+<title id="title">Rapala Knot — six-move construction sequence</title>
+<desc id="desc">Step-by-step construction plate for the Rapala Knot. Use with the written profile; inspect the finished structure before fishing.</desc>
+<style>
+  .bg{fill:#F7F5EF}.panel{fill:#fff;stroke:#D8D4CA;stroke-width:2}
+  .title{font:800 26px system-ui,sans-serif;fill:#071827}
+  .kicker{font:700 12px system-ui,sans-serif;fill:#176F78;letter-spacing:.12em}
+  .step-num{font:800 14px system-ui,sans-serif;fill:#fff}
+  .step-label{font:700 13px system-ui,sans-serif;fill:#071827}
+  .note{font:500 12px system-ui,sans-serif;fill:#424546}
+  .badge{fill:#0F5660}
+  .footer{font:600 12px system-ui,sans-serif;fill:#5E6A71}
+</style>
+<rect class="bg" width="1160" height="720"/>
+<text x="40" y="42" class="kicker">HOOK THE HORIZON · STEP PLATE</text>
+<text x="40" y="76" class="title">Rapala Knot — six moves</text>
+
+<rect x="30" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="30" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="43" y="126" class="step-num">1</text>
+<text x="82" y="128" class="step-label">Tie a loose overhand</text>
+<text x="46" y="290" class="note">Leave a loop large enough for the lure</text>
+<text x="46" y="308" class="note"></text>
+<rect x="400" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="400" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="413" y="126" class="step-num">2</text>
+<text x="452" y="128" class="step-label">Pass the tag through the eye</text>
+<text x="416" y="290" class="note">Then back through the overhand</text>
+<text x="416" y="308" class="note"></text>
+<rect x="770" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="770" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="783" y="126" class="step-num">3</text>
+<text x="822" y="128" class="step-label">Wrap the standing line</text>
+<text x="786" y="290" class="note">Keep wraps ordered above the overhand</text>
+<text x="786" y="308" class="note"></text>
+<rect x="30" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="30" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="43" y="386" class="step-num">4</text>
+<text x="82" y="388" class="step-label">Tuck the tag to finish</text>
+<text x="46" y="550" class="note">Do not reverse the final tuck</text>
+<text x="46" y="568" class="note"></text>
+<rect x="400" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="400" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="413" y="386" class="step-num">5</text>
+<text x="452" y="388" class="step-label">Hold loop size while seating</text>
+<text x="416" y="550" class="note">Loop must not collapse to the eye</text>
+<text x="416" y="568" class="note"></text>
+<rect x="770" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="770" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="783" y="386" class="step-num">6</text>
+<text x="822" y="388" class="step-label">Pull-test for free swing</text>
+<text x="786" y="550" class="note">Retie if the loop closes under load</text>
+<text x="786" y="568" class="note"></text>
+<text x="40" y="700" class="footer">Construction sequence schematic · verify with the finished-state diagnostic before fishing</text>
+</svg>
+

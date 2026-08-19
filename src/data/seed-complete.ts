@@ -38,9 +38,14 @@ const RELATED: Record<string, string[]> = {
   rapala: ["homer-rhode", "king-sling"],
   "surgeons-loop": ["dropper-loop", "bimini-twist"],
   "arbor-knot": ["centauri"],
-  "double-sheet-bend": ["bowline"],
-  "figure-8-stopper": ["ashley-stopper"],
-  "ashley-stopper": ["estar-stopper"],
+  "double-sheet-bend": ["bowline", "sheet-bend"],
+  "figure-8-stopper": ["ashley-stopper", "estar-stopper"],
+  "ashley-stopper": ["estar-stopper", "figure-8-stopper"],
+  "cleat-hitch": ["pile-hitch", "round-turn-two-half-hitches"],
+  bowline: ["water-bowline", "yosemite-bowline"],
+  "rolling-hitch": ["icicle-hitch", "midshipmans-hitch"],
+  "zeppelin-bend": ["hunters-bend", "carrick-bend"],
+  "clove-hitch": ["constrictor", "round-turn-two-half-hitches"],
 };
 
 function finish(

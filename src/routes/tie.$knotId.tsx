@@ -4,6 +4,8 @@ import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { StepPlayer } from "@/components/instrument/step-player";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { VideoEmbed } from "@/components/instrument/video-embed";
+import { FailureModesPanel } from "@/components/instrument/failure-modes";
+import { HthInspectPlates } from "@/components/instrument/hth-plate";
 import { getKnot } from "@/data/catalog";
 import { DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 
@@ -56,7 +58,7 @@ function TieMode() {
     <Shell>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <MicroLabel>Mode 03 · Tie</MicroLabel>
+          <MicroLabel>Mode 04 · Tie</MicroLabel>
           <h1 className="mt-2 text-[2rem] font-semibold leading-none tracking-[-0.03em]">
             {knot.name}
           </h1>
@@ -160,9 +162,9 @@ function TieMode() {
           </Panel>
 
           <Panel className="p-6">
-            <MicroLabel className="mb-1">Verify before you fish it</MicroLabel>
+            <MicroLabel className="mb-1">Verify before you load it</MicroLabel>
             <p className="mb-4 text-[0.8125rem] leading-relaxed text-muted-foreground">
-              Every line is pass or fail. One fail means retie — do not fish a knot you argued with.
+              Every line is pass or fail. One fail means retie — do not load a knot you argued with.
             </p>
             <ul className="space-y-px overflow-hidden rounded-lg border border-hairline bg-hairline">
               {[
@@ -187,6 +189,7 @@ function TieMode() {
             </ul>
             <Link
               to="/diagnose"
+              search={{ knot: knot.id }}
               className="mt-4 inline-block font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent underline underline-offset-4"
             >
               Something failed → run Diagnose
@@ -202,10 +205,9 @@ function TieMode() {
             </Panel>
           ) : null}
 
-          <Panel className="p-5">
-            <MicroLabel className="mb-3">Common mistakes</MicroLabel>
-            <Bullets items={knot.commonMistakes} marker="!" />
-          </Panel>
+          <HthInspectPlates knotId={knot.id} name={knot.name} />
+
+          <FailureModesPanel knot={knot} />
 
           <Panel className="p-5">
             <MicroLabel className="mb-3">Not ideal for</MicroLabel>
@@ -241,7 +243,7 @@ function TieMode() {
           >
             <MicroLabel className="text-accent">Already tied it?</MicroLabel>
             <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
-              Check the finished knot against its fingerprint before you fish it.
+              Check the finished knot against its fingerprint before you load it.
             </p>
           </Link>
         </div>

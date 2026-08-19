@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { APPLICATION_ID, ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
 import { PRODUCT_MONOGRAM, PRODUCT_NAME, PRODUCT_TAGLINE, PUBLISHER_NAME } from "@/domain/brand";
 import { knotsForDomain } from "@/data/catalog";
+import { catalogReviewDue } from "@/data/connection-model-meta";
 import { DomainSwitch } from "@/components/instrument/domain-switch";
-import { LocaleSwitch } from "@/components/instrument/locale-switch";
 import { AppearanceMenu } from "@/components/instrument/appearance-menu";
 import { Finder } from "@/components/instrument/finder";
 import { useT } from "@/i18n";
@@ -30,6 +30,7 @@ function ModeLink({ to, label, code }: { to: string; label: string; code: string
 export function Shell({ children, className }: { children: ReactNode; className?: string }) {
   const t = useT();
   const domain = useDomain();
+  const review = catalogReviewDue();
   const [finderOpen, setFinderOpen] = useState(false);
 
   useEffect(() => {
@@ -82,10 +83,10 @@ export function Shell({ children, className }: { children: ReactNode; className?
           >
             <ModeLink to="/" label={t("nav.decide")} code="01" />
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
-            <ModeLink to="/compare" label="Compare" code="03" />
-            <ModeLink to="/library" label={t("nav.library")} code="05" />
-            <ModeLink to="/applications" label={t("nav.applications")} code="07" />
-            <ModeLink to="/admin" label={t("nav.data")} code="04" />
+            <ModeLink to="/compare" label={t("nav.compare")} code="03" />
+            <ModeLink to="/library" label={t("nav.library")} code="04" />
+            <ModeLink to="/applications" label={t("nav.applications")} code="05" />
+            <ModeLink to="/admin" label={t("nav.data")} code="06" />
             <button
               type="button"
               onClick={() => setFinderOpen(true)}
@@ -96,7 +97,6 @@ export function Shell({ children, className }: { children: ReactNode; className?
               <Search size={15} aria-hidden="true" />
             </button>
             <AppearanceMenu />
-            <LocaleSwitch />
           </nav>
         </div>
       </header>
@@ -121,6 +121,11 @@ export function Shell({ children, className }: { children: ReactNode; className?
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
             {APPLICATION_ID} · {ENGINE_VERSION} · {KNOT_CATALOG_VERSION} ·{" "}
             {knotsForDomain(domain.id).length} knots · {domain.label}
+            {review.due
+              ? ` · review due · ${review.daysSince ?? "?"}d since ${review.newestReviewed ?? "unknown"}`
+              : review.newestReviewed
+                ? ` · reviewed ${review.newestReviewed}`
+                : ""}
           </p>
         </div>
       </footer>

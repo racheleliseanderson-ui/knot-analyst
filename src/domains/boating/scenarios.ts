@@ -53,6 +53,23 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
     },
   },
   {
+    id: "standing-eye",
+    title: "Standing eye in the end",
+    blurb:
+      "A fixed eye you will drop or clip. Collar must stay seated. An open bowline capsizes; a figure-eight jams after a snatch.",
+    tag: "Loops · standing eye",
+    connectionLine: "Fixed eye in the end",
+    likelyPick: "Bowline when you must untie; figure-eight when the eye must stay inspectable",
+    autoRun: true,
+    input: {
+      connection: "fixed-eye",
+      mainMaterial: "polyester",
+      needsUntie: true,
+      retieFrequency: "occasional",
+      proficiency: "beginner",
+    },
+  },
+  {
     id: "eye-over-post",
     title: "Finished eye dropped over a post",
     blurb: "A loop you already have, dropped over a piling. Both legs must share the load.",

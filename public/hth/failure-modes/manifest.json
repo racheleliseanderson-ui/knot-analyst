@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": "advanced-failure-modes.json",
+  "plateCount": 25,
+  "profiles": [
+    "fg-knot",
+    "palomar-knot",
+    "bimini-twist",
+    "blood-knot",
+    "alberto-knot",
+    "non-slip-loop-kreh-loop",
+    "double-uni-knot",
+    "albright-special",
+    "improved-clinch-knot",
+    "uni-grinner-knot",
+    "nanofil-knot",
+    "snell-knot-traditional",
+    "snell-knot-uni-version",
+    "haywire-twist",
+    "needle-knot",
+    "yucatan-knot",
+    "bristol-knot",
+    "fish-n-fool-knot",
+    "kryston-non-slip-loop-knot",
+    "loop-to-loop-connection",
+    "nail-knot",
+    "rapala-knot",
+    "seaguar-knot",
+    "spider-hitch",
+    "surgeons-knot"
+  ]
+}

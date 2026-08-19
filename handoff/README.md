@@ -1,6 +1,6 @@
 # Knot Analyst — Handoff Package (non-canonical)
 
-Source baseline: `racheleliseanderson-ui/knot-intelligence` @ `main` (live: knot-intelligence.vercel.app).
+Source baseline: `racheleliseanderson-ui/knot-analyst` @ `main` (live: https://knot.hookthehorizon.blog/).
 This directory is a **selective port map**, not a merge instruction. Nothing here is published,
 deployed, or connected to a canonical branch.
 

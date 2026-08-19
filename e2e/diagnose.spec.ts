@@ -80,4 +80,29 @@ test.describe("Diagnose", () => {
     await expect(page).toHaveURL(/\/\?.*connection=/);
     await expect(page.getByText("Knot decision card")).toBeVisible();
   });
+
+  test("naming the knot overlays modelled failsWhen and the finished plate", async ({ page }) => {
+    await page.goto("/diagnose");
+    await page
+      .getByRole("button", { name: /broke under load/i })
+      .first()
+      .click();
+    await page.getByLabel("Knot you tied").selectOption("palomar");
+    await page.getByRole("button", { name: /run diagnosis/i }).click();
+
+    await expect(page.getByText("Diagnosis card")).toBeVisible();
+    await expect(page.getByText(/The knot you named/i)).toBeVisible();
+    await expect(page.getByText("Fails when").first()).toBeVisible();
+    await expect(page.getByText(/Eye too small for doubled line/i).first()).toBeVisible();
+  });
+
+  test("a connection-implicated failure offers the Tackle handoff", async ({ page }) => {
+    await page.goto("/diagnose");
+    await page
+      .getByRole("button", { name: /let go at the join/i })
+      .first()
+      .click();
+    await expect(page.getByText("Diagnosis card")).toBeVisible();
+    await expect(page.getByRole("link", { name: /weakest link in Tackle/i })).toBeVisible();
+  });
 });

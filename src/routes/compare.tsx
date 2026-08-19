@@ -16,6 +16,9 @@ import { useSessionState } from "@/lib/session-state";
 import type { ChooseInput } from "@/domain/types";
 import { CONNECTION_LABELS, MATERIAL_LABELS } from "@/domain/types";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
+import { useDomain } from "@/domain/context";
+import { failsWhenFor } from "@/data/connection-model-meta";
+import { familyFor } from "@/data/family-failure";
 
 type Search = { a?: string; b?: string; as?: string; bs?: string; row?: string };
 const str = (v: unknown) => (typeof v === "string" && v.length ? v : undefined);
@@ -47,7 +50,7 @@ export const Route = createFileRoute("/compare")({
   component: CompareMode,
 });
 
-const TOGGLES: { key: keyof ChooseInput; label: string }[] = [
+const FISHING_TOGGLES: { key: keyof ChooseInput; label: string }[] = [
   { key: "mustPassGuides", label: "Guides" },
   { key: "windy", label: "Wind" },
   { key: "coldHands", label: "Cold hands" },
@@ -57,14 +60,22 @@ const TOGGLES: { key: keyof ChooseInput; label: string }[] = [
   { key: "needsUntie", label: "Must untie" },
 ];
 
+const BOATING_TOGGLES: { key: keyof ChooseInput; label: string }[] = [
+  { key: "mustPassGuides", label: "Fairleads" },
+  { key: "windy", label: "Wind" },
+  { key: "coldHands", label: "Cold / wet hands" },
+  { key: "lowLight", label: "Low light" },
+  { key: "needsUntie", label: "Must untie" },
+];
+
 const RETIES: NonNullable<ChooseInput["retieFrequency"]>[] = ["frequent", "occasional", "rare"];
 
 const btn =
   "ki-press inline-flex min-h-11 touch-manipulation items-center rounded-md border border-hairline px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-9";
 
-function summarise(i: Partial<ChooseInput>): string {
+function summarise(i: Partial<ChooseInput>, toggles: typeof FISHING_TOGGLES): string {
   const bits: string[] = [];
-  for (const t of TOGGLES) if (i[t.key]) bits.push(t.label.toLowerCase());
+  for (const t of toggles) if (i[t.key]) bits.push(t.label.toLowerCase());
   if (i.retieFrequency) bits.push(`${i.retieFrequency} retie`);
   return bits.length ? bits.join(" · ") : "no conditions declared";
 }
@@ -76,6 +87,7 @@ function SideEditor({
   onScenario,
   scenarioId,
   collapsed,
+  toggles,
 }: {
   side: "A" | "B";
   input: Partial<ChooseInput>;
@@ -83,6 +95,7 @@ function SideEditor({
   onScenario: (id: string) => void;
   scenarioId?: string;
   collapsed: boolean;
+  toggles: typeof FISHING_TOGGLES;
 }) {
   const scenarios = useScenarios();
   const tone = side === "A" ? "text-muted-foreground" : "text-accent";
@@ -123,14 +136,14 @@ function SideEditor({
 
       {collapsed ? (
         <p className="mt-3 text-[0.8125rem] leading-relaxed text-muted-foreground">
-          {summarise(input)}
+          {summarise(input, toggles)}
         </p>
       ) : (
         <>
           <div className="mt-4">
             <MicroLabel className="mb-2">Conditions</MicroLabel>
             <div className="flex flex-wrap gap-1.5">
-              {TOGGLES.map((tg) => (
+              {toggles.map((tg) => (
                 <Chip
                   key={String(tg.key)}
                   active={Boolean(input[tg.key])}
@@ -226,6 +239,18 @@ function AnswerCard({
         <div className="mt-4">
           <Bullets items={(failed ? card.watchFor : card.reasons).slice(0, 3)} />
         </div>
+        {!failed && result.ranked[0] ? (
+          <div className="mt-4">
+            <MicroLabel className="mb-2">Fails when</MicroLabel>
+            <Bullets
+              items={(
+                familyFor(result.ranked[0].knot.id)?.modes ??
+                failsWhenFor(result.ranked[0].knot.id, result.ranked[0].knot.commonMistakes)
+              ).slice(0, 3)}
+              marker="!"
+            />
+          </div>
+        ) : null}
         <div className="mt-4 flex flex-wrap gap-2 no-print">
           {result.ranked[0] ? (
             <>
@@ -672,6 +697,8 @@ function CompareMode() {
   const search = Route.useSearch();
   const navigate = useNavigate();
   const scenarios = useScenarios();
+  const domain = useDomain();
+  const toggles = domain.id === "boating" ? BOATING_TOGGLES : FISHING_TOGGLES;
 
   const seedA = decodeInput(search.a) ?? scenarios.find((s) => s.id === search.as)?.input;
   const seedB = decodeInput(search.b) ?? scenarios.find((s) => s.id === search.bs)?.input;
@@ -690,6 +717,18 @@ function CompareMode() {
   const [compact, setCompact] = useState(false);
   const frozenRef = useRef<ComparisonResult | null>(null);
   const [log, setLog] = useState<RunEntry[]>([]);
+
+  const firstDomain = useRef(domain.id);
+  useEffect(() => {
+    if (firstDomain.current === domain.id) return;
+    firstDomain.current = domain.id;
+    setA({});
+    setB({});
+    setIds({});
+    setLog([]);
+    frozenRef.current = null;
+    setFrozen(false);
+  }, [domain.id, setFrozen]);
 
   const ready = Boolean(a.connection && b.connection);
   const live = useMemo(
@@ -821,6 +860,7 @@ function CompareMode() {
             onScenario={(id) => pick("A", id)}
             scenarioId={ids.a}
             collapsed={compact}
+            toggles={toggles}
           />
           <SideEditor
             side="B"
@@ -829,6 +869,7 @@ function CompareMode() {
             onScenario={(id) => pick("B", id)}
             scenarioId={ids.b}
             collapsed={compact}
+            toggles={toggles}
           />
         </div>
       </section>

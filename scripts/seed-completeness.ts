@@ -12,6 +12,15 @@
  * Run: npx tsx scripts/seed-completeness.ts
  */
 import { FISHING_KNOTS, BOATING_KNOTS } from "../src/data/catalog";
+import { isBoilerplateDefectLabel, overlayKeys } from "../src/data/defect-assign";
+import { familyFor, families } from "../src/data/family-failure";
+import { failsWhenFor } from "../src/data/connection-model-meta";
+import { HTH_SLUG_BY_KNOT, platesFor } from "../src/data/hth-plates";
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const publicRoot = join(dirname(fileURLToPath(import.meta.url)), "../public");
 
 const all = [...FISHING_KNOTS, ...BOATING_KNOTS];
 const ids = new Set(all.map((k) => k.id));
@@ -62,6 +71,78 @@ for (const k of all) {
     k.fingerprint?.expectedCoilDistribution,
   ].filter(Boolean);
   if (verify.length < 4) fail(`${k.id}: fingerprint verify needs ≥4 lines`);
+  for (const d of k.fingerprint?.dangerousDefects ?? []) {
+    if (isBoilerplateDefectLabel(d.label)) {
+      fail(`${k.id}: generic defect "${d.label}" — fingerprint must name the geometry`);
+    }
+  }
+  if (!familyFor(k.id)) fail(`${k.id}: not in a failure family`);
+  if ((k.diagnostics ?? []).length < 2) {
+    fail(`${k.id}: diagnostics need ≥2 (have ${k.diagnostics.length})`);
+  }
+  const slug = HTH_SLUG_BY_KNOT[k.id];
+  if (slug) {
+    const plates = platesFor(k.id);
+    if (!plates) fail(`${k.id}: HTH slug ${slug} has no attached plate`);
+    for (const url of [plates?.diagnostics, plates?.failureModes, plates?.steps]) {
+      if (!url) continue;
+      const file = join(publicRoot, url.replace(/^\//, ""));
+      if (!existsSync(file)) fail(`${k.id}: missing attached plate ${file}`);
+    }
+  }
+}
+
+const GENERIC_FAILS = new Set([
+  "too few wraps",
+  "dry seat",
+  "incomplete seat",
+  "crossed wraps",
+  "incomplete lock",
+  "wrong tag path",
+  "uneven wraps",
+  "under-seating",
+  "loose finish",
+  "loose column",
+]);
+for (const k of all) {
+  const meta = failsWhenFor(k.id);
+  for (const line of meta) {
+    if (GENERIC_FAILS.has(line.trim().toLowerCase())) {
+      fail(`${k.id}: generic failsWhen "${line}" — name the geometry`);
+    }
+  }
+}
+
+for (const family of families()) {
+  if (family.modes.length < 2) fail(`${family.id}: family needs ≥2 failure modes`);
+  for (const id of family.members) {
+    if (!ids.has(id)) fail(`${family.id}: member ${id} is not in the catalog`);
+  }
+}
+
+const seenModes = new Map<string, string>();
+for (const family of families()) {
+  for (const mode of family.modes) {
+    const key = mode.trim().toLowerCase();
+    const prev = seenModes.get(key);
+    if (prev) fail(`family mode reused by ${family.id} and ${prev}: "${mode}"`);
+    seenModes.set(key, family.id);
+  }
+}
+
+const overlayByKnot = new Map<string, string[]>();
+for (const { knotId, key } of overlayKeys()) {
+  const list = overlayByKnot.get(knotId) ?? [];
+  list.push(key);
+  overlayByKnot.set(knotId, list);
+}
+for (const k of all) {
+  const overlay = overlayByKnot.get(k.id);
+  if (!overlay) continue;
+  const keys = new Set((k.fingerprint?.dangerousDefects ?? []).map((d) => d.observationKey));
+  for (const key of overlay) {
+    if (!keys.has(key)) fail(`${k.id}: overlay key "${key}" has no matching defect`);
+  }
 }
 
 if (failed === 0) {

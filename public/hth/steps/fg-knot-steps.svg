@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 720" role="img" aria-labelledby="title desc">
+<title id="title">FG Knot — six-move construction sequence</title>
+<desc id="desc">Step-by-step construction plate for the FG Knot. Use with the written profile; inspect the finished structure before fishing.</desc>
+<style>
+  .bg{fill:#F7F5EF}.panel{fill:#fff;stroke:#D8D4CA;stroke-width:2}
+  .title{font:800 26px system-ui,sans-serif;fill:#071827}
+  .kicker{font:700 12px system-ui,sans-serif;fill:#176F78;letter-spacing:.12em}
+  .step-num{font:800 14px system-ui,sans-serif;fill:#fff}
+  .step-label{font:700 13px system-ui,sans-serif;fill:#071827}
+  .note{font:500 12px system-ui,sans-serif;fill:#424546}
+  .badge{fill:#0F5660}
+  .footer{font:600 12px system-ui,sans-serif;fill:#5E6A71}
+</style>
+<rect class="bg" width="1160" height="720"/>
+<text x="40" y="42" class="kicker">HOOK THE HORIZON · STEP PLATE</text>
+<text x="40" y="76" class="title">FG Knot — six moves</text>
+
+<rect x="30" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="30" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="43" y="126" class="step-num">1</text>
+<text x="82" y="128" class="step-label">Form a long leader tag</text>
+<text x="46" y="290" class="note">Keep the leader straight as the weave host</text>
+<text x="46" y="308" class="note"></text>
+<rect x="400" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="400" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="413" y="126" class="step-num">2</text>
+<text x="452" y="128" class="step-label">Start the braid weave</text>
+<text x="416" y="290" class="note">Alternate under/over with even tension</text>
+<text x="416" y="308" class="note"></text>
+<rect x="770" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="770" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="783" y="126" class="step-num">3</text>
+<text x="822" y="128" class="step-label">Count the weave series</text>
+<text x="786" y="290" class="note">Do not reverse direction mid-series</text>
+<text x="786" y="308" class="note"></text>
+<rect x="30" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="30" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="43" y="386" class="step-num">4</text>
+<text x="82" y="388" class="step-label">Lock with half-hitches</text>
+<text x="46" y="550" class="note">Seat the weave before locking</text>
+<text x="46" y="568" class="note"></text>
+<rect x="400" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="400" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="413" y="386" class="step-num">5</text>
+<text x="452" y="388" class="step-label">Trim and dress tags</text>
+<text x="416" y="550" class="note">Remove shoulders that hang in guides</text>
+<text x="416" y="568" class="note"></text>
+<rect x="770" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="770" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="783" y="386" class="step-num">6</text>
+<text x="822" y="388" class="step-label">Pull-test progressively</text>
+<text x="786" y="550" class="note">Retie if the weave opens or leader crushes</text>
+<text x="786" y="568" class="note"></text>
+<text x="40" y="700" class="footer">Construction sequence schematic · verify with the finished-state diagnostic before fishing</text>
+</svg>
+
