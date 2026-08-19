@@ -12,6 +12,7 @@
  * Run: npx tsx scripts/seed-completeness.ts
  */
 import { FISHING_KNOTS, BOATING_KNOTS } from "../src/data/catalog";
+import { isBoilerplateDefectLabel, overlayKeys } from "../src/data/defect-assign";
 
 const all = [...FISHING_KNOTS, ...BOATING_KNOTS];
 const ids = new Set(all.map((k) => k.id));
@@ -62,6 +63,26 @@ for (const k of all) {
     k.fingerprint?.expectedCoilDistribution,
   ].filter(Boolean);
   if (verify.length < 4) fail(`${k.id}: fingerprint verify needs ≥4 lines`);
+  for (const d of k.fingerprint?.dangerousDefects ?? []) {
+    if (isBoilerplateDefectLabel(d.label)) {
+      fail(`${k.id}: generic defect "${d.label}" — fingerprint must name the geometry`);
+    }
+  }
+}
+
+const overlayByKnot = new Map<string, string[]>();
+for (const { knotId, key } of overlayKeys()) {
+  const list = overlayByKnot.get(knotId) ?? [];
+  list.push(key);
+  overlayByKnot.set(knotId, list);
+}
+for (const k of all) {
+  const overlay = overlayByKnot.get(k.id);
+  if (!overlay) continue;
+  const keys = new Set((k.fingerprint?.dangerousDefects ?? []).map((d) => d.observationKey));
+  for (const key of overlay) {
+    if (!keys.has(key)) fail(`${k.id}: overlay key "${key}" has no matching defect`);
+  }
 }
 
 if (failed === 0) {

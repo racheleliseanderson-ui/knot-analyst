@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Shell } from "@/components/instrument/shell";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
+import { FailureModesPanel } from "@/components/instrument/failure-modes";
 import { getKnot } from "@/data/catalog";
 import {
   EXTRA_DOMAIN_LABELS,
@@ -215,6 +216,9 @@ function KnotPage({ id }: { id: string }) {
             {diagramStepNote(k.diagramKind)}
           </p>
         </div>
+      </div>
+      <div className="mb-6">
+        <FailureModesPanel knot={k} />
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <Panel className="p-5">

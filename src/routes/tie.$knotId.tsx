@@ -4,8 +4,8 @@ import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { StepPlayer } from "@/components/instrument/step-player";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { VideoEmbed } from "@/components/instrument/video-embed";
+import { FailureModesPanel } from "@/components/instrument/failure-modes";
 import { getKnot } from "@/data/catalog";
-import { failsWhenFor } from "@/data/connection-model-meta";
 import { DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 
 export const Route = createFileRoute("/tie/$knotId")({
@@ -188,6 +188,7 @@ function TieMode() {
             </ul>
             <Link
               to="/diagnose"
+              search={{ knot: knot.id }}
               className="mt-4 inline-block font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent underline underline-offset-4"
             >
               Something failed → run Diagnose
@@ -203,10 +204,7 @@ function TieMode() {
             </Panel>
           ) : null}
 
-          <Panel className="p-5">
-            <MicroLabel className="mb-3">Fails when</MicroLabel>
-            <Bullets items={failsWhenFor(knot.id, knot.commonMistakes)} marker="!" />
-          </Panel>
+          <FailureModesPanel knot={knot} />
 
           <Panel className="p-5">
             <MicroLabel className="mb-3">Not ideal for</MicroLabel>
