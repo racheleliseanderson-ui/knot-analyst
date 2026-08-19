@@ -3,6 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 /**
  * Family-level failure modes on Diagram / Tie / Applications.
  * Diagnose still starts from the symptom even when a knot is named.
+ * HTH plates are the attached 0.3.19 package — not invented drawings.
  */
 
 const failOnPageErrors = (page: Page, sink: string[]) => {
@@ -23,6 +24,8 @@ test.describe("Failure modes", () => {
     await expect(page.getByText("Failure modes").first()).toBeVisible();
     await expect(page.getByText(/Wrong hitch path/i).first()).toBeVisible();
     await expect(page.getByText("Under-seated")).toHaveCount(0);
+    await expect(page.getByText(/HTH · Correct vs wrong/i).first()).toBeVisible();
+    await expect(page.getByRole("img", { name: /finished-state check/i })).toBeVisible();
     await expect(page.getByRole("link", { name: /this failed — start diagnose/i })).toBeVisible();
     expect(errors).toEqual([]);
   });
@@ -60,5 +63,11 @@ test.describe("Failure modes", () => {
     await expect(page.getByText("Diagnosis card")).toBeVisible();
     await expect(page.getByText(/modelled failure modes/i).first()).toBeVisible();
     expect(errors).toEqual([]);
+  });
+
+  test("Palomar shows the attached HTH four-mode plate", async ({ page }) => {
+    await page.goto("/diagram/palomar");
+    await expect(page.getByText(/HTH · Advanced failure modes/i).first()).toBeVisible();
+    await expect(page.getByRole("img", { name: /what fails and what to do/i })).toBeVisible();
   });
 });

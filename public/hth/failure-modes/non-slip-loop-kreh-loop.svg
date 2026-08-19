@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 720" role="img" aria-labelledby="title desc">
+<title id="title">Non-Slip Loop / Kreh advanced failure modes</title>
+<desc id="desc">Four advanced failure modes for Non-Slip Loop / Kreh: symptom, cause, action, and severity.</desc>
+<style>
+  .bg{fill:#F7F5EF}.panel{fill:#fff;stroke:#D8D4CA;stroke-width:2}
+  .title{font:800 28px system-ui,sans-serif;fill:#071827}
+  .kicker{font:700 12px system-ui,sans-serif;fill:#176F78;letter-spacing:.12em}
+  .head{font:700 14px system-ui,sans-serif;fill:#fff;letter-spacing:.08em}
+  .mode-title{font:800 18px system-ui,sans-serif;fill:#071827;text-transform:capitalize}
+  .label{font:700 11px system-ui,sans-serif;fill:#5E6A71;letter-spacing:.08em}
+  .body{font:500 14px system-ui,sans-serif;fill:#12202B}
+  .footer{font:600 12px system-ui,sans-serif;fill:#5E6A71}
+</style>
+<rect class="bg" width="1160" height="720"/>
+<text x="40" y="42" class="kicker">HOOK THE HORIZON · ADVANCED FAILURE MODES</text>
+<text x="40" y="78" class="title">Non-Slip Loop / Kreh — what fails and what to do</text>
+
+<rect x="30" y="110" width="535" height="260" rx="16" class="panel"/>
+<rect x="30" y="110" width="535" height="44" rx="16" fill="#176F78"/>
+<rect x="30" y="138" width="535" height="16" fill="#176F78"/>
+<text x="50" y="140" class="head">SEATING</text>
+<text x="50" y="182" class="mode-title">loop collapse</text>
+<text x="50" y="214" class="label">SYMPTOM</text>
+<text x="50" y="236" class="body">Loop size shrinks under a firm pull test.</text>
+<text x="50" y="266" class="label">CAUSE</text>
+<text x="50" y="288" class="body">Incorrect return path through the overhand or insufficient wraps.</text>
+<text x="50" y="318" class="label">ACTION · lost lure action</text>
+<text x="50" y="340" class="body">Retie holding loop size while seating; verify return path.</text>
+<rect x="595" y="110" width="535" height="260" rx="16" class="panel"/>
+<rect x="595" y="110" width="535" height="44" rx="16" fill="#0F5660"/>
+<rect x="595" y="138" width="535" height="16" fill="#0F5660"/>
+<text x="615" y="140" class="head">CONSTRUCTION</text>
+<text x="615" y="182" class="mode-title">wrap bunch</text>
+<text x="615" y="214" class="label">SYMPTOM</text>
+<text x="615" y="236" class="body">Wraps bunch or reverse during final draw.</text>
+<text x="615" y="266" class="label">CAUSE</text>
+<text x="615" y="288" class="body">Dry cinch or uneven wrap spacing.</text>
+<text x="615" y="318" class="label">ACTION · unstable loop</text>
+<text x="615" y="340" class="body">Wet, keep wraps ordered, draw steadily.</text>
+<rect x="30" y="400" width="535" height="260" rx="16" class="panel"/>
+<rect x="30" y="400" width="535" height="44" rx="16" fill="#C7A257"/>
+<rect x="30" y="428" width="535" height="16" fill="#C7A257"/>
+<text x="50" y="430" class="head">MATERIAL</text>
+<text x="50" y="472" class="mode-title">fluoro misuse</text>
+<text x="50" y="504" class="label">SYMPTOM</text>
+<text x="50" y="526" class="body">Stiff fluoro kinks or refuses to seat cleanly.</text>
+<text x="50" y="556" class="label">CAUSE</text>
+<text x="50" y="578" class="body">Material too stiff for the loop variant in hand.</text>
+<text x="50" y="608" class="label">ACTION · kink / weak seat</text>
+<text x="50" y="630" class="body">Use a fluoro-appropriate loop variant or different terminal strategy.</text>
+<rect x="595" y="400" width="535" height="260" rx="16" class="panel"/>
+<rect x="595" y="400" width="535" height="44" rx="16" fill="#D55C3E"/>
+<rect x="595" y="428" width="535" height="16" fill="#D55C3E"/>
+<text x="615" y="430" class="head">MISAPPLICATION</text>
+<text x="615" y="472" class="mode-title">wrong lure job</text>
+<text x="615" y="504" class="label">SYMPTOM</text>
+<text x="615" y="526" class="body">Loop used on a lure that needs a snug eye seat.</text>
+<text x="615" y="556" class="label">CAUSE</text>
+<text x="615" y="578" class="body">Loop applied where a tight terminal is safer (cover, trebles, etc.).</text>
+<text x="615" y="608" class="label">ACTION · foul / hang</text>
+<text x="615" y="630" class="body">Switch to Palomar/Uni/Clinch family for pinned terminals.</text>
+<text x="40" y="700" class="footer">Symptom → cause → action. Finished-state plates still apply for correct vs wrong visual checks.</text>
+</svg>
+

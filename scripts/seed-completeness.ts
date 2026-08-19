@@ -13,6 +13,12 @@
  */
 import { FISHING_KNOTS, BOATING_KNOTS } from "../src/data/catalog";
 import { isBoilerplateDefectLabel, overlayKeys } from "../src/data/defect-assign";
+import { HTH_SLUG_BY_KNOT, platesFor } from "../src/data/hth-plates";
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const publicRoot = join(dirname(fileURLToPath(import.meta.url)), "../public");
 
 const all = [...FISHING_KNOTS, ...BOATING_KNOTS];
 const ids = new Set(all.map((k) => k.id));
@@ -66,6 +72,19 @@ for (const k of all) {
   for (const d of k.fingerprint?.dangerousDefects ?? []) {
     if (isBoilerplateDefectLabel(d.label)) {
       fail(`${k.id}: generic defect "${d.label}" — fingerprint must name the geometry`);
+    }
+  }
+  if ((k.diagnostics ?? []).length < 2) {
+    fail(`${k.id}: diagnostics need ≥2 (have ${k.diagnostics.length})`);
+  }
+  const slug = HTH_SLUG_BY_KNOT[k.id];
+  if (slug) {
+    const plates = platesFor(k.id);
+    if (!plates) fail(`${k.id}: HTH slug ${slug} has no attached plate`);
+    for (const url of [plates?.diagnostics, plates?.failureModes, plates?.steps]) {
+      if (!url) continue;
+      const file = join(publicRoot, url.replace(/^\//, ""));
+      if (!existsSync(file)) fail(`${k.id}: missing attached plate ${file}`);
     }
   }
 }

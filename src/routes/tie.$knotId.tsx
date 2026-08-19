@@ -5,6 +5,7 @@ import { StepPlayer } from "@/components/instrument/step-player";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { VideoEmbed } from "@/components/instrument/video-embed";
 import { FailureModesPanel } from "@/components/instrument/failure-modes";
+import { HthInspectPlates } from "@/components/instrument/hth-plate";
 import { getKnot } from "@/data/catalog";
 import { DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 
@@ -203,6 +204,8 @@ function TieMode() {
               <Bullets items={knot.fieldNotes} marker="·" />
             </Panel>
           ) : null}
+
+          <HthInspectPlates knotId={knot.id} name={knot.name} />
 
           <FailureModesPanel knot={knot} />
 

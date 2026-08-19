@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 720" role="img" aria-labelledby="title desc">
+<title id="title">Uni / Grinner Knot — six-move construction sequence</title>
+<desc id="desc">Step-by-step construction plate for the Uni / Grinner Knot. Use with the written profile; inspect the finished structure before fishing.</desc>
+<style>
+  .bg{fill:#F7F5EF}
+  .panel{fill:#fff;stroke:#D8D4CA;stroke-width:2}
+  .title{font:800 26px system-ui,sans-serif;fill:#071827}
+  .kicker{font:700 12px system-ui,sans-serif;fill:#176F78;letter-spacing:.12em}
+  .step-num{font:800 14px system-ui,sans-serif;fill:#fff}
+  .step-label{font:700 13px system-ui,sans-serif;fill:#071827}
+  .note{font:500 12px system-ui,sans-serif;fill:#424546}
+  .line{fill:none;stroke:#176F78;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+  .line-navy{fill:none;stroke:#071827;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+  .line-gold{fill:none;stroke:#C7A257;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+  .dot{fill:#176F78}
+  .badge{fill:#0F5660}
+  .footer{font:600 12px system-ui,sans-serif;fill:#5E6A71}
+</style>
+<rect class="bg" width="1160" height="720"/>
+<text x="40" y="42" class="kicker">HOOK THE HORIZON · STEP PLATE</text>
+<text x="40" y="76" class="title">Uni / Grinner Knot — six moves</text>
+
+<rect x="30" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="30" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="43" y="126" class="step-num">1</text>
+<text x="82" y="128" class="step-label">Through the eye</text>
+<path class="line-navy" d="M145 220 h120"/>
+<circle class="dot" cx="275" cy="220" r="10"/>
+<text x="46" y="300" class="note">Pass tag through eye and back alongside</text>
+<text x="46" y="316" class="note">standing line</text>
+<rect x="400" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="400" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="413" y="126" class="step-num">2</text>
+<text x="452" y="128" class="step-label">Form the loop</text>
+<path class="line" d="M525 200 q40 0 40 40 t40 40"/>
+<path class="line-navy" d="M505 260 h140"/>
+<text x="416" y="300" class="note">Make a Uni loop with the tag</text>
+<rect x="770" y="100" width="350" height="230" rx="14" class="panel"/>
+<rect x="770" y="100" width="40" height="40" rx="10" class="badge"/>
+<text x="783" y="126" class="step-num">3</text>
+<text x="822" y="128" class="step-label">Wrap the pair</text>
+<path class="line" d="M905 190 a40 40 0 1 1 0 80 a40 40 0 1 1 0 -80"/>
+<path class="line-navy" d="M945 190 v60"/>
+<text x="786" y="300" class="note">Wrap tag through the loop around both</text>
+<text x="786" y="316" class="note">strands</text>
+<rect x="30" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="30" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="43" y="386" class="step-num">4</text>
+<text x="82" y="388" class="step-label">Close the barrel</text>
+<path class="line-gold" d="M155 480 h100"/>
+<path class="line" d="M175 455 q30 25 0 50"/>
+<text x="46" y="560" class="note">Pull tag to form a clean barrel</text>
+<rect x="400" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="400" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="413" y="386" class="step-num">5</text>
+<text x="452" y="388" class="step-label">Slide to the eye</text>
+<path class="line" d="M520 470 h110"/>
+<path class="line-navy" d="M535 495 h80"/>
+<circle class="dot" cx="630" cy="480" r="8"/>
+<text x="416" y="560" class="note">Slide the barrel to the hardware and</text>
+<text x="416" y="576" class="note">seat</text>
+<rect x="770" y="360" width="350" height="230" rx="14" class="panel"/>
+<rect x="770" y="360" width="40" height="40" rx="10" class="badge"/>
+<text x="783" y="386" class="step-num">6</text>
+<text x="822" y="388" class="step-label">Test and trim</text>
+<path class="line" d="M895 480 h70"/>
+<path class="line-navy" d="M965 480 h40"/>
+<path class="line-gold" d="M925 460 v40"/>
+<text x="786" y="560" class="note">Hard pull test; no creep; trim the</text>
+<text x="786" y="576" class="note">tag</text>
+<text x="40" y="700" class="footer">Construction sequence only. Confirm finished-state checks on the full profile before fishing.</text>
+</svg>

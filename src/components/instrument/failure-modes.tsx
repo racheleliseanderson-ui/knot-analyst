@@ -6,6 +6,8 @@ import { Link } from "@tanstack/react-router";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { failsWhenFor } from "@/data/connection-model-meta";
 import { getKnot } from "@/data/catalog";
+import { platesFor } from "@/data/hth-plates";
+import { HthPlate } from "@/components/instrument/hth-plate";
 import type { Knot } from "@/domain/types";
 
 export function FailureModesPanel({ knot }: { knot: Knot }) {
@@ -17,6 +19,7 @@ export function FailureModesPanel({ knot }: { knot: Knot }) {
     .filter((k): k is Knot => k != null)
     .filter((k) => k.id !== knot.id)
     .slice(0, 4);
+  const hth = platesFor(knot.id);
 
   return (
     <Panel className="p-5">
@@ -24,6 +27,16 @@ export function FailureModesPanel({ knot }: { knot: Knot }) {
       <p className="mb-4 max-w-2xl text-[0.8125rem] leading-relaxed text-muted-foreground">
         When this family fails, it fails as these. The recovered end still outranks the name.
       </p>
+
+      {hth?.failureModes ? (
+        <div className="mb-5">
+          <HthPlate
+            src={hth.failureModes}
+            title={`${knot.name} — what fails and what to do`}
+            kicker="HTH · Advanced failure modes"
+          />
+        </div>
+      ) : null}
 
       {modes.length ? (
         <div className="mb-5">

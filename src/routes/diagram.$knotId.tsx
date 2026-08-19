@@ -3,6 +3,7 @@ import { Shell } from "@/components/instrument/shell";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { KnotDiagram, describeDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { FailureModesPanel } from "@/components/instrument/failure-modes";
+import { HthInspectPlates } from "@/components/instrument/hth-plate";
 import { getKnot } from "@/data/catalog";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 import { useT } from "@/i18n";
@@ -174,6 +175,10 @@ function DiagramMode() {
           </li>
         ))}
       </ol>
+
+      <div className="mt-8">
+        <HthInspectPlates knotId={knot.id} name={knot.name} />
+      </div>
 
       <div className="mt-8">
         <FailureModesPanel knot={knot} />
