@@ -83,6 +83,13 @@ function TieMode() {
           >
             All diagrams
           </Link>
+          <Link
+            to="/applications/$id"
+            params={{ id: knot.id }}
+            className="min-h-[44px] inline-flex items-center font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground no-print"
+          >
+            Applications
+          </Link>
         </div>
       </div>
 

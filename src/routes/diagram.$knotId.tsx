@@ -82,6 +82,13 @@ function DiagramMode() {
             {t("library.plates")}
           </p>
           <Link
+            to="/applications/$id"
+            params={{ id: knot.id }}
+            className="inline-flex min-h-11 items-center font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+          >
+            {t("nav.applications")}
+          </Link>
+          <Link
             to="/tie/$knotId"
             params={{ knotId: knot.id }}
             className="inline-flex min-h-11 items-center rounded-md border border-hairline px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
