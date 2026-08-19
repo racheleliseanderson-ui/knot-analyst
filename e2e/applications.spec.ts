@@ -43,7 +43,7 @@ test.describe("Applications", () => {
       .click();
     await expect(page).toHaveURL(/\/applications\/bowline$/);
     await expect(page.getByRole("heading", { name: "Bowline" })).toBeVisible();
-    await expect(page.getByText(/same crossing pattern/i)).toBeVisible();
+    await expect(page.getByText(/same crossing pattern/i).first()).toBeVisible();
     await expect(page.getByText(/does not pick a knot/i).first()).toBeVisible();
 
     await page.getByRole("link", { name: /how to tie it/i }).click();
