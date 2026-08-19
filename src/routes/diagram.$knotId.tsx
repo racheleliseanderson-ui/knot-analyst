@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Shell } from "@/components/instrument/shell";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
-import { KnotDiagram, describeDiagram } from "@/components/instrument/diagram";
+import { KnotDiagram, describeDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { getKnot } from "@/data/catalog";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 import { useT } from "@/i18n";
@@ -108,6 +108,9 @@ function DiagramMode() {
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
             Finished structure
           </p>
+          <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+            {diagramStepNote(knot.diagramKind)}
+          </p>
         </div>
       </div>
 
@@ -127,9 +130,33 @@ function DiagramMode() {
                 Step {String(s.order).padStart(2, "0")}
               </p>
               <p className="mt-2 text-[0.9375rem] leading-relaxed">{s.instruction}</p>
+              <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                {diagramStepNote(knot.diagramKind, s.order)}
+              </p>
               {s.look || s.expectedResult ? (
-                <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
-                  {t("library.lookFor")}: {s.look ?? s.expectedResult}
+                <p className="mt-3 text-[0.8125rem] leading-relaxed">
+                  <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-affirm">
+                    Look for
+                  </span>
+                  <span className="mt-1 block text-foreground/85">
+                    {s.look ?? s.expectedResult}
+                  </span>
+                </p>
+              ) : null}
+              {s.failureMode ? (
+                <p className="mt-3 text-[0.8125rem] leading-relaxed">
+                  <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-destructive">
+                    Fails as
+                  </span>
+                  <span className="mt-1 block text-foreground/85">{s.failureMode}</span>
+                </p>
+              ) : null}
+              {s.quickFix ? (
+                <p className="mt-3 text-[0.8125rem] leading-relaxed">
+                  <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent">
+                    Quick fix
+                  </span>
+                  <span className="mt-1 block text-foreground/85">{s.quickFix}</span>
                 </p>
               ) : null}
               {s.tip ? (
@@ -137,7 +164,7 @@ function DiagramMode() {
                   {s.tip}
                 </p>
               ) : null}
-              {s.commonError ? (
+              {s.commonError && !s.failureMode ? (
                 <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                   Fails as: {s.commonError}
                 </p>

@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Shell } from "@/components/instrument/shell";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { StepPlayer } from "@/components/instrument/step-player";
-import { KnotDiagram } from "@/components/instrument/diagram";
+import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { VideoEmbed } from "@/components/instrument/video-embed";
 import { getKnot } from "@/data/catalog";
 import { DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
@@ -146,6 +146,9 @@ function TieMode() {
                 className="aspect-[400/220] w-full sm:aspect-[400/180]"
               />
             </div>
+            <p className="mb-4 text-[0.8125rem] leading-relaxed text-muted-foreground">
+              {diagramStepNote(knot.diagramKind)}
+            </p>
             <Bullets
               items={[
                 knot.fingerprint.expectedGeometry,

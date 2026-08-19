@@ -158,7 +158,8 @@ function LibraryMode() {
                     <KnotDiagram
                       kind={k.diagramKind}
                       title={`${k.name} — finished structure`}
-                      className="aspect-[400/180] h-full w-full"
+                      compact
+                      className="aspect-[400/160] h-full w-full"
                     />
                   </div>
                   <span className="flex min-w-0 flex-1 flex-col justify-between p-4">
