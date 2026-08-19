@@ -29,17 +29,17 @@ export const Route = createFileRoute("/compare")({
   }),
   head: () => ({
     meta: [
-      { title: "Quick compare — two scenarios, one engine | Knot Analyst" },
+      { title: "Quick compare — two jobs, side by side | Knot Analyst" },
       {
         name: "description",
         content:
-          "Run two connection scenarios side by side, then open any changed constraint to read the exact evidence — eliminations, score movement and the reverted probe run.",
+          "Run two jobs side by side. Tap a difference to see why the call changed.",
       },
-      { property: "og:title", content: "Quick compare — evidence for every constraint" },
+      { property: "og:title", content: "Quick compare — two jobs, side by side" },
       {
         property: "og:description",
         content:
-          "Side-by-side constraint comparison with a per-row evidence drilldown and explicit pipeline run controls.",
+          "See what changed between two jobs, and why one knot dropped out.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -369,7 +369,7 @@ function PipelineStrip({
         <div
           ref={toolbarRef}
           role="toolbar"
-          aria-label="Pipeline run controls"
+          aria-label="Compare run controls"
           aria-orientation="horizontal"
           onKeyDown={onToolbarKey}
           className="flex flex-wrap gap-2 no-print"
@@ -378,7 +378,7 @@ function PipelineStrip({
             type="button"
             onClick={onRerun}
             {...ctl(0)}
-            aria-label={`Re-run the pipeline. Current run ${comparison.runId}.`}
+            aria-label={`Run again. Current run ${comparison.runId}.`}
             className={btn}
           >
             Re-run
@@ -389,8 +389,8 @@ function PipelineStrip({
             {...ctl(1)}
             aria-label={
               revealed >= 4
-                ? "Step the pipeline. All four stages revealed; stepping restarts at stage 1."
-                : `Step the pipeline. Stage ${Math.min(revealed, 4)} of 4 revealed; next reveals ${comparison.stages[Math.min(revealed, 3)]?.label ?? "the next stage"}.`
+                ? "Step through the compare. All four stages are open; next step starts over."
+                : `Step through the compare. Stage ${Math.min(revealed, 4)} of 4 is open; next opens ${comparison.stages[Math.min(revealed, 3)]?.label ?? "the next stage"}.`
             }
             className={btn}
           >
@@ -403,8 +403,8 @@ function PipelineStrip({
             {...ctl(2)}
             aria-label={
               frozen
-                ? "Freeze pipeline. On — edits are held and not recomputed."
-                : "Freeze pipeline. Off — edits recompute immediately."
+                ? "Hold the compare. On — edits wait."
+                : "Hold the compare. Off — edits update right away."
             }
             className={btn + (frozen ? " border-caution/60 text-caution" : "")}
           >
@@ -729,10 +729,10 @@ function CompareMode() {
       <div className="mb-8">
         <MicroLabel className="text-accent">Mode 03 · Quick compare</MicroLabel>
         <h1 className="mt-2 max-w-3xl text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.02em]">
-          Two scenarios, one engine.
+          Two jobs, side by side.
           <br />
           <span className="text-muted-foreground">
-            Open any changed constraint to read the evidence behind it.
+            Tap a difference to see why the call changed.
           </span>
         </h1>
       </div>
@@ -810,8 +810,7 @@ function CompareMode() {
         <Panel className="mt-6 p-6">
           <MicroLabel className="mb-2">Nothing compares yet</MicroLabel>
           <p className="max-w-2xl text-[0.875rem] leading-relaxed text-muted-foreground">
-            Both sides need a declared connection job. Nothing scores on a guess — that rule holds
-            here exactly as it does in Decide.
+            Both sides need a job. We will not pick on a guess — same rule as Decide.
           </p>
         </Panel>
       ) : null}
@@ -885,8 +884,8 @@ function CompareMode() {
                 <div>
                   <MicroLabel>What changed</MicroLabel>
                   <p className="mt-1.5 max-w-2xl text-[0.8125rem] text-muted-foreground">
-                    Each row is re-run with that single field reverted to side A. Open a row for the
-                    eliminations, score movement and probe result behind the attribution.
+                    Each row is re-run with that one field set back to side A. Open a row to see
+                    which knots dropped out and why the call moved.
                   </p>
                 </div>
                 {deltas.length ? (

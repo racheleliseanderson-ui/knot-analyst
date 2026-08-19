@@ -142,10 +142,10 @@ function AdminMode() {
           Add data, not code.
         </h1>
         <p className="mt-3 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">
-          Scenarios, materials and connection jobs authored here appear in Decide immediately.
-          Every custom material and connection must declare the mechanical class it behaves like —
-          the engine only ever reasons in modelled classes, so nothing you add here can widen a
-          hard constraint. Drafts live in this browser; export JSON to move them anywhere.
+          Scenarios, lines and jobs you add here show up in Decide right away.
+          Every custom line and job has to say which known kind it behaves like —
+          we will not invent a new kind from a marketing name. Drafts stay in this
+          browser; export JSON to take them with you.
         </p>
         <p className="mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
           storage: {overlay.adapterName} · {overlay.ready ? "loaded" : "loading"} ·{" "}
@@ -443,7 +443,7 @@ function MaterialEditor() {
         <StepHead
           index="01"
           title="New material"
-          hint="A named line you actually fish, mapped to a modelled class."
+          hint="A line you actually fish, tied to the closest known kind."
         />
         <div className="space-y-4">
           <Field label="Display name">
@@ -456,7 +456,7 @@ function MaterialEditor() {
           </Field>
           <Field
             label="Behaves like"
-            hint="The engine reasons in this class. Choose the closest mechanical behaviour, not the marketing name."
+            hint="Pick the closest known behaviour, not the name on the spool."
           >
             <div className="flex flex-wrap gap-1.5">
               {BASE_MATERIALS.map((m) => (
@@ -550,7 +550,7 @@ function ConnectionEditor() {
         <StepHead
           index="01"
           title="New connection type"
-          hint="A job you name yourself, resolved to a modelled connection."
+          hint="A job you name yourself, tied to a knot kind we already cover."
         />
         <div className="space-y-4">
           <Field label="Display name">

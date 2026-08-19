@@ -21,7 +21,7 @@ export const PACKET_LABELS: Record<PacketVariant, string> = {
 
 export const PACKET_NOTES: Record<PacketVariant, string> = {
   brief: "One sheet. The call, the conditions, the named compromises, the fallback.",
-  field: "Everything in the brief, plus surviving options, readout, eliminations and the tying procedure.",
+  field: "Everything in the brief, plus the other knots, why they lost, and how to tie the one that won.",
 };
 
 const INK = { r: 17, g: 28, b: 36 };

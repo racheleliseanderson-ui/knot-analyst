@@ -19,7 +19,7 @@ export const Route = createFileRoute("/diagram/$knotId")({
         { title: `${name} — diagrams | Knot Analyst` },
         {
           name: "description",
-          content: `Field plates for ${name}. Open the tying procedure when you are ready to tie.`,
+          content: `Diagrams for ${name}. Open the steps when you are ready to tie.`,
         },
         { property: "og:title", content: `${name} — diagrams` },
         { property: "og:type", content: "article" },
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/diagram/$knotId")({
   notFoundComponent: () => (
     <Shell>
       <p className="text-sm text-muted-foreground">
-        No modelled diagram for that connection.{" "}
+        No diagram for that knot.{" "}
         <Link to="/library" className="text-accent underline underline-offset-4">
           Back to Library
         </Link>

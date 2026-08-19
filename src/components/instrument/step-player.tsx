@@ -65,11 +65,11 @@ export function StepPlayer({ knot }: { knot: Knot }) {
     <Panel
       className="rounded-lg print:hidden sm:overflow-hidden"
       role="group"
-      aria-roledescription="step player"
-      aria-label={`${knot.name} tying procedure`}
+      aria-roledescription="steps"
+      aria-label={`${knot.name} — how to tie it`}
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3">
-        <MicroLabel>Tying procedure — step {`${index + 1} / ${total}`}</MicroLabel>
+        <MicroLabel>How to tie it — step {`${index + 1} / ${total}`}</MicroLabel>
         <div className="hidden items-center gap-1.5 no-print sm:flex" role="tablist" aria-label="Steps">
           {steps.map((s, i) => (
             <button

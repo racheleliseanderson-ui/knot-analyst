@@ -14,15 +14,13 @@ export const Route = createFileRoute("/tie/$knotId")({
     return { id: knot.id, name: knot.name, summary: knot.mechanicsSummary };
   },
   head: ({ loaderData }) => {
-    const name = loaderData?.name ?? "Tying procedure";
-    const desc =
-      loaderData?.summary ??
-      "Step-by-step tying procedure with schematic diagram and failure points.";
+    const name = loaderData?.name ?? "How to tie it";
+    const desc = loaderData?.summary ?? "How to tie it, with a diagram and what to watch for.";
     return {
       meta: [
-        { title: `${name} — tying procedure | Knot Analyst` },
+        { title: `${name} — how to tie it | Knot Analyst` },
         { name: "description", content: desc.slice(0, 155) },
-        { property: "og:title", content: `${name} — tying procedure` },
+        { property: "og:title", content: `${name} — how to tie it` },
         { property: "og:description", content: desc.slice(0, 155) },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
@@ -40,7 +38,7 @@ export const Route = createFileRoute("/tie/$knotId")({
   notFoundComponent: () => (
     <Shell>
       <p className="text-sm text-muted-foreground">
-        No modelled procedure for that connection.{" "}
+        No tying steps for that knot.{" "}
         <Link to="/library" className="text-accent underline underline-offset-4">
           Back to Library
         </Link>

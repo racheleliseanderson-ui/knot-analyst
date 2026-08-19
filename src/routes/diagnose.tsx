@@ -33,13 +33,13 @@ export const Route = createFileRoute("/diagnose")({
   }),
   head: () => ({
     meta: [
-      { title: "Diagnose a failed connection | Knot Analyst" },
+      { title: "Diagnose a failed knot | Knot Analyst" },
       {
         name: "description",
         content:
-          "Symptom-first failure diagnosis: break location, recovered-end forensics, and the material system narrow the cause. Fishing and rope work stay on their own discipline.",
+          "Start from what broke. Where it let go and what the end looks like tell you more than the knot name. Fishing and boat knots stay apart.",
       },
-      { property: "og:title", content: "Diagnose a failed connection" },
+      { property: "og:title", content: "Diagnose a failed knot" },
       {
         property: "og:description",
         content:
@@ -495,8 +495,8 @@ function DiagnoseMode() {
                     "Break location separates line damage from knot geometry from hardware damage.",
                     "A tip wrap, riding turn, bite-off, or shock snap is often not a knot-family failure.",
                     "Material system separates user error from a family that was never rated for that line.",
-                    "Connection type weights the causes; it does not filter a catalog.",
-                    "Anything the model cannot verify is reported as unverified, not as a pass.",
+                    "The job weights the causes; it does not hide a knot.",
+                    "If we cannot check it, we say so — we do not call it a pass.",
                   ]}
                 />
               </Panel>

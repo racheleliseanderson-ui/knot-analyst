@@ -110,16 +110,16 @@ export function Shell({ children, className }: { children: ReactNode; className?
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-3 px-5 py-6 sm:px-8">
           <div className="max-w-md space-y-1">
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Decide and diagnose first. The modelled catalogue is also browsable without a form.
-              Invalid options never score. Unsuitable recommendations fail closed.
+              Run Decide or Diagnose when you need a call or something failed. Or just open a knot
+              and tie it. Unsuitable recommendations fail closed.
             </p>
             <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/60">
               {PRODUCT_NAME} · {PRODUCT_TAGLINE}
             </p>
           </div>
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
-            {APPLICATION_ID} · {ENGINE_VERSION} · catalog {KNOT_CATALOG_VERSION} ·{" "}
-            {knotsForDomain(domain.id).length} modelled connections · {domain.label}
+            {APPLICATION_ID} · {ENGINE_VERSION} · {KNOT_CATALOG_VERSION} ·{" "}
+            {knotsForDomain(domain.id).length} knots · {domain.label}
           </p>
         </div>
       </footer>
