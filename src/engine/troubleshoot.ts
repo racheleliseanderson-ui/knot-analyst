@@ -10,6 +10,7 @@ import {
   type FailureEvent,
 } from "@/data/failure-playbook";
 import { getKnot } from "@/data/catalog";
+import { failsWhenFor } from "@/data/connection-model-meta";
 import { runFinishedCheck } from "@/engine/diagnostics";
 import type {
   CheckResult,
@@ -83,6 +84,8 @@ export interface TroubleshootResult {
   findings: LayeredFinding[];
   knotCheck?: CheckResult;
   relatedKnot?: Knot;
+  /** Modelled failsWhen for the named knot — empty unless knotId was set. */
+  failsWhen?: string[];
 }
 
 function fid(prefix: string) {
@@ -814,6 +817,7 @@ export function runTroubleshoot(input: TroubleshootInput): TroubleshootResult {
 
   let knotCheck: CheckResult | undefined;
   let relatedKnot: Knot | undefined;
+  let namedFailsWhen: string[] | undefined;
   let confidence: FindingConfidence = "moderate";
 
   // Context chips raise confidence; full knot fingerprint can raise further
@@ -826,6 +830,20 @@ export function runTroubleshoot(input: TroubleshootInput): TroubleshootResult {
   if (input.knotId) {
     relatedKnot = getKnot(input.knotId);
     if (relatedKnot) {
+      namedFailsWhen = failsWhenFor(relatedKnot.id, relatedKnot.commonMistakes);
+      likelyCauses.push(...namedFailsWhen);
+      findings.push({
+        id: fid("fail"),
+        severity: "watch",
+        title: `${relatedKnot.name} — modelled failure modes`,
+        observation: namedFailsWhen.slice(0, 4).join(" · "),
+        implication:
+          "These are when this family is known to fail. The recovered end still outranks the name.",
+        nextAction: "Check these modes against what you still have in hand.",
+        rationale: "Connection model failsWhen — not a library lookup.",
+        confidence: "high",
+        category: "diagnostics",
+      });
       knotCheck = runFinishedCheck(relatedKnot, {
         knotId: relatedKnot.id,
         observations: input.observations ?? [],
@@ -923,7 +941,7 @@ export function runTroubleshoot(input: TroubleshootInput): TroubleshootResult {
     title: play.title,
     plainSummary: `${play.title}. ${play.retieWhen}`,
     meaning: play.meaning,
-    likelyCauses: uniq(likelyCauses).slice(0, 10),
+    likelyCauses: uniq([...(namedFailsWhen ?? []), ...likelyCauses]).slice(0, 10),
     checks: uniq(checks).slice(0, 10),
     fixes: uniq(fixes).slice(0, 10),
     retieDecision,
@@ -941,5 +959,6 @@ export function runTroubleshoot(input: TroubleshootInput): TroubleshootResult {
     findings,
     knotCheck,
     relatedKnot,
+    failsWhen: namedFailsWhen,
   };
 }

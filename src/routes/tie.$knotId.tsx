@@ -5,6 +5,7 @@ import { StepPlayer } from "@/components/instrument/step-player";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { VideoEmbed } from "@/components/instrument/video-embed";
 import { getKnot } from "@/data/catalog";
+import { failsWhenFor } from "@/data/connection-model-meta";
 import { DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 
 export const Route = createFileRoute("/tie/$knotId")({
@@ -203,8 +204,8 @@ function TieMode() {
           ) : null}
 
           <Panel className="p-5">
-            <MicroLabel className="mb-3">Common mistakes</MicroLabel>
-            <Bullets items={knot.commonMistakes} marker="!" />
+            <MicroLabel className="mb-3">Fails when</MicroLabel>
+            <Bullets items={failsWhenFor(knot.id, knot.commonMistakes)} marker="!" />
           </Panel>
 
           <Panel className="p-5">

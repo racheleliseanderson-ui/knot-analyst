@@ -11,6 +11,7 @@ import type { ChooseResult } from "@/domain/types";
 import { DIMENSION_LABELS } from "@/domain/types";
 import type { Counterfactual, DecisionCard, Tradeoff } from "@/engine/advisor";
 import { getKnot } from "@/data/catalog";
+import { failsWhenFor } from "@/data/connection-model-meta";
 import { diagramStepNote } from "@/components/instrument/diagram";
 
 export type PacketVariant = "brief" | "field";
@@ -353,10 +354,11 @@ export async function generateDecisionPacket({
       }
     }
 
-    if (knot.commonMistakes.length) {
+    const failModes = failsWhenFor(knot.id, knot.commonMistakes);
+    if (failModes.length) {
       rule();
-      micro("Common mistakes");
-      bullets(knot.commonMistakes.slice(0, 8), "×");
+      micro("Fails when");
+      bullets(failModes.slice(0, 8), "!");
     }
     if (knot.fieldNotes?.length) {
       rule();
