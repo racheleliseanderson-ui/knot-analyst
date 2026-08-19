@@ -20,3 +20,9 @@ jobs:
         run: bunx tsx scripts/schema-regression.ts
       - name: Catalog gold-standard schema
         run: bunx tsx scripts/validate-catalog.ts
+      - name: Seed / teaching-record completeness
+        run: bunx tsx scripts/seed-completeness.ts
+      - name: Diagnose completeness
+        run: bunx tsx scripts/diagnose-completeness.ts
+      - name: Applications completeness
+        run: bunx tsx scripts/applications-completeness.ts
