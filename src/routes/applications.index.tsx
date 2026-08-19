@@ -57,7 +57,7 @@ export const Route = createFileRoute("/applications/")({
 function ApplicationsMode() {
   const t = useT();
   const domain = useDomain();
-  const navigate = useNavigate({ from: "/applications" });
+  const navigate = useNavigate({ from: "/applications/" });
   const search = Route.useSearch();
   const q = search.q ?? "";
   const tangle = search.class;
