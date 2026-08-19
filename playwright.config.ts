@@ -1,8 +1,10 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Production-like e2e: the app is built and served by the same worker runtime
- * the deployed site uses (nitro cloudflare output via wrangler), not vite dev.
+ * Production-like e2e: the app is built first, then served by `vite preview`
+ * of the nitro `.output` (same preview nitro prints after `vite build`).
+ * Wrangler/workerd is skipped — its compatibility_date lags the calendar
+ * and fails CI when Nitro stamps today's date.
  */
 const PORT = Number(process.env["E2E_PORT"] ?? 8788);
 const baseURL = process.env["E2E_BASE_URL"] ?? `http://127.0.0.1:${PORT}`;
