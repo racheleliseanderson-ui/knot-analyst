@@ -9,7 +9,7 @@
 export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
-export const KNOT_CATALOG_VERSION = "2026-08-18.2";
+export const KNOT_CATALOG_VERSION = "2026-08-19.1";
 export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
 export const ENGINE_VERSION = "mech-intel-1.3.0";
 
@@ -57,11 +57,7 @@ export type LineMaterial =
   | "natural";
 
 export type DiameterRelation =
-  | "similar"
-  | "main-thinner"
-  | "main-much-thinner"
-  | "main-thicker"
-  | "extreme-mismatch";
+  "similar" | "main-thinner" | "main-much-thinner" | "main-thicker" | "extreme-mismatch";
 
 export type Difficulty = "beginner" | "intermediate" | "advanced";
 
@@ -80,11 +76,7 @@ export type FindingConfidence = "low" | "moderate" | "high";
 
 /** Central field-mode outputs for finished-knot checks */
 export type RetieDecision =
-  | "cosmetic"
-  | "watch"
-  | "retie-recommended"
-  | "retie-now"
-  | "cannot-verify";
+  "cosmetic" | "watch" | "retie-recommended" | "retie-now" | "cannot-verify";
 
 /** Field-fit dimension keys (Layer 2 ranking) */
 export const FIELD_FIT_DIMENSIONS = [
@@ -308,20 +300,51 @@ export type DiagramKind =
   | "terminal-palomar"
   | "terminal-uni"
   | "terminal-snell"
+  | "terminal-davy"
+  | "terminal-turle"
+  | "terminal-clinch"
+  | "terminal-improved"
+  | "terminal-trilene"
+  | "terminal-pitzen"
+  | "terminal-jansik"
+  | "terminal-jam"
+  | "terminal-egg"
+  | "terminal-knotless"
   | "line-join"
+  | "line-blood"
+  | "line-surgeons"
+  | "line-albright"
   | "braid-leader-fg"
   | "braid-leader-alberto"
   | "loop-fixed"
   | "loop-nonslip"
   | "loop-dropper"
+  | "loop-handshake"
+  | "loop-rapala"
   | "double-line"
   | "fly-line-coil"
   | "arbor-spool"
   | "rope-cleat"
   | "rope-hitch"
+  | "rope-hitch-round"
+  | "rope-hitch-clove"
+  | "rope-hitch-rolling"
+  | "rope-hitch-pile"
+  | "rope-hitch-buntline"
+  | "rope-hitch-icicle"
+  | "rope-timber"
+  | "rope-trucker"
   | "rope-bend"
+  | "rope-bend-zeppelin"
+  | "rope-bend-carrick"
+  | "rope-reef"
   | "rope-loop"
+  | "rope-loop-figure8"
+  | "rope-loop-butterfly"
+  | "rope-loop-bight"
   | "rope-stopper"
+  | "rope-stopper-ashley"
+  | "rope-heaving"
   | "generic";
 
 /** Schematics the renderer draws as first-class families. `generic` is fallback only. */
@@ -330,20 +353,51 @@ export const MODELLED_DIAGRAM_KINDS = [
   "terminal-palomar",
   "terminal-uni",
   "terminal-snell",
+  "terminal-davy",
+  "terminal-turle",
+  "terminal-clinch",
+  "terminal-improved",
+  "terminal-trilene",
+  "terminal-pitzen",
+  "terminal-jansik",
+  "terminal-jam",
+  "terminal-egg",
+  "terminal-knotless",
   "line-join",
+  "line-blood",
+  "line-surgeons",
+  "line-albright",
   "braid-leader-fg",
   "braid-leader-alberto",
   "loop-fixed",
   "loop-nonslip",
   "loop-dropper",
+  "loop-handshake",
+  "loop-rapala",
   "double-line",
   "fly-line-coil",
   "arbor-spool",
   "rope-cleat",
   "rope-hitch",
+  "rope-hitch-round",
+  "rope-hitch-clove",
+  "rope-hitch-rolling",
+  "rope-hitch-pile",
+  "rope-hitch-buntline",
+  "rope-hitch-icicle",
+  "rope-timber",
+  "rope-trucker",
   "rope-bend",
+  "rope-bend-zeppelin",
+  "rope-bend-carrick",
+  "rope-reef",
   "rope-loop",
+  "rope-loop-figure8",
+  "rope-loop-butterfly",
+  "rope-loop-bight",
   "rope-stopper",
+  "rope-stopper-ashley",
+  "rope-heaving",
 ] as const satisfies readonly DiagramKind[];
 
 export interface Knot extends KnotContent {

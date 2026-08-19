@@ -38,6 +38,7 @@ import { HOW_TO_EXTRAS, MICRO_EXTRAS } from "../src/data/how-to-extras";
 import { KNOT_VIDEOS } from "../src/data/videos";
 import type { KnotContent } from "../src/domain/types";
 import { MODELLED_DIAGRAM_KINDS } from "../src/domain/types";
+import { getMechanics } from "../src/data/mechanics";
 
 const VALID_JOBS = new Set([
   "line-to-hook",
@@ -171,17 +172,22 @@ function checkContent(id: string, c: KnotContent) {
   if (!CATEGORIES.has(c.category)) fail(`${id}: category invalid (${c.category})`);
   if (!Array.isArray(c.bestFor) || c.bestFor.length < 1) fail(`${id}: bestFor needs ≥1`);
   if (!c.goodFor || c.goodFor.length < 20) fail(`${id}: goodFor too thin`);
-  if (!Array.isArray(c.notIdealFor) || c.notIdealFor.length < 1) fail(`${id}: notIdealFor needs ≥1`);
-  if (!Array.isArray(c.lineMaterials) || c.lineMaterials.length < 1) fail(`${id}: lineMaterials required`);
+  if (!Array.isArray(c.notIdealFor) || c.notIdealFor.length < 1)
+    fail(`${id}: notIdealFor needs ≥1`);
+  if (!Array.isArray(c.lineMaterials) || c.lineMaterials.length < 1)
+    fail(`${id}: lineMaterials required`);
   if (!DIFFICULTY.has(c.difficulty)) fail(`${id}: difficulty invalid`);
-  if (!Array.isArray(c.materialsNeeded) || c.materialsNeeded.length < 1) fail(`${id}: materialsNeeded required`);
+  if (!Array.isArray(c.materialsNeeded) || c.materialsNeeded.length < 1)
+    fail(`${id}: materialsNeeded required`);
   if (!c.howToSummary || c.howToSummary.length < 20) fail(`${id}: howToSummary too thin`);
   if (!c.strengthRetentionTypical || c.strengthRetentionTypical.length < 16) {
     fail(`${id}: strengthRetentionTypical required (cited band, not a single figure)`);
   }
   if (!Array.isArray(c.steps) || c.steps.length < 3) fail(`${id}: steps need ≥3`);
-  if (!Array.isArray(c.commonMistakes) || c.commonMistakes.length < 1) fail(`${id}: commonMistakes required`);
-  if (!Array.isArray(c.diagnostics) || c.diagnostics.length < 1) fail(`${id}: diagnostics required`);
+  if (!Array.isArray(c.commonMistakes) || c.commonMistakes.length < 1)
+    fail(`${id}: commonMistakes required`);
+  if (!Array.isArray(c.diagnostics) || c.diagnostics.length < 1)
+    fail(`${id}: diagnostics required`);
   if (!Array.isArray(c.resources) || c.resources.length < 1) fail(`${id}: resources required`);
   if (!Array.isArray(c.relatedKnots)) fail(`${id}: relatedKnots must be array`);
   if (!Array.isArray(c.tags) || c.tags.length < 1) fail(`${id}: tags required`);
@@ -198,11 +204,14 @@ function checkMechanicsContract(id: string) {
     if (!VALID_JOBS.has(f)) fail(`${id}: invalid ConnectionJob "${f}"`);
   }
   if (!m.completeness?.decisionModel) fail(`${id}: completeness.decisionModel must be true`);
-  if (!m.completeness?.mechanicalFingerprint) fail(`${id}: completeness.mechanicalFingerprint must be true`);
-  if (!m.mechanicsSummary || m.mechanicsSummary.length < 12) fail(`${id}: mechanicsSummary too thin`);
-  if (!m.fingerprint?.dangerousDefects?.length) fail(`${id}: fingerprint.dangerousDefects required`);
+  if (!m.completeness?.mechanicalFingerprint)
+    fail(`${id}: completeness.mechanicalFingerprint must be true`);
+  if (!m.mechanicsSummary || m.mechanicsSummary.length < 12)
+    fail(`${id}: mechanicsSummary too thin`);
+  if (!m.fingerprint?.dangerousDefects?.length)
+    fail(`${id}: fingerprint.dangerousDefects required`);
   if (!m.observations?.length) fail(`${id}: observations required`);
-  const kind = m.diagramKind;
+  const kind = getMechanics(id)?.diagramKind ?? m.diagramKind;
   if (!kind) fail(`${id}: diagramKind required`);
   else if (!(MODELLED_DIAGRAM_KINDS as readonly string[]).includes(kind)) {
     fail(`${id}: diagramKind "${kind}" is not an implemented schematic (no generic fallback)`);
@@ -216,7 +225,8 @@ function checkTieBuild(id: string, c: KnotContent) {
     return;
   }
   if (!how.beforeYouStart?.length) fail(`${id}: how-to beforeYouStart required`);
-  if (!how.seatingSequence || how.seatingSequence.length < 3) fail(`${id}: how-to seatingSequence needs ≥3 phases`);
+  if (!how.seatingSequence || how.seatingSequence.length < 3)
+    fail(`${id}: how-to seatingSequence needs ≥3 phases`);
   if (!how.fieldNotes?.length) fail(`${id}: how-to fieldNotes required`);
 
   const stepDepth = how.steps ?? {};
@@ -280,8 +290,6 @@ if (failed === 0) {
 
 console.log(report.join("\n"));
 console.log(
-  failed === 0
-    ? "\nCatalog validation PASSED"
-    : `\nCatalog validation FAILED (${failed})`,
+  failed === 0 ? "\nCatalog validation PASSED" : `\nCatalog validation FAILED (${failed})`,
 );
 process.exit(failed === 0 ? 0 : 1);

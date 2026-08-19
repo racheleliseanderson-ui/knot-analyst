@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import type { Knot, KnotStep } from "@/domain/types";
-import { KnotDiagram, describeDiagram } from "@/components/instrument/diagram";
+import { KnotDiagram, describeDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { MicroLabel, Panel } from "@/components/instrument/primitives";
 import { cn } from "@/lib/utils";
 
@@ -103,6 +103,9 @@ export function StepPlayer({ knot }: { knot: Knot }) {
             description={`${diagramDescription} This step: ${current.instruction}`}
             className="aspect-[400/230] w-full transition-opacity duration-200 motion-reduce:transition-none sm:aspect-[400/180]"
           />
+          <p className="mt-2 px-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+            {diagramStepNote(knot.diagramKind, index + 1)}
+          </p>
           <div className="mt-2">
             <button
               type="button"
