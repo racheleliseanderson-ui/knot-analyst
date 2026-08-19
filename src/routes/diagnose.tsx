@@ -9,7 +9,13 @@ import {
   StepHead,
   Verdict,
 } from "@/components/instrument/primitives";
-import { runTroubleshoot, type TroubleshootInput } from "@/engine/troubleshoot";
+import {
+  runTroubleshoot,
+  type TroubleshootInput,
+  type TroubleshootResult,
+} from "@/engine/troubleshoot";
+import { runChooser } from "@/engine/chooser";
+import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { diagnosisToDecide, encodeInput } from "@/lib/handoff";
 import {
   END_LOOK_LABELS,
@@ -544,6 +550,30 @@ function DiagnoseMode() {
                   </p>
                 </div>
 
+                {result.relatedKnot ? (
+                  <div className="overflow-hidden border-t border-hairline bg-surface-2/40">
+                    <KnotDiagram
+                      kind={result.relatedKnot.diagramKind}
+                      title={`${result.relatedKnot.name} — finished structure`}
+                      className="aspect-[400/180] w-full sm:aspect-[400/150]"
+                    />
+                    <div className="border-t border-hairline px-6 py-3">
+                      <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
+                        The knot you named · {result.relatedKnot.name}
+                      </p>
+                      <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                        {diagramStepNote(result.relatedKnot.diagramKind)}
+                      </p>
+                      {result.knotCheck ? (
+                        <p className="mt-2 text-[0.8125rem] leading-relaxed text-foreground/85">
+                          Fingerprint: {result.knotCheck.retieDecision.replace(/-/g, " ")}. The
+                          recovered end still outranks this name.
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+
                 <div className="grid gap-px bg-hairline sm:grid-cols-3">
                   <div className="bg-card px-6 py-5">
                     <MicroLabel className="mb-3">Likely causes</MicroLabel>
@@ -610,6 +640,8 @@ function DiagnoseMode() {
                 </div>
               </Panel>
 
+              <ReplacementCandidates result={result} />
+
               {result.findings.length ? (
                 <Panel className="p-6">
                   <MicroLabel className="mb-4">Evidence trail</MicroLabel>
@@ -651,5 +683,74 @@ function DiagnoseMode() {
         </div>
       </div>
     </Shell>
+  );
+}
+
+/**
+ * Visual next-knots after a diagnosis. The failure still does not pick a knot;
+ * these are what Decide would rank if the same job were declared.
+ */
+function ReplacementCandidates({ result }: { result: TroubleshootResult }) {
+  const job = result.decideSearch?.connection;
+  const ranked = useMemo(() => {
+    if (!job) return [];
+    const r = runChooser({
+      connection: job,
+      mainMaterial: result.decideSearch?.mainMaterial,
+      secondaryMaterial: result.decideSearch?.secondaryMaterial,
+      diameterRelation: result.decideSearch?.diameterRelation,
+    });
+    return r.ranked.slice(0, 3);
+  }, [job, result.decideSearch]);
+
+  if (!job || ranked.length === 0) return null;
+
+  return (
+    <Panel className="p-6">
+      <MicroLabel className="mb-1">What Decide would look at next</MicroLabel>
+      <p className="mb-4 max-w-2xl text-[0.8125rem] leading-relaxed text-muted-foreground">
+        The diagnosis did not pick these. Same job and materials, scored — so you can see the
+        geometry before you rebuild.
+      </p>
+      <ul className="grid gap-3 sm:grid-cols-3">
+        {ranked.map((o, idx) => (
+          <li key={o.knot.id}>
+            <article className="panel overflow-hidden">
+              <KnotDiagram
+                kind={o.knot.diagramKind}
+                compact
+                title={`${o.knot.name} — finished structure`}
+                className="aspect-[400/180] w-full bg-surface-2/40"
+              />
+              <div className="border-t border-hairline p-3">
+                <p className="font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                  {String(idx + 1).padStart(2, "0")} · {o.fieldFitPercent}% field fit
+                </p>
+                <p className="mt-1 text-[0.9375rem] font-semibold tracking-tight">{o.knot.name}</p>
+                <p className="mt-1 line-clamp-2 text-[0.75rem] leading-relaxed text-muted-foreground">
+                  {diagramStepNote(o.knot.diagramKind)}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-3">
+                  <Link
+                    to="/diagram/$knotId"
+                    params={{ knotId: o.knot.id }}
+                    className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                  >
+                    Diagrams
+                  </Link>
+                  <Link
+                    to="/tie/$knotId"
+                    params={{ knotId: o.knot.id }}
+                    className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent hover:text-foreground"
+                  >
+                    Tie it
+                  </Link>
+                </div>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </Panel>
   );
 }
