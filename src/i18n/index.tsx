@@ -8,6 +8,7 @@ import { usePrefs, type Locale } from "@/lib/prefs";
 const en = {
   "nav.decide": "Decide",
   "nav.diagnose": "Diagnose",
+  "nav.compare": "Compare",
   "nav.data": "Data",
   "nav.library": "Library",
   "nav.applications": "Applications",
@@ -56,7 +57,7 @@ const en = {
   "boating.body":
     "Boating words are on, but there are no boat knots to pick yet. We will not guess.",
   skip: "Skip to content",
-  "library.mode": "Mode 05 · Library",
+  "library.mode": "Mode 04 · Library",
   "library.title": "The knots",
   "library.lede":
     "Every fishing and boat knot we cover. Open a diagram or the steps — you don’t have to run Decide first.",
@@ -69,7 +70,7 @@ const en = {
   "library.lookFor": "Look for",
   "library.related": "Related knots",
   "library.plates": "steps",
-  "applications.mode": "Mode 07 · Applications",
+  "applications.mode": "Mode 05 · Applications",
   "applications.title": "Where the theory applies",
   "applications.lede":
     "What the physics actually says about these knots — and what it must never pick for you. This page does not run Decide.",
@@ -93,6 +94,7 @@ type Key = keyof typeof en;
 const es: Record<Key, string> = {
   "nav.decide": "Decidir",
   "nav.diagnose": "Diagnosticar",
+  "nav.compare": "Comparar",
   "nav.data": "Datos",
   "nav.library": "Biblioteca",
   "nav.applications": "Aplicaciones",
@@ -141,7 +143,7 @@ const es: Record<Key, string> = {
   "boating.body":
     "Las palabras de náutica están, pero aún no hay nudos de barco que elegir. No vamos a adivinar.",
   skip: "Ir al contenido",
-  "library.mode": "Modo 05 · Biblioteca",
+  "library.mode": "Modo 04 · Biblioteca",
   "library.title": "Los nudos",
   "library.lede":
     "Todos los nudos de pesca y de barco que cubrimos. Abre un diagrama o los pasos — no hace falta pasar por Decidir primero.",
@@ -154,7 +156,7 @@ const es: Record<Key, string> = {
   "library.lookFor": "Busca",
   "library.related": "Nudos relacionados",
   "library.plates": "pasos",
-  "applications.mode": "Modo 07 · Aplicaciones",
+  "applications.mode": "Modo 05 · Aplicaciones",
   "applications.title": "Dónde aplica la teoría",
   "applications.lede":
     "Lo que la física dice de verdad sobre estos nudos — y lo que nunca debe elegirte el nudo. Esta página no ejecuta Decidir.",

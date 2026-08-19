@@ -7,7 +7,6 @@ import { PRODUCT_MONOGRAM, PRODUCT_NAME, PRODUCT_TAGLINE, PUBLISHER_NAME } from 
 import { knotsForDomain } from "@/data/catalog";
 import { catalogReviewDue } from "@/data/connection-model-meta";
 import { DomainSwitch } from "@/components/instrument/domain-switch";
-import { LocaleSwitch } from "@/components/instrument/locale-switch";
 import { AppearanceMenu } from "@/components/instrument/appearance-menu";
 import { Finder } from "@/components/instrument/finder";
 import { useT } from "@/i18n";
@@ -84,10 +83,10 @@ export function Shell({ children, className }: { children: ReactNode; className?
           >
             <ModeLink to="/" label={t("nav.decide")} code="01" />
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
-            <ModeLink to="/compare" label="Compare" code="03" />
-            <ModeLink to="/library" label={t("nav.library")} code="05" />
-            <ModeLink to="/applications" label={t("nav.applications")} code="07" />
-            <ModeLink to="/admin" label={t("nav.data")} code="04" />
+            <ModeLink to="/compare" label={t("nav.compare")} code="03" />
+            <ModeLink to="/library" label={t("nav.library")} code="04" />
+            <ModeLink to="/applications" label={t("nav.applications")} code="05" />
+            <ModeLink to="/admin" label={t("nav.data")} code="06" />
             <button
               type="button"
               onClick={() => setFinderOpen(true)}
@@ -98,7 +97,6 @@ export function Shell({ children, className }: { children: ReactNode; className?
               <Search size={15} aria-hidden="true" />
             </button>
             <AppearanceMenu />
-            <LocaleSwitch />
           </nav>
         </div>
       </header>
