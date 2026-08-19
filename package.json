@@ -14,7 +14,7 @@
     "test:catalog": "tsx scripts/validate-catalog.ts",
     "test": "tsx scripts/schema-regression.ts && tsx scripts/validate-catalog.ts && tsx scripts/diagnose-completeness.ts && tsx scripts/seed-completeness.ts && tsx scripts/applications-completeness.ts",
     "e2e": "playwright test",
-    "e2e:serve": "wrangler dev -c .output/server/wrangler.json --ip 127.0.0.1 --compatibility-date 2026-08-01",
+    "e2e:serve": "node scripts/e2e-serve.mjs",
     "e2e:build": "vite build"
   },
   "dependencies": {
