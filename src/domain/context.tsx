@@ -11,13 +11,7 @@ import { usePrefs } from "@/lib/prefs";
 
 const DomainContext = createContext<KnotDomain | null>(null);
 
-export function DomainProvider({
-  domain,
-  children,
-}: {
-  domain?: KnotDomain;
-  children: ReactNode;
-}) {
+export function DomainProvider({ domain, children }: { domain?: KnotDomain; children: ReactNode }) {
   const { domain: pref } = usePrefs();
   const active = domain ?? domainById(pref);
   return <DomainContext.Provider value={active}>{children}</DomainContext.Provider>;

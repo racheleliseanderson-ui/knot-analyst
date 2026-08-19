@@ -11,6 +11,7 @@ I rendered every mode at 390px wide. Nothing overflows — Decide, Diagnose, Dat
 - Header nav labels stay full-length at 390px, crowding the theme toggle.
 
 ### Fixes
+
 - Sticky step bar on small screens: step counter, Prev/Next and progress dots pinned to the bottom of the viewport while the player is on screen.
 - Horizontal swipe on the diagram area to advance/reverse steps (keyboard arrows stay).
 - Enlarge dots and buttons to 44px hit areas without changing their visual size.

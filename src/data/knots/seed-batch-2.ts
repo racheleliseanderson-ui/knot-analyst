@@ -18,7 +18,8 @@ export const SEED_BATCH_2: KnotContent[] = [
       "Equal-diameter mono joins (Blood / Double Uni)",
     ],
     lineMaterials: ["braid", "mixed"],
-    strengthRetentionTypical: "High band when seated; technique-sensitive like other braid-leader joins",
+    strengthRetentionTypical:
+      "High band when seated; technique-sensitive like other braid-leader joins",
     difficulty: "intermediate",
     materialsNeeded: ["Braid main (often doubled)", "Heavier mono or fluoro leader"],
     toolsHelpful: ["Clippers"],
@@ -31,16 +32,19 @@ export const SEED_BATCH_2: KnotContent[] = [
       },
       {
         order: 2,
-        instruction: "Double a section of braid and pass the loop through both openings of the figure-8.",
+        instruction:
+          "Double a section of braid and pass the loop through both openings of the figure-8.",
       },
       {
         order: 3,
-        instruction: "Wrap the doubled braid down the leader several times, then back toward the figure-8.",
+        instruction:
+          "Wrap the doubled braid down the leader several times, then back toward the figure-8.",
         tip: "Keep wraps parallel and snug — gaps kill retention.",
       },
       {
         order: 4,
-        instruction: "Pass the braid loop back through the figure-8 gap, moisten, and seat by opposing pull on braid and leader.",
+        instruction:
+          "Pass the braid loop back through the figure-8 gap, moisten, and seat by opposing pull on braid and leader.",
       },
       {
         order: 5,
@@ -58,7 +62,11 @@ export const SEED_BATCH_2: KnotContent[] = [
         symptom: "Braid walks off the leader",
         likelyCauses: ["Under-wrapped", "Incomplete seat", "Figure-8 never locked"],
         checks: ["Wrap density", "Pull-test before fishing"],
-        fixes: ["Retie with more wraps", "Seat wet and hard", "Consider FG when practice time allows"],
+        fixes: [
+          "Retie with more wraps",
+          "Seat wet and hard",
+          "Consider FG when practice time allows",
+        ],
         severity: "stop",
         confidence: "high",
       },
@@ -93,7 +101,8 @@ export const SEED_BATCH_2: KnotContent[] = [
       "Situations where the hitch can work loose under cyclic load without inspection",
     ],
     lineMaterials: ["mono", "fluoro", "braid"],
-    strengthRetentionTypical: "High on mono/fluoro when formed correctly; treat as a practical double, not a magic 100% claim",
+    strengthRetentionTypical:
+      "High on mono/fluoro when formed correctly; treat as a practical double, not a magic 100% claim",
     difficulty: "intermediate",
     materialsNeeded: ["Enough line to form a long bight"],
     howToSummary:
@@ -105,15 +114,18 @@ export const SEED_BATCH_2: KnotContent[] = [
       },
       {
         order: 2,
-        instruction: "Wrap the bight around both standing legs several times (typically 5–8+ depending on line).",
+        instruction:
+          "Wrap the bight around both standing legs several times (typically 5–8+ depending on line).",
       },
       {
         order: 3,
-        instruction: "Pass the working loop through the remaining opening and pull standing lines to seat the hitch column.",
+        instruction:
+          "Pass the working loop through the remaining opening and pull standing lines to seat the hitch column.",
       },
       {
         order: 4,
-        instruction: "Confirm the double holds under a firm pull; trim only if a separate tag exists.",
+        instruction:
+          "Confirm the double holds under a firm pull; trim only if a separate tag exists.",
       },
     ],
     commonMistakes: [
@@ -162,7 +174,8 @@ export const SEED_BATCH_2: KnotContent[] = [
       "Equal thin mono tippet joins (Blood / Surgeon)",
     ],
     lineMaterials: ["fly-line", "mono", "fluoro", "mixed"],
-    strengthRetentionTypical: "Typically high 80s to low 90s of the weaker side when wraps are even and seated",
+    strengthRetentionTypical:
+      "Typically high 80s to low 90s of the weaker side when wraps are even and seated",
     difficulty: "intermediate",
     materialsNeeded: ["Fly line end", "Leader", "Nail, tube, or needle as form"],
     toolsHelpful: ["Nail or hollow tube", "Clippers"],
@@ -171,7 +184,8 @@ export const SEED_BATCH_2: KnotContent[] = [
     steps: [
       {
         order: 1,
-        instruction: "Lay the leader parallel to the fly-line tip with a nail or tube as a temporary form.",
+        instruction:
+          "Lay the leader parallel to the fly-line tip with a nail or tube as a temporary form.",
       },
       {
         order: 2,
@@ -179,7 +193,8 @@ export const SEED_BATCH_2: KnotContent[] = [
       },
       {
         order: 3,
-        instruction: "Pass the leader tag through the path left by the tool; remove the tool and slide the coil onto the fly line.",
+        instruction:
+          "Pass the leader tag through the path left by the tool; remove the tool and slide the coil onto the fly line.",
       },
       {
         order: 4,

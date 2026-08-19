@@ -1,10 +1,5 @@
 import { Chip, MicroLabel } from "@/components/instrument/primitives";
-import {
-  activeRegion,
-  broadRegions,
-  fineRegionsFor,
-  type DomainRegion,
-} from "@/domain/region";
+import { activeRegion, broadRegions, fineRegionsFor, type DomainRegion } from "@/domain/region";
 import { useT } from "@/i18n";
 
 /**

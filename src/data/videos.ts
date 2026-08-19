@@ -333,7 +333,7 @@ export const KNOT_VIDEOS: Record<string, KnotVideo> = {
   willis: {
     provider: "youtube",
     id: "ge0VCeJOdc4",
-    title: "How to tie a Willis Knot a/k/a \"The Leadcore Knot\"",
+    title: 'How to tie a Willis Knot a/k/a "The Leadcore Knot"',
     channel: "vikingrainmaker",
   },
   "kryston-loop": {

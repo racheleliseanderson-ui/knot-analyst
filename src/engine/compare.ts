@@ -187,9 +187,10 @@ export function runComparison(a: ChooseInput, b: ChooseInput): ComparisonResult 
       fitImpact: topFit(rb) - topFit(probe),
       probeKnot: topName(probe),
       probeFit: topFit(probe),
-      kind: eliminatedByField.length || probe.eliminated.length !== rb.eliminated.length
-        ? "hard"
-        : "soft",
+      kind:
+        eliminatedByField.length || probe.eliminated.length !== rb.eliminated.length
+          ? "hard"
+          : "soft",
       eliminatedByField,
       ...(refOption ? { referenceKnot: refOption.knot.name } : {}),
       dimensionDeltas,

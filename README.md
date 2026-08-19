@@ -6,7 +6,7 @@ A decision and diagnosis instrument for fishing and boat connections — not a h
 - Vercel: https://knot-analyst.vercel.app
 - GitHub: https://github.com/racheleliseanderson-ui/knot-analyst
 
-Catalog `2026-08-19.1` · 86 modelled connections (56 fishing · 30 boating).
+Catalog `2026-08-19.3` · 86 modelled connections (56 fishing · 30 boating).
 
 ---
 
@@ -105,8 +105,8 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git clone https://github.com/racheleliseanderson-ui/knot-analyst.git
+cd knot-analyst
 npm i
 npm run dev
 ```

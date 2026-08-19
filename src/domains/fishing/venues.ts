@@ -16,7 +16,8 @@ export const FISHING_WATERBODIES: DomainVenue[] = [
     conditions: { mustPassGuides: true, windy: true, retieFrequency: "frequent" },
     punishes:
       "Bulk. A profile that survives a boat deck grinds through guides all day in the surf and shock-loads on every cast.",
-    watch: "The join, after twenty casts — fuzzing on the leader side means abrasion, not knot failure.",
+    watch:
+      "The join, after twenty casts — fuzzing on the leader side means abrasion, not knot failure.",
     fix: "Shorter leader, slimmer join, and retie on a schedule instead of on evidence.",
   },
   {

@@ -48,13 +48,7 @@ export type MaterialTreatment =
   | "unspecified";
 
 export type MaterialRole =
-  | "main-line"
-  | "leader"
-  | "tippet"
-  | "fly-line"
-  | "backing"
-  | "shock-leader"
-  | "unspecified";
+  "main-line" | "leader" | "tippet" | "fly-line" | "backing" | "shock-leader" | "unspecified";
 
 export interface MaterialSpec {
   /** The angler-facing category this spec came from */
@@ -343,7 +337,9 @@ export function terminationAdvice(
     };
   }
 
-  const heavyWire = specs.find((s) => s.construction === "wire-7x7" || s.construction === "wire-1x7");
+  const heavyWire = specs.find(
+    (s) => s.construction === "wire-7x7" || s.construction === "wire-1x7",
+  );
   if (heavyWire && heavyWire.treatment !== "nylon-coated") {
     return {
       method: "crimp",

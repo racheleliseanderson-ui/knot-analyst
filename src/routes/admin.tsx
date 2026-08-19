@@ -142,10 +142,9 @@ function AdminMode() {
           Add data, not code.
         </h1>
         <p className="mt-3 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">
-          Scenarios, lines and jobs you add here show up in Decide right away.
-          Every custom line and job has to say which known kind it behaves like —
-          we will not invent a new kind from a marketing name. Drafts stay in this
-          browser; export JSON to take them with you.
+          Scenarios, lines and jobs you add here show up in Decide right away. Every custom line and
+          job has to say which known kind it behaves like — we will not invent a new kind from a
+          marketing name. Drafts stay in this browser; export JSON to take them with you.
         </p>
         <p className="mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
           storage: {overlay.adapterName} · {overlay.ready ? "loaded" : "loading"} ·{" "}
@@ -193,12 +192,17 @@ function ScenarioEditor() {
 
   const add = () => {
     if (!title.trim()) return setError("A scenario needs a title.");
-    if (!input.connection) return setError("A scenario needs a connection job — nothing runs without it.");
+    if (!input.connection)
+      return setError("A scenario needs a connection job — nothing runs without it.");
     if (!input.mainMaterial)
-      return setError("Declare a main material. A scenario that omits it scores a different question.");
+      return setError(
+        "Declare a main material. A scenario that omits it scores a different question.",
+      );
     const id = slugify(title);
-    if (data.scenarios.some((s) => s.id === id)) return setError("A scenario with that name already exists.");
-    if (blurb.trim().length > 220) return setError("Keep the blurb under 220 characters — it is a chip, not a page.");
+    if (data.scenarios.some((s) => s.id === id))
+      return setError("A scenario with that name already exists.");
+    if (blurb.trim().length > 220)
+      return setError("Keep the blurb under 220 characters — it is a chip, not a page.");
     const next: CustomScenario = {
       id,
       title: title.trim(),
@@ -344,7 +348,9 @@ function ScenarioEditor() {
                   <Chip
                     key={r}
                     active={input.retieFrequency === r}
-                    onClick={() => set({ retieFrequency: input.retieFrequency === r ? undefined : r })}
+                    onClick={() =>
+                      set({ retieFrequency: input.retieFrequency === r ? undefined : r })
+                    }
                   >
                     {r}
                   </Chip>
@@ -395,13 +401,13 @@ function ScenarioEditor() {
             {data.scenarios
               .filter((s) => matches(q, s.title, s.tag, s.blurb))
               .map((s) => (
-              <Row
-                key={s.id}
-                title={s.title}
-                sub={`${CONNECTION_LABELS[s.input.connection]} · ${s.tag}`}
-                onDelete={() => setScenarios(data.scenarios.filter((x) => x.id !== s.id))}
-              />
-            ))}
+                <Row
+                  key={s.id}
+                  title={s.title}
+                  sub={`${CONNECTION_LABELS[s.input.connection]} · ${s.tag}`}
+                  onDelete={() => setScenarios(data.scenarios.filter((x) => x.id !== s.id))}
+                />
+              ))}
           </div>
         )}
       </Panel>
@@ -421,7 +427,8 @@ function MaterialEditor() {
 
   const add = () => {
     if (!label.trim()) return setError("A material needs a display name.");
-    if (label.trim().length < 3) return setError("Give it a name you would recognise on the water.");
+    if (label.trim().length < 3)
+      return setError("Give it a name you would recognise on the water.");
     const id = slugify(label);
     if (!id) return setError("That name has no usable characters.");
     if (data.materials.some((m) => m.id === id)) return setError("That material already exists.");
@@ -501,13 +508,13 @@ function MaterialEditor() {
             {data.materials
               .filter((m) => matches(q, m.label, m.note, m.behavesLike))
               .map((m) => (
-              <Row
-                key={m.id}
-                title={m.label}
-                sub={`behaves like ${MATERIAL_LABELS[m.behavesLike]}`}
-                onDelete={() => setMaterials(data.materials.filter((x) => x.id !== m.id))}
-              />
-            ))}
+                <Row
+                  key={m.id}
+                  title={m.label}
+                  sub={`behaves like ${MATERIAL_LABELS[m.behavesLike]}`}
+                  onDelete={() => setMaterials(data.materials.filter((x) => x.id !== m.id))}
+                />
+              ))}
           </div>
         )}
       </Panel>
@@ -530,7 +537,8 @@ function ConnectionEditor() {
     if (!label.trim()) return setError("A connection type needs a display name.");
     const id = slugify(label);
     if (!id) return setError("That name has no usable characters.");
-    if (data.connections.some((c) => c.id === id)) return setError("That connection already exists.");
+    if (data.connections.some((c) => c.id === id))
+      return setError("That connection already exists.");
     const next: CustomConnection = {
       id,
       label: label.trim(),
@@ -609,13 +617,13 @@ function ConnectionEditor() {
             {data.connections
               .filter((c) => matches(q, c.label, c.group, c.note))
               .map((c) => (
-              <Row
-                key={c.id}
-                title={c.label}
-                sub={`${c.group} · behaves like ${CONNECTION_LABELS[c.behavesLike]}`}
-                onDelete={() => setConnections(data.connections.filter((x) => x.id !== c.id))}
-              />
-            ))}
+                <Row
+                  key={c.id}
+                  title={c.label}
+                  sub={`${c.group} · behaves like ${CONNECTION_LABELS[c.behavesLike]}`}
+                  onDelete={() => setConnections(data.connections.filter((x) => x.id !== c.id))}
+                />
+              ))}
           </div>
         )}
       </Panel>

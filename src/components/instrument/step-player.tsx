@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import type { Knot, KnotStep } from "@/domain/types";
 import { KnotDiagram, describeDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { MicroLabel, Panel } from "@/components/instrument/primitives";
@@ -53,270 +59,276 @@ export function StepPlayer({ knot }: { knot: Knot }) {
 
   if (!current) return null;
 
-  const defect = knot.fingerprint.dangerousDefects.filter(
-    (d) => d.stepWhere === current.order,
-  );
+  const defect = knot.fingerprint.dangerousDefects.filter((d) => d.stepWhere === current.order);
 
   const hasMicro = Boolean(current.look || current.failureMode || current.quickFix);
   const diagramDescription = describeDiagram(knot.diagramKind, index + 1, total);
 
   return (
     <>
-    <Panel
-      className="rounded-lg print:hidden sm:overflow-hidden"
-      role="group"
-      aria-roledescription="steps"
-      aria-label={`${knot.name} — how to tie it`}
-    >
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3">
-        <MicroLabel>How to tie it — step {`${index + 1} / ${total}`}</MicroLabel>
-        <div className="hidden items-center gap-1.5 no-print sm:flex" role="tablist" aria-label="Steps">
-          {steps.map((s, i) => (
-            <button
-              key={s.order}
-              type="button"
-              role="tab"
-              aria-label={`Step ${i + 1} of ${total}`}
-              aria-selected={i === index}
-              aria-current={i === index ? "step" : undefined}
-              onClick={() => goTo(i)}
-              className={cn(
-                "relative h-1.5 rounded-full transition-all after:absolute after:-inset-y-5 after:-inset-x-1 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                i === index ? "w-6 bg-primary" : "w-3 bg-surface-2 hover:bg-border",
-              )}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="grid gap-px bg-hairline lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <div
-          className="touch-pan-y select-none bg-surface-2/40 p-4"
-          onPointerDown={onPointerDown}
-          onPointerUp={onPointerUp}
-        >
-          <KnotDiagram
-            kind={knot.diagramKind}
-            step={index + 1}
-            focus
-            title={`${knot.name} — step ${index + 1} of ${total}: ${current.instruction}`}
-            description={`${diagramDescription} This step: ${current.instruction}`}
-            className="aspect-[400/230] w-full transition-opacity duration-200 motion-reduce:transition-none sm:aspect-[400/180]"
-          />
-          <p className="mt-2 px-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-            {diagramStepNote(knot.diagramKind, index + 1)}
-          </p>
-          <div className="mt-2">
-            <button
-              type="button"
-              onClick={() => setDescribeOpen((v) => !v)}
-              aria-expanded={describeOpen}
-              className="flex min-h-[44px] w-full items-center justify-between gap-3 rounded-md px-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <MicroLabel>Describe diagram</MicroLabel>
-              <span
-                aria-hidden="true"
+      <Panel
+        className="rounded-lg print:hidden sm:overflow-hidden"
+        role="group"
+        aria-roledescription="steps"
+        aria-label={`${knot.name} — how to tie it`}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3">
+          <MicroLabel>How to tie it — step {`${index + 1} / ${total}`}</MicroLabel>
+          <div
+            className="hidden items-center gap-1.5 no-print sm:flex"
+            role="tablist"
+            aria-label="Steps"
+          >
+            {steps.map((s, i) => (
+              <button
+                key={s.order}
+                type="button"
+                role="tab"
+                aria-label={`Step ${i + 1} of ${total}`}
+                aria-selected={i === index}
+                aria-current={i === index ? "step" : undefined}
+                onClick={() => goTo(i)}
                 className={cn(
-                  "font-mono text-[0.625rem] text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
-                  describeOpen && "rotate-90",
+                  "relative h-1.5 rounded-full transition-all after:absolute after:-inset-y-5 after:-inset-x-1 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                  i === index ? "w-6 bg-primary" : "w-3 bg-surface-2 hover:bg-border",
                 )}
-              >
-                ▸
-              </span>
-            </button>
-            {describeOpen ? (
-              <p className="motion-safe:animate-fade-in px-1 pb-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
-                {diagramDescription}
-              </p>
-            ) : null}
+              />
+            ))}
           </div>
-          <p className="mt-1 text-center font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground/60 sm:hidden">
-            swipe to step
-          </p>
         </div>
 
-        <div
-          key={index}
-          className="bg-card px-5 py-5 motion-safe:animate-[ki-step_240ms_ease-out]"
-          style={{ ["--ki-step-from" as string]: dir === 1 ? "10px" : "-10px" }}
-          aria-live="polite"
-        >
-          <p className="sr-only">
-            Step {index + 1} of {total}
-          </p>
-          <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
-            {String(current.order).padStart(2, "0")}
-          </p>
-          <p className="mt-2 text-[1.0625rem] leading-snug tracking-tight text-foreground">
-            {current.instruction}
-          </p>
-
-          {current.detail ? (
-            <p className="mt-3 text-[0.8125rem] leading-relaxed text-muted-foreground">
-              {current.detail}
+        <div className="grid gap-px bg-hairline lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <div
+            className="touch-pan-y select-none bg-surface-2/40 p-4"
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+          >
+            <KnotDiagram
+              kind={knot.diagramKind}
+              step={index + 1}
+              focus
+              title={`${knot.name} — step ${index + 1} of ${total}: ${current.instruction}`}
+              description={`${diagramDescription} This step: ${current.instruction}`}
+              className="aspect-[400/230] w-full transition-opacity duration-200 motion-reduce:transition-none sm:aspect-[400/180]"
+            />
+            <p className="mt-2 px-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+              {diagramStepNote(knot.diagramKind, index + 1)}
             </p>
-          ) : null}
-
-          {current.expectedResult ? (
-            <div className="mt-4 border-l-2 border-primary/60 pl-3">
-              <MicroLabel className="text-primary">You should now see</MicroLabel>
-              <p className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
-                {current.expectedResult}
-              </p>
-            </div>
-          ) : null}
-
-          {current.tip ? (
-            <div className="mt-4 border-l-2 border-accent/60 pl-3">
-              <MicroLabel className="text-accent">Tension / control</MicroLabel>
-              <p className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
-                {current.tip}
-              </p>
-            </div>
-          ) : null}
-
-          {current.commonError ? (
-            <div className="mt-4 border-l-2 border-caution/60 pl-3">
-              <MicroLabel className="text-caution">Common error here</MicroLabel>
-              <p className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
-                {current.commonError}
-              </p>
-            </div>
-          ) : null}
-
-          {hasMicro ? (
-            <div className="mt-4 overflow-hidden rounded-md border border-hairline">
+            <div className="mt-2">
               <button
                 type="button"
-                onClick={() => setMicroOpen((v) => !v)}
-                aria-expanded={microOpen}
-                className="flex min-h-[44px] w-full items-center justify-between gap-3 bg-surface-2/40 px-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+                onClick={() => setDescribeOpen((v) => !v)}
+                aria-expanded={describeOpen}
+                className="flex min-h-[44px] w-full items-center justify-between gap-3 rounded-md px-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <MicroLabel>Micro how-to</MicroLabel>
+                <MicroLabel>Describe diagram</MicroLabel>
                 <span
                   aria-hidden="true"
                   className={cn(
                     "font-mono text-[0.625rem] text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
-                    microOpen && "rotate-90",
+                    describeOpen && "rotate-90",
                   )}
                 >
                   ▸
                 </span>
               </button>
-              {microOpen ? (
-                <dl className="motion-safe:animate-fade-in space-y-3 border-t border-hairline px-3 py-3">
-                  {current.look ? (
-                    <div>
-                      <dt className="label-micro text-affirm">✓ Look for</dt>
-                      <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
-                        {current.look}
-                      </dd>
-                    </div>
-                  ) : null}
-                  {current.failureMode ? (
-                    <div>
-                      <dt className="label-micro text-destructive">× Fails as</dt>
-                      <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
-                        {current.failureMode}
-                      </dd>
-                    </div>
-                  ) : null}
-                  {current.quickFix ? (
-                    <div>
-                      <dt className="label-micro text-accent">→ Quick fix</dt>
-                      <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
-                        {current.quickFix}
-                      </dd>
-                    </div>
-                  ) : null}
-                </dl>
+              {describeOpen ? (
+                <p className="motion-safe:animate-fade-in px-1 pb-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                  {diagramDescription}
+                </p>
               ) : null}
             </div>
-          ) : null}
+            <p className="mt-1 text-center font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground/60 sm:hidden">
+              swipe to step
+            </p>
+          </div>
 
-          {defect.length ? (
-            <div className="mt-4 border-l-2 border-destructive/60 pl-3">
-              <MicroLabel className="text-destructive">What fails if this is wrong</MicroLabel>
-              <ul className="mt-1 space-y-1.5">
-                {defect.map((d) => (
-                  <li key={d.id} className="text-[0.8125rem] leading-relaxed text-foreground/85">
-                    <span className="font-medium">{d.label}</span> — {d.consequence}.{" "}
-                    <span className="text-muted-foreground">{d.mechanicsWhy}.</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          <div
+            key={index}
+            className="bg-card px-5 py-5 motion-safe:animate-[ki-step_240ms_ease-out]"
+            style={{ ["--ki-step-from" as string]: dir === 1 ? "10px" : "-10px" }}
+            aria-live="polite"
+          >
+            <p className="sr-only">
+              Step {index + 1} of {total}
+            </p>
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
+              {String(current.order).padStart(2, "0")}
+            </p>
+            <p className="mt-2 text-[1.0625rem] leading-snug tracking-tight text-foreground">
+              {current.instruction}
+            </p>
+
+            {current.detail ? (
+              <p className="mt-3 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                {current.detail}
+              </p>
+            ) : null}
+
+            {current.expectedResult ? (
+              <div className="mt-4 border-l-2 border-primary/60 pl-3">
+                <MicroLabel className="text-primary">You should now see</MicroLabel>
+                <p className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                  {current.expectedResult}
+                </p>
+              </div>
+            ) : null}
+
+            {current.tip ? (
+              <div className="mt-4 border-l-2 border-accent/60 pl-3">
+                <MicroLabel className="text-accent">Tension / control</MicroLabel>
+                <p className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                  {current.tip}
+                </p>
+              </div>
+            ) : null}
+
+            {current.commonError ? (
+              <div className="mt-4 border-l-2 border-caution/60 pl-3">
+                <MicroLabel className="text-caution">Common error here</MicroLabel>
+                <p className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                  {current.commonError}
+                </p>
+              </div>
+            ) : null}
+
+            {hasMicro ? (
+              <div className="mt-4 overflow-hidden rounded-md border border-hairline">
+                <button
+                  type="button"
+                  onClick={() => setMicroOpen((v) => !v)}
+                  aria-expanded={microOpen}
+                  className="flex min-h-[44px] w-full items-center justify-between gap-3 bg-surface-2/40 px-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+                >
+                  <MicroLabel>Micro how-to</MicroLabel>
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "font-mono text-[0.625rem] text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
+                      microOpen && "rotate-90",
+                    )}
+                  >
+                    ▸
+                  </span>
+                </button>
+                {microOpen ? (
+                  <dl className="motion-safe:animate-fade-in space-y-3 border-t border-hairline px-3 py-3">
+                    {current.look ? (
+                      <div>
+                        <dt className="label-micro text-affirm">✓ Look for</dt>
+                        <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                          {current.look}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {current.failureMode ? (
+                      <div>
+                        <dt className="label-micro text-destructive">× Fails as</dt>
+                        <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                          {current.failureMode}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {current.quickFix ? (
+                      <div>
+                        <dt className="label-micro text-accent">→ Quick fix</dt>
+                        <dd className="mt-1 text-[0.8125rem] leading-relaxed text-foreground/85">
+                          {current.quickFix}
+                        </dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                ) : null}
+              </div>
+            ) : null}
+
+            {defect.length ? (
+              <div className="mt-4 border-l-2 border-destructive/60 pl-3">
+                <MicroLabel className="text-destructive">What fails if this is wrong</MicroLabel>
+                <ul className="mt-1 space-y-1.5">
+                  {defect.map((d) => (
+                    <li key={d.id} className="text-[0.8125rem] leading-relaxed text-foreground/85">
+                      <span className="font-medium">{d.label}</span> — {d.consequence}.{" "}
+                      <span className="text-muted-foreground">{d.mechanicsWhy}.</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
         </div>
-      </div>
 
-      <div className="hidden items-center justify-between gap-3 border-t border-hairline px-5 py-3 no-print sm:flex">
-        <button
-          type="button"
-          onClick={() => go(-1)}
-          disabled={index === 0}
-          className="rounded-md border border-hairline px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
-        >
-          ← Previous
-        </button>
-        <p className="hidden font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/60 sm:block">
-          arrow keys work
-        </p>
-        <button
-          type="button"
-          onClick={() => go(1)}
-          disabled={index === total - 1}
-          className="rounded-md border border-primary/60 bg-primary/15 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
-        >
-          Next →
-        </button>
-      </div>
-
-      {/* Phone: controls pinned within thumb reach */}
-      <div className="sticky bottom-0 z-30 flex items-center justify-between gap-2 border-t border-hairline bg-background/95 px-3 py-2 backdrop-blur-xl no-print sm:hidden">
-        <button
-          type="button"
-          onClick={() => go(-1)}
-          disabled={index === 0}
-          aria-label="Previous step"
-          className="min-h-[44px] min-w-[64px] rounded-md border border-hairline px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
-        >
-          ← Prev
-        </button>
-        <div className="flex flex-1 items-center justify-center gap-1.5" role="tablist" aria-label="Steps">
-          {steps.map((s, i) => (
-            <button
-              key={s.order}
-              type="button"
-              role="tab"
-              aria-label={`Step ${i + 1} of ${total}`}
-              aria-selected={i === index}
-              aria-current={i === index ? "step" : undefined}
-              onClick={() => goTo(i)}
-              className="flex h-11 min-w-[16px] items-center px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span
-                className={cn(
-                  "block h-1.5 rounded-full transition-all motion-reduce:transition-none",
-                  i === index ? "w-6 bg-primary" : "w-2.5 bg-surface-2",
-                )}
-              />
-            </button>
-          ))}
+        <div className="hidden items-center justify-between gap-3 border-t border-hairline px-5 py-3 no-print sm:flex">
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            disabled={index === 0}
+            className="rounded-md border border-hairline px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
+          >
+            ← Previous
+          </button>
+          <p className="hidden font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/60 sm:block">
+            arrow keys work
+          </p>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            disabled={index === total - 1}
+            className="rounded-md border border-primary/60 bg-primary/15 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
+          >
+            Next →
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => go(1)}
-          disabled={index === total - 1}
-          aria-label="Next step"
-          className="min-h-[44px] min-w-[64px] rounded-md border border-primary/60 bg-primary/15 px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
-        >
-          Next →
-        </button>
-      </div>
-    </Panel>
 
-    <PrintSteps knot={knot} steps={steps} />
+        {/* Phone: controls pinned within thumb reach */}
+        <div className="sticky bottom-0 z-30 flex items-center justify-between gap-2 border-t border-hairline bg-background/95 px-3 py-2 backdrop-blur-xl no-print sm:hidden">
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            disabled={index === 0}
+            aria-label="Previous step"
+            className="min-h-[44px] min-w-[64px] rounded-md border border-hairline px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
+          >
+            ← Prev
+          </button>
+          <div
+            className="flex flex-1 items-center justify-center gap-1.5"
+            role="tablist"
+            aria-label="Steps"
+          >
+            {steps.map((s, i) => (
+              <button
+                key={s.order}
+                type="button"
+                role="tab"
+                aria-label={`Step ${i + 1} of ${total}`}
+                aria-selected={i === index}
+                aria-current={i === index ? "step" : undefined}
+                onClick={() => goTo(i)}
+                className="flex h-11 min-w-[16px] items-center px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span
+                  className={cn(
+                    "block h-1.5 rounded-full transition-all motion-reduce:transition-none",
+                    i === index ? "w-6 bg-primary" : "w-2.5 bg-surface-2",
+                  )}
+                />
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            disabled={index === total - 1}
+            aria-label="Next step"
+            className="min-h-[44px] min-w-[64px] rounded-md border border-primary/60 bg-primary/15 px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-35"
+          >
+            Next →
+          </button>
+        </div>
+      </Panel>
+
+      <PrintSteps knot={knot} steps={steps} />
     </>
   );
 }

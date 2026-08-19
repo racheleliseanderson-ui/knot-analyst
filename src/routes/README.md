@@ -22,12 +22,12 @@ is `src/routes/__root.tsx`.
 
 ## Instrument modes
 
-| File                  | URL                | Mode                                                |
-| --------------------- | ------------------ | --------------------------------------------------- |
-| `index.tsx`           | `/`                | 01 Decide                                           |
-| `diagnose.tsx`        | `/diagnose`        | 02 Diagnose                                         |
-| `compare.tsx`         | `/compare`         | 03 Compare                                          |
-| `admin.tsx`           | `/admin`           | 04 Data                                             |
-| `library.tsx`         | `/library`         | 05 Library — browse the knots, no form |
-| `diagram.$knotId.tsx` | `/diagram/:knotId` | 06 Diagrams — field plates for one connection       |
-| `tie.$knotId.tsx`     | `/tie/:knotId`     | Step player                                         |
+| File                  | URL                | Mode                                          |
+| --------------------- | ------------------ | --------------------------------------------- |
+| `index.tsx`           | `/`                | 01 Decide                                     |
+| `diagnose.tsx`        | `/diagnose`        | 02 Diagnose                                   |
+| `compare.tsx`         | `/compare`         | 03 Compare                                    |
+| `admin.tsx`           | `/admin`           | 04 Data                                       |
+| `library.tsx`         | `/library`         | 05 Library — browse the knots, no form        |
+| `diagram.$knotId.tsx` | `/diagram/:knotId` | 06 Diagrams — field plates for one connection |
+| `tie.$knotId.tsx`     | `/tie/:knotId`     | Step player                                   |

@@ -53,11 +53,17 @@ test.describe("Deep-linked job context", () => {
     const before = await page.getByText(/\d+%/).first().innerText();
 
     // Switch modes through the shell, the way a user would.
-    await page.getByRole("link", { name: /diagnose/i }).first().click();
+    await page
+      .getByRole("link", { name: /diagnose/i })
+      .first()
+      .click();
     await expect(page).toHaveURL(/\/diagnose/);
 
     // Same job, now stated as a failure.
-    await page.getByRole("button", { name: /let go at the join/i }).first().click();
+    await page
+      .getByRole("button", { name: /let go at the join/i })
+      .first()
+      .click();
     await expect(page.getByText("Diagnosis card")).toBeVisible();
 
     await page.getByRole("button", { name: /decide the replacement/i }).click();
@@ -137,10 +143,16 @@ test.describe("Deep-linked job context (phone)", () => {
     await page.goto(DEEP_LINK);
     await expect(page.getByText("Knot decision card")).toBeVisible();
 
-    await page.getByRole("link", { name: /diagnose/i }).first().click();
+    await page
+      .getByRole("link", { name: /diagnose/i })
+      .first()
+      .click();
     await expect(page).toHaveURL(/\/diagnose/);
 
-    await page.getByRole("button", { name: /let go at the join/i }).first().click();
+    await page
+      .getByRole("button", { name: /let go at the join/i })
+      .first()
+      .click();
     await expect(page.getByText("Diagnosis card")).toBeVisible();
 
     await page.getByRole("button", { name: /decide the replacement/i }).click();

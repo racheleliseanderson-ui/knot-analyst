@@ -68,7 +68,10 @@ test.describe("Mobile accessibility smoke", () => {
     page.on("pageerror", (e) => errors.push(String(e)));
 
     await page.goto("/");
-    await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
+    await page
+      .getByRole("button", { name: /^Load scenario:/ })
+      .first()
+      .click();
 
     // The rail is a named tablist with exactly one selected step.
     const rail = page.getByRole("tablist", { name: /decision steps/i });
@@ -153,8 +156,7 @@ test.describe("Printable card accessibility", () => {
       const el = document.activeElement as HTMLElement | null;
       if (!el) return false;
       const s = getComputedStyle(el);
-      const outline =
-        s.outlineStyle !== "none" && parseFloat(s.outlineWidth || "0") > 0;
+      const outline = s.outlineStyle !== "none" && parseFloat(s.outlineWidth || "0") > 0;
       const ring = s.boxShadow !== "none" && s.boxShadow.trim().length > 0;
       return outline || ring;
     });
@@ -165,7 +167,10 @@ test.describe("Printable card accessibility", () => {
     page.on("pageerror", (e) => errors.push(String(e)));
 
     await page.goto("/");
-    await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
+    await page
+      .getByRole("button", { name: /^Load scenario:/ })
+      .first()
+      .click();
     await expect(page.getByText("Knot decision card")).toBeVisible();
 
     // Each export control states what it produces, not just "PDF".
@@ -201,7 +206,10 @@ test.describe("Printable card accessibility", () => {
 
   test("print media keeps the card and drops its controls", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
+    await page
+      .getByRole("button", { name: /^Load scenario:/ })
+      .first()
+      .click();
     await expect(page.getByText("Knot decision card")).toBeVisible();
 
     await page.emulateMedia({ media: "print" });

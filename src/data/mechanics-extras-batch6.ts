@@ -10,24 +10,53 @@ import type {
 } from "@/domain/types";
 
 const FULL: CompletenessFlags = {
-  atAGlance: true, mechanics: true, diagram: true, tyingSteps: true,
-  finishedCheck: true, failureDiagnosis: true, constraints: true, compareNext: true,
-  sources: true, decisionModel: true, mechanicalFingerprint: true, failureRules: true,
-  visualInspectability: true, offlineAssets: true,
+  atAGlance: true,
+  mechanics: true,
+  diagram: true,
+  tyingSteps: true,
+  finishedCheck: true,
+  failureDiagnosis: true,
+  constraints: true,
+  compareNext: true,
+  sources: true,
+  decisionModel: true,
+  mechanicalFingerprint: true,
+  failureRules: true,
+  visualInspectability: true,
+  offlineAssets: true,
 };
 
 const fit = (overrides: Partial<FieldFitProfile["baseline"]> = {}): FieldFitProfile => ({
   baseline: {
-    connectionJobFit: 80, materialCompatibility: 75, diameterRelationship: 70,
-    eyeHardwareGeometry: 75, guidePassage: 70, finishedProfile: 72, loadBehavior: 78,
-    fieldTieability: 75, coldWetHandDifficulty: 70, lowLightDifficulty: 68,
-    windSensitivity: 70, requiredTensionControl: 72, inspectionDifficulty: 75,
-    retieSpeed: 78, failureSensitivity: 70, userProficiency: 75, ...overrides,
+    connectionJobFit: 80,
+    materialCompatibility: 75,
+    diameterRelationship: 70,
+    eyeHardwareGeometry: 75,
+    guidePassage: 70,
+    finishedProfile: 72,
+    loadBehavior: 78,
+    fieldTieability: 75,
+    coldWetHandDifficulty: 70,
+    lowLightDifficulty: 68,
+    windSensitivity: 70,
+    requiredTensionControl: 72,
+    inspectionDifficulty: 75,
+    retieSpeed: 78,
+    failureSensitivity: 70,
+    userProficiency: 75,
+    ...overrides,
   },
-  strengths: [], weaknesses: [],
+  strengths: [],
+  weaknesses: [],
 });
 
-function obs(key: string, label: string, group: "geometry" | "wraps" | "exits" | "finish" | "visibility", badWhen: boolean, relatedDefectIds: string[]) {
+function obs(
+  key: string,
+  label: string,
+  group: "geometry" | "wraps" | "exits" | "finish" | "visibility",
+  badWhen: boolean,
+  relatedDefectIds: string[],
+) {
   return { key, label, group, badWhen, relatedDefectIds };
 }
 function baseObs(p: string) {
@@ -71,7 +100,13 @@ function mk(
       ...extra,
     },
     fieldFit: {
-      ...fit({ connectionJobFit: 84, materialCompatibility: 80, fieldTieability: 68, retieSpeed: 64, loadBehavior: 82 }),
+      ...fit({
+        connectionJobFit: 84,
+        materialCompatibility: 80,
+        fieldTieability: 68,
+        retieSpeed: 64,
+        loadBehavior: 82,
+      }),
       strengths: ["Documented job from Hook the Horizon library"],
       weaknesses: ["Technique-sensitive seating"],
     },
@@ -86,9 +121,33 @@ function mk(
       expectedCompressionZones: "Primary contact zone",
       expectedFinishingStructure: id,
       dangerousDefects: [
-        { id: `${id}-crossover`, label: "Uneven structure", observationKey: "crossover", consequence: "Weak side", mechanicsWhy: "Even friction required", stepWhere: 2, decision: "retie-recommended" },
-        { id: `${id}-seat`, label: "Under-seated", observationKey: "gap_seating", consequence: "Fail under load", mechanicsWhy: "Full seat locks the join", stepWhere: 3, decision: "retie-now" },
-        { id: `${id}-tag`, label: "Tag path wrong", observationKey: "tag_wrong", consequence: "Unlock", mechanicsWhy: "Tag completes the lock", stepWhere: 3, decision: "retie-now" },
+        {
+          id: `${id}-crossover`,
+          label: "Uneven structure",
+          observationKey: "crossover",
+          consequence: "Weak side",
+          mechanicsWhy: "Even friction required",
+          stepWhere: 2,
+          decision: "retie-recommended",
+        },
+        {
+          id: `${id}-seat`,
+          label: "Under-seated",
+          observationKey: "gap_seating",
+          consequence: "Fail under load",
+          mechanicsWhy: "Full seat locks the join",
+          stepWhere: 3,
+          decision: "retie-now",
+        },
+        {
+          id: `${id}-tag`,
+          label: "Tag path wrong",
+          observationKey: "tag_wrong",
+          consequence: "Unlock",
+          mechanicsWhy: "Tag completes the lock",
+          stepWhere: 3,
+          decision: "retie-now",
+        },
       ],
       cosmeticIrregularities: [],
     },
@@ -107,7 +166,12 @@ export const MECHANICS_EXTRAS_BATCH6: Record<string, MechanicsBundle> = {
     ["braid", "mono", "fluoro", "mixed"],
     "braid-leader-fg",
     [6, 12],
-    { requiresDoubleLine: true, mainMaterials: ["braid"], secondaryMaterials: ["mono", "fluoro"], diameterRelationships: ["main-thinner", "main-much-thinner", "extreme-mismatch"] },
+    {
+      requiresDoubleLine: true,
+      mainMaterials: ["braid"],
+      secondaryMaterials: ["mono", "fluoro"],
+      diameterRelationships: ["main-thinner", "main-much-thinner", "extreme-mismatch"],
+    },
   ),
   "double-double-uni": mk(
     "double-double-uni",
@@ -116,7 +180,11 @@ export const MECHANICS_EXTRAS_BATCH6: Record<string, MechanicsBundle> = {
     ["braid", "mono", "fluoro", "mixed"],
     "line-join",
     [8, 14],
-    { mainMaterials: ["braid"], secondaryMaterials: ["mono", "fluoro"], diameterRelationships: ["main-thinner", "main-much-thinner", "similar"] },
+    {
+      mainMaterials: ["braid"],
+      secondaryMaterials: ["mono", "fluoro"],
+      diameterRelationships: ["main-thinner", "main-much-thinner", "similar"],
+    },
   ),
   "loop-to-loop": mk(
     "loop-to-loop",
@@ -125,7 +193,12 @@ export const MECHANICS_EXTRAS_BATCH6: Record<string, MechanicsBundle> = {
     ["fly-line", "mono", "fluoro", "mixed"],
     "loop-fixed",
     [0, 0],
-    { loopBehavior: "fixed", finishedGeometry: "loop", mainMaterials: ["fly-line", "mono", "fluoro"], secondaryMaterials: ["mono", "fluoro"] },
+    {
+      loopBehavior: "fixed",
+      finishedGeometry: "loop",
+      mainMaterials: ["fly-line", "mono", "fluoro"],
+      secondaryMaterials: ["mono", "fluoro"],
+    },
   ),
   willis: mk(
     "willis",
@@ -134,7 +207,12 @@ export const MECHANICS_EXTRAS_BATCH6: Record<string, MechanicsBundle> = {
     ["braid", "mono", "mixed"],
     "fly-line-coil",
     [0, 0],
-    { mainMaterials: ["braid"], secondaryMaterials: ["mono"], guidePassage: "fair", tensionRequirements: "high" },
+    {
+      mainMaterials: ["braid"],
+      secondaryMaterials: ["mono"],
+      guidePassage: "fair",
+      tensionRequirements: "high",
+    },
   ),
   "kryston-loop": mk(
     "kryston-loop",
@@ -143,6 +221,11 @@ export const MECHANICS_EXTRAS_BATCH6: Record<string, MechanicsBundle> = {
     ["mono"],
     "loop-nonslip",
     [2, 5],
-    { loopBehavior: "non-slip", loadDirection: "loop-swing", finishedGeometry: "loop", hardExclusions: ["fluorocarbon"] },
+    {
+      loopBehavior: "non-slip",
+      loadDirection: "loop-swing",
+      finishedGeometry: "loop",
+      hardExclusions: ["fluorocarbon"],
+    },
   ),
 };

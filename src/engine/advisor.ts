@@ -242,7 +242,8 @@ export function counterfactuals(result: ChooseResult, limit = 4): Counterfactual
         id: v.id,
         question: v.question,
         verdict: "changes",
-        answer: `Recommendation switches to ${altTop.knot.name} at ${altTop.fieldFitPercent}%. ${altTop.whyBest[0] ?? ""}`.trim(),
+        answer:
+          `Recommendation switches to ${altTop.knot.name} at ${altTop.fieldFitPercent}%. ${altTop.whyBest[0] ?? ""}`.trim(),
       });
     }
   }
@@ -321,7 +322,9 @@ export function buildDecisionCard(result: ChooseResult): DecisionCard {
           runnerUp: {
             name: second.knot.name,
             fieldFit: second.fieldFitPercent,
-            when: result.tradeoffSummary ?? `${second.knot.name} is the fallback if the primary will not seat cleanly.`,
+            when:
+              result.tradeoffSummary ??
+              `${second.knot.name} is the fallback if the primary will not seat cleanly.`,
           },
         }
       : {}),

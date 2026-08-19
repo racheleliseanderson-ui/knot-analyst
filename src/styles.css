@@ -96,7 +96,7 @@
   --background: oklch(0.91 0.012 220);
   --foreground: oklch(0.22 0.028 232);
   --surface: oklch(0.945 0.01 220);
-  --surface-2: oklch(0.90 0.012 222);
+  --surface-2: oklch(0.9 0.012 222);
   --card: oklch(0.955 0.009 220);
   --card-foreground: oklch(0.22 0.028 232);
   --popover: oklch(0.96 0.008 220);
@@ -114,7 +114,8 @@
   --input: oklch(0.8 0.014 220);
   --ring: oklch(0.5 0.09 210);
   --gradient-depth: linear-gradient(180deg, oklch(0.96 0.009 220) 0%, oklch(0.92 0.011 222) 100%);
-  --shadow-instrument: 0 1px 0 0 oklch(1 0 0 / 55%) inset, 0 14px 32px -22px oklch(0.25 0.04 232 / 35%);
+  --shadow-instrument:
+    0 1px 0 0 oklch(1 0 0 / 55%) inset, 0 14px 32px -22px oklch(0.25 0.04 232 / 35%);
 }
 
 /*
@@ -146,18 +147,10 @@
 
 /* Meter grade survives greyscale: fill pattern differs per grade. */
 .cb .ki-meter-fill[data-grade="2"] {
-  background-image: repeating-linear-gradient(
-    90deg,
-    oklch(1 0 0 / 70%) 0 2px,
-    transparent 2px 5px
-  );
+  background-image: repeating-linear-gradient(90deg, oklch(1 0 0 / 70%) 0 2px, transparent 2px 5px);
 }
 .cb .ki-meter-fill[data-grade="3"] {
-  background-image: repeating-linear-gradient(
-    90deg,
-    oklch(1 0 0 / 85%) 0 1px,
-    transparent 1px 3px
-  );
+  background-image: repeating-linear-gradient(90deg, oklch(1 0 0 / 85%) 0 1px, transparent 1px 3px);
 }
 
 @layer base {
@@ -205,7 +198,11 @@
 @utility hairline-grid {
   background-image:
     linear-gradient(color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--foreground) 5%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 44px 44px;
 }
 
@@ -216,11 +213,22 @@
 }
 
 @media print {
-  .no-print { display: none !important; }
-  body { background: #fff; color: #111; }
-  .panel { box-shadow: none; border-color: #ccc; background: #fff; }
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #111;
+  }
+  .panel {
+    box-shadow: none;
+    border-color: #ccc;
+    background: #fff;
+  }
 
-  @page { margin: 14mm; }
+  @page {
+    margin: 14mm;
+  }
 
   /* Ink-safe: no colour dependence, no fills, no shadows */
   * {
@@ -230,22 +238,47 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  a { text-decoration: underline; }
-  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.6875rem; }
+  a {
+    text-decoration: underline;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.6875rem;
+  }
 
   /* Diagram strokes render as black; step state survives as line weight */
-  .ki-diagram svg path { stroke: #111 !important; opacity: 1 !important; }
-  .ki-diagram svg rect { display: none; }
-  .ki-diagram figcaption { display: none; }
+  .ki-diagram svg path {
+    stroke: #111 !important;
+    opacity: 1 !important;
+  }
+  .ki-diagram svg rect {
+    display: none;
+  }
+  .ki-diagram figcaption {
+    display: none;
+  }
 
-  li, section, ol > li { break-inside: avoid; }
-  h1, h2 { break-after: avoid; }
+  li,
+  section,
+  ol > li {
+    break-inside: avoid;
+  }
+  h1,
+  h2 {
+    break-after: avoid;
+  }
 }
 
 /* Step-player transition — direction supplied per render via --ki-step-from */
 @keyframes ki-step {
-  from { opacity: 0; transform: translateX(var(--ki-step-from, 8px)); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(var(--ki-step-from, 8px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Motion is decoration — never a requirement for understanding state. */
@@ -270,21 +303,43 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-.ki-press:active { transform: scale(0.97); }
+.ki-press:active {
+  transform: scale(0.97);
+}
 
 @keyframes ki-rise {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.ki-rise { animation: ki-rise 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.ki-rise {
+  animation: ki-rise 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
 
 /* Staggered reveal for result lists */
-.ki-stagger > * { animation: ki-rise 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
-.ki-stagger > *:nth-child(1) { animation-delay: 0ms; }
-.ki-stagger > *:nth-child(2) { animation-delay: 45ms; }
-.ki-stagger > *:nth-child(3) { animation-delay: 90ms; }
-.ki-stagger > *:nth-child(4) { animation-delay: 135ms; }
-.ki-stagger > *:nth-child(n + 5) { animation-delay: 180ms; }
+.ki-stagger > * {
+  animation: ki-rise 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.ki-stagger > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.ki-stagger > *:nth-child(2) {
+  animation-delay: 45ms;
+}
+.ki-stagger > *:nth-child(3) {
+  animation-delay: 90ms;
+}
+.ki-stagger > *:nth-child(4) {
+  animation-delay: 135ms;
+}
+.ki-stagger > *:nth-child(n + 5) {
+  animation-delay: 180ms;
+}
 
 /* Edge-to-edge horizontal rail with a fade hint instead of squeezed content */
 .ki-rail {
@@ -293,19 +348,37 @@
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
 }
-.ki-rail::-webkit-scrollbar { display: none; }
-.ki-rail > * { scroll-snap-align: start; }
+.ki-rail::-webkit-scrollbar {
+  display: none;
+}
+.ki-rail > * {
+  scroll-snap-align: start;
+}
 @media (max-width: 639px) {
   .ki-rail {
-    mask-image: linear-gradient(to right, transparent 0, #000 12px, #000 calc(100% - 20px), transparent 100%);
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 12px,
+      #000 calc(100% - 20px),
+      transparent 100%
+    );
   }
 }
 
 /* Backwards step transition for the phone decision stepper */
 @keyframes ki-step-back {
-  from { opacity: 0; transform: translateX(-8px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Sticky bars must clear the home indicator on touch devices */
-.ki-safe-bottom { padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px)); }
+.ki-safe-bottom {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}

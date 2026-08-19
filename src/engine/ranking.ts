@@ -88,7 +88,11 @@ function situationalAdjust(
       Math.min(
         100,
         s.finishedProfile +
-          (knot.contract.guidePassage === "excellent" ? 10 : knot.contract.guidePassage === "fair" ? -10 : 0),
+          (knot.contract.guidePassage === "excellent"
+            ? 10
+            : knot.contract.guidePassage === "fair"
+              ? -10
+              : 0),
       ),
     );
     notes.guidePassage = `Guide passage: ${knot.contract.guidePassage}`;
@@ -314,7 +318,10 @@ export function rankSurvivors(survivors: Knot[], input: ChooseInput): RankedOpti
     if (input.mustPassGuides && knot.contract.guidePassage === "excellent") {
       whyBest.unshift("Compact through guides");
     }
-    if (input.mustPassGuides && (knot.contract.guidePassage === "fair" || knot.contract.guidePassage === "poor")) {
+    if (
+      input.mustPassGuides &&
+      (knot.contract.guidePassage === "fair" || knot.contract.guidePassage === "poor")
+    ) {
       butNotes.unshift("Larger finished profile for repeated guide passage");
     }
 

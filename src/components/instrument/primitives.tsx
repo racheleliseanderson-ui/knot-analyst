@@ -1,11 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
-export function Panel({
-  className,
-  children,
-  ...rest
-}: React.HTMLAttributes<HTMLDivElement>) {
+export function Panel({ className, children, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={cn("panel", className)} {...rest}>
       {children}
@@ -80,7 +76,8 @@ export function Chip({
           (tone === "signal"
             ? "border-primary/70 bg-primary/15 text-foreground shadow-[0_0_0_1px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
             : "border-accent/70 bg-accent/15 text-foreground"),
-        disabled && "cursor-not-allowed opacity-35 hover:border-hairline hover:text-muted-foreground",
+        disabled &&
+          "cursor-not-allowed opacity-35 hover:border-hairline hover:text-muted-foreground",
       )}
     >
       {children}

@@ -61,10 +61,7 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       {
         axis: "construction",
         label: "What kind of fluoro?",
-        options: [
-          ...con("monofilament", "copolymer"),
-          { id: "unspecified", label: "Not sure" },
-        ],
+        options: [...con("monofilament", "copolymer"), { id: "unspecified", label: "Not sure" }],
       },
       {
         axis: "treatment",
@@ -114,10 +111,7 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       {
         axis: "fiber",
         label: "Fiber / material",
-        options: [
-          ...fiber("uhmwpe", "polyester"),
-          { id: "unspecified", label: "Not sure" },
-        ],
+        options: [...fiber("uhmwpe", "polyester"), { id: "unspecified", label: "Not sure" }],
       },
       {
         axis: "construction",
@@ -131,7 +125,13 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
         axis: "treatment",
         label: "Finish",
         options: [
-          ...treat("uncoated", "coated-braid", "gel-spun-finish", "wax-treated", "high-vis-pigment"),
+          ...treat(
+            "uncoated",
+            "coated-braid",
+            "gel-spun-finish",
+            "wax-treated",
+            "high-vis-pigment",
+          ),
           { id: "unspecified", label: "Not sure" },
         ],
       },
@@ -150,10 +150,7 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       {
         axis: "fiber",
         label: "Metal",
-        options: [
-          ...fiber("stainless", "titanium"),
-          { id: "unspecified", label: "Not sure" },
-        ],
+        options: [...fiber("stainless", "titanium"), { id: "unspecified", label: "Not sure" }],
       },
       {
         axis: "construction",
@@ -183,10 +180,7 @@ export const FISHING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       {
         axis: "fiber",
         label: "Fiber / material",
-        options: [
-          ...fiber("uhmwpe", "polyester"),
-          { id: "unspecified", label: "Not sure" },
-        ],
+        options: [...fiber("uhmwpe", "polyester"), { id: "unspecified", label: "Not sure" }],
       },
       {
         axis: "construction",

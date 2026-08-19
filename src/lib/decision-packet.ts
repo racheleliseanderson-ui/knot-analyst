@@ -23,7 +23,8 @@ export const PACKET_LABELS: Record<PacketVariant, string> = {
 
 export const PACKET_NOTES: Record<PacketVariant, string> = {
   brief: "One sheet. The call, the conditions, the named compromises, the fallback.",
-  field: "Everything in the brief, plus the other knots, why they lost, and how to tie the one that won.",
+  field:
+    "Everything in the brief, plus the other knots, why they lost, and how to tie the one that won.",
 };
 
 const INK = { r: 17, g: 28, b: 36 };
@@ -71,7 +72,9 @@ export async function generateDecisionPacket({
       .replace(/[\u2018\u2019]/g, "'")
       .replace(/[\u201C\u201D]/g, '"')
       // em/en dash and middot render fine in jsPDF's WinAnsi encoding — keep them.
-      .replace(/[^\u0000-\u00FF\u2013\u2014]/g, "-");
+      // Printable Latin-1 only (U+0020–U+00FF): a U+0000 start trips no-control-regex
+      // and control bytes do not belong in Helvetica PDF text.
+      .replace(/[^\u0020-\u00FF\u2013\u2014]/g, "-");
 
   const micro = (text: string, color = MUTED) => {
     ensure(18);
@@ -117,12 +120,7 @@ export async function generateDecisionPacket({
   doc.setFillColor(17, 28, 36).rect(0, 0, W, 96, "F");
   doc.setFont("helvetica", "bold").setFontSize(8);
   doc.setTextColor(224, 168, 78);
-  doc.text(
-    `KNOT ANALYST · ${full ? "FIELD PACKET" : "DECISION BRIEF"}`,
-    M,
-    40,
-    { charSpace: 1.8 },
-  );
+  doc.text(`KNOT ANALYST · ${full ? "FIELD PACKET" : "DECISION BRIEF"}`, M, 40, { charSpace: 1.8 });
   doc.setFontSize(19).setTextColor(246, 249, 250);
   doc.text(ascii(card.knotName ?? "No valid connection"), M, 66);
   doc.setFont("helvetica", "normal").setFontSize(8).setTextColor(150, 166, 176);
@@ -191,7 +189,9 @@ export async function generateDecisionPacket({
       doc.text(`${o.fieldFitPercent}%`, W - M, y, { align: "right" });
       y += 7;
       doc.setFillColor(228, 232, 235).rect(M, y, CW, 3.5, "F");
-      doc.setFillColor(BRASS.r, BRASS.g, BRASS.b).rect(M, y, (CW * o.fieldFitPercent) / 100, 3.5, "F");
+      doc
+        .setFillColor(BRASS.r, BRASS.g, BRASS.b)
+        .rect(M, y, (CW * o.fieldFitPercent) / 100, 3.5, "F");
       y += 12;
       const note = idx === 0 ? (o.vsNext ?? o.whyBest[0]) : (o.whyBest[0] ?? o.butNotes[0]);
       if (note) body(note, 8.5, MUTED);
@@ -205,7 +205,9 @@ export async function generateDecisionPacket({
     rule();
     ensure(70); // keep the readout header with its first rows
     micro("Mechanical readout — " + top.knot.name);
-    const dims = top.dimensionScores.slice().sort((a, b) => b.weight * b.score - a.weight * a.score);
+    const dims = top.dimensionScores
+      .slice()
+      .sort((a, b) => b.weight * b.score - a.weight * a.score);
     const colW = CW / 2;
     for (let i = 0; i < dims.length; i += 2) {
       ensure(24);
@@ -241,7 +243,8 @@ export async function generateDecisionPacket({
       y += 13;
       body(t.tension, 9, MUTED);
       body(t.detail, 9);
-      if (t.alternative) body(`Trade down to ${t.alternative.name} — ${t.alternative.gain}`, 8.5, BRASS);
+      if (t.alternative)
+        body(`Trade down to ${t.alternative.name} — ${t.alternative.gain}`, 8.5, BRASS);
       y += 8;
     }
   }
@@ -270,7 +273,9 @@ export async function generateDecisionPacket({
     rule();
     micro(`Eliminated on hard constraints — ${result.eliminated.length}`);
     bullets(
-      result.eliminated.slice(0, 12).map((e) => `${e.knotName} — ${e.reasons[0] ?? "hard constraint"}`),
+      result.eliminated
+        .slice(0, 12)
+        .map((e) => `${e.knotName} — ${e.reasons[0] ?? "hard constraint"}`),
       "×",
     );
   }

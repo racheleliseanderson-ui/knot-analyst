@@ -20,22 +20,26 @@ export const UTILITY_KNOTS: KnotContent[] = [
     steps: [
       {
         order: 1,
-        instruction: "Pass the tag end around the reel arbor and bring it back alongside the standing line.",
+        instruction:
+          "Pass the tag end around the reel arbor and bring it back alongside the standing line.",
         tip: "Open the bail first — a line trapped under a closed bail seats crooked.",
       },
       {
         order: 2,
         instruction: "Tie a simple overhand knot with the tag around the standing line.",
-        commonError: "Tying the overhand around itself instead of around the standing line — it will not cinch.",
+        commonError:
+          "Tying the overhand around itself instead of around the standing line — it will not cinch.",
         failureLinks: ["arbor-knot-tag"],
       },
       {
         order: 3,
-        instruction: "Tie a second overhand in the tag alone, about a finger-width out, as a stopper.",
+        instruction:
+          "Tie a second overhand in the tag alone, about a finger-width out, as a stopper.",
       },
       {
         order: 4,
-        instruction: "Pull the standing line so the first knot slides down and both knots jam against the arbor. Trim the tag.",
+        instruction:
+          "Pull the standing line so the first knot slides down and both knots jam against the arbor. Trim the tag.",
         tip: "On braid, add a strip of tape or a mono backing underlay — braid will slip on a bare metal arbor no matter how well the knot is tied.",
         failureLinks: ["arbor-knot-loose", "arbor-knot-gap"],
       },
@@ -95,18 +99,21 @@ export const UTILITY_KNOTS: KnotContent[] = [
       },
       {
         order: 2,
-        instruction: "Twist the loop 6–8 full turns so a symmetrical twist column forms either side.",
+        instruction:
+          "Twist the loop 6–8 full turns so a symmetrical twist column forms either side.",
         tip: "Even turn counts on both sides — an off-centre column pulls the finished loop crooked.",
         failureLinks: ["dropper-loop-crossover"],
       },
       {
         order: 3,
-        instruction: "Open the twists at the centre of the column and push the loop through that opening.",
+        instruction:
+          "Open the twists at the centre of the column and push the loop through that opening.",
         commonError: "Opening the wrong gap — the loop must pass through the exact centre.",
       },
       {
         order: 4,
-        instruction: "Hold the loop, moisten, and pull both standing ends steadily apart until the twists roll up tight against the loop base.",
+        instruction:
+          "Hold the loop, moisten, and pull both standing ends steadily apart until the twists roll up tight against the loop base.",
         tip: "Pull slowly: this knot seats by rolling, not by snapping.",
         failureLinks: ["dropper-loop-slip"],
       },
@@ -163,19 +170,22 @@ export const UTILITY_KNOTS: KnotContent[] = [
     steps: [
       {
         order: 1,
-        instruction: "Pass roughly 10 in (25 cm) of tag through the lure eye and fold it back parallel to the standing line.",
+        instruction:
+          "Pass roughly 10 in (25 cm) of tag through the lure eye and fold it back parallel to the standing line.",
         tip: "A single pass — this is the knot to reach for when a doubled line will not fit the eye.",
       },
       {
         order: 2,
-        instruction: "Hold the fold and wrap the tag up and away from the lure, 6–7 turns around the doubled section.",
+        instruction:
+          "Hold the fold and wrap the tag up and away from the lure, 6–7 turns around the doubled section.",
         tip: "Wrap away from the eye, not toward it. Keep the turns touching and parallel.",
         commonError: "Wrapping toward the eye buries the tag and the knot will not close.",
         failureLinks: ["san-diego-jam-crossover"],
       },
       {
         order: 3,
-        instruction: "Pass the tag back down through the small loop sitting just above the lure eye.",
+        instruction:
+          "Pass the tag back down through the small loop sitting just above the lure eye.",
         failureLinks: ["san-diego-jam-tag"],
       },
       {
@@ -184,7 +194,8 @@ export const UTILITY_KNOTS: KnotContent[] = [
       },
       {
         order: 5,
-        instruction: "Moisten, then pull the standing line steadily so the wraps roll down and stack tight against the eye. Trim.",
+        instruction:
+          "Moisten, then pull the standing line steadily so the wraps roll down and stack tight against the eye. Trim.",
         tip: "Pull on the standing line, not the tag — the tag only tidies the stack.",
         failureLinks: ["san-diego-jam-loose", "san-diego-jam-gap"],
       },

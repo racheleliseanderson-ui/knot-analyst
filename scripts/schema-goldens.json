@@ -3,37 +3,19 @@
   "note": "Fishing-only pool fingerprints after batch 6 (Bristol, Double-Double Uni, loop-to-loop, Willis, Kryston). Boating catalog is isolated and must not appear here.",
   "cases": {
     "braid-fluoro-ideal": {
-      "top": [
-        "fg:85",
-        "slim-beauty:82",
-        "alberto:81",
-        "aussie-quickie:78",
-        "bristol:77"
-      ],
+      "top": ["fg:85", "slim-beauty:82", "alberto:81", "aussie-quickie:78", "bristol:77"],
       "elim": 48,
       "conf": "high",
       "term": null
     },
     "braid-cold-wind": {
-      "top": [
-        "double-uni:76",
-        "alberto:74",
-        "slim-beauty:74",
-        "aussie-quickie:74",
-        "bristol:73"
-      ],
+      "top": ["double-uni:76", "alberto:74", "slim-beauty:74", "aussie-quickie:74", "bristol:73"],
       "elim": 48,
       "conf": "moderate",
       "term": null
     },
     "jig-palomar": {
-      "top": [
-        "palomar:83",
-        "uni-knot:82",
-        "berkley-braid:77",
-        "eye-crosser:76",
-        "fish-n-fool:76"
-      ],
+      "top": ["palomar:83", "uni-knot:82", "berkley-braid:77", "eye-crosser:76", "fish-n-fool:76"],
       "elim": 49,
       "conf": "high",
       "term": null
@@ -51,128 +33,67 @@
       "term": null
     },
     "leader-tippet": {
-      "top": [
-        "double-uni:80",
-        "surgeons:80",
-        "orvis-tippet:78",
-        "seaguar:78",
-        "j-knot:78"
-      ],
+      "top": ["double-uni:80", "surgeons:80", "orvis-tippet:78", "seaguar:78", "j-knot:78"],
       "elim": 50,
       "conf": "high",
       "term": null
     },
     "beginner-hook": {
-      "top": [
-        "palomar:85",
-        "uni-knot:83",
-        "improved-clinch:80",
-        "davy:80",
-        "double-davy:80"
-      ],
+      "top": ["palomar:85", "uni-knot:83", "improved-clinch:80", "davy:80", "double-davy:80"],
       "elim": 33,
       "conf": "high",
       "term": null
     },
     "night-dock-light": {
-      "top": [
-        "palomar:83",
-        "uni-knot:80",
-        "berkley-braid:75",
-        "eye-crosser:75",
-        "fish-n-fool:75"
-      ],
+      "top": ["palomar:83", "uni-knot:80", "berkley-braid:75", "eye-crosser:75", "fish-n-fool:75"],
       "elim": 49,
       "conf": "high",
       "term": null
     },
     "small-eye-fluoro": {
-      "top": [
-        "uni-knot:80",
-        "trilene:78",
-        "davy:78",
-        "double-davy:78",
-        "egg-loop:78"
-      ],
+      "top": ["uni-knot:80", "trilene:78", "davy:78", "double-davy:78", "egg-loop:78"],
       "elim": 35,
       "conf": "high",
       "term": null
     },
     "surf-heavy-leader": {
-      "top": [
-        "slim-beauty:80",
-        "alberto:79",
-        "fg:78",
-        "aussie-quickie:77",
-        "bristol:76"
-      ],
+      "top": ["slim-beauty:80", "alberto:79", "fg:78", "aussie-quickie:77", "bristol:76"],
       "elim": 50,
       "conf": "high",
       "term": null
     },
     "fly-line-leader": {
-      "top": [
-        "nail-knot:83",
-        "needle-knot:80",
-        "loop-to-loop:76"
-      ],
+      "top": ["nail-knot:83", "needle-knot:80", "loop-to-loop:76"],
       "elim": 53,
       "conf": "high",
       "term": null
     },
     "snell-bait": {
-      "top": [
-        "egg-loop:78",
-        "uni-snell:78",
-        "easy-snell:78",
-        "knotless:78",
-        "snell:77"
-      ],
+      "top": ["egg-loop:78", "uni-snell:78", "easy-snell:78", "knotless:78", "snell:77"],
       "elim": 51,
       "conf": "moderate",
       "term": null
     },
     "spool-arbor": {
-      "top": [
-        "uni-knot:80",
-        "arbor-knot:79"
-      ],
+      "top": ["uni-knot:80", "arbor-knot:79"],
       "elim": 54,
       "conf": "high",
       "term": null
     },
     "ice-jig-micro": {
-      "top": [
-        "uni-knot:81",
-        "improved-clinch:78",
-        "centauri:78",
-        "world-fair:78",
-        "baja:75"
-      ],
+      "top": ["uni-knot:81", "improved-clinch:78", "centauri:78", "world-fair:78", "baja:75"],
       "elim": 42,
       "conf": "high",
       "term": null
     },
     "kayak-drift-retie": {
-      "top": [
-        "double-uni:78",
-        "slim-beauty:78",
-        "alberto:76",
-        "aussie-quickie:76",
-        "bristol:75"
-      ],
+      "top": ["double-uni:78", "slim-beauty:78", "alberto:76", "aussie-quickie:76", "bristol:75"],
       "elim": 47,
       "conf": "moderate",
       "term": null
     },
     "offshore-heavy-mono": {
-      "top": [
-        "double-uni:78",
-        "surgeons:78",
-        "blood:77",
-        "orvis-tippet:77",
-        "seaguar:77"
-      ],
+      "top": ["double-uni:78", "surgeons:78", "blood:77", "orvis-tippet:77", "seaguar:77"],
       "elim": 49,
       "conf": "moderate",
       "term": null
@@ -196,33 +117,19 @@
       "term": null
     },
     "dropshot-tag": {
-      "top": [
-        "uni-knot:80",
-        "trilene:78",
-        "davy:78",
-        "double-davy:78",
-        "egg-loop:78"
-      ],
+      "top": ["uni-knot:80", "trilene:78", "davy:78", "double-davy:78", "egg-loop:78"],
       "elim": 35,
       "conf": "high",
       "term": null
     },
     "tippet-ring-swap": {
-      "top": [
-        "uni-knot:81",
-        "clinch:79",
-        "world-fair:79",
-        "improved-clinch:78",
-        "trilene:75"
-      ],
+      "top": ["uni-knot:81", "clinch:79", "world-fair:79", "improved-clinch:78", "trilene:75"],
       "elim": 48,
       "conf": "high",
       "term": null
     },
     "shock-tippet-join": {
-      "top": [
-        "double-uni:68"
-      ],
+      "top": ["double-uni:68"],
       "elim": 55,
       "conf": "moderate",
       "term": null
@@ -240,83 +147,43 @@
       "term": null
     },
     "loop-to-loop-swap": {
-      "top": [
-        "surgeons-loop:82",
-        "perfection-loop:81",
-        "loop-to-loop:78"
-      ],
+      "top": ["surgeons-loop:82", "perfection-loop:81", "loop-to-loop:78"],
       "elim": 53,
       "conf": "high",
       "term": null
     },
     "night-snell-circle": {
-      "top": [
-        "easy-snell:77",
-        "snell:76",
-        "egg-loop:76",
-        "uni-snell:76",
-        "knotless:76"
-      ],
+      "top": ["easy-snell:77", "snell:76", "egg-loop:76", "uni-snell:76", "knotless:76"],
       "elim": 51,
       "conf": "moderate",
       "term": null
     },
     "hollow-core-topshot": {
-      "top": [
-        "fg:78",
-        "slim-beauty:76",
-        "alberto:75",
-        "aussie-quickie:73",
-        "willis:73"
-      ],
+      "top": ["fg:78", "slim-beauty:76", "alberto:75", "aussie-quickie:73", "willis:73"],
       "elim": 47,
       "conf": "moderate",
       "term": "splice"
     },
     "flat-braid-leader": {
-      "top": [
-        "fg:85",
-        "slim-beauty:82",
-        "alberto:81",
-        "aussie-quickie:78",
-        "bristol:77"
-      ],
+      "top": ["fg:85", "slim-beauty:82", "alberto:81", "aussie-quickie:78", "bristol:77"],
       "elim": 48,
       "conf": "high",
       "term": null
     },
     "flat-terminal-mono": {
-      "top": [
-        "palomar:82",
-        "uni-knot:81",
-        "davy:79",
-        "double-davy:79",
-        "orvis:79"
-      ],
+      "top": ["palomar:82", "uni-knot:81", "davy:79", "double-davy:79", "orvis:79"],
       "elim": 33,
       "conf": "high",
       "term": null
     },
     "blood-similar": {
-      "top": [
-        "double-uni:79",
-        "surgeons:78",
-        "orvis-tippet:76",
-        "seaguar:76",
-        "j-knot:76"
-      ],
+      "top": ["double-uni:79", "surgeons:78", "orvis-tippet:76", "seaguar:76", "j-knot:76"],
       "elim": 49,
       "conf": "moderate",
       "term": null
     },
     "extreme-mismatch-guides": {
-      "top": [
-        "fg:85",
-        "slim-beauty:82",
-        "alberto:81",
-        "aussie-quickie:78",
-        "bristol:77"
-      ],
+      "top": ["fg:85", "slim-beauty:82", "alberto:81", "aussie-quickie:78", "bristol:77"],
       "elim": 50,
       "conf": "high",
       "term": null

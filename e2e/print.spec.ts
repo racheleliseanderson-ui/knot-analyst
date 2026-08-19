@@ -30,7 +30,10 @@ test.describe("Printable decision card", () => {
     page.on("pageerror", (e) => errors.push(String(e)));
 
     await page.goto("/");
-    await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
+    await page
+      .getByRole("button", { name: /^Load scenario:/ })
+      .first()
+      .click();
 
     const card = page.getByText("Knot decision card");
     await expect(card).toBeVisible();
@@ -53,7 +56,10 @@ test.describe("Printable decision card", () => {
 
   test("exports a brief and a field packet PDF after a Decide run", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
+    await page
+      .getByRole("button", { name: /^Load scenario:/ })
+      .first()
+      .click();
     await expect(page.getByText("Knot decision card")).toBeVisible();
 
     for (const label of [/^Brief PDF/, /^Field packet PDF/]) {
@@ -74,7 +80,10 @@ test.describe("Printable decision card", () => {
     page.on("pageerror", (e) => errors.push(String(e)));
 
     await page.goto("/diagnose");
-    await page.getByRole("button", { name: /let go at the join/i }).first().click();
+    await page
+      .getByRole("button", { name: /let go at the join/i })
+      .first()
+      .click();
 
     const card = page.getByText("Diagnosis card");
     await expect(card).toBeVisible();

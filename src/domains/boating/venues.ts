@@ -6,7 +6,8 @@ export const BOATING_VENUES: DomainVenue[] = [
     label: "Dock / cleat",
     summary: "Tide range, surge, and lines that must be freed under load.",
     conditions: {},
-    punishes: "Anything that jams. A dock line you cannot cast off in surge is a hazard, not a hold.",
+    punishes:
+      "Anything that jams. A dock line you cannot cast off in surge is a hazard, not a hold.",
     watch: "Turns that have welded together after a tide cycle.",
     fix: "Finish with a form that can be broken by hand while the load is still on.",
   },
@@ -15,7 +16,8 @@ export const BOATING_VENUES: DomainVenue[] = [
     label: "Mooring ball",
     summary: "Cyclic snatch loading and hours of chafe at one point.",
     conditions: {},
-    punishes: "A single unprotected contact point. The rope fails at the fairlead, never in the knot.",
+    punishes:
+      "A single unprotected contact point. The rope fails at the fairlead, never in the knot.",
     watch: "Glazing and flattening where the rope crosses the bow roller.",
     fix: "Chafe gear first, then a knot that can be re-made in the dark.",
   },

@@ -79,14 +79,20 @@ export function AppearanceMenu() {
                 }}
                 className={cn(
                   "flex w-full min-h-11 items-start gap-3 rounded-md px-2.5 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  active ? "bg-primary/12 text-foreground" : "text-muted-foreground hover:bg-surface-2/60 hover:text-foreground",
+                  active
+                    ? "bg-primary/12 text-foreground"
+                    : "text-muted-foreground hover:bg-surface-2/60 hover:text-foreground",
                 )}
               >
                 <A size={14} aria-hidden="true" className="mt-0.5 shrink-0" />
                 <span className="min-w-0">
                   <span className="block text-[0.8125rem] font-medium tracking-tight">
                     {APPEARANCE_LABELS[a]}
-                    {active ? <span className="ml-2 font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-primary">active</span> : null}
+                    {active ? (
+                      <span className="ml-2 font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-primary">
+                        active
+                      </span>
+                    ) : null}
                   </span>
                   <span className="mt-0.5 block text-[0.6875rem] leading-snug text-muted-foreground">
                     {APPEARANCE_NOTES[a]}

@@ -51,8 +51,7 @@ export function useTheme() {
     }
     const migrated = migrateStored(stored);
     const initial: Appearance =
-      migrated ??
-      (document.documentElement.classList.contains("light") ? "light" : "dark");
+      migrated ?? (document.documentElement.classList.contains("light") ? "light" : "dark");
     if (stored === "atelier") {
       try {
         localStorage.setItem(KEY, "dark");

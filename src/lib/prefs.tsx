@@ -2,7 +2,15 @@
  * Persistent instrument preferences — active domain and interface language.
  * Applied before paint by PREFS_BOOT_SCRIPT so vocabulary never flashes.
  */
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 export type DomainPref = "fishing" | "boating";
 export type Locale = "en" | "es";

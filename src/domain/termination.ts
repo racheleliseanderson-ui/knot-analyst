@@ -5,22 +5,10 @@
  * may be a knot, bend, hitch, splice, crimp, twist, or mechanical termination.
  * This module surfaces non-knot candidates without rewriting the knot catalog.
  */
-import {
-  type MaterialSpec,
-  type Termination,
-  terminationAdvice,
-} from "@/domain/material";
+import { type MaterialSpec, type Termination, terminationAdvice } from "@/domain/material";
 
 export type TerminationType =
-  | "knot"
-  | "bend"
-  | "hitch"
-  | "splice"
-  | "crimp"
-  | "twist"
-  | "mechanical"
-  | "lashing"
-  | "other";
+  "knot" | "bend" | "hitch" | "splice" | "crimp" | "twist" | "mechanical" | "lashing" | "other";
 
 export interface TerminationCandidate {
   id: string;
