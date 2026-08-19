@@ -1,10 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Production-like e2e: the app is built first, then served by `vite preview`
- * of the nitro `.output` (same preview nitro prints after `vite build`).
- * Wrangler/workerd is skipped — its compatibility_date lags the calendar
- * and fails CI when Nitro stamps today's date.
+ * Production-like e2e: nitro cloudflare-module output served by wrangler.
+ * compatibility-date is pinned — Nitro stamps today, and workerd in wrangler 4
+ * often lags the calendar by a day, which aborts the worker on CI.
  */
 const PORT = Number(process.env["E2E_PORT"] ?? 8788);
 const baseURL = process.env["E2E_BASE_URL"] ?? `http://127.0.0.1:${PORT}`;
