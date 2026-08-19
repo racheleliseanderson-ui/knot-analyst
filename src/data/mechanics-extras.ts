@@ -3,7 +3,7 @@
  * reviewable. Merged at getMechanics time.
  */
 import type { MechanicsBundle } from "@/data/mechanics-profiles";
-import type { CompletenessFlags, FieldFitProfile } from "@/domain/types";
+import type { CompletenessFlags, FieldFitProfile, GeometricRule } from "@/domain/types";
 
 const FULL: CompletenessFlags = {
   atAGlance: true,
@@ -80,6 +80,61 @@ function baseLoopObs(defectPrefix: string) {
     obs("tag_wrong", "Tag finish incorrect", "finish", true, [`${defectPrefix}-tag`]),
     obs("both_exits", "Loop, standing line, and tag visible", "visibility", false, []),
   ];
+}
+
+
+const RULE_WRAPS_PARALLEL: GeometricRule = {
+  id: "wraps-parallel",
+  description: "Wraps / coils must remain parallel with no crossover",
+  violatedBy: ["crossover"],
+  supportedBy: ["wraps_neat", "barrel_uniform"],
+  severity: "retie-now",
+  mechanicsWhy:
+    "A crossed turn creates a local high-stress point and lets the structure walk or cut under load.",
+};
+
+const RULE_TAG_EXIT_CORRECT: GeometricRule = {
+  id: "tag-exit-correct",
+  description: "Tag must follow the expected finish path",
+  violatedBy: ["tag_wrong"],
+  supportedBy: ["tag_visible", "tags_ok", "tag_ok"],
+  severity: "retie-now",
+  mechanicsWhy: "Wrong tag path leaves the lock incomplete — the structure can unlock under load.",
+};
+
+const RULE_STANDING_ON_AXIS: GeometricRule = {
+  id: "standing-on-axis",
+  description: "Standing line must exit on the load axis with no off-axis hinge",
+  violatedBy: ["off_axis"],
+  supportedBy: ["line_exits", "standing_straight"],
+  severity: "watch",
+  mechanicsWhy:
+    "Off-axis exit creates a hinge that concentrates cyclic load and abrades the join interface.",
+};
+
+const RULE_WRAP_STACK_COMPACT: GeometricRule = {
+  id: "wrap-stack-compact",
+  description: "Wrap stack / barrel must be compact with consecutive turns touching",
+  violatedBy: ["gap_seating", "crossover"],
+  supportedBy: ["barrel_uniform", "fully_seated", "wraps_neat"],
+  severity: "retie-recommended",
+  mechanicsWhy:
+    "Gaps between turns reduce friction surface and let the stack walk under load.",
+  appliesWhen: { finishedGeometry: ["wrap-stack", "barrel"] },
+};
+
+const RULE_NO_HINGE: GeometricRule = {
+  id: "no-hinge",
+  description: "Join must be collinear with no hinge or soft section at the material transition",
+  violatedBy: ["gap_seating", "off_axis"],
+  supportedBy: ["fully_seated", "line_exits"],
+  severity: "retie-now",
+  mechanicsWhy:
+    "A hinge at a braid-leader transition concentrates shock and unzips the grip column.",
+};
+
+function withStep(rule: GeometricRule, stepWhere: number | null): GeometricRule {
+  return { ...rule, stepWhere };
 }
 
 export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
@@ -175,6 +230,13 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
           decision: "watch",
         },
       ],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 2),
+        withStep(RULE_WRAP_STACK_COMPACT, 2),
+        withStep(RULE_TAG_EXIT_CORRECT, 3),
+        withStep(RULE_NO_HINGE, 3),
+        withStep(RULE_STANDING_ON_AXIS, 4),
+      ],
       cosmeticIrregularities: ["Minor wrap count variation if density is solid"],
     },
     observations: baseJoinObs("yucatan"),
@@ -268,6 +330,13 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
           stepWhere: 5,
           decision: "watch",
         },
+      ],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 3),
+        withStep(RULE_WRAP_STACK_COMPACT, 3),
+        withStep(RULE_TAG_EXIT_CORRECT, 4),
+        withStep(RULE_NO_HINGE, 4),
+        withStep(RULE_STANDING_ON_AXIS, 5),
       ],
       cosmeticIrregularities: [],
     },

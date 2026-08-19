@@ -3,7 +3,7 @@
  * connectionFamilies must be valid ConnectionJob values only.
  */
 import type { MechanicsBundle } from "@/data/mechanics-profiles";
-import type { CompletenessFlags, FieldFitProfile, ConnectionJob, LineMaterial, DiameterRelation, DiagramKind } from "@/domain/types";
+import type { CompletenessFlags, FieldFitProfile, ConnectionJob, LineMaterial, DiameterRelation, DiagramKind, GeometricRule } from "@/domain/types";
 
 const FULL: CompletenessFlags = {
   atAGlance: true, mechanics: true, diagram: true, tyingSteps: true,
@@ -39,6 +39,51 @@ function baseJoinObs(p: string) {
     obs("off_axis", "Standing line off-axis", "exits", true, [`${p}-axis`]),
     obs("both_exits", "Critical structure visible", "visibility", false, []),
   ];
+}
+
+
+const RULE_WRAPS_PARALLEL: GeometricRule = {
+  id: "wraps-parallel",
+  description: "Wraps / coils must remain parallel with no crossover",
+  violatedBy: ["crossover"],
+  supportedBy: ["wraps_neat", "barrel_uniform"],
+  severity: "retie-now",
+  mechanicsWhy:
+    "A crossed turn creates a local high-stress point and lets the structure walk or cut under load.",
+};
+
+const RULE_TAG_EXIT_CORRECT: GeometricRule = {
+  id: "tag-exit-correct",
+  description: "Tag must follow the expected finish path",
+  violatedBy: ["tag_wrong"],
+  supportedBy: ["tag_visible", "tags_ok", "tag_ok"],
+  severity: "retie-now",
+  mechanicsWhy: "Wrong tag path leaves the lock incomplete — the structure can unlock under load.",
+};
+
+const RULE_STANDING_ON_AXIS: GeometricRule = {
+  id: "standing-on-axis",
+  description: "Standing line must exit on the load axis with no off-axis hinge",
+  violatedBy: ["off_axis"],
+  supportedBy: ["line_exits", "standing_straight"],
+  severity: "watch",
+  mechanicsWhy:
+    "Off-axis exit creates a hinge that concentrates cyclic load and abrades the eye interface.",
+};
+
+const RULE_WRAP_STACK_COMPACT: GeometricRule = {
+  id: "wrap-stack-compact",
+  description: "Wrap stack / barrel must be compact with consecutive turns touching",
+  violatedBy: ["gap_seating", "crossover"],
+  supportedBy: ["barrel_uniform", "fully_seated", "wraps_neat"],
+  severity: "retie-recommended",
+  mechanicsWhy:
+    "Gaps between turns reduce friction surface and let the stack walk under load.",
+  appliesWhen: { finishedGeometry: ["wrap-stack", "barrel"] },
+};
+
+function withStep(rule: GeometricRule, stepWhere: number | null): GeometricRule {
+  return { ...rule, stepWhere };
 }
 
 function term(
@@ -89,6 +134,12 @@ function term(
         { id: `${id}-crossover`, label: "Crossed / uneven wraps", observationKey: "crossover", consequence: "Weak side", mechanicsWhy: "Even wrap friction carries load", stepWhere: 2, decision: "retie-recommended" },
         { id: `${id}-seat`, label: "Under-seated", observationKey: "gap_seating", consequence: "Walk or fail", mechanicsWhy: "Full seat locks structure", stepWhere: 3, decision: "retie-now" },
         { id: `${id}-tag`, label: "Tag path wrong", observationKey: "tag_wrong", consequence: "Unlock", mechanicsWhy: "Tag completes the lock", stepWhere: 3, decision: "retie-now" },
+      ],
+      geometricRules: [
+        withStep(RULE_WRAPS_PARALLEL, 2),
+        withStep(RULE_WRAP_STACK_COMPACT, 2),
+        withStep(RULE_TAG_EXIT_CORRECT, 3),
+        withStep(RULE_STANDING_ON_AXIS, 3),
       ],
       cosmeticIrregularities: [],
     },
