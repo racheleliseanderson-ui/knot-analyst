@@ -23,6 +23,7 @@ import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/ad
 import { generateDecisionPacket, type PacketVariant } from "@/lib/decision-packet";
 import { PresetBar } from "@/components/instrument/preset-bar";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
+import { FailureModesPanel } from "@/components/instrument/failure-modes";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import { encodeInput } from "@/lib/handoff";
 import { cn } from "@/lib/utils";
@@ -54,8 +55,11 @@ function DiameterMmFields({
     relation?: DiameterRelation,
   ) => void;
 }) {
+  const domain = useDomain();
   const [mainDraft, setMainDraft] = useState(mainMm != null ? String(mainMm) : "");
   const [secDraft, setSecDraft] = useState(secondaryMm != null ? String(secondaryMm) : "");
+  const mainPh = domain.id === "boating" ? "e.g. 12" : "e.g. 0.18";
+  const secPh = domain.id === "boating" ? "e.g. 16" : "e.g. 0.43";
 
   useEffect(() => {
     setMainDraft(mainMm != null ? String(mainMm) : "");
@@ -78,7 +82,7 @@ function DiameterMmFields({
         <input
           type="text"
           inputMode="decimal"
-          placeholder="e.g. 0.18"
+          placeholder={mainPh}
           value={mainDraft}
           onChange={(e) => {
             setMainDraft(e.target.value);
@@ -92,7 +96,7 @@ function DiameterMmFields({
         <input
           type="text"
           inputMode="decimal"
-          placeholder="e.g. 0.43"
+          placeholder={secPh}
           value={secDraft}
           onChange={(e) => {
             setSecDraft(e.target.value);
@@ -450,7 +454,7 @@ function DecideMode() {
         <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
           <StepHead
             index="02"
-            title="Line and leader"
+            title={`${domain.terms.line[0]!.toUpperCase()}${domain.terms.line.slice(1)} and ${domain.terms.secondary}`}
             hint="The line decides what is even allowed."
             state={input.connection ? "open" : "locked"}
           />
@@ -499,12 +503,15 @@ function DecideMode() {
                       Two-sided job
                     </p>
                     <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                      Both sides matter for joins. Declare the leader / second line so the model can
-                      score diameter mismatch and material pairs.
+                      Both sides matter for joins. Declare the {domain.terms.secondary} so the model
+                      can score diameter mismatch and material pairs.
                     </p>
                   </div>
                   <div>
-                    <MicroLabel className="mb-2">Leader / second line · required</MicroLabel>
+                    <MicroLabel className="mb-2">
+                      {domain.terms.secondary[0]!.toUpperCase()}
+                      {domain.terms.secondary.slice(1)} · required
+                    </MicroLabel>
                     <div className="flex flex-wrap gap-1.5">
                       {materialOptions.map((m) => (
                         <Chip
@@ -595,8 +602,9 @@ function DecideMode() {
                     Single-side job
                   </p>
                   <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                    This connection only needs a main line — no leader / second line for this job.
-                    Switch to a line-to-line join to declare both sides.
+                    This connection only needs a main {domain.terms.line} — no{" "}
+                    {domain.terms.secondary} for this job. Switch to a two-sided join to declare
+                    both sides.
                   </p>
                 </div>
               )
@@ -613,13 +621,13 @@ function DecideMode() {
         <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
           <StepHead
             index="03"
-            title="On the water"
+            title={domain.id === "boating" ? "On the boat" : "On the water"}
             hint="Only the conditions you tap count."
             state={input.connection ? "open" : "locked"}
           />
           <div className="flex flex-wrap gap-1.5">
             <Chip active={input.mustPassGuides} onClick={() => toggle("mustPassGuides")}>
-              Must pass guides
+              Must pass {domain.terms.passage}
             </Chip>
             <Chip active={input.windy} onClick={() => toggle("windy")}>
               Wind
@@ -630,12 +638,16 @@ function DecideMode() {
             <Chip active={input.lowLight} onClick={() => toggle("lowLight")}>
               Low light
             </Chip>
-            <Chip active={input.hardwareEyeSmall} onClick={() => toggle("hardwareEyeSmall")}>
-              Small eye
-            </Chip>
-            <Chip active={input.freeSwing} onClick={() => toggle("freeSwing")}>
-              Free-swing action
-            </Chip>
+            {domain.id === "fishing" ? (
+              <>
+                <Chip active={input.hardwareEyeSmall} onClick={() => toggle("hardwareEyeSmall")}>
+                  Small {domain.terms.hardware}
+                </Chip>
+                <Chip active={input.freeSwing} onClick={() => toggle("freeSwing")}>
+                  Free-swing action
+                </Chip>
+              </>
+            ) : null}
             <Chip active={input.needsUntie} onClick={() => toggle("needsUntie")}>
               Must untie later
             </Chip>
@@ -1074,7 +1086,7 @@ function DecideMode() {
                         <KnotDiagram
                           kind={activeOption.knot.diagramKind}
                           title={`${activeOption.knot.name} — finished structure`}
-                          className="aspect-[400/180] w-full sm:aspect-[400/150]"
+                          className="aspect-[400/180] w-full"
                         />
                         <p className="border-t border-hairline px-6 py-3 text-[0.8125rem] leading-relaxed text-muted-foreground">
                           {diagramStepNote(activeOption.knot.diagramKind)}
@@ -1192,6 +1204,8 @@ function DecideMode() {
                 )}
               </Panel>
 
+              {activeOption ? <FailureModesPanel knot={activeOption.knot} /> : null}
+
               {tradeoffs.length ? (
                 <Panel className="p-6">
                   <MicroLabel className="mb-4">These fight each other</MicroLabel>
@@ -1220,7 +1234,7 @@ function DecideMode() {
                   <div className="space-y-5">
                     {result.ranked.slice(0, 5).map((o, idx) => (
                       <div key={o.knot.id} className="flex gap-3 sm:gap-4">
-                        <div className="w-[88px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40 sm:w-[112px]">
+                        <div className="w-[96px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40 sm:w-[132px]">
                           <KnotDiagram
                             kind={o.knot.diagramKind}
                             compact
@@ -1408,12 +1422,17 @@ function DecideMode() {
 
 function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
   const scenarios = useScenarios();
+  const domain = useDomain();
   return (
     <div className="space-y-6">
       <div className="relative overflow-hidden rounded-xl border border-hairline">
         <img
           src={heroImg}
-          alt="Braid-to-leader connection under tension at first light"
+          alt={
+            domain.id === "boating"
+              ? "Dock line under tension on a horn cleat"
+              : "Braid-to-leader connection under tension at first light"
+          }
           width={1600}
           height={1008}
           className="h-[260px] w-full object-cover sm:h-[340px]"
@@ -1455,7 +1474,7 @@ function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
       </Panel>
 
       <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
-        Already lost a fish?{" "}
+        {domain.id === "boating" ? "Already lost a line?" : "Already lost a fish?"}{" "}
         <Link to="/diagnose" className="text-accent underline underline-offset-4">
           Start from the failure instead
         </Link>{" "}

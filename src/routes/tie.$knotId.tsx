@@ -162,9 +162,9 @@ function TieMode() {
           </Panel>
 
           <Panel className="p-6">
-            <MicroLabel className="mb-1">Verify before you fish it</MicroLabel>
+            <MicroLabel className="mb-1">Verify before you load it</MicroLabel>
             <p className="mb-4 text-[0.8125rem] leading-relaxed text-muted-foreground">
-              Every line is pass or fail. One fail means retie — do not fish a knot you argued with.
+              Every line is pass or fail. One fail means retie — do not load a knot you argued with.
             </p>
             <ul className="space-y-px overflow-hidden rounded-lg border border-hairline bg-hairline">
               {[
@@ -243,7 +243,7 @@ function TieMode() {
           >
             <MicroLabel className="text-accent">Already tied it?</MicroLabel>
             <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
-              Check the finished knot against its fingerprint before you fish it.
+              Check the finished knot against its fingerprint before you load it.
             </p>
           </Link>
         </div>

@@ -6,7 +6,7 @@ A decision and diagnosis instrument for fishing and boat connections — not a h
 - Vercel: https://knot-analyst.vercel.app
 - GitHub: https://github.com/racheleliseanderson-ui/knot-analyst
 
-Catalog `2026-08-19.3` · 86 modelled connections (56 fishing · 30 boating).
+Catalog `2026-08-19.5` · 86 modelled connections (56 fishing · 30 boating).
 
 ---
 

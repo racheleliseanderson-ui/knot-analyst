@@ -5,20 +5,24 @@
 import { Link } from "@tanstack/react-router";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { failsWhenFor } from "@/data/connection-model-meta";
+import { familyFor } from "@/data/family-failure";
 import { getKnot } from "@/data/catalog";
 import { platesFor } from "@/data/hth-plates";
 import { HthPlate } from "@/components/instrument/hth-plate";
+import { useDomain } from "@/domain/context";
 import type { Knot } from "@/domain/types";
 
 export function FailureModesPanel({ knot }: { knot: Knot }) {
+  const domain = useDomain();
   const modes = failsWhenFor(knot.id, knot.commonMistakes);
   const defects = knot.fingerprint.dangerousDefects;
   const diags = knot.diagnostics;
-  const related = knot.relatedKnots
+  const family = familyFor(knot.id);
+  const related = (family?.members ?? knot.relatedKnots)
     .map((id) => getKnot(id))
     .filter((k): k is Knot => k != null)
     .filter((k) => k.id !== knot.id)
-    .slice(0, 4);
+    .slice(0, 5);
   const hth = platesFor(knot.id);
 
   return (
@@ -35,6 +39,14 @@ export function FailureModesPanel({ knot }: { knot: Knot }) {
             title={`${knot.name} — what fails and what to do`}
             kicker="HTH · Advanced failure modes"
           />
+        </div>
+      ) : null}
+
+      {family ? (
+        <div className="mb-5">
+          <MicroLabel className="mb-2">{family.name}</MicroLabel>
+          <p className="mb-2 text-[0.8125rem] leading-relaxed text-muted-foreground">{family.job}</p>
+          <Bullets items={family.modes} marker="!" />
         </div>
       ) : null}
 
@@ -88,9 +100,10 @@ export function FailureModesPanel({ knot }: { knot: Knot }) {
 
       {related.length ? (
         <div className="mb-5">
-          <MicroLabel className="mb-2">Related families</MicroLabel>
+          <MicroLabel className="mb-2">Same family</MicroLabel>
           <p className="mb-2 text-[0.75rem] leading-relaxed text-muted-foreground">
-            Same job, different failure. Open the plates — Diagnose still starts from the symptom.
+            Same failure class, different geometry. Open the plates — Diagnose still starts from the
+            symptom.
           </p>
           <ul className="flex flex-wrap gap-x-4 gap-y-2">
             {related.map((k) => (
@@ -113,7 +126,9 @@ export function FailureModesPanel({ knot }: { knot: Knot }) {
         search={{ knot: knot.id }}
         className="inline-block font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent underline underline-offset-4"
       >
-        This failed — start Diagnose
+        {domain.id === "boating"
+          ? "This failed — start Diagnose from the symptom"
+          : "This failed — start Diagnose"}
       </Link>
     </Panel>
   );

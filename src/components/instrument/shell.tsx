@@ -124,7 +124,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             {APPLICATION_ID} · {ENGINE_VERSION} · {KNOT_CATALOG_VERSION} ·{" "}
             {knotsForDomain(domain.id).length} knots · {domain.label}
             {review.due
-              ? ` · review due · last ${review.newestReviewed ?? "unknown"}`
+              ? ` · review due · ${review.daysSince ?? "?"}d since ${review.newestReviewed ?? "unknown"}`
               : review.newestReviewed
                 ? ` · reviewed ${review.newestReviewed}`
                 : ""}

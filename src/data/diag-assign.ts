@@ -136,11 +136,10 @@ export function applyDiagOverlay(
     for (const r of fromHthModes(knotId, slug)) pushUnique(out, r);
     for (const r of fromHthFinished(knotId, slug)) pushUnique(out, r);
   }
-  if (out.length < 2) {
-    for (const r of fromFingerprint(knotId, mechanics)) {
-      pushUnique(out, r);
-      if (out.length >= 3) break;
-    }
+  const beforeFp = out.length;
+  for (const r of fromFingerprint(knotId, mechanics)) {
+    pushUnique(out, r);
+    if (out.length - beforeFp >= 3) break;
   }
   if (out.length < 2) {
     for (const line of failsWhenFor(knotId)) {

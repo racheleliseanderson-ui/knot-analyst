@@ -253,7 +253,7 @@ function KnotPage({ id }: { id: string }) {
                     <Link
                       to="/applications/$id"
                       params={{ id: d.knotId }}
-                      className="w-[72px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40"
+                      className="w-[96px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40"
                     >
                       <KnotDiagram
                         kind={d.knot.diagramKind}

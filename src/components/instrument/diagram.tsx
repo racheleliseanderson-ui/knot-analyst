@@ -125,6 +125,12 @@ const FOCUS: Partial<Record<DiagramKind, Record<number, [number, number, number]
   "rope-timber": { 1: [120, 90, 1.5], 2: [190, 90, 1.6], 3: [250, 90, 1.6], 4: [300, 84, 1.5] },
   "rope-trucker": { 1: [80, 110, 1.4], 2: [200, 70, 1.6], 3: [250, 90, 1.5], 4: [310, 90, 1.6] },
   "rope-bend": { 1: [140, 90, 1.3], 2: [200, 90, 1.6], 3: [250, 90, 1.6], 4: [300, 84, 1.6] },
+  "rope-bend-double": {
+    1: [140, 90, 1.3],
+    2: [180, 90, 1.5],
+    3: [230, 90, 1.6],
+    4: [300, 84, 1.6],
+  },
   "rope-bend-zeppelin": {
     1: [150, 78, 1.5],
     2: [230, 108, 1.5],
@@ -153,6 +159,12 @@ const FOCUS: Partial<Record<DiagramKind, Record<number, [number, number, number]
   },
   "rope-loop-bight": { 1: [160, 90, 1.4], 2: [200, 80, 1.6], 3: [250, 90, 1.6], 4: [300, 84, 1.5] },
   "rope-stopper": { 1: [180, 90, 1.4], 2: [230, 90, 1.7], 3: [280, 90, 1.7] },
+  "rope-stopper-estar": {
+    1: [180, 90, 1.4],
+    2: [220, 90, 1.6],
+    3: [260, 90, 1.7],
+    4: [300, 90, 1.5],
+  },
   "rope-stopper-ashley": {
     1: [180, 90, 1.4],
     2: [230, 90, 1.6],
@@ -949,6 +961,26 @@ function Body({ kind, step }: { kind: DiagramKind; step?: number }) {
           <Mark x={220} y={68} text="same side" from={4} step={step} />
         </>
       );
+    case "rope-bend-double":
+      return (
+        <>
+          <Seg
+            d="M 8 74 L 176 74 q 22 0 22 18 q 0 18 -22 18 L 8 110"
+            from={1}
+            step={step}
+            width={4}
+          />
+          <Mark x={12} y={64} text="bight" from={1} step={step} />
+          <Seg role="stand" d="M 392 90 L 196 90" from={1} step={step} />
+          <Seg d="M 196 90 q -30 -28 -70 0 q 30 28 70 0" from={2} step={step} width={2.6} />
+          <Mark x={140} y={52} text="turn 1" from={2} step={step} />
+          <Seg d="M 196 90 q -38 -40 -86 0 q 38 40 86 0" from={3} step={step} width={2.4} />
+          <Mark x={92} y={36} text="turn 2" from={3} step={step} />
+          <Seg d="M 110 90 q 16 22 0 36" from={4} step={step} width={2} dash="4 4" />
+          <Mark x={116} y={140} text="tuck" from={4} step={step} />
+          <Mark x={220} y={68} text="same side" from={4} step={step} />
+        </>
+      );
     case "rope-bend-zeppelin":
       return (
         <>
@@ -1059,6 +1091,20 @@ function Body({ kind, step }: { kind: DiagramKind; step?: number }) {
           <Mark x={280} y={60} text="size" from={3} step={step} />
         </>
       );
+    case "rope-stopper-estar":
+      return (
+        <>
+          <Block />
+          <Seg role="stand" d="M 8 90 L 392 90" from={1} step={step} />
+          <Seg d="M 200 90 q 20 -28 44 0 q -20 28 -44 0" from={2} step={step} width={2.6} />
+          <Mark x={204} y={54} text="extra turns" from={2} step={step} />
+          <Seg d="M 244 90 q 16 -22 32 0 q -16 22 -32 0" from={3} step={step} width={2.8} />
+          <Seg d="M 276 90 q 14 -18 28 0" from={3} step={step} width={2.4} />
+          <Mark x={280} y={56} text="HMPE hold" from={3} step={step} />
+          <Seg d="M 304 90 q 14 18 0 28" from={4} step={step} width={2} dash="4 4" />
+          <Mark x={312} y={132} text="tuck" from={4} step={step} />
+        </>
+      );
     case "rope-stopper-ashley":
       return (
         <>
@@ -1164,6 +1210,8 @@ const KIND_DESCRIPTION: Record<DiagramKind, string> = {
   "rope-trucker":
     "Around a far point, directional loop, tail through for 2:1 purchase, two half hitches to lock.",
   "rope-bend": "Bight in the thicker rope; second rope through, around, tucked; tails same side.",
+  "rope-bend-double":
+    "Bight in the thicker rope; thinner rope takes two turns around the bight, then tucks. Tails same side.",
   "rope-bend-zeppelin":
     "A 6 in one rope, a 9 in the other, working ends opposite, each through both loops.",
   "rope-bend-carrick":
@@ -1180,6 +1228,8 @@ const KIND_DESCRIPTION: Record<DiagramKind, string> = {
   "rope-stopper":
     "Compact figure-eight in the tail, larger than the block or fairlead after dress.",
   "rope-stopper-ashley": "Three-lobed stopper. Two lobes is still an overhand.",
+  "rope-stopper-estar":
+    "Estar path: extra turns a figure-eight does not have. The extra tucks are the hold in HMPE.",
   "rope-heaving": "Wraps that add throwing mass. Not a load-bearing stopper.",
   generic: "A single line with wraps along it and a tag exiting the lock.",
 };
@@ -1421,6 +1471,12 @@ const STEP_NOTE: Partial<Record<DiagramKind, Record<number, string>>> = {
     3: "Tuck under itself.",
     4: "Tails same side. Opposite tails is a thief knot.",
   },
+  "rope-bend-double": {
+    1: "Bight in the thicker rope — never the thinner.",
+    2: "First turn of the thinner rope around the bight.",
+    3: "Second turn. One turn is a single sheet bend.",
+    4: "Tuck. Tails same side. Opposite tails slip on a mismatch.",
+  },
   "rope-bend-zeppelin": {
     1: "A 6 in one rope — look at it from above.",
     2: "A 9 in the other, facing the 6.",
@@ -1468,6 +1524,12 @@ const STEP_NOTE: Partial<Record<DiagramKind, Record<number, string>>> = {
     2: "Figure-eight, dressed compact.",
     3: "Larger than the block or fairlead after dress.",
     4: "If it pulls through, it was too small or not dressed.",
+  },
+  "rope-stopper-estar": {
+    1: "Start the Estar path — not a figure-eight.",
+    2: "Extra turns a figure-eight does not have.",
+    3: "Those tucks are the hold in Dyneema.",
+    4: "Compact, larger than the opening. A figure-8 in HMPE walks.",
   },
   "rope-stopper-ashley": {
     1: "Start as you would an overhand.",

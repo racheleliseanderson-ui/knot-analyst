@@ -9,7 +9,7 @@
 export const APP_VERSION = "1.1.0";
 export const APPLICATION_ID = "HTH-KK-001";
 export const ADAPTER_KEY = "horizon.knot-intelligence";
-export const KNOT_CATALOG_VERSION = "2026-08-19.3";
+export const KNOT_CATALOG_VERSION = "2026-08-19.5";
 export const CONFIG_VERSION = "nitro-fluid-v1.3.0";
 export const ENGINE_VERSION = "mech-intel-1.3.0";
 
@@ -337,6 +337,7 @@ export type DiagramKind =
   | "rope-bend"
   | "rope-bend-zeppelin"
   | "rope-bend-carrick"
+  | "rope-bend-double"
   | "rope-reef"
   | "rope-loop"
   | "rope-loop-figure8"
@@ -344,6 +345,7 @@ export type DiagramKind =
   | "rope-loop-bight"
   | "rope-stopper"
   | "rope-stopper-ashley"
+  | "rope-stopper-estar"
   | "rope-heaving"
   | "generic";
 
@@ -390,6 +392,7 @@ export const MODELLED_DIAGRAM_KINDS = [
   "rope-bend",
   "rope-bend-zeppelin",
   "rope-bend-carrick",
+  "rope-bend-double",
   "rope-reef",
   "rope-loop",
   "rope-loop-figure8",
@@ -397,6 +400,7 @@ export const MODELLED_DIAGRAM_KINDS = [
   "rope-loop-bight",
   "rope-stopper",
   "rope-stopper-ashley",
+  "rope-stopper-estar",
   "rope-heaving",
 ] as const satisfies readonly DiagramKind[];
 

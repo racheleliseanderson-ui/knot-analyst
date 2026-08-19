@@ -13,6 +13,8 @@
  */
 import { FISHING_KNOTS, BOATING_KNOTS } from "../src/data/catalog";
 import { isBoilerplateDefectLabel, overlayKeys } from "../src/data/defect-assign";
+import { familyFor, families } from "../src/data/family-failure";
+import { failsWhenFor } from "../src/data/connection-model-meta";
 import { HTH_SLUG_BY_KNOT, platesFor } from "../src/data/hth-plates";
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -74,6 +76,7 @@ for (const k of all) {
       fail(`${k.id}: generic defect "${d.label}" — fingerprint must name the geometry`);
     }
   }
+  if (!familyFor(k.id)) fail(`${k.id}: not in a failure family`);
   if ((k.diagnostics ?? []).length < 2) {
     fail(`${k.id}: diagnostics need ≥2 (have ${k.diagnostics.length})`);
   }
@@ -86,6 +89,44 @@ for (const k of all) {
       const file = join(publicRoot, url.replace(/^\//, ""));
       if (!existsSync(file)) fail(`${k.id}: missing attached plate ${file}`);
     }
+  }
+}
+
+const GENERIC_FAILS = new Set([
+  "too few wraps",
+  "dry seat",
+  "incomplete seat",
+  "crossed wraps",
+  "incomplete lock",
+  "wrong tag path",
+  "uneven wraps",
+  "under-seating",
+  "loose finish",
+  "loose column",
+]);
+for (const k of all) {
+  const meta = failsWhenFor(k.id);
+  for (const line of meta) {
+    if (GENERIC_FAILS.has(line.trim().toLowerCase())) {
+      fail(`${k.id}: generic failsWhen "${line}" — name the geometry`);
+    }
+  }
+}
+
+for (const family of families()) {
+  if (family.modes.length < 2) fail(`${family.id}: family needs ≥2 failure modes`);
+  for (const id of family.members) {
+    if (!ids.has(id)) fail(`${family.id}: member ${id} is not in the catalog`);
+  }
+}
+
+const seenModes = new Map<string, string>();
+for (const family of families()) {
+  for (const mode of family.modes) {
+    const key = mode.trim().toLowerCase();
+    const prev = seenModes.get(key);
+    if (prev) fail(`family mode reused by ${family.id} and ${prev}: "${mode}"`);
+    seenModes.set(key, family.id);
   }
 }
 

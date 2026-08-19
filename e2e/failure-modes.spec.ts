@@ -70,4 +70,31 @@ test.describe("Failure modes", () => {
     await expect(page.getByText(/HTH · Advanced failure modes/i).first()).toBeVisible();
     await expect(page.getByRole("img", { name: /what fails and what to do/i })).toBeVisible();
   });
+
+  test("Bowline names the family and collar-capsize mode", async ({ page }) => {
+    await page.goto("/diagram/bowline");
+    await expect(page.getByText("Bowline family").first()).toBeVisible();
+    await expect(page.getByText(/Open collar/i).first()).toBeVisible();
+    await expect(page.getByText(/Yosemite Bowline|Water Bowline/i).first()).toBeVisible();
+  });
+
+  test("Cow hitch is a dropped-bight, not a jam hitch", async ({ page }) => {
+    await page.goto("/diagram/cow-hitch");
+    await expect(page.getByText("Dropped-bight family").first()).toBeVisible();
+    await expect(page.getByText(/Only one leg loaded/i).first()).toBeVisible();
+    await expect(page.getByText("Jam-to-hardware family")).toHaveCount(0);
+  });
+
+  test("Double sheet bend schematic is not a single-turn sheet bend", async ({ page }) => {
+    await page.goto("/diagram/double-sheet-bend");
+    await expect(page.getByText(/two turns around the bight/i).first()).toBeVisible();
+    await page.goto("/diagram/sheet-bend");
+    await expect(page.getByText(/second rope through, around, tucked/i).first()).toBeVisible();
+  });
+
+  test("Figure-8 stopper sits with the stopper family, not the loop", async ({ page }) => {
+    await page.goto("/diagram/figure-8-stopper");
+    await expect(page.getByText("Stopper family").first()).toBeVisible();
+    await expect(page.getByText("Figure-eight loop family")).toHaveCount(0);
+  });
 });

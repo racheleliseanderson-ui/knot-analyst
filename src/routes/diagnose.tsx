@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Shell } from "@/components/instrument/shell";
 import {
   Bullets,
@@ -123,6 +123,14 @@ function DiagnoseMode() {
   };
   const [input, setInput] = useState<Partial<TroubleshootInput>>(seeded);
   const [ran, setRan] = useState(false);
+
+  const firstDomain = useRef(domain.id);
+  useEffect(() => {
+    if (firstDomain.current === domain.id) return;
+    firstDomain.current = domain.id;
+    setInput({});
+    setRan(false);
+  }, [domain.id]);
 
   const grouped = useMemo(() => {
     const map = new Map<SymptomGroup, typeof plays>();
@@ -387,8 +395,8 @@ function DiagnoseMode() {
                         Two-sided job
                       </p>
                       <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                        Declare the leader / second line so the diagnosis can separate join failure
-                        from main-line failure.
+                        Declare the {domain.terms.secondary} so the diagnosis can separate join
+                        failure from main-{domain.terms.line} failure.
                       </p>
                     </div>
                     <div>
@@ -620,7 +628,7 @@ function DiagnoseMode() {
                     <KnotDiagram
                       kind={result.relatedKnot.diagramKind}
                       title={`${result.relatedKnot.name} — finished structure`}
-                      className="aspect-[400/180] w-full sm:aspect-[400/150]"
+                      className="aspect-[400/180] w-full"
                     />
                     <div className="border-t border-hairline px-6 py-3">
                       <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">

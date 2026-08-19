@@ -1456,8 +1456,21 @@ export function overlayKeys(): Array<{ knotId: string; key: string }> {
 
 export function applyDefectOverlay(knotId: string, m: MechanicsBundle): MechanicsBundle {
   const rows = DEFECT_OVERLAY[knotId];
-  if (!rows?.length) return m;
-  const byKey = new Map(rows.map((r) => [r.key, r]));
+  const byKey = new Map<string, Overlay>();
+  for (const d of m.fingerprint.dangerousDefects) {
+    if (isBoilerplateDefectLabel(d.label)) continue;
+    byKey.set(d.observationKey, {
+      key: d.observationKey,
+      label: d.label,
+      consequence: d.consequence,
+      why: d.mechanicsWhy,
+      step: d.stepWhere ?? undefined,
+    });
+  }
+  if (rows?.length) {
+    for (const r of rows) byKey.set(r.key, r);
+  }
+  if (!byKey.size) return m;
   const dangerousDefects: DefectDef[] = m.fingerprint.dangerousDefects.map((d) => {
     const o = byKey.get(d.observationKey);
     if (!o) return d;
