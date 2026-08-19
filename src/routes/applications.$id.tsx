@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Shell } from "@/components/instrument/shell";
 import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
+import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { getKnot } from "@/data/catalog";
 import {
   EXTRA_DOMAIN_LABELS,
@@ -120,16 +121,26 @@ function WorldPage({ id }: { id: string }) {
       {related.length ? (
         <section className="mt-8">
           <MicroLabel>Modelled connections this talks about</MicroLabel>
-          <ul className="mt-3 flex flex-wrap gap-2">
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2">
             {related.map((k) =>
               k ? (
                 <li key={k.id}>
                   <Link
                     to="/applications/$id"
                     params={{ id: k.id }}
-                    className="inline-flex min-h-11 items-center rounded-md border border-hairline px-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                    className="panel flex min-h-20 overflow-hidden hover:border-primary/40"
                   >
-                    {k.name}
+                    <div className="w-[88px] shrink-0 border-r border-hairline bg-surface-2/40">
+                      <KnotDiagram
+                        kind={k.diagramKind}
+                        compact
+                        title={`${k.name} — finished structure`}
+                        className="aspect-[400/180] h-full w-full"
+                      />
+                    </div>
+                    <span className="flex min-w-0 flex-1 items-center px-4 text-[0.875rem] font-medium tracking-tight">
+                      {k.name}
+                    </span>
                   </Link>
                 </li>
               ) : null,
@@ -190,6 +201,21 @@ function KnotPage({ id }: { id: string }) {
         </div>
       </div>
       <IsolationBanner text={t("applications.isolation")} />
+      <div className="mb-6 overflow-hidden rounded-lg border border-hairline bg-surface-2/40">
+        <KnotDiagram
+          kind={k.diagramKind}
+          title={`${k.name} — finished structure`}
+          className="aspect-[400/180] w-full"
+        />
+        <div className="border-t border-hairline px-5 py-3">
+          <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
+            Finished structure
+          </p>
+          <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+            {diagramStepNote(k.diagramKind)}
+          </p>
+        </div>
+      </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <Panel className="p-5">
           <MicroLabel>What holds it</MicroLabel>
@@ -214,17 +240,33 @@ function KnotPage({ id }: { id: string }) {
           {duals.length ? (
             <ul className="mt-3 space-y-3">
               {duals.map((d) => (
-                <li key={d.knotId}>
-                  <Link
-                    to="/applications/$id"
-                    params={{ id: d.knotId }}
-                    className="font-semibold tracking-tight hover:text-accent"
-                  >
-                    {d.knot?.name}
-                  </Link>
-                  <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
-                    {d.relation}
-                  </p>
+                <li key={d.knotId} className="flex gap-3">
+                  {d.knot ? (
+                    <Link
+                      to="/applications/$id"
+                      params={{ id: d.knotId }}
+                      className="w-[72px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40"
+                    >
+                      <KnotDiagram
+                        kind={d.knot.diagramKind}
+                        compact
+                        title={`${d.knot.name} — finished structure`}
+                        className="aspect-[400/180] w-full"
+                      />
+                    </Link>
+                  ) : null}
+                  <div className="min-w-0">
+                    <Link
+                      to="/applications/$id"
+                      params={{ id: d.knotId }}
+                      className="font-semibold tracking-tight hover:text-accent"
+                    >
+                      {d.knot?.name}
+                    </Link>
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                      {d.relation}
+                    </p>
+                  </div>
                 </li>
               ))}
             </ul>

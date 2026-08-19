@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Shell } from "@/components/instrument/shell";
 import { Chip, MicroLabel, Panel } from "@/components/instrument/primitives";
+import { KnotDiagram } from "@/components/instrument/diagram";
 import { getKnot, FISHING_KNOTS, BOATING_KNOTS } from "@/data/catalog";
 import {
   WORLD_ESSAYS,
@@ -259,19 +260,29 @@ function ApplicationsMode() {
                   <Link
                     to="/applications/$id"
                     params={{ id: r.knotId }}
-                    className="group flex min-w-0 flex-1 flex-col justify-between p-4"
+                    className="group flex min-w-0 flex-1"
                   >
-                    <span>
-                      <span className="font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground">
-                        {TANGLE_LABELS[r.tangleClass]} ·{" "}
-                        {r.holdsBy.map((h) => HOLDS_LABELS[h]).join(" · ")}
+                    <div className="w-[96px] shrink-0 border-r border-hairline bg-surface-2/40 sm:w-[132px]">
+                      <KnotDiagram
+                        kind={k.diagramKind}
+                        compact
+                        title={`${k.name} — finished structure`}
+                        className="aspect-[400/180] h-full w-full"
+                      />
+                    </div>
+                    <span className="flex min-w-0 flex-1 flex-col justify-between p-4">
+                      <span>
+                        <span className="font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted-foreground">
+                          {TANGLE_LABELS[r.tangleClass]} ·{" "}
+                          {r.holdsBy.map((h) => HOLDS_LABELS[h]).join(" · ")}
+                        </span>
+                        <span className="mt-1 block text-[1.05rem] font-semibold tracking-tight group-hover:text-accent">
+                          {k.name}
+                        </span>
                       </span>
-                      <span className="mt-1 block text-[1.05rem] font-semibold tracking-tight group-hover:text-accent">
-                        {k.name}
+                      <span className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                        {r.applicationNotes[0]}
                       </span>
-                    </span>
-                    <span className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
-                      {r.applicationNotes[0]}
                     </span>
                   </Link>
                   <div className="flex shrink-0 flex-col justify-center border-l border-hairline">

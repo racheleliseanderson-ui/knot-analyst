@@ -14,6 +14,7 @@ import { knotsForDomain } from "@/data/catalog";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
 import { generateDecisionPacket, type PacketVariant } from "@/lib/decision-packet";
 import { PresetBar } from "@/components/instrument/preset-bar";
+import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import { encodeInput } from "@/lib/handoff";
 import { cn } from "@/lib/utils";
@@ -1038,6 +1039,18 @@ function DecideMode() {
                         </p>
                       </div>
                     ) : null}
+                    {activeOption ? (
+                      <div className="overflow-hidden border-b border-hairline bg-surface-2/40">
+                        <KnotDiagram
+                          kind={activeOption.knot.diagramKind}
+                          title={`${activeOption.knot.name} — finished structure`}
+                          className="aspect-[400/180] w-full sm:aspect-[400/150]"
+                        />
+                        <p className="border-t border-hairline px-6 py-3 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                          {diagramStepNote(activeOption.knot.diagramKind)}
+                        </p>
+                      </div>
+                    ) : null}
                     <div className="grid gap-6 px-6 py-6 sm:grid-cols-[minmax(0,1fr)_150px]">
                       <div className="min-w-0">
                         <h2 className="text-[2rem] font-semibold leading-none tracking-[-0.03em]">
@@ -1055,13 +1068,22 @@ function DecideMode() {
                           {card.conditionLine}
                         </p>
                         {activeOption ? (
-                          <Link
-                            to="/tie/$knotId"
-                            params={{ knotId: activeOption.knot.id }}
-                            className="mt-4 inline-flex items-center gap-2 rounded-md border border-accent/50 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent/10 no-print"
-                          >
-                            Tie it — steps and diagram
-                          </Link>
+                          <div className="mt-4 flex flex-wrap gap-2 no-print">
+                            <Link
+                              to="/tie/$knotId"
+                              params={{ knotId: activeOption.knot.id }}
+                              className="inline-flex items-center gap-2 rounded-md border border-accent/50 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent/10"
+                            >
+                              Tie it — steps and diagram
+                            </Link>
+                            <Link
+                              to="/diagram/$knotId"
+                              params={{ knotId: activeOption.knot.id }}
+                              className="inline-flex items-center gap-2 rounded-md border border-hairline px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                              All diagrams
+                            </Link>
+                          </div>
                         ) : null}
                       </div>
                       <div className="sm:text-right">
@@ -1168,39 +1190,49 @@ function DecideMode() {
                   <MicroLabel className="mb-4">Surviving options</MicroLabel>
                   <div className="space-y-5">
                     {result.ranked.slice(0, 5).map((o, idx) => (
-                      <div key={o.knot.id}>
-                        <div className="flex items-baseline justify-between gap-4">
-                          <p className="text-[0.9375rem] font-medium tracking-tight">
-                            <span className="mr-2 font-mono text-[0.6875rem] text-muted-foreground">
-                              {String(idx + 1).padStart(2, "0")}
+                      <div key={o.knot.id} className="flex gap-3 sm:gap-4">
+                        <div className="w-[88px] shrink-0 overflow-hidden rounded-md border border-hairline bg-surface-2/40 sm:w-[112px]">
+                          <KnotDiagram
+                            kind={o.knot.diagramKind}
+                            compact
+                            title={`${o.knot.name} — finished structure`}
+                            className="aspect-[400/180] w-full"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-baseline justify-between gap-4">
+                            <p className="text-[0.9375rem] font-medium tracking-tight">
+                              <span className="mr-2 font-mono text-[0.6875rem] text-muted-foreground">
+                                {String(idx + 1).padStart(2, "0")}
+                              </span>
+                              {o.knot.name}
+                            </p>
+                            <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                              {o.fieldFitPercent}%
                             </span>
-                            {o.knot.name}
-                          </p>
-                          <span className="font-mono text-xs tabular-nums text-muted-foreground">
-                            {o.fieldFitPercent}%
-                          </span>
-                        </div>
-                        <div className="mt-2">
-                          <Meter value={o.fieldFitPercent} />
-                        </div>
-                        <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
-                          {idx === 0 ? (o.vsNext ?? o.whyBest[0]) : (o.whyBest[0] ?? o.butNotes[0] ?? o.vsNext)}
-                        </p>
-                        {idx === 0 ? (
-                          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                            {o.dimensionScores
-                              .slice()
-                              .sort((a, b) => b.weight * b.score - a.weight * a.score)
-                              .slice(0, 4)
-                              .map((d) => (
-                                <Meter
-                                  key={d.dimension}
-                                  value={d.score}
-                                  label={DIMENSION_LABELS[d.dimension]}
-                                />
-                              ))}
                           </div>
-                        ) : null}
+                          <div className="mt-2">
+                            <Meter value={o.fieldFitPercent} />
+                          </div>
+                          <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
+                            {idx === 0 ? (o.vsNext ?? o.whyBest[0]) : (o.whyBest[0] ?? o.butNotes[0] ?? o.vsNext)}
+                          </p>
+                          {idx === 0 ? (
+                            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                              {o.dimensionScores
+                                .slice()
+                                .sort((a, b) => b.weight * b.score - a.weight * a.score)
+                                .slice(0, 4)
+                                .map((d) => (
+                                  <Meter
+                                    key={d.dimension}
+                                    value={d.score}
+                                    label={DIMENSION_LABELS[d.dimension]}
+                                  />
+                                ))}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
                     ))}
                   </div>
