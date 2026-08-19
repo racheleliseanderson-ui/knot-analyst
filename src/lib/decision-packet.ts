@@ -7,10 +7,11 @@
  *
  * Presentation only — it renders an existing ChooseResult, it never re-scores.
  */
-import type { ChooseResult, KnotContent } from "@/domain/types";
+import type { ChooseResult } from "@/domain/types";
 import { DIMENSION_LABELS } from "@/domain/types";
 import type { Counterfactual, DecisionCard, Tradeoff } from "@/engine/advisor";
 import { getKnot } from "@/data/catalog";
+import { diagramStepNote } from "@/components/instrument/diagram";
 
 export type PacketVariant = "brief" | "field";
 
@@ -274,7 +275,7 @@ export async function generateDecisionPacket({
   }
 
   // ── Tying procedure (field packet only) ─────────────────────
-  const knot: KnotContent | undefined = full && top ? getKnot(top.knot.id) : undefined;
+  const knot = full && top ? getKnot(top.knot.id) : undefined;
   if (knot) {
     doc.addPage();
     y = M;
@@ -284,6 +285,8 @@ export async function generateDecisionPacket({
     doc.text(ascii(knot.name), M, y);
     y += 18;
     body(knot.howToSummary, 9.5, MUTED);
+    y += 4;
+    body(diagramStepNote(knot.diagramKind), 8.5, MUTED);
     y += 8;
 
     if (knot.beforeYouStart?.length) {
@@ -306,6 +309,7 @@ export async function generateDecisionPacket({
         y += 13;
       }
       y += 2;
+      body(diagramStepNote(knot.diagramKind, s.order), 8.5, MUTED, 24);
       if (s.detail) body(s.detail, 8.5, MUTED, 24);
       const cues: [string, string | undefined][] = [
         ["Look for", s.look ?? s.expectedResult],

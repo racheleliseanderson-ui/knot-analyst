@@ -15,31 +15,30 @@ import { useScenarios } from "@/lib/overlay";
 import { useSessionState } from "@/lib/session-state";
 import type { ChooseInput } from "@/domain/types";
 import { CONNECTION_LABELS, MATERIAL_LABELS } from "@/domain/types";
+import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 
 type Search = { a?: string; b?: string; as?: string; bs?: string; row?: string };
 const str = (v: unknown) => (typeof v === "string" && v.length ? v : undefined);
 
 export const Route = createFileRoute("/compare")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    a: str(s['a']),
-    b: str(s['b']),
-    as: str(s['as']),
-    bs: str(s['bs']),
-    row: str(s['row']),
+    a: str(s["a"]),
+    b: str(s["b"]),
+    as: str(s["as"]),
+    bs: str(s["bs"]),
+    row: str(s["row"]),
   }),
   head: () => ({
     meta: [
       { title: "Quick compare — two jobs, side by side | Knot Analyst" },
       {
         name: "description",
-        content:
-          "Run two jobs side by side. Tap a difference to see why the call changed.",
+        content: "Run two jobs side by side. Tap a difference to see why the call changed.",
       },
       { property: "og:title", content: "Quick compare — two jobs, side by side" },
       {
         property: "og:description",
-        content:
-          "See what changed between two jobs, and why one knot dropped out.",
+        content: "See what changed between two jobs, and why one knot dropped out.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -114,8 +113,10 @@ function SideEditor({
       </label>
 
       <p className="mt-3 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
-        {[input.mainMaterial ? MATERIAL_LABELS[input.mainMaterial] : null,
-          input.secondaryMaterial ? MATERIAL_LABELS[input.secondaryMaterial] : null]
+        {[
+          input.mainMaterial ? MATERIAL_LABELS[input.mainMaterial] : null,
+          input.secondaryMaterial ? MATERIAL_LABELS[input.secondaryMaterial] : null,
+        ]
           .filter(Boolean)
           .join(" → ") || "material unset"}
       </p>
@@ -151,7 +152,10 @@ function SideEditor({
                   active={input.retieFrequency === r}
                   disabled={!input.connection}
                   onClick={() =>
-                    onChange({ ...input, retieFrequency: input.retieFrequency === r ? undefined : r })
+                    onChange({
+                      ...input,
+                      retieFrequency: input.retieFrequency === r ? undefined : r,
+                    })
                   }
                 >
                   {constraintValueLabel("retieFrequency", r)}
@@ -198,6 +202,18 @@ function AnswerCard({
         <p className="mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
           {card.jobLine} · {card.systemLine}
         </p>
+        {!failed && result.ranked[0] ? (
+          <div className="mt-4 overflow-hidden rounded-md border border-hairline bg-surface-2/40">
+            <KnotDiagram
+              kind={result.ranked[0].knot.diagramKind}
+              title={`${result.ranked[0].knot.name} — finished structure`}
+              className="aspect-[400/180] w-full"
+            />
+            <p className="border-t border-hairline px-3 py-2 text-[0.75rem] leading-relaxed text-muted-foreground">
+              {diagramStepNote(result.ranked[0].knot.diagramKind)}
+            </p>
+          </div>
+        ) : null}
         {!failed ? (
           <div className="mt-4 flex items-baseline gap-2">
             <span className="font-mono text-[2rem] leading-none tabular-nums text-primary">
@@ -212,13 +228,22 @@ function AnswerCard({
         </div>
         <div className="mt-4 flex flex-wrap gap-2 no-print">
           {result.ranked[0] ? (
-            <Link
-              to="/tie/$knotId"
-              params={{ knotId: result.ranked[0].knot.id }}
-              className={btn + " border-accent/50 text-accent hover:bg-accent/10"}
-            >
-              Tie it
-            </Link>
+            <>
+              <Link
+                to="/tie/$knotId"
+                params={{ knotId: result.ranked[0].knot.id }}
+                className={btn + " border-accent/50 text-accent hover:bg-accent/10"}
+              >
+                Tie it
+              </Link>
+              <Link
+                to="/diagram/$knotId"
+                params={{ knotId: result.ranked[0].knot.id }}
+                className={btn}
+              >
+                All diagrams
+              </Link>
+            </>
           ) : null}
           <Link to="/" search={toDecideSearch(input)} className={btn}>
             Open in Decide
@@ -504,7 +529,9 @@ function PipelineStrip({
               aria-current={current ? "step" : undefined}
               className={
                 "relative bg-card px-5 py-4 " +
-                (current ? "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent" : "")
+                (current
+                  ? "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent"
+                  : "")
               }
             >
               <div className="flex items-center gap-2">
