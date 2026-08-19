@@ -72,7 +72,7 @@ test.describe("Library", () => {
       .click();
     await expect(page).toHaveURL(/\/diagram\/palomar/);
     await expect(page.getByRole("heading", { name: "Palomar Knot" })).toBeVisible();
-    await expect(page.getByText("Finished structure")).toBeVisible();
+    await expect(page.getByText("Finished structure", { exact: true })).toBeVisible();
     await expect(page.getByText(/^Step 01$/)).toBeVisible();
 
     await page.getByRole("link", { name: /how to tie it/i }).click();

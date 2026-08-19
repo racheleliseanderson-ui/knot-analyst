@@ -41,7 +41,7 @@ test.describe("Applications", () => {
       .getByRole("link", { name: /bowline/i })
       .first()
       .click();
-    await expect(page).toHaveURL(/\/applications\/bowline/);
+    await expect(page).toHaveURL(/\/applications\/bowline$/);
     await expect(page.getByRole("heading", { name: "Bowline" })).toBeVisible();
     await expect(page.getByText(/same crossing pattern/i)).toBeVisible();
     await expect(page.getByText(/does not pick a knot/i).first()).toBeVisible();
@@ -57,7 +57,7 @@ test.describe("Applications", () => {
 
     await page.goto("/applications");
     await page.getByRole("link", { name: /dna topology/i }).click();
-    await expect(page).toHaveURL(/\/applications\/dna-topology/);
+    await expect(page).toHaveURL(/\/applications\/dna-topology$/);
     await expect(page.getByRole("heading", { name: /dna topology/i })).toBeVisible();
     await expect(page.getByText(/does not tell you which fishing knot/i)).toBeVisible();
     await expect(page.getByText(/not about a fishing or boat knot/i)).toBeVisible();
