@@ -73,29 +73,29 @@ npm run test:schema
 
 Fishing venues split into two soft layers (no ranking ID renames, no engine change):
 
-| Layer | Role | Examples |
-|---|---|---|
-| **Waterbody** (`domain.venues`) | Where — water / structure | Surf, Shoreline, Lake, Reservoir, River, Waterway, Offshore |
-| **Platform** (`domain.platforms`) | How positioned | Wading, Bank/shore, Kayak, Skiff, Large boat |
+| Layer                             | Role                      | Examples                                                    |
+| --------------------------------- | ------------------------- | ----------------------------------------------------------- |
+| **Waterbody** (`domain.venues`)   | Where — water / structure | Surf, Shoreline, Lake, Reservoir, River, Waterway, Offshore |
+| **Platform** (`domain.platforms`) | How positioned            | Wading, Bank/shore, Kayak, Skiff, Large boat                |
 
 - Condition patches merge (platform wins on key collision); chips remain editable.
 - Legacy preset `venueId` values map via `LEGACY_FISHING_VENUE` (`pier`→shoreline, `kayak`→platform, `river`→river+wading, `flats`→waterway).
 - Boating keeps a single flat venue list.
 - Schema goldens: unchanged (venues never enter flat ChooseInput goldens).
 
-
 ## Phase D — US region soft priors (2026-08-12)
 
 Geographic intelligence without hard-coded knots.
 
-| Piece | Location |
-|---|---|
-| Model | `src/domain/region.ts` |
-| Fishing catalog | `src/domains/fishing/regions.ts` |
-| Picker | `src/components/instrument/region-picker.tsx` |
-| Domain hook | `domain.regions` |
+| Piece           | Location                                      |
+| --------------- | --------------------------------------------- |
+| Model           | `src/domain/region.ts`                        |
+| Fishing catalog | `src/domains/fishing/regions.ts`              |
+| Picker          | `src/components/instrument/region-picker.tsx` |
+| Domain hook     | `domain.regions`                              |
 
 ### Behavior
+
 - **Broad** chips: Northeast · Southeast · Midwest · West · Southwest
 - **Fine** optional second tap (e.g. Gulf, Great Lakes, Pacific, Mountain…)
 - Soft-loads condition chips only (same contract as venue)
@@ -104,5 +104,5 @@ Geographic intelligence without hard-coded knots.
 - Schema goldens: unchanged when region not selected (flat path)
 
 ### Signals (for Phase E)
-`saltLean`, `wireWatch`, `abrasion`, `shockLeaderCommon`, `clearPressured`, `coldSeason`
 
+`saltLean`, `wireWatch`, `abrasion`, `shockLeaderCommon`, `clearPressured`, `coldSeason`

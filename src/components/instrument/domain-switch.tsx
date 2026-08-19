@@ -3,7 +3,12 @@ import { cn } from "@/lib/utils";
 import { usePrefs, type DomainPref } from "@/lib/prefs";
 import { useT } from "@/i18n";
 
-const OPTIONS: { id: DomainPref; icon: typeof Fish; key: "domain.fishing" | "domain.boating"; short: string }[] = [
+const OPTIONS: {
+  id: DomainPref;
+  icon: typeof Fish;
+  key: "domain.fishing" | "domain.boating";
+  short: string;
+}[] = [
   { id: "fishing", icon: Fish, key: "domain.fishing", short: "Fish" },
   { id: "boating", icon: Anchor, key: "domain.boating", short: "Boat" },
 ];

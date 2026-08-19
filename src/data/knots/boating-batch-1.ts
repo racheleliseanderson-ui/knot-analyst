@@ -15,19 +15,44 @@ export const BOATING_BATCH_1: KnotContent[] = [
     category: "rope",
     bestFor: ["make-fast"],
     goodFor: "Make fast to a horn cleat so the line can be cast off under load.",
-    notIdealFor: ["Permanent standing rigging (splice instead)", "A jammed lock hitch you cannot break by hand"],
+    notIdealFor: [
+      "Permanent standing rigging (splice instead)",
+      "A jammed lock hitch you cannot break by hand",
+    ],
     lineMaterials: [...rope, "dyneema"],
-    strengthRetentionTypical: "A make-fast, not a rope-break figure. Holds when the first turn is on the far horn and the lock is dressed — BoatUS / sailing-school standard.",
+    strengthRetentionTypical:
+      "A make-fast, not a rope-break figure. Holds when the first turn is on the far horn and the lock is dressed — BoatUS / sailing-school standard.",
     difficulty: "beginner",
     materialsNeeded: ["Dock or boat line", "Horn cleat"],
-    howToSummary: "Full turn on the far horn, figure-eights across the horns, locking hitch under the last cross. Must be breakable by hand.",
+    howToSummary:
+      "Full turn on the far horn, figure-eights across the horns, locking hitch under the last cross. Must be breakable by hand.",
     steps: [
-      { order: 1, instruction: "Lead the line to the far horn — the one opposite the incoming load — and take a full turn around the base." },
-      { order: 2, instruction: "Figure-eight across both horns. One cross is enough on a working cleat; two if the line is light." },
-      { order: 3, instruction: "Finish with a twisted locking hitch under the last cross so the two parts lie parallel." },
-      { order: 4, instruction: "Dress. If you cannot break it by hand with load still on, it is a jam, not a hitch." },
+      {
+        order: 1,
+        instruction:
+          "Lead the line to the far horn — the one opposite the incoming load — and take a full turn around the base.",
+      },
+      {
+        order: 2,
+        instruction:
+          "Figure-eight across both horns. One cross is enough on a working cleat; two if the line is light.",
+      },
+      {
+        order: 3,
+        instruction:
+          "Finish with a twisted locking hitch under the last cross so the two parts lie parallel.",
+      },
+      {
+        order: 4,
+        instruction:
+          "Dress. If you cannot break it by hand with load still on, it is a jam, not a hitch.",
+      },
     ],
-    commonMistakes: ["First turn on the near horn", "Locking hitch that jams", "No full turn on the base"],
+    commonMistakes: [
+      "First turn on the near horn",
+      "Locking hitch that jams",
+      "No full turn on the base",
+    ],
     diagnostics: [
       {
         id: "cleat-jam",
@@ -40,16 +65,34 @@ export const BOATING_BATCH_1: KnotContent[] = [
       },
     ],
     resources: [
-      { type: "article", title: "Animated Knots — Cleat Hitch", url: "https://www.animatedknots.com/cleat-hitch-knot", source: "Animated Knots by Grog", vetted: true },
-      { type: "article", title: "Hook the Horizon — The Cleat Hitch", url: "https://hookthehorizon.blog/cleat-hitch/", source: "Hook the Horizon", vetted: true },
+      {
+        type: "article",
+        title: "Animated Knots — Cleat Hitch",
+        url: "https://www.animatedknots.com/cleat-hitch-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+      {
+        type: "article",
+        title: "Hook the Horizon — The Cleat Hitch",
+        url: "https://hookthehorizon.blog/cleat-hitch/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
     ],
     relatedKnots: ["round-turn-two-half-hitches", "bowline"],
     tags: ["boating", "make-fast", "dock"],
     reviewedOn: "2026-08-14",
     sources: [
-      { title: "Animated Knots — Cleat Hitch", url: "https://www.animatedknots.com/cleat-hitch-knot" },
+      {
+        title: "Animated Knots — Cleat Hitch",
+        url: "https://www.animatedknots.com/cleat-hitch-knot",
+      },
       { title: "BoatUS — How to Tie a Cleat Hitch" },
-      { title: "Hook the Horizon — The Cleat Hitch", url: "https://hookthehorizon.blog/cleat-hitch/" },
+      {
+        title: "Hook the Horizon — The Cleat Hitch",
+        url: "https://hookthehorizon.blog/cleat-hitch/",
+      },
     ],
   },
   {
@@ -58,20 +101,34 @@ export const BOATING_BATCH_1: KnotContent[] = [
     aliases: ["Round turn and two half hitches"],
     category: "rope",
     bestFor: ["make-fast"],
-    goodFor: "Make fast to a bollard, piling, or ring when you need a hitch that can be untied after load.",
+    goodFor:
+      "Make fast to a bollard, piling, or ring when you need a hitch that can be untied after load.",
     notIdealFor: ["Slick HMPE without extra turns", "A job that should be a splice"],
     lineMaterials: [...rope, "dyneema"],
-    strengthRetentionTypical: "Typical working hitch band ~60–75% of rope strength when the round turn takes the load and the hitches only lock.",
+    strengthRetentionTypical:
+      "Typical working hitch band ~60–75% of rope strength when the round turn takes the load and the hitches only lock.",
     difficulty: "beginner",
     materialsNeeded: ["Rope", "Bollard, piling, or ring"],
-    howToSummary: "Full round turn to take the load, then two half hitches on the standing part. The turn does the work; the hitches lock.",
+    howToSummary:
+      "Full round turn to take the load, then two half hitches on the standing part. The turn does the work; the hitches lock.",
     steps: [
-      { order: 1, instruction: "Pass a full round turn around the bollard or ring so the turn, not the hitch, carries the load." },
+      {
+        order: 1,
+        instruction:
+          "Pass a full round turn around the bollard or ring so the turn, not the hitch, carries the load.",
+      },
       { order: 2, instruction: "Tie the first half hitch around the standing part." },
       { order: 3, instruction: "Tie the second half hitch in the same direction so they nest." },
-      { order: 4, instruction: "Dress both hitches up to the turn. If they sit loose, they will walk." },
+      {
+        order: 4,
+        instruction: "Dress both hitches up to the turn. If they sit loose, they will walk.",
+      },
     ],
-    commonMistakes: ["Half hitches without the round turn", "Hitches tied in opposite directions", "HMPE with too few turns"],
+    commonMistakes: [
+      "Half hitches without the round turn",
+      "Hitches tied in opposite directions",
+      "HMPE with too few turns",
+    ],
     diagnostics: [
       {
         id: "rtthh-walk",
@@ -83,13 +140,24 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Round Turn and Two Half Hitches", url: "https://www.animatedknots.com/round-turn-two-half-hitches-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Round Turn and Two Half Hitches",
+        url: "https://www.animatedknots.com/round-turn-two-half-hitches-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["clove-hitch", "anchor-bend", "cleat-hitch"],
     tags: ["boating", "make-fast"],
     reviewedOn: "2026-08-14",
     sources: [
       { title: "Animated Knots — Round Turn and Two Half Hitches" },
-      { title: "Hook the Horizon — Round Turn and Two Half Hitches", url: "https://hookthehorizon.blog/round-turn-two-half-hitches/" },
+      {
+        title: "Hook the Horizon — Round Turn and Two Half Hitches",
+        url: "https://hookthehorizon.blog/round-turn-two-half-hitches/",
+      },
     ],
   },
   {
@@ -98,20 +166,34 @@ export const BOATING_BATCH_1: KnotContent[] = [
     aliases: ["Boat hitch"],
     category: "rope",
     bestFor: ["make-fast"],
-    goodFor: "Fast temporary make-fast to a piling when both ends can be watched. Walks under cycling load.",
+    goodFor:
+      "Fast temporary make-fast to a piling when both ends can be watched. Walks under cycling load.",
     notIdealFor: ["Unattended mooring", "Cyclic snatch", "The only hitch on a night tide"],
     lineMaterials: [...rope],
-    strengthRetentionTypical: "Holds in the 60–70% band when dressed and watched; well-documented walk-off under cycling load.",
+    strengthRetentionTypical:
+      "Holds in the 60–70% band when dressed and watched; well-documented walk-off under cycling load.",
     difficulty: "beginner",
     materialsNeeded: ["Rope", "Piling or spar"],
-    howToSummary: "Two stacked turns with the working end tucked under the second. A working hitch, not a mooring plan.",
+    howToSummary:
+      "Two stacked turns with the working end tucked under the second. A working hitch, not a mooring plan.",
     steps: [
       { order: 1, instruction: "Pass the first turn around the spar." },
       { order: 2, instruction: "Cross over and pass the second turn." },
-      { order: 3, instruction: "Tuck the working end under the second turn and dress both turns together." },
-      { order: 4, instruction: "If the load will cycle or you will leave it, back it up or switch to a round turn and two half hitches." },
+      {
+        order: 3,
+        instruction: "Tuck the working end under the second turn and dress both turns together.",
+      },
+      {
+        order: 4,
+        instruction:
+          "If the load will cycle or you will leave it, back it up or switch to a round turn and two half hitches.",
+      },
     ],
-    commonMistakes: ["Left unattended on a tide", "Turns not stacked", "Used as the only overnight hitch"],
+    commonMistakes: [
+      "Left unattended on a tide",
+      "Turns not stacked",
+      "Used as the only overnight hitch",
+    ],
     diagnostics: [
       {
         id: "clove-walk",
@@ -123,13 +205,24 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Clove Hitch", url: "https://www.animatedknots.com/clove-hitch-knot-end-loop", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Clove Hitch",
+        url: "https://www.animatedknots.com/clove-hitch-knot-end-loop",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["round-turn-two-half-hitches", "rolling-hitch"],
     tags: ["boating", "make-fast", "temporary"],
     reviewedOn: "2026-08-14",
     sources: [
       { title: "Animated Knots — Clove Hitch" },
-      { title: "Hook the Horizon — The Clove Hitch", url: "https://hookthehorizon.blog/clove-hitch/" },
+      {
+        title: "Hook the Horizon — The Clove Hitch",
+        url: "https://hookthehorizon.blog/clove-hitch/",
+      },
     ],
   },
   {
@@ -141,10 +234,12 @@ export const BOATING_BATCH_1: KnotContent[] = [
     goodFor: "Rope to a ring or shackle when the hitch must stay after a soak.",
     notIdealFor: ["A job you must undo every five minutes", "Slick HMPE without a seizing"],
     lineMaterials: [...rope],
-    strengthRetentionTypical: "Typically cited in the 70–80% band when the round turn is seized or the hitch is well dressed.",
+    strengthRetentionTypical:
+      "Typically cited in the 70–80% band when the round turn is seized or the hitch is well dressed.",
     difficulty: "intermediate",
     materialsNeeded: ["Rope", "Ring or shackle"],
-    howToSummary: "Round turn through the ring, working end through both turns, then a half hitch. Optional seizing on a standing job.",
+    howToSummary:
+      "Round turn through the ring, working end through both turns, then a half hitch. Optional seizing on a standing job.",
     steps: [
       { order: 1, instruction: "Pass a round turn through the ring." },
       { order: 2, instruction: "Tuck the working end through both turns." },
@@ -163,13 +258,24 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Anchor Bend", url: "https://www.animatedknots.com/anchor-bend-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Anchor Bend",
+        url: "https://www.animatedknots.com/anchor-bend-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["round-turn-two-half-hitches", "bowline"],
     tags: ["boating", "make-fast", "ring"],
     reviewedOn: "2026-08-14",
     sources: [
       { title: "Animated Knots — Anchor Bend" },
-      { title: "Hook the Horizon — The Anchor Bend", url: "https://hookthehorizon.blog/anchor-bend/" },
+      {
+        title: "Hook the Horizon — The Anchor Bend",
+        url: "https://hookthehorizon.blog/anchor-bend/",
+      },
     ],
   },
   {
@@ -179,19 +285,40 @@ export const BOATING_BATCH_1: KnotContent[] = [
     category: "rope",
     bestFor: ["fixed-eye"],
     goodFor: "Fixed eye that can be untied after load. The working loop of sailing.",
-    notIdealFor: ["Life-critical without a backup", "Slick HMPE (use a splice)", "A loop that must never capsize"],
+    notIdealFor: [
+      "Life-critical without a backup",
+      "Slick HMPE (use a splice)",
+      "A loop that must never capsize",
+    ],
     lineMaterials: [...rope],
-    strengthRetentionTypical: "Widely published 60–75% of rope strength. Can capsize if not backed up.",
+    strengthRetentionTypical:
+      "Widely published 60–75% of rope strength. Can capsize if not backed up.",
     difficulty: "beginner",
     materialsNeeded: ["Rope"],
-    howToSummary: "Small loop in the standing part, working end up through, around the standing part, back down. Dress so the collar sits tight.",
+    howToSummary:
+      "Small loop in the standing part, working end up through, around the standing part, back down. Dress so the collar sits tight.",
     steps: [
-      { order: 1, instruction: "Form a small loop in the standing part with the working end coming up through it." },
+      {
+        order: 1,
+        instruction:
+          "Form a small loop in the standing part with the working end coming up through it.",
+      },
       { order: 2, instruction: "Pass the working end around the standing part." },
-      { order: 3, instruction: "Return the working end down through the small loop (the rabbit hole)." },
-      { order: 4, instruction: "Dress the collar tight. Backup the tail if the load is serious or the rope is stiff." },
+      {
+        order: 3,
+        instruction: "Return the working end down through the small loop (the rabbit hole).",
+      },
+      {
+        order: 4,
+        instruction:
+          "Dress the collar tight. Backup the tail if the load is serious or the rope is stiff.",
+      },
     ],
-    commonMistakes: ["Cowboy / left-handed bowline left undressed", "No backup on a critical job", "Tied in HMPE and treated like polyester"],
+    commonMistakes: [
+      "Cowboy / left-handed bowline left undressed",
+      "No backup on a critical job",
+      "Tied in HMPE and treated like polyester",
+    ],
     diagnostics: [
       {
         id: "bowline-capsize",
@@ -203,7 +330,15 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Bowline", url: "https://www.animatedknots.com/bowline-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Bowline",
+        url: "https://www.animatedknots.com/bowline-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["figure-8-loop", "sheet-bend"],
     tags: ["boating", "loop", "fixed-eye"],
     reviewedOn: "2026-08-14",
@@ -218,20 +353,35 @@ export const BOATING_BATCH_1: KnotContent[] = [
     aliases: ["Figure eight on a bight", "Flemish loop"],
     category: "rope",
     bestFor: ["fixed-eye"],
-    goodFor: "Bulkier, more inspectable fixed eye than a bowline. Standard when the loop must be obvious.",
-    notIdealFor: ["A loop you must untie after a hard snatch (it can jam)", "Fairlead-critical running rigging"],
+    goodFor:
+      "Bulkier, more inspectable fixed eye than a bowline. Standard when the loop must be obvious.",
+    notIdealFor: [
+      "A loop you must untie after a hard snatch (it can jam)",
+      "Fairlead-critical running rigging",
+    ],
     lineMaterials: [...rope, "dyneema"],
-    strengthRetentionTypical: "Typically cited 75–80%+ — higher and more stable than a bowline, at the cost of jam risk.",
+    strengthRetentionTypical:
+      "Typically cited 75–80%+ — higher and more stable than a bowline, at the cost of jam risk.",
     difficulty: "beginner",
     materialsNeeded: ["Rope"],
     howToSummary: "Bight, figure-eight, dress both parts so the eights nest. Inspect both strands.",
     steps: [
       { order: 1, instruction: "Form a bight long enough for the finished eye." },
       { order: 2, instruction: "Tie a figure-eight with the bight." },
-      { order: 3, instruction: "Dress both parts so the eights nest and the eye is the size you wanted." },
-      { order: 4, instruction: "Inspect both strands. A crossed eight is a different, weaker knot." },
+      {
+        order: 3,
+        instruction: "Dress both parts so the eights nest and the eye is the size you wanted.",
+      },
+      {
+        order: 4,
+        instruction: "Inspect both strands. A crossed eight is a different, weaker knot.",
+      },
     ],
-    commonMistakes: ["Crossed eights", "Eye sized after the dress", "Expected to untie easily after a snatch"],
+    commonMistakes: [
+      "Crossed eights",
+      "Eye sized after the dress",
+      "Expected to untie easily after a snatch",
+    ],
     diagnostics: [
       {
         id: "fig8-cross",
@@ -243,7 +393,15 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Figure 8 Loop", url: "https://www.animatedknots.com/figure-8-loop-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Figure 8 Loop",
+        url: "https://www.animatedknots.com/figure-8-loop-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["bowline", "figure-8-stopper"],
     tags: ["boating", "loop", "fixed-eye"],
     reviewedOn: "2026-08-14",
@@ -255,18 +413,32 @@ export const BOATING_BATCH_1: KnotContent[] = [
     aliases: ["Becket bend", "Weaver's knot"],
     category: "rope",
     bestFor: ["rope-join"],
-    goodFor: "Join two ropes of similar diameter. The classic bend — tails same side, bight in the thicker rope.",
-    notIdealFor: ["Large diameter mismatch (use double sheet bend)", "Slick HMPE", "A permanent join (splice)"],
+    goodFor:
+      "Join two ropes of similar diameter. The classic bend — tails same side, bight in the thicker rope.",
+    notIdealFor: [
+      "Large diameter mismatch (use double sheet bend)",
+      "Slick HMPE",
+      "A permanent join (splice)",
+    ],
     lineMaterials: [...rope],
-    strengthRetentionTypical: "Typically cited ~45–65% — a working bend, not a high-retention splice.",
+    strengthRetentionTypical:
+      "Typically cited ~45–65% — a working bend, not a high-retention splice.",
     difficulty: "beginner",
     materialsNeeded: ["Two ropes of similar diameter"],
-    howToSummary: "Bight in the thicker or standing rope; working rope through the bight, around both parts, tucked under itself. Tails exit same side.",
+    howToSummary:
+      "Bight in the thicker or standing rope; working rope through the bight, around both parts, tucked under itself. Tails exit same side.",
     steps: [
       { order: 1, instruction: "Form a bight in one rope (the thicker, if they differ slightly)." },
       { order: 2, instruction: "Pass the second rope up through the bight." },
-      { order: 3, instruction: "Around both parts of the bight and tuck under its own standing part." },
-      { order: 4, instruction: "Dress so both tails exit on the same side. Opposite tails is a left-handed sheet bend and will slip." },
+      {
+        order: 3,
+        instruction: "Around both parts of the bight and tuck under its own standing part.",
+      },
+      {
+        order: 4,
+        instruction:
+          "Dress so both tails exit on the same side. Opposite tails is a left-handed sheet bend and will slip.",
+      },
     ],
     commonMistakes: ["Tails on opposite sides", "Large diameter mismatch", "Used in HMPE"],
     diagnostics: [
@@ -280,13 +452,24 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Sheet Bend", url: "https://www.animatedknots.com/sheet-bend-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Sheet Bend",
+        url: "https://www.animatedknots.com/sheet-bend-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["double-sheet-bend", "bowline"],
     tags: ["boating", "join"],
     reviewedOn: "2026-08-14",
     sources: [
       { title: "Animated Knots — Sheet Bend" },
-      { title: "Hook the Horizon — The Sheet Bend", url: "https://hookthehorizon.blog/sheet-bend/" },
+      {
+        title: "Hook the Horizon — The Sheet Bend",
+        url: "https://hookthehorizon.blog/sheet-bend/",
+      },
     ],
   },
   {
@@ -296,16 +479,24 @@ export const BOATING_BATCH_1: KnotContent[] = [
     category: "rope",
     bestFor: ["unequal-join"],
     goodFor: "Join two ropes of unequal diameter. Extra turn on the thinner rope.",
-    notIdealFor: ["Equal thin lines where a single sheet bend already holds", "HMPE without a splice"],
+    notIdealFor: [
+      "Equal thin lines where a single sheet bend already holds",
+      "HMPE without a splice",
+    ],
     lineMaterials: [...rope],
-    strengthRetentionTypical: "Higher and more stable than a single sheet bend on a mismatch — typically cited mid band ~55–75%.",
+    strengthRetentionTypical:
+      "Higher and more stable than a single sheet bend on a mismatch — typically cited mid band ~55–75%.",
     difficulty: "beginner",
     materialsNeeded: ["Two ropes, often unequal diameter"],
-    howToSummary: "Sheet bend plus a second turn of the thinner rope around the bight before the tuck.",
+    howToSummary:
+      "Sheet bend plus a second turn of the thinner rope around the bight before the tuck.",
     steps: [
       { order: 1, instruction: "Form a bight in the thicker rope." },
       { order: 2, instruction: "Pass the thinner rope up through the bight." },
-      { order: 3, instruction: "Take two turns around the bight, then tuck under its own standing part." },
+      {
+        order: 3,
+        instruction: "Take two turns around the bight, then tuck under its own standing part.",
+      },
       { order: 4, instruction: "Dress hard. Tails same side." },
     ],
     commonMistakes: ["Bight in the thinner rope", "Only one turn", "Opposite-side tails"],
@@ -320,7 +511,15 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Double Sheet Bend", url: "https://www.animatedknots.com/sheet-bend-knot-double", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Double Sheet Bend",
+        url: "https://www.animatedknots.com/sheet-bend-knot-double",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["sheet-bend"],
     tags: ["boating", "join", "mismatch"],
     reviewedOn: "2026-08-14",
@@ -335,17 +534,31 @@ export const BOATING_BATCH_1: KnotContent[] = [
     goodFor: "Grip a standing line or chain to transfer load (snubber). Directional.",
     notIdealFor: ["Slick HMPE standing part", "A hitch that must hold both ways equally"],
     lineMaterials: [...rope],
-    strengthRetentionTypical: "Grip hitch — typically cited 50–70% and highly surface-dependent. Fails first by sliding, not by breaking.",
+    strengthRetentionTypical:
+      "Grip hitch — typically cited 50–70% and highly surface-dependent. Fails first by sliding, not by breaking.",
     difficulty: "intermediate",
     materialsNeeded: ["Working rope", "Standing rope or chain"],
-    howToSummary: "Two turns on the load side, then a third turn that crosses and tucks. Pull must be along the standing part, not away from it.",
+    howToSummary:
+      "Two turns on the load side, then a third turn that crosses and tucks. Pull must be along the standing part, not away from it.",
     steps: [
       { order: 1, instruction: "Pass two turns around the standing part on the load side." },
       { order: 2, instruction: "Cross and make the third turn." },
-      { order: 3, instruction: "Tuck the working end under the last turn so the hitch locks in the intended direction." },
-      { order: 4, instruction: "Dress toward the load. Test by sliding — if it walks, add a turn or change the surface." },
+      {
+        order: 3,
+        instruction:
+          "Tuck the working end under the last turn so the hitch locks in the intended direction.",
+      },
+      {
+        order: 4,
+        instruction:
+          "Dress toward the load. Test by sliding — if it walks, add a turn or change the surface.",
+      },
     ],
-    commonMistakes: ["Turns on the wrong side of the load", "Used on slick HMPE", "Expected to hold both directions"],
+    commonMistakes: [
+      "Turns on the wrong side of the load",
+      "Used on slick HMPE",
+      "Expected to hold both directions",
+    ],
     diagnostics: [
       {
         id: "rolling-slide",
@@ -357,13 +570,24 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Rolling Hitch", url: "https://www.animatedknots.com/rolling-hitch-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Rolling Hitch",
+        url: "https://www.animatedknots.com/rolling-hitch-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["clove-hitch", "round-turn-two-half-hitches"],
     tags: ["boating", "snubber", "hitch"],
     reviewedOn: "2026-08-14",
     sources: [
       { title: "Animated Knots — Rolling Hitch" },
-      { title: "Hook the Horizon — The Rolling Hitch", url: "https://hookthehorizon.blog/rolling-hitch/" },
+      {
+        title: "Hook the Horizon — The Rolling Hitch",
+        url: "https://hookthehorizon.blog/rolling-hitch/",
+      },
     ],
   },
   {
@@ -372,20 +596,35 @@ export const BOATING_BATCH_1: KnotContent[] = [
     aliases: ["Figure eight stopper", "Flemish stopper"],
     category: "rope",
     bestFor: ["stopper"],
-    goodFor: "Stopper in the end so the rope cannot pull through a block or fairlead. Not a working knot.",
-    notIdealFor: ["Any load-bearing join", "A stopper that must be tiny (use an overhand, knowing it jams harder)"],
+    goodFor:
+      "Stopper in the end so the rope cannot pull through a block or fairlead. Not a working knot.",
+    notIdealFor: [
+      "Any load-bearing join",
+      "A stopper that must be tiny (use an overhand, knowing it jams harder)",
+    ],
     lineMaterials: [...rope, "dyneema"],
-    strengthRetentionTypical: "A stopper, not a working-strength figure. The rope should never be asked to load this knot as a join.",
+    strengthRetentionTypical:
+      "A stopper, not a working-strength figure. The rope should never be asked to load this knot as a join.",
     difficulty: "beginner",
     materialsNeeded: ["Rope"],
     howToSummary: "Figure-eight in the tail. Dress so it will not pull through the block.",
     steps: [
-      { order: 1, instruction: "Pass the tail around itself to form the first loop of a figure-eight." },
+      {
+        order: 1,
+        instruction: "Pass the tail around itself to form the first loop of a figure-eight.",
+      },
       { order: 2, instruction: "Complete the eight and pull the tail through." },
-      { order: 3, instruction: "Dress so the eight is compact and larger than the block or fairlead." },
+      {
+        order: 3,
+        instruction: "Dress so the eight is compact and larger than the block or fairlead.",
+      },
       { order: 4, instruction: "Leave a short tail. This is not a join — do not load it as one." },
     ],
-    commonMistakes: ["Used as a join", "Too small to stop the block", "Left loose so it pulls through"],
+    commonMistakes: [
+      "Used as a join",
+      "Too small to stop the block",
+      "Left loose so it pulls through",
+    ],
     diagnostics: [
       {
         id: "stopper-through",
@@ -397,13 +636,24 @@ export const BOATING_BATCH_1: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Animated Knots — Figure 8", url: "https://www.animatedknots.com/figure-8-knot", source: "Animated Knots by Grog", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Animated Knots — Figure 8",
+        url: "https://www.animatedknots.com/figure-8-knot",
+        source: "Animated Knots by Grog",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["figure-8-loop"],
     tags: ["boating", "stopper"],
     reviewedOn: "2026-08-14",
     sources: [
       { title: "Animated Knots — Figure 8" },
-      { title: "Hook the Horizon — The Figure-Eight Stopper", url: "https://hookthehorizon.blog/figure-eight-stopper/" },
+      {
+        title: "Hook the Horizon — The Figure-Eight Stopper",
+        url: "https://hookthehorizon.blog/figure-eight-stopper/",
+      },
     ],
   },
 ];

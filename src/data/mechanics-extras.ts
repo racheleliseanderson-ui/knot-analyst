@@ -59,11 +59,23 @@ function obs(
 function baseJoinObs(defectPrefix: string) {
   return [
     obs("barrel_uniform", "Barrel / wrap stack looks uniform", "wraps", false, []),
-    obs("crossover", "Crossed or uneven wraps visible", "wraps", true, [`${defectPrefix}-crossover`]),
-    obs("fully_seated", "Connection is fully seated (no gaps between barrels)", "geometry", false, []),
-    obs("gap_seating", "Gap or incomplete seating between sections", "geometry", true, [`${defectPrefix}-seat`]),
+    obs("crossover", "Crossed or uneven wraps visible", "wraps", true, [
+      `${defectPrefix}-crossover`,
+    ]),
+    obs(
+      "fully_seated",
+      "Connection is fully seated (no gaps between barrels)",
+      "geometry",
+      false,
+      [],
+    ),
+    obs("gap_seating", "Gap or incomplete seating between sections", "geometry", true, [
+      `${defectPrefix}-seat`,
+    ]),
     obs("tags_ok", "Tags exit correctly and are trimmed safely", "finish", false, []),
-    obs("tag_wrong", "Tag orientation wrong or sucked into structure", "finish", true, [`${defectPrefix}-tag`]),
+    obs("tag_wrong", "Tag orientation wrong or sucked into structure", "finish", true, [
+      `${defectPrefix}-tag`,
+    ]),
     obs("line_exits", "Both standing lines exit on-axis", "exits", false, []),
     obs("off_axis", "Leader or main exits off-axis", "exits", true, [`${defectPrefix}-axis`]),
     obs("both_exits", "Critical structure and both exits visible", "visibility", false, []),
@@ -73,7 +85,9 @@ function baseJoinObs(defectPrefix: string) {
 function baseLoopObs(defectPrefix: string) {
   return [
     obs("loop_stable", "Loop size is stable and intentional", "geometry", false, []),
-    obs("loop_collapses", "Loop collapses or slips under tension", "geometry", true, [`${defectPrefix}-slip`]),
+    obs("loop_collapses", "Loop collapses or slips under tension", "geometry", true, [
+      `${defectPrefix}-slip`,
+    ]),
     obs("wraps_neat", "Wrapping structure neat", "wraps", false, []),
     obs("crossover", "Crossed wraps in loop body", "wraps", true, [`${defectPrefix}-crossover`]),
     obs("tag_ok", "Tag finish looks correct", "finish", false, []),
@@ -81,7 +95,6 @@ function baseLoopObs(defectPrefix: string) {
     obs("both_exits", "Loop, standing line, and tag visible", "visibility", false, []),
   ];
 }
-
 
 const RULE_WRAPS_PARALLEL: GeometricRule = {
   id: "wraps-parallel",
@@ -118,8 +131,7 @@ const RULE_WRAP_STACK_COMPACT: GeometricRule = {
   violatedBy: ["gap_seating", "crossover"],
   supportedBy: ["barrel_uniform", "fully_seated", "wraps_neat"],
   severity: "retie-recommended",
-  mechanicsWhy:
-    "Gaps between turns reduce friction surface and let the stack walk under load.",
+  mechanicsWhy: "Gaps between turns reduce friction surface and let the stack walk under load.",
   appliesWhen: { finishedGeometry: ["wrap-stack", "barrel"] },
 };
 
@@ -177,10 +189,7 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
         "High retention on doubled braid → leader",
         "More accessible than perfect FG for many anglers",
       ],
-      weaknesses: [
-        "Requires a sound double first",
-        "Bulkier / less guide-friendly than FG",
-      ],
+      weaknesses: ["Requires a sound double first", "Bulkier / less guide-friendly than FG"],
     },
     fingerprint: {
       expectedGeometry: "Doubled braid wraps compressed onto leader, collinear exits",
@@ -358,10 +367,13 @@ export const MECHANICS_EXTRAS: Record<string, MechanicsBundle> = {
       loopBehavior: "fixed",
       loadDirection: "loop-swing",
       slipSensitivity: "moderate",
-      seatingRequirements: "Multiple wraps of bight around standings; continuous tension while seating",
+      seatingRequirements:
+        "Multiple wraps of bight around standings; continuous tension while seating",
       tensionRequirements: "high",
       failureSensitiveStages: ["wrap count", "pass-through", "seat"],
-      hardExclusions: ["Permanent substitute for an uninspectable big-game double without verification"],
+      hardExclusions: [
+        "Permanent substitute for an uninspectable big-game double without verification",
+      ],
     },
     fieldFit: {
       ...terminalFit({

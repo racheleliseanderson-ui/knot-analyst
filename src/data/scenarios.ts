@@ -105,7 +105,8 @@ export const FIELD_SCENARIOS: FieldScenario[] = [
   {
     id: "leader-tippet",
     title: "Leader → tippet (fly)",
-    blurb: "Join similar-diameter leader to tippet. Diameter match and clean barrels drive the ranking.",
+    blurb:
+      "Join similar-diameter leader to tippet. Diameter match and clean barrels drive the ranking.",
     tag: "Fly system",
     connectionLine: "Leader → tippet",
     likelyPick: "Blood or Double Surgeon depending on mismatch",

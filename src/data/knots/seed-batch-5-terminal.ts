@@ -11,37 +11,69 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     aliases: ["Fig 8 knot", "Centauri"],
     category: "terminal",
     bestFor: ["hook-to-line", "easy-quick"],
-    goodFor: "Sliding-collar mono terminal that also serves as a simple spool attachment; low-friction close on nylon.",
-    notIdealFor: ["Braid-first terminals", "Fluoro-first use that has not been verified for this collar"],
+    goodFor:
+      "Sliding-collar mono terminal that also serves as a simple spool attachment; low-friction close on nylon.",
+    notIdealFor: [
+      "Braid-first terminals",
+      "Fluoro-first use that has not been verified for this collar",
+    ],
     lineMaterials: ["mono"],
-    strengthRetentionTypical: "High sliding-collar band on nylon when the three loops close clean; not a braid knot",
+    strengthRetentionTypical:
+      "High sliding-collar band on nylon when the three loops close clean; not a braid knot",
     difficulty: "beginner",
     materialsNeeded: ["Monofilament", "Hook, lure, or reel arbor"],
-    howToSummary: "Through the eye, three open loops around the standing line, tag through all three, slide the collar to the eye or arbor.",
+    howToSummary:
+      "Through the eye, three open loops around the standing line, tag through all three, slide the collar to the eye or arbor.",
     steps: [
-      { order: 1, instruction: "Pass mono through the eye and form the first loop around the standing line." },
+      {
+        order: 1,
+        instruction: "Pass mono through the eye and form the first loop around the standing line.",
+      },
       { order: 2, instruction: "Form a second and third loop, holding all three open." },
-      { order: 3, instruction: "Pass the tag through all three loops and close the collar onto the standing line." },
+      {
+        order: 3,
+        instruction:
+          "Pass the tag through all three loops and close the collar onto the standing line.",
+      },
       { order: 4, instruction: "Slide the collar to the eye or arbor and set before trimming." },
     ],
-    commonMistakes: ["Reversed loop order", "Hard pull before the collar forms", "Used on slick braid"],
+    commonMistakes: [
+      "Reversed loop order",
+      "Hard pull before the collar forms",
+      "Used on slick braid",
+    ],
     diagnostics: [
       {
         id: "centauri-slip",
         symptom: "Collar walks or opens under load",
-        likelyCauses: ["Loops closed out of order", "Braid used as primary", "Early hard pull kinked the mono"],
+        likelyCauses: [
+          "Loops closed out of order",
+          "Braid used as primary",
+          "Early hard pull kinked the mono",
+        ],
         checks: ["Collar butted to the eye", "Three-loop stack visible"],
         fixes: ["Retie on nylon", "Do not transfer this collar to braid"],
         severity: "stop",
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Centauri Knot", url: "https://hookthehorizon.blog/centauri-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Centauri Knot",
+        url: "https://hookthehorizon.blog/centauri-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["uni-knot", "arbor-knot", "pitzen"],
     tags: ["terminal", "mono", "spool"],
     reviewedOn: "2026-08-14",
     sources: [
-      { title: "NetKnots — Centauri Knot", url: "https://www.netknots.com/fishing_knots/centauri-knot" },
+      {
+        title: "NetKnots — Centauri Knot",
+        url: "https://www.netknots.com/fishing_knots/centauri-knot",
+      },
       { title: "Hook the Horizon — Centauri Knot" },
     ],
   },
@@ -51,20 +83,41 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     aliases: ["Eye Crosser"],
     category: "terminal",
     bestFor: ["hook-to-line", "high-strength"],
-    goodFor: "Snug terminal with doubled eye contact across mono, fluoro, and braid when the hardware has room for two passes.",
-    notIdealFor: ["Tiny fly eyes", "Crowded hardware where a single-pass Uni or Palomar already fits"],
+    goodFor:
+      "Snug terminal with doubled eye contact across mono, fluoro, and braid when the hardware has room for two passes.",
+    notIdealFor: [
+      "Tiny fly eyes",
+      "Crowded hardware where a single-pass Uni or Palomar already fits",
+    ],
     lineMaterials: ["mono", "fluoro", "braid"],
-    strengthRetentionTypical: "High double-eye band when both passes stay parallel and the lock seats to the eye",
+    strengthRetentionTypical:
+      "High double-eye band when both passes stay parallel and the lock seats to the eye",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Hook, lure, or swivel with room for two eye passes"],
-    howToSummary: "Two passes through the eye, lock formed around the doubled section, wet seat to the eye, hard test on braid.",
+    howToSummary:
+      "Two passes through the eye, lock formed around the doubled section, wet seat to the eye, hard test on braid.",
     steps: [
       { order: 1, instruction: "Pass the line through the eye and leave a long working tag." },
-      { order: 2, instruction: "Bring the tag back through the eye so two parallel strands occupy it." },
-      { order: 3, instruction: "Form the locking turn around the doubled section without crossing the eye strands." },
-      { order: 4, instruction: "Moisten nylon/fluoro, seat compact to the eye, pull-test (especially braid), then trim." },
+      {
+        order: 2,
+        instruction: "Bring the tag back through the eye so two parallel strands occupy it.",
+      },
+      {
+        order: 3,
+        instruction:
+          "Form the locking turn around the doubled section without crossing the eye strands.",
+      },
+      {
+        order: 4,
+        instruction:
+          "Moisten nylon/fluoro, seat compact to the eye, pull-test (especially braid), then trim.",
+      },
     ],
-    commonMistakes: ["Eye too small for two passes", "Doubled strands crossed in the eye", "Incomplete braid set"],
+    commonMistakes: [
+      "Eye too small for two passes",
+      "Doubled strands crossed in the eye",
+      "Incomplete braid set",
+    ],
     diagnostics: [
       {
         id: "eye-crosser-crowd",
@@ -76,7 +129,15 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Eye Crosser Knot", url: "https://hookthehorizon.blog/eye-crosser-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Eye Crosser Knot",
+        url: "https://hookthehorizon.blog/eye-crosser-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["trilene", "fish-n-fool", "palomar"],
     tags: ["terminal", "double-eye"],
     reviewedOn: "2026-08-14",
@@ -91,20 +152,37 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     aliases: ["Fish-N-Fool", "Improved Uni", "FishNFool"],
     category: "terminal",
     bestFor: ["hook-to-line", "high-strength"],
-    goodFor: "Doubled-eye Uni barrel for mono, fluoro, and light braid; extra eye pass plus Uni friction along the standing line.",
-    notIdealFor: ["Tiny eyes that pinch the second pass", "Very heavy braid where a dedicated braid terminal is cleaner"],
+    goodFor:
+      "Doubled-eye Uni barrel for mono, fluoro, and light braid; extra eye pass plus Uni friction along the standing line.",
+    notIdealFor: [
+      "Tiny eyes that pinch the second pass",
+      "Very heavy braid where a dedicated braid terminal is cleaner",
+    ],
     lineMaterials: ["mono", "fluoro", "braid"],
-    strengthRetentionTypical: "High 90s family when the second eye pass and Uni barrel both seat; Knot Wars winner in its class",
+    strengthRetentionTypical:
+      "High 90s family when the second eye pass and Uni barrel both seat; Knot Wars winner in its class",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Hook or lure with room for a second eye pass"],
-    howToSummary: "Two passes through the eye, Uni-style wraps with the tag, slide the barrel to the eye, lock, test.",
+    howToSummary:
+      "Two passes through the eye, Uni-style wraps with the tag, slide the barrel to the eye, lock, test.",
     steps: [
-      { order: 1, instruction: "Pass the line through the eye, then through again for doubled eye contact." },
+      {
+        order: 1,
+        instruction: "Pass the line through the eye, then through again for doubled eye contact.",
+      },
       { order: 2, instruction: "Form a Uni-style loop with the tag alongside the standing line." },
       { order: 3, instruction: "Wrap through that loop several times (more on slick braid)." },
-      { order: 4, instruction: "Moisten, close the barrel, slide it to the eye, lock, and pull-test before trimming." },
+      {
+        order: 4,
+        instruction:
+          "Moisten, close the barrel, slide it to the eye, lock, and pull-test before trimming.",
+      },
     ],
-    commonMistakes: ["Second eye pass crosses the first", "Too few wraps on braid", "Barrel closes before it reaches the eye"],
+    commonMistakes: [
+      "Second eye pass crosses the first",
+      "Too few wraps on braid",
+      "Barrel closes before it reaches the eye",
+    ],
     diagnostics: [
       {
         id: "fish-n-fool-seat",
@@ -116,12 +194,23 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Fish N Fool Knot", url: "https://hookthehorizon.blog/fish-n-fool-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Fish N Fool Knot",
+        url: "https://hookthehorizon.blog/fish-n-fool-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["uni-knot", "eye-crosser", "berkley-braid"],
     tags: ["terminal", "uni-family", "braid"],
     reviewedOn: "2026-08-14",
     sources: [
-      { title: "NetKnots — Fish N Fool Knot", url: "https://www.netknots.com/fishing_knots/fish-n-fool-knot" },
+      {
+        title: "NetKnots — Fish N Fool Knot",
+        url: "https://www.netknots.com/fishing_knots/fish-n-fool-knot",
+      },
       { title: "North American Fisherman Knot Wars (2010 class winner)" },
       { title: "Hook the Horizon — Fish N Fool Knot" },
     ],
@@ -133,19 +222,43 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     category: "terminal",
     bestFor: ["fly-hook"],
     goodFor: "Tippet-to-turned-eye dry fly when the job is presentation angle, not peak retention.",
-    notIdealFor: ["Straight-eye flies", "Streamers that need free swing", "Any job where Davy/Orvis is easier and angle does not matter"],
+    notIdealFor: [
+      "Straight-eye flies",
+      "Streamers that need free swing",
+      "Any job where Davy/Orvis is easier and angle does not matter",
+    ],
     lineMaterials: ["mono", "fluoro"],
     strengthRetentionTypical: "Presentation-first band; not modelled as a max-retention terminal",
     difficulty: "intermediate",
     materialsNeeded: ["Tippet", "Up- or down-eyed dry fly"],
-    howToSummary: "Through the turned eye, two working loops, tag through twice, cinch so the tippet exits at the intended angle.",
+    howToSummary:
+      "Through the turned eye, two working loops, tag through twice, cinch so the tippet exits at the intended angle.",
     steps: [
-      { order: 1, instruction: "Confirm an up- or down-turned eye; do not substitute a straight-eye fly." },
-      { order: 2, instruction: "Pass tippet through the eye and form two small working loops beside the standing tippet." },
-      { order: 3, instruction: "Run the tag through those loops twice so the knot will seat on the intended side of the eye." },
-      { order: 4, instruction: "Moisten, cinch without rolling around the eye, and inspect the exit angle before trimming." },
+      {
+        order: 1,
+        instruction: "Confirm an up- or down-turned eye; do not substitute a straight-eye fly.",
+      },
+      {
+        order: 2,
+        instruction:
+          "Pass tippet through the eye and form two small working loops beside the standing tippet.",
+      },
+      {
+        order: 3,
+        instruction:
+          "Run the tag through those loops twice so the knot will seat on the intended side of the eye.",
+      },
+      {
+        order: 4,
+        instruction:
+          "Moisten, cinch without rolling around the eye, and inspect the exit angle before trimming.",
+      },
     ],
-    commonMistakes: ["Used on a straight-eye fly", "Knot rolls around the eye", "Stiff heavy tippet on a tiny dry"],
+    commonMistakes: [
+      "Used on a straight-eye fly",
+      "Knot rolls around the eye",
+      "Stiff heavy tippet on a tiny dry",
+    ],
     diagnostics: [
       {
         id: "harvey-angle",
@@ -157,12 +270,23 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
         confidence: "moderate",
       },
     ],
-    resources: [{ type: "article", title: "Harvey Dry Fly Knot", url: "https://hookthehorizon.blog/harvey-dry-fly-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Harvey Dry Fly Knot",
+        url: "https://hookthehorizon.blog/harvey-dry-fly-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["turle", "orvis", "davy"],
     tags: ["terminal", "fly", "dry-fly", "presentation"],
     reviewedOn: "2026-08-14",
     sources: [
-      { title: "NetKnots — Harvey Dry Fly Knot", url: "https://www.netknots.com/fishing_knots/harvey-dry-fly-knot" },
+      {
+        title: "NetKnots — Harvey Dry Fly Knot",
+        url: "https://www.netknots.com/fishing_knots/harvey-dry-fly-knot",
+      },
       { title: "Hook the Horizon — Harvey Dry Fly Knot" },
     ],
   },
@@ -173,19 +297,39 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     category: "terminal",
     bestFor: ["fly-hook", "easy-quick"],
     goodFor: "Very compact fly-to-tippet lock when the crossing can be tied consistently.",
-    notIdealFor: ["Braid", "Heavy conventional tackle", "Anyone who inspects Davy/Orvis more reliably"],
+    notIdealFor: [
+      "Braid",
+      "Heavy conventional tackle",
+      "Anyone who inspects Davy/Orvis more reliably",
+    ],
     lineMaterials: ["mono", "fluoro"],
-    strengthRetentionTypical: "Compact tippet-family band when the crossing seats centered; not braid-verified",
+    strengthRetentionTypical:
+      "Compact tippet-family band when the crossing seats centered; not braid-verified",
     difficulty: "intermediate",
     materialsNeeded: ["Tippet", "Fly"],
-    howToSummary: "Through the eye, compact crossing/lock on the standing tippet, wet seat to the eye, trim close.",
+    howToSummary:
+      "Through the eye, compact crossing/lock on the standing tippet, wet seat to the eye, trim close.",
     steps: [
-      { order: 1, instruction: "Pass tippet through the fly eye and double back parallel to the standing tippet." },
-      { order: 2, instruction: "Form the documented crossing/loop; do not improvise a second turn." },
+      {
+        order: 1,
+        instruction:
+          "Pass tippet through the fly eye and double back parallel to the standing tippet.",
+      },
+      {
+        order: 2,
+        instruction: "Form the documented crossing/loop; do not improvise a second turn.",
+      },
       { order: 3, instruction: "Route the tag through the crossing in the documented direction." },
-      { order: 4, instruction: "Moisten, draw the compact lock to the eye, pull-test, trim close." },
+      {
+        order: 4,
+        instruction: "Moisten, draw the compact lock to the eye, pull-test, trim close.",
+      },
     ],
-    commonMistakes: ["Reversed crossing", "Tag exits the wrong side", "Pulled tight before the structure organizes"],
+    commonMistakes: [
+      "Reversed crossing",
+      "Tag exits the wrong side",
+      "Pulled tight before the structure organizes",
+    ],
     diagnostics: [
       {
         id: "jacks-twist",
@@ -197,7 +341,15 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Jack’s Knot", url: "https://hookthehorizon.blog/jacks-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Jack’s Knot",
+        url: "https://hookthehorizon.blog/jacks-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["davy", "orvis", "pitzen"],
     tags: ["terminal", "fly", "tippet", "compact"],
     reviewedOn: "2026-08-14",
@@ -212,17 +364,27 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     aliases: ["Jansik knot", "Jansik"],
     category: "terminal",
     bestFor: ["hook-to-line", "high-strength"],
-    goodFor: "Triple-eye compact terminal on light mono/fluoro when the eye has room for three passes.",
+    goodFor:
+      "Triple-eye compact terminal on light mono/fluoro when the eye has room for three passes.",
     notIdealFor: ["Braid", "Tiny eyes", "Heavy stiff leader that cannot close the compact lock"],
     lineMaterials: ["mono", "fluoro"],
-    strengthRetentionTypical: "Published as near-full on light nylon when the triple pass stays parallel; independent reports sit lower — treat as a wide band",
+    strengthRetentionTypical:
+      "Published as near-full on light nylon when the triple pass stays parallel; independent reports sit lower — treat as a wide band",
     difficulty: "intermediate",
     materialsNeeded: ["Light mono or fluoro (commonly to ~20 lb class)", "Roomy eye"],
-    howToSummary: "Three passes through the eye leaving two working loops, tag around standing line and through both loops, wet close.",
+    howToSummary:
+      "Three passes through the eye leaving two working loops, tag around standing line and through both loops, wet close.",
     steps: [
-      { order: 1, instruction: "Pass the line through the eye three times, leaving two working loops behind the eye." },
+      {
+        order: 1,
+        instruction:
+          "Pass the line through the eye three times, leaving two working loops behind the eye.",
+      },
       { order: 2, instruction: "Keep all eye strands parallel — do not twist them." },
-      { order: 3, instruction: "Bring the tag around the standing line and through both working loops." },
+      {
+        order: 3,
+        instruction: "Bring the tag around the standing line and through both working loops.",
+      },
       { order: 4, instruction: "Moisten, close gradually, seat compact at the eye, test, trim." },
     ],
     commonMistakes: ["Eye crowding", "Crossed eye strands", "Tag misses one loop"],
@@ -237,12 +399,23 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Jansik Special", url: "https://hookthehorizon.blog/jansik-special/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Jansik Special",
+        url: "https://hookthehorizon.blog/jansik-special/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["trilene", "eye-crosser", "orvis"],
     tags: ["terminal", "light-line", "triple-eye"],
     reviewedOn: "2026-08-14",
     sources: [
-      { title: "NetKnots — Jansik Special (near-100% claim)", url: "https://www.netknots.com/fishing_knots/jansik-special" },
+      {
+        title: "NetKnots — Jansik Special (near-100% claim)",
+        url: "https://www.netknots.com/fishing_knots/jansik-special",
+      },
       { title: "Take Me Fishing — Jansik Knot" },
       { title: "Hook the Horizon — Jansik Special" },
     ],
@@ -253,32 +426,69 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     aliases: ["Hair-rig knot", "Knotless hair rig"],
     category: "terminal",
     bestFor: ["hook-snell"],
-    goodFor: "Hair-rig hook-shank connection so bait sits off the hook; wraps trap the hair and align the hooklink.",
+    goodFor:
+      "Hair-rig hook-shank connection so bait sits off the hook; wraps trap the hair and align the hooklink.",
     notIdealFor: ["Ordinary lure or hook terminal work", "Any job that is not a hair rig"],
     lineMaterials: ["mono", "fluoro", "braid"],
-    strengthRetentionTypical: "Snell-family wrap band when the column is even; hair length is the job as much as retention",
+    strengthRetentionTypical:
+      "Snell-family wrap band when the column is even; hair length is the job as much as retention",
     difficulty: "intermediate",
-    materialsNeeded: ["Hooklink (coated or uncoated braid, fluoro, or mono)", "Eyed hook", "Bait stop"],
-    howToSummary: "Set hair length beyond the bend, wrap the shank over hair and hooklink, return through the eye for the intended hook-turn.",
-    steps: [
-      { order: 1, instruction: "Pass the hooklink through the eye and set the hair length beyond the bend." },
-      { order: 2, instruction: "Lay the tag and hair along the shank." },
-      { order: 3, instruction: "Wrap the standing hooklink neatly around shank and hair six to ten times toward the bend." },
-      { order: 4, instruction: "Pass the standing hooklink back through the eye for the intended hook-turn angle; set, then add the bait stop separately." },
+    materialsNeeded: [
+      "Hooklink (coated or uncoated braid, fluoro, or mono)",
+      "Eyed hook",
+      "Bait stop",
     ],
-    commonMistakes: ["Hair trapped at the wrong length", "Crossed wraps sliding onto the bend", "Line exiting the eye backwards"],
+    howToSummary:
+      "Set hair length beyond the bend, wrap the shank over hair and hooklink, return through the eye for the intended hook-turn.",
+    steps: [
+      {
+        order: 1,
+        instruction: "Pass the hooklink through the eye and set the hair length beyond the bend.",
+      },
+      { order: 2, instruction: "Lay the tag and hair along the shank." },
+      {
+        order: 3,
+        instruction:
+          "Wrap the standing hooklink neatly around shank and hair six to ten times toward the bend.",
+      },
+      {
+        order: 4,
+        instruction:
+          "Pass the standing hooklink back through the eye for the intended hook-turn angle; set, then add the bait stop separately.",
+      },
+    ],
+    commonMistakes: [
+      "Hair trapped at the wrong length",
+      "Crossed wraps sliding onto the bend",
+      "Line exiting the eye backwards",
+    ],
     diagnostics: [
       {
         id: "knotless-hair",
         symptom: "Bait sits wrong or wraps walk onto the bend",
         likelyCauses: ["Hair length set after wraps", "Crossed column", "Wrong eye-exit direction"],
-        checks: ["Even shank column", "Hair length unchanged after the set", "Exit direction matches the intended turn"],
-        fixes: ["Retie and set hair length first", "Compare Egg Loop if you need a bait loop without a hair"],
+        checks: [
+          "Even shank column",
+          "Hair length unchanged after the set",
+          "Exit direction matches the intended turn",
+        ],
+        fixes: [
+          "Retie and set hair length first",
+          "Compare Egg Loop if you need a bait loop without a hair",
+        ],
         severity: "stop",
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Knotless Knot", url: "https://hookthehorizon.blog/knotless-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Knotless Knot",
+        url: "https://hookthehorizon.blog/knotless-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["egg-loop", "snell", "uni-snell"],
     tags: ["terminal", "hair-rig", "snell-family"],
     reviewedOn: "2026-08-14",
@@ -293,20 +503,40 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     aliases: ["Double Palomar", "Nano-Fil knot", "Nano Knot"],
     category: "terminal",
     bestFor: ["hook-to-line", "high-strength"],
-    goodFor: "Doubled-line terminal for slick fused superline (Berkley NanoFil and similar); Palomar plus a second overhand pass.",
-    notIdealFor: ["When the manufacturer of a different line specifies another knot", "Tiny eyes that will not take doubled fused line"],
+    goodFor:
+      "Doubled-line terminal for slick fused superline (Berkley NanoFil and similar); Palomar plus a second overhand pass.",
+    notIdealFor: [
+      "When the manufacturer of a different line specifies another knot",
+      "Tiny eyes that will not take doubled fused line",
+    ],
     lineMaterials: ["braid"],
-    strengthRetentionTypical: "Palomar-family high band on fused superline only when the second overhand pass is complete; slick line walks a single Palomar",
+    strengthRetentionTypical:
+      "Palomar-family high band on fused superline only when the second overhand pass is complete; slick line walks a single Palomar",
     difficulty: "intermediate",
-    materialsNeeded: ["NanoFil or similar fused superline", "Hook or lure with room for doubled line"],
-    howToSummary: "Double the line, Palomar overhand, second pass through that overhand, hardware through the large loop, even seat, slip-test.",
+    materialsNeeded: [
+      "NanoFil or similar fused superline",
+      "Hook or lure with room for doubled line",
+    ],
+    howToSummary:
+      "Double the line, Palomar overhand, second pass through that overhand, hardware through the large loop, even seat, slip-test.",
     steps: [
       { order: 1, instruction: "Double a generous section and pass the loop through the eye." },
       { order: 2, instruction: "Tie a loose overhand with the doubled line." },
-      { order: 3, instruction: "Pass the doubled working loop through that overhand a second time." },
-      { order: 4, instruction: "Pass the hook or lure through the large loop, seat both sides evenly, and pull-test for slip before trimming." },
+      {
+        order: 3,
+        instruction: "Pass the doubled working loop through that overhand a second time.",
+      },
+      {
+        order: 4,
+        instruction:
+          "Pass the hook or lure through the large loop, seat both sides evenly, and pull-test for slip before trimming.",
+      },
     ],
-    commonMistakes: ["Only one overhand pass", "Crossed doubled line", "Hardware catches the large loop"],
+    commonMistakes: [
+      "Only one overhand pass",
+      "Crossed doubled line",
+      "Hardware catches the large loop",
+    ],
     diagnostics: [
       {
         id: "nanofil-slip",
@@ -318,12 +548,23 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "NanoFil Knot", url: "https://hookthehorizon.blog/nanofil-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "NanoFil Knot",
+        url: "https://hookthehorizon.blog/nanofil-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["palomar", "berkley-braid", "uni-knot"],
     tags: ["terminal", "superline", "palomar-family"],
     reviewedOn: "2026-08-14",
     sources: [
-      { title: "NetKnots — NanoFil / Double Palomar", url: "https://www.netknots.com/fishing_knots/nanofil-knot" },
+      {
+        title: "NetKnots — NanoFil / Double Palomar",
+        url: "https://www.netknots.com/fishing_knots/nanofil-knot",
+      },
       { title: "Berkley NanoFil knot guidance (Double Palomar)" },
       { title: "Hook the Horizon — NanoFil Knot" },
     ],
@@ -334,20 +575,35 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
     aliases: ["World’s Fair Knot", "Worlds Fair Knot"],
     category: "terminal",
     bestFor: ["hook-to-line", "easy-quick"],
-    goodFor: "Compact mono/fluoro terminal (1982 DuPont contest winner) when a doubled-loop lock is preferred to a wrap stack.",
+    goodFor:
+      "Compact mono/fluoro terminal (1982 DuPont contest winner) when a doubled-loop lock is preferred to a wrap stack.",
     notIdealFor: ["Braid (not verified)", "Oversized stiff leader"],
     lineMaterials: ["mono", "fluoro"],
-    strengthRetentionTypical: "High compact band on nylon/fluoro when the return openings stack; not a braid knot",
+    strengthRetentionTypical:
+      "High compact band on nylon/fluoro when the return openings stack; not a braid knot",
     difficulty: "beginner",
     materialsNeeded: ["Mono or fluoro", "Hook, lure, or swivel"],
-    howToSummary: "Doubled loop through the eye, fold back, tag through the documented openings, wet close, seat.",
+    howToSummary:
+      "Doubled loop through the eye, fold back, tag through the documented openings, wet close, seat.",
     steps: [
       { order: 1, instruction: "Double the line into a loop and pass it through the eye." },
       { order: 2, instruction: "Fold the protruding loop back over the doubled line." },
-      { order: 3, instruction: "Route the tag through the first opening, then the second, exactly as documented." },
-      { order: 4, instruction: "Moisten, close so the crossings stack instead of roll, pull-test, trim." },
+      {
+        order: 3,
+        instruction:
+          "Route the tag through the first opening, then the second, exactly as documented.",
+      },
+      {
+        order: 4,
+        instruction: "Moisten, close so the crossings stack instead of roll, pull-test, trim.",
+      },
     ],
-    commonMistakes: ["Missed return opening", "Rolled crossing", "Dry cinch damage", "Transferred to braid"],
+    commonMistakes: [
+      "Missed return opening",
+      "Rolled crossing",
+      "Dry cinch damage",
+      "Transferred to braid",
+    ],
     diagnostics: [
       {
         id: "world-fair-roll",
@@ -359,12 +615,23 @@ export const SEED_BATCH_5_TERMINAL: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "World Fair Knot", url: "https://hookthehorizon.blog/world-fair-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "World Fair Knot",
+        url: "https://hookthehorizon.blog/world-fair-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["orvis", "pitzen", "trilene"],
     tags: ["terminal", "mono", "fluoro", "compact"],
     reviewedOn: "2026-08-14",
     sources: [
-      { title: "NetKnots — World’s Fair Knot", url: "https://www.netknots.com/fishing_knots/worlds-fair-knot" },
+      {
+        title: "NetKnots — World’s Fair Knot",
+        url: "https://www.netknots.com/fishing_knots/worlds-fair-knot",
+      },
       { title: "Hook the Horizon — World Fair Knot" },
     ],
   },

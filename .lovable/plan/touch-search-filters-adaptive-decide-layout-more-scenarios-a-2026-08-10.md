@@ -5,6 +5,7 @@
 Desktop keeps today's two-column instrument: sticky left column (Connection, Material system, Field conditions, Venue), results on the right. Nothing moves for mouse users.
 
 Phone becomes a guided stepper. One decision per screen — Connection, then Material system, then Conditions and Venue — with:
+
 - a persistent bottom bar showing the job so far ("Braid → leader · braid/fluoro") plus Back and Continue, and Run the model on the last step;
 - a slim progress rail at the top with step names, tappable to jump back to anything already answered;
 - horizontal swipe between steps, matching the tying step player's gesture;
@@ -23,6 +24,7 @@ Locked/dimmed panels disappear on phone — a step you cannot answer yet simply 
 ## 3. Search filters
 
 The Finder gains a filter row under the input:
+
 - type filters (Scenarios · Knots · Symptoms) as toggles, with counts;
 - knot-specific facets — category (terminal, line-to-line, loop, utility), material fit, difficulty;
 - recent picks when the query is empty, alongside the current scenario suggestions.
@@ -40,6 +42,7 @@ Card grid gains a compact two-up phone layout with the tag and the connection li
 Add presets: copolymer, hollow-core braid, fused/thermal, coated braid, knottable and single-strand wire, titanium leader, fly backing (dacron vs gel-spun), and tippet material.
 
 Deepen the four axes and the advice they trigger:
+
 - construction gains hollow, fused, kernmantle-style coated core, single strand and multi-strand wire;
 - treatment gains coated, waxed, colour-loaded and abrasion-treated, each with a slip note where it matters;
 - role gains shock leader, bite/wire trace, backing and tippet;

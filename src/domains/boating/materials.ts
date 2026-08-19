@@ -51,7 +51,10 @@ export const BOATING_MATERIAL_PRESETS: Record<string, MaterialPreset> = {
       {
         axis: "construction",
         label: "Construction",
-        options: [{ id: "unspecified", label: "Not sure" }, ...con("twisted-multifilament", "braid-8")],
+        options: [
+          { id: "unspecified", label: "Not sure" },
+          ...con("twisted-multifilament", "braid-8"),
+        ],
       },
     ],
   },

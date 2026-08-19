@@ -45,10 +45,7 @@ export function mergeVenueConditions(
  * Legacy single-venue ids → waterbody + platform after the Phase C split.
  * Used when loading presets that still store the old ids.
  */
-export const LEGACY_FISHING_VENUE: Record<
-  string,
-  { waterbodyId?: string; platformId?: string }
-> = {
+export const LEGACY_FISHING_VENUE: Record<string, { waterbodyId?: string; platformId?: string }> = {
   surf: { waterbodyId: "surf" },
   pier: { waterbodyId: "shoreline" },
   kayak: { platformId: "kayak" },

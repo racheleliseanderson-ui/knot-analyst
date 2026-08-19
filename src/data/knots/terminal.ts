@@ -9,9 +9,13 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     bestFor: ["hook-to-line", "high-strength", "easy-quick", "fly-hook"],
     goodFor:
       "Strong, reliable terminal knot for hooks and lures. Excellent retention on mono and fluoro when dressed correctly; works with braid when doubled carefully.",
-    notIdealFor: ["Very large eyes that will not pass a doubled line", "Situations needing an easy untie"],
+    notIdealFor: [
+      "Very large eyes that will not pass a doubled line",
+      "Situations needing an easy untie",
+    ],
     lineMaterials: ["mono", "fluoro", "braid"],
-    strengthRetentionTypical: "Typical range often cited near 90%+ when seated correctly — always test your system",
+    strengthRetentionTypical:
+      "Typical range often cited near 90%+ when seated correctly — always test your system",
     difficulty: "beginner",
     materialsNeeded: ["Line", "Hook or lure with eye large enough for doubled line"],
     toolsHelpful: ["Nail clippers or line cutters"],
@@ -26,7 +30,8 @@ export const TERMINAL_KNOTS: KnotContent[] = [
       },
       {
         order: 2,
-        instruction: "Tie a simple overhand knot with the doubled section, leaving the hook hanging free.",
+        instruction:
+          "Tie a simple overhand knot with the doubled section, leaving the hook hanging free.",
         tip: "Do not tighten yet — leave the overhand open.",
       },
       {
@@ -35,7 +40,8 @@ export const TERMINAL_KNOTS: KnotContent[] = [
       },
       {
         order: 4,
-        instruction: "Moisten the knot. Pull tag and standing line together so the coils stack neatly against the eye.",
+        instruction:
+          "Moisten the knot. Pull tag and standing line together so the coils stack neatly against the eye.",
         tip: "Pull slowly and watch the doubled coils dress without overlapping chaotically.",
         commonError: "Dry mono/fluoro can heat-score and weaken when yanked hard.",
         failureLinks: ["palomar-crossover", "palomar-gap", "palomar-loose"],
@@ -58,7 +64,11 @@ export const TERMINAL_KNOTS: KnotContent[] = [
         symptom: "Slips or walks under load",
         likelyCauses: ["Not fully seated", "Dry friction burn", "Tag too short after trim"],
         checks: ["Inspect coil stack against the eye", "Confirm tag is not pulled into the knot"],
-        fixes: ["Retie with moisture", "Seat with steady opposing pressure", "Leave a slightly longer tag"],
+        fixes: [
+          "Retie with moisture",
+          "Seat with steady opposing pressure",
+          "Leave a slightly longer tag",
+        ],
         severity: "stop",
         confidence: "high",
         retieDecision: "retie-now",
@@ -69,7 +79,10 @@ export const TERMINAL_KNOTS: KnotContent[] = [
         symptom: "Cannot pass doubled line through eye",
         likelyCauses: ["Eye too small", "Heavy doubled braid bulk"],
         checks: ["Compare doubled diameter to eye ID"],
-        fixes: ["Switch to Uni or Improved Clinch for that terminal", "Use a smaller diameter leader"],
+        fixes: [
+          "Switch to Uni or Improved Clinch for that terminal",
+          "Use a smaller diameter leader",
+        ],
         severity: "watch",
         confidence: "high",
         retieDecision: "watch",
@@ -96,7 +109,10 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     tags: ["terminal", "strong", "beginner", "all-around"],
     reviewedOn: "2026-08-09",
     sources: [
-      { title: "Animated Knots by Grog — Palomar", url: "https://www.animatedknots.com/palomar-knot" },
+      {
+        title: "Animated Knots by Grog — Palomar",
+        url: "https://www.animatedknots.com/palomar-knot",
+      },
       { title: "Field practice and manufacturer terminal guides (general)" },
     ],
   },
@@ -106,18 +122,27 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     aliases: ["Clinched knot", "Improved clinch"],
     category: "terminal",
     bestFor: ["hook-to-line", "easy-quick"],
-    goodFor: "Classic mono/fluoro terminal for hooks and swivels. Fast when you know the wrap count.",
+    goodFor:
+      "Classic mono/fluoro terminal for hooks and swivels. Fast when you know the wrap count.",
     notIdealFor: ["Braid terminals", "Maximum strength critical connections"],
     lineMaterials: ["mono", "fluoro"],
     strengthRetentionTypical: "Adequate when fully seated — not the strongest modern option",
     difficulty: "beginner",
     materialsNeeded: ["Line", "Hook, lure, or swivel"],
-    howToSummary: "Through the eye, wraps around standing line, tag through the small loop then the big loop, seat.",
+    howToSummary:
+      "Through the eye, wraps around standing line, tag through the small loop then the big loop, seat.",
     steps: [
       { order: 1, instruction: "Pass tag through the eye and pull 4–6 in of tag." },
       { order: 2, instruction: "Wrap tag around standing line 5–7 times." },
-      { order: 3, instruction: "Pass tag through the small loop just above the eye, then through the large loop just formed." },
-      { order: 4, instruction: "Moisten and pull standing line to seat wraps down to the eye; trim tag." },
+      {
+        order: 3,
+        instruction:
+          "Pass tag through the small loop just above the eye, then through the large loop just formed.",
+      },
+      {
+        order: 4,
+        instruction: "Moisten and pull standing line to seat wraps down to the eye; trim tag.",
+      },
     ],
     commonMistakes: ["Too few wraps", "Skipping the improved pass", "Dry seating"],
     diagnostics: [
@@ -158,11 +183,21 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     strengthRetentionTypical: "Strong multi-material terminal when barrel is uniform",
     difficulty: "beginner",
     materialsNeeded: ["Line", "Hook or lure"],
-    howToSummary: "Through eye, form Uni loop, wrap tag inside the loop, seat barrel, slide to eye, lock.",
+    howToSummary:
+      "Through eye, form Uni loop, wrap tag inside the loop, seat barrel, slide to eye, lock.",
     steps: [
-      { order: 1, instruction: "Pass tag through the eye and double back parallel to the standing line." },
-      { order: 2, instruction: "Form a loop and wrap the tag through that loop 4–6 times (more for braid)." },
-      { order: 3, instruction: "Moisten; pull tag to form a neat barrel, then slide the barrel to the eye." },
+      {
+        order: 1,
+        instruction: "Pass tag through the eye and double back parallel to the standing line.",
+      },
+      {
+        order: 2,
+        instruction: "Form a loop and wrap the tag through that loop 4–6 times (more for braid).",
+      },
+      {
+        order: 3,
+        instruction: "Moisten; pull tag to form a neat barrel, then slide the barrel to the eye.",
+      },
       { order: 4, instruction: "Pull standing line to lock; trim tag." },
     ],
     commonMistakes: ["Not sliding barrel fully to eye", "Too few braid wraps", "Crossing wraps"],
@@ -252,7 +287,8 @@ export const TERMINAL_KNOTS: KnotContent[] = [
       "Working-loop class, typically mid-80s to mid-90s when wraps are even; the job is swing, not peak retention.",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Lure or fly"],
-    howToSummary: "Overhand, through eye, wraps around standing, tag back through overhand, set loop size, seat.",
+    howToSummary:
+      "Overhand, through eye, wraps around standing, tag back through overhand, set loop size, seat.",
     steps: [
       { order: 1, instruction: "Tie a loose overhand; pass tag through the eye." },
       { order: 2, instruction: "Pass tag back through the overhand." },
@@ -305,7 +341,10 @@ export const TERMINAL_KNOTS: KnotContent[] = [
       { order: 1, instruction: "Tie a loose overhand; pass tag through lure eye." },
       { order: 2, instruction: "Return tag through the overhand." },
       { order: 3, instruction: "Wrap tag around standing line 3–4 times." },
-      { order: 4, instruction: "Pass tag back through overhand; moisten and seat a small loop; trim." },
+      {
+        order: 4,
+        instruction: "Pass tag back through overhand; moisten and seat a small loop; trim.",
+      },
     ],
     commonMistakes: ["Loop too large and sloppy", "Under-wrapping light line"],
     diagnostics: [
@@ -341,17 +380,33 @@ export const TERMINAL_KNOTS: KnotContent[] = [
     category: "terminal",
     bestFor: ["snell-hook", "high-strength"],
     goodFor: "Aligns pull with the hook point via shank wraps — classic bait-hook connection.",
-    notIdealFor: ["Quick lure changes", "Ring-eye-only presentations where a simple eye knot is enough"],
+    notIdealFor: [
+      "Quick lure changes",
+      "Ring-eye-only presentations where a simple eye knot is enough",
+    ],
     lineMaterials: ["mono", "fluoro"],
     strengthRetentionTypical:
       "High when shank wraps are even and finish at the eye; geometry is the job as much as raw retention.",
     difficulty: "intermediate",
     materialsNeeded: ["Line", "Hook with shank suitable for snelling"],
-    howToSummary: "Secure line with parallel wraps along the hook shank so load travels on-axis with the point.",
+    howToSummary:
+      "Secure line with parallel wraps along the hook shank so load travels on-axis with the point.",
     steps: [
-      { order: 1, instruction: "Position line along the shank with tag toward the bend or eye per your snell method." },
-      { order: 2, instruction: "Form a loop and wrap tightly along the shank toward the eye (typically 5–10 wraps)." },
-      { order: 3, instruction: "Pass tag through the remaining loop and pull standing line to seat wraps evenly." },
+      {
+        order: 1,
+        instruction:
+          "Position line along the shank with tag toward the bend or eye per your snell method.",
+      },
+      {
+        order: 2,
+        instruction:
+          "Form a loop and wrap tightly along the shank toward the eye (typically 5–10 wraps).",
+      },
+      {
+        order: 3,
+        instruction:
+          "Pass tag through the remaining loop and pull standing line to seat wraps evenly.",
+      },
       { order: 4, instruction: "Confirm wraps are parallel with no crossovers; trim tag." },
     ],
     commonMistakes: ["Crossed wraps", "Too few wraps", "Finishing short of the eye"],

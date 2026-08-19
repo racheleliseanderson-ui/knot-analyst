@@ -95,12 +95,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Pick the fishing or boat knot for the job, the line, and the water. If a knot does not fit, we will not recommend it.",
       },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: "https://i0.wp.com/hookthehorizon.blog/wp-content/uploads/2026/08/AdobeStock_1419406694.jpeg?resize=1200%2C630&ssl=1" },
+      {
+        property: "og:image",
+        content:
+          "https://i0.wp.com/hookthehorizon.blog/wp-content/uploads/2026/08/AdobeStock_1419406694.jpeg?resize=1200%2C630&ssl=1",
+      },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "Close-up of hands tying fishing line to terminal tackle on a wooden surface" },
+      {
+        property: "og:image:alt",
+        content: "Close-up of hands tying fishing line to terminal tackle on a wooden surface",
+      },
       { property: "og:url", content: "https://knot.hookthehorizon.blog/" },
-      { name: "twitter:image", content: "https://i0.wp.com/hookthehorizon.blog/wp-content/uploads/2026/08/AdobeStock_1419406694.jpeg?resize=1200%2C630&ssl=1" },
+      {
+        name: "twitter:image",
+        content:
+          "https://i0.wp.com/hookthehorizon.blog/wp-content/uploads/2026/08/AdobeStock_1419406694.jpeg?resize=1200%2C630&ssl=1",
+      },
     ],
     links: [
       {

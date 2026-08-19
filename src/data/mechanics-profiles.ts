@@ -52,25 +52,49 @@ function obs(
 function baseTerminalObs(defectPrefix: string): ObservationDef[] {
   return [
     obs("wraps_neat", "Wraps / coils look neat and parallel", "wraps", false, []),
-    obs("crossover", "Visible crossovers or crossed coils", "wraps", true, [`${defectPrefix}-crossover`]),
+    obs("crossover", "Visible crossovers or crossed coils", "wraps", true, [
+      `${defectPrefix}-crossover`,
+    ]),
     obs("seated_to_eye", "Knot is fully seated against the eye / hardware", "geometry", false, []),
     obs("gap_at_eye", "Gap between knot body and eye", "geometry", true, [`${defectPrefix}-gap`]),
     obs("tag_visible", "Tag end is visible and orientation looks correct", "exits", false, []),
-    obs("tag_wrong", "Tag pulled into knot or exits wrong side", "finish", true, [`${defectPrefix}-tag`]),
+    obs("tag_wrong", "Tag pulled into knot or exits wrong side", "finish", true, [
+      `${defectPrefix}-tag`,
+    ]),
     obs("standing_straight", "Standing line exits cleanly under load path", "exits", false, []),
-    obs("loose_finish", "Final structure looks loose or incomplete", "finish", true, [`${defectPrefix}-loose`]),
-    obs("both_exits", "Both line exits (tag + standing) are visible in view", "visibility", false, []),
+    obs("loose_finish", "Final structure looks loose or incomplete", "finish", true, [
+      `${defectPrefix}-loose`,
+    ]),
+    obs(
+      "both_exits",
+      "Both line exits (tag + standing) are visible in view",
+      "visibility",
+      false,
+      [],
+    ),
   ];
 }
 
 function baseJoinObs(defectPrefix: string): ObservationDef[] {
   return [
     obs("barrel_uniform", "Barrel / wrap stack looks uniform", "wraps", false, []),
-    obs("crossover", "Crossed or uneven wraps visible", "wraps", true, [`${defectPrefix}-crossover`]),
-    obs("fully_seated", "Connection is fully seated (no gaps between barrels)", "geometry", false, []),
-    obs("gap_seating", "Gap or incomplete seating between sections", "geometry", true, [`${defectPrefix}-seat`]),
+    obs("crossover", "Crossed or uneven wraps visible", "wraps", true, [
+      `${defectPrefix}-crossover`,
+    ]),
+    obs(
+      "fully_seated",
+      "Connection is fully seated (no gaps between barrels)",
+      "geometry",
+      false,
+      [],
+    ),
+    obs("gap_seating", "Gap or incomplete seating between sections", "geometry", true, [
+      `${defectPrefix}-seat`,
+    ]),
     obs("tags_ok", "Tags exit correctly and are trimmed safely", "finish", false, []),
-    obs("tag_wrong", "Tag orientation wrong or sucked into structure", "finish", true, [`${defectPrefix}-tag`]),
+    obs("tag_wrong", "Tag orientation wrong or sucked into structure", "finish", true, [
+      `${defectPrefix}-tag`,
+    ]),
     obs("line_exits", "Both standing lines exit on-axis", "exits", false, []),
     obs("off_axis", "Leader or main exits off-axis", "exits", true, [`${defectPrefix}-axis`]),
     obs("both_exits", "Critical structure and both exits visible", "visibility", false, []),
@@ -80,7 +104,9 @@ function baseJoinObs(defectPrefix: string): ObservationDef[] {
 function baseLoopObs(defectPrefix: string): ObservationDef[] {
   return [
     obs("loop_stable", "Loop size is stable and intentional", "geometry", false, []),
-    obs("loop_collapses", "Loop collapses or slips under tension", "geometry", true, [`${defectPrefix}-slip`]),
+    obs("loop_collapses", "Loop collapses or slips under tension", "geometry", true, [
+      `${defectPrefix}-slip`,
+    ]),
     obs("wraps_neat", "Wrapping structure neat", "wraps", false, []),
     obs("crossover", "Crossed wraps in loop body", "wraps", true, [`${defectPrefix}-crossover`]),
     obs("tag_ok", "Tag finish looks correct", "finish", false, []),
@@ -88,7 +114,6 @@ function baseLoopObs(defectPrefix: string): ObservationDef[] {
     obs("both_exits", "Loop, standing line, and tag visible", "visibility", false, []),
   ];
 }
-
 
 /** Shared high-value geometric invariants — seed on strongest knots first */
 const RULE_WRAPS_PARALLEL: GeometricRule = {
@@ -107,8 +132,7 @@ const RULE_SEATED_TO_HARDWARE: GeometricRule = {
   violatedBy: ["gap_at_eye"],
   supportedBy: ["seated_to_eye"],
   severity: "retie-recommended",
-  mechanicsWhy:
-    "A gap at the hardware interface lets the knot walk and abrade under cyclic load.",
+  mechanicsWhy: "A gap at the hardware interface lets the knot walk and abrade under cyclic load.",
 };
 
 const RULE_TAG_EXIT_CORRECT: GeometricRule = {
@@ -126,7 +150,8 @@ const RULE_BARRELS_BUTTED: GeometricRule = {
   violatedBy: ["gap_seating"],
   supportedBy: ["fully_seated"],
   severity: "retie-now",
-  mechanicsWhy: "Double Uni locks when the barrels butt and seat; a gap means the join can separate.",
+  mechanicsWhy:
+    "Double Uni locks when the barrels butt and seat; a gap means the join can separate.",
 };
 
 const RULE_LOOP_STABLE: GeometricRule = {
@@ -149,7 +174,6 @@ const RULE_COLUMN_DENSE: GeometricRule = {
     "FG and Bimini hold by continuous compression; gaps or crossed turns let the column unzip under load.",
 };
 
-
 const RULE_STANDING_ON_AXIS: GeometricRule = {
   id: "standing-on-axis",
   description: "Standing line must exit on the load axis with no off-axis hinge",
@@ -166,8 +190,7 @@ const RULE_WRAP_STACK_COMPACT: GeometricRule = {
   violatedBy: ["gap_seating", "crossover"],
   supportedBy: ["barrel_uniform", "fully_seated", "wraps_neat"],
   severity: "retie-recommended",
-  mechanicsWhy:
-    "Gaps between turns reduce friction surface and let the stack walk under load.",
+  mechanicsWhy: "Gaps between turns reduce friction surface and let the stack walk under load.",
   appliesWhen: { finishedGeometry: ["wrap-stack", "barrel"] },
 };
 
@@ -222,7 +245,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       loopBehavior: "none",
       loadDirection: "inline",
       slipSensitivity: "low",
-      seatingRequirements: "Even opposing pressure with moisture on mono/fluoro; doubled coils stack at eye",
+      seatingRequirements:
+        "Even opposing pressure with moisture on mono/fluoro; doubled coils stack at eye",
       tensionRequirements: "moderate",
       failureSensitiveStages: ["passing doubled line", "overhand dressing", "final seat"],
       hardExclusions: ["Eye too small for doubled line"],
@@ -292,7 +316,10 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
         withStep(RULE_TAG_EXIT_CORRECT, 5),
         withStep(RULE_STANDING_ON_AXIS, 4),
       ],
-      cosmeticIrregularities: ["Slight tag length variation", "Minor coil twist if still fully seated"],
+      cosmeticIrregularities: [
+        "Slight tag length variation",
+        "Minor coil twist if still fully seated",
+      ],
     },
     observations: baseTerminalObs("palomar"),
     diagramKind: "terminal-palomar",
@@ -565,7 +592,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     observations: baseTerminalObs("trilene"),
     diagramKind: "terminal-eye",
-    mechanicsSummary: "Double pass through eye plus clinch-style wraps. Extra eye friction vs single-pass clinch.",
+    mechanicsSummary:
+      "Double pass through eye plus clinch-style wraps. Extra eye friction vs single-pass clinch.",
     completeness: FULL,
   },
 
@@ -847,9 +875,15 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       loopBehavior: "none",
       loadDirection: "inline",
       slipSensitivity: "high",
-      seatingRequirements: "High leader tension during weave; hard final seat; lock hitches complete",
+      seatingRequirements:
+        "High leader tension during weave; hard final seat; lock hitches complete",
       tensionRequirements: "extreme",
-      failureSensitiveStages: ["initial tension", "alternating wraps", "lock hitches", "final seat"],
+      failureSensitiveStages: [
+        "initial tension",
+        "alternating wraps",
+        "lock hitches",
+        "final seat",
+      ],
       hardExclusions: [
         "Mono-to-mono joins",
         "Equal diameter similar mono pairs",
@@ -874,7 +908,11 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
         failureSensitivity: 40,
         userProficiency: 40,
       }),
-      strengths: ["Best slim braid-to-leader geometry", "Guide-friendly", "Large diameter transition"],
+      strengths: [
+        "Best slim braid-to-leader geometry",
+        "Guide-friendly",
+        "Large diameter transition",
+      ],
       weaknesses: ["Low field tieability", "High tension skill", "Poor emergency retie"],
     },
     fingerprint: {
@@ -894,7 +932,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
           label: "Crossed lower wraps",
           observationKey: "crossover",
           consequence: "Load concentrates; FG can slip off leader",
-          mechanicsWhy: "FG relies on distributed braid compression — crossovers break that distribution",
+          mechanicsWhy:
+            "FG relies on distributed braid compression — crossovers break that distribution",
           stepWhere: 2,
           decision: "retie-now",
         },
@@ -956,7 +995,13 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       slipSensitivity: "moderate",
       seatingRequirements: "Even down-and-back wraps through doubled leader loop; hard seat",
       tensionRequirements: "high",
-      failureSensitiveStages: ["leader double", "down wraps", "return wraps", "re-entry direction", "seat"],
+      failureSensitiveStages: [
+        "leader double",
+        "down wraps",
+        "return wraps",
+        "re-entry direction",
+        "seat",
+      ],
     },
     fieldFit: {
       ...terminalFit({
@@ -1119,7 +1164,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     observations: baseJoinObs("albright"),
     diagramKind: "line-join",
-    mechanicsSummary: "Classic loop-and-wrap join for diameter differences, including some fly-line systems.",
+    mechanicsSummary:
+      "Classic loop-and-wrap join for diameter differences, including some fly-line systems.",
     completeness: FULL,
   },
 
@@ -1203,7 +1249,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     observations: baseJoinObs("blood"),
     diagramKind: "line-join",
-    mechanicsSummary: "Symmetric multi-wrap join for similar mono/fluoro diameters. Slim; intolerant of mismatch.",
+    mechanicsSummary:
+      "Symmetric multi-wrap join for similar mono/fluoro diameters. Slim; intolerant of mismatch.",
     completeness: FULL,
   },
 
@@ -1285,7 +1332,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     observations: baseJoinObs("surgeons"),
     diagramKind: "line-join",
-    mechanicsSummary: "Fast multi-pass overhand join for tippet. Field favorite when Blood is too fussy.",
+    mechanicsSummary:
+      "Fast multi-pass overhand join for tippet. Field favorite when Blood is too fussy.",
     completeness: FULL,
   },
 
@@ -1441,7 +1489,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       loopBehavior: "fixed",
       loadDirection: "loop-swing",
       slipSensitivity: "moderate",
-      seatingRequirements: "Mid-line loop formed and locked without weakening standings excessively",
+      seatingRequirements:
+        "Mid-line loop formed and locked without weakening standings excessively",
       tensionRequirements: "moderate",
       failureSensitiveStages: ["twist count", "pass-through", "size"],
     },
@@ -1518,11 +1567,22 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     fieldFit: {
       baseline: {
-        connectionJobFit: 88, materialCompatibility: 75, diameterRelationship: 70,
-        eyeHardwareGeometry: 80, guidePassage: 50, finishedProfile: 72, loadBehavior: 78,
-        fieldTieability: 68, coldWetHandDifficulty: 62, lowLightDifficulty: 60,
-        windSensitivity: 60, requiredTensionControl: 65, inspectionDifficulty: 70,
-        retieSpeed: 58, failureSensitivity: 62, userProficiency: 68,
+        connectionJobFit: 88,
+        materialCompatibility: 75,
+        diameterRelationship: 70,
+        eyeHardwareGeometry: 80,
+        guidePassage: 50,
+        finishedProfile: 72,
+        loadBehavior: 78,
+        fieldTieability: 68,
+        coldWetHandDifficulty: 62,
+        lowLightDifficulty: 60,
+        windSensitivity: 60,
+        requiredTensionControl: 65,
+        inspectionDifficulty: 70,
+        retieSpeed: 58,
+        failureSensitivity: 62,
+        userProficiency: 68,
       },
       strengths: ["Free-swing hardbait loop", "Classic lure action"],
       weaknesses: ["Slower retie", "Easy to mis-size loop"],
@@ -1539,9 +1599,33 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       expectedCompressionZones: "Overhand body",
       expectedFinishingStructure: "Rapala loop",
       dangerousDefects: [
-        { id: "rapala-slip", label: "Loop collapses", observationKey: "loop_collapses", consequence: "Loses free swing; may cut", mechanicsWhy: "Non-slip lock failed", stepWhere: 4, decision: "retie-now" },
-        { id: "rapala-crossover", label: "Messy wraps", observationKey: "crossover", consequence: "Weak lock", mechanicsWhy: "Wrap friction holds structure", stepWhere: 3, decision: "retie-recommended" },
-        { id: "rapala-tag", label: "Tag path wrong", observationKey: "tag_wrong", consequence: "Structural failure", mechanicsWhy: "Tag path completes Rapala", stepWhere: 4, decision: "retie-now" },
+        {
+          id: "rapala-slip",
+          label: "Loop collapses",
+          observationKey: "loop_collapses",
+          consequence: "Loses free swing; may cut",
+          mechanicsWhy: "Non-slip lock failed",
+          stepWhere: 4,
+          decision: "retie-now",
+        },
+        {
+          id: "rapala-crossover",
+          label: "Messy wraps",
+          observationKey: "crossover",
+          consequence: "Weak lock",
+          mechanicsWhy: "Wrap friction holds structure",
+          stepWhere: 3,
+          decision: "retie-recommended",
+        },
+        {
+          id: "rapala-tag",
+          label: "Tag path wrong",
+          observationKey: "tag_wrong",
+          consequence: "Structural failure",
+          mechanicsWhy: "Tag path completes Rapala",
+          stepWhere: 4,
+          decision: "retie-now",
+        },
       ],
       cosmeticIrregularities: ["Loop size preference"],
     },
@@ -1569,11 +1653,22 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     fieldFit: {
       baseline: {
-        connectionJobFit: 90, materialCompatibility: 85, diameterRelationship: 75,
-        eyeHardwareGeometry: 50, guidePassage: 80, finishedProfile: 78, loadBehavior: 95,
-        fieldTieability: 25, coldWetHandDifficulty: 20, lowLightDifficulty: 22,
-        windSensitivity: 25, requiredTensionControl: 15, inspectionDifficulty: 50,
-        retieSpeed: 15, failureSensitivity: 35, userProficiency: 30,
+        connectionJobFit: 90,
+        materialCompatibility: 85,
+        diameterRelationship: 75,
+        eyeHardwareGeometry: 50,
+        guidePassage: 80,
+        finishedProfile: 78,
+        loadBehavior: 95,
+        fieldTieability: 25,
+        coldWetHandDifficulty: 20,
+        lowLightDifficulty: 22,
+        windSensitivity: 25,
+        requiredTensionControl: 15,
+        inspectionDifficulty: 50,
+        retieSpeed: 15,
+        failureSensitivity: 35,
+        userProficiency: 30,
       },
       strengths: ["Creates strong double-line", "Big-game systems"],
       weaknesses: ["Very low field tieability", "Time and space required"],
@@ -1590,9 +1685,33 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       expectedCompressionZones: "Twist column",
       expectedFinishingStructure: "Bimini lock",
       dangerousDefects: [
-        { id: "bimini-twist-slip", label: "Twists unravel", observationKey: "loop_collapses", consequence: "Double line fails", mechanicsWhy: "Tension and lock create the structure", stepWhere: 3, decision: "retie-now" },
-        { id: "bimini-twist-crossover", label: "Loose / gapped twists", observationKey: "crossover", consequence: "Weak column", mechanicsWhy: "Dense even twists required", stepWhere: 2, decision: "retie-now" },
-        { id: "bimini-twist-tag", label: "Incomplete lock", observationKey: "tag_wrong", consequence: "Unravels under load", mechanicsWhy: "Lock hitches finish the Bimini", stepWhere: 4, decision: "retie-now" },
+        {
+          id: "bimini-twist-slip",
+          label: "Twists unravel",
+          observationKey: "loop_collapses",
+          consequence: "Double line fails",
+          mechanicsWhy: "Tension and lock create the structure",
+          stepWhere: 3,
+          decision: "retie-now",
+        },
+        {
+          id: "bimini-twist-crossover",
+          label: "Loose / gapped twists",
+          observationKey: "crossover",
+          consequence: "Weak column",
+          mechanicsWhy: "Dense even twists required",
+          stepWhere: 2,
+          decision: "retie-now",
+        },
+        {
+          id: "bimini-twist-tag",
+          label: "Incomplete lock",
+          observationKey: "tag_wrong",
+          consequence: "Unravels under load",
+          mechanicsWhy: "Lock hitches finish the Bimini",
+          stepWhere: 4,
+          decision: "retie-now",
+        },
       ],
       geometricRules: [
         withStep(RULE_WRAPS_PARALLEL, 2),
@@ -1604,7 +1723,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     observations: baseLoopObs("bimini-twist"),
     diagramKind: "double-line",
-    mechanicsSummary: "High-count twist under tension creates a strong double-line loop for leader systems.",
+    mechanicsSummary:
+      "High-count twist under tension creates a strong double-line loop for leader systems.",
     completeness: FULL,
   },
 
@@ -1683,7 +1803,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
     },
     observations: baseTerminalObs("arbor-knot"),
     diagramKind: "arbor-spool",
-    mechanicsSummary: "Simple cinch to reel arbor — spool attachment, not a terminal fighting knot.",
+    mechanicsSummary:
+      "Simple cinch to reel arbor — spool attachment, not a terminal fighting knot.",
     completeness: FULL,
   },
 
@@ -1701,7 +1822,12 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       seatingRequirements:
         "Seat wet on the standing line so wraps roll down and stack against the eye",
       tensionRequirements: "moderate",
-      failureSensitiveStages: ["wrap direction", "first loop pass", "second loop pass", "roll-down"],
+      failureSensitiveStages: [
+        "wrap direction",
+        "first loop pass",
+        "second loop pass",
+        "roll-down",
+      ],
       hardExclusions: [],
     },
     fieldFit: {
@@ -1726,7 +1852,8 @@ export const MECHANICS: Record<string, MechanicsBundle> = {
       weaknesses: ["Slower than a Palomar", "Two loop passes are easy to miss in the dark"],
     },
     fingerprint: {
-      expectedGeometry: "Wrap stack rolled down tight against the eye on a doubled standing section",
+      expectedGeometry:
+        "Wrap stack rolled down tight against the eye on a doubled standing section",
       expectedWrapDirection: "Wraps run away from the eye, up the doubled section",
       expectedWrapCountRange: [5, 7],
       expectedTagOrientation: "Tag exits the outer loop, away from the eye",

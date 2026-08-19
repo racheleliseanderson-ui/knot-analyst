@@ -100,8 +100,12 @@ function report(label: string, rows: Row[]) {
         key.padEnd(14),
         avg(xs).toFixed(1).padStart(7),
         med(xs).toFixed(1).padStart(7),
-        Math.min(...xs).toFixed(0).padStart(7),
-        Math.max(...xs).toFixed(0).padStart(7),
+        Math.min(...xs)
+          .toFixed(0)
+          .padStart(7),
+        Math.max(...xs)
+          .toFixed(0)
+          .padStart(7),
         String(z).padStart(6),
       ].join(" "),
     );

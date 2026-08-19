@@ -121,7 +121,9 @@ function observations(id: string, family: RopeObsFamily): ObservationDef[] {
   if (family === "loop") {
     return [
       obs("barrel_uniform", "Collar and nipping loop look even", "wraps", false, []),
-      obs("crossover", "Collar twisted or walked off the standing part", "wraps", true, [`${p}-crossover`]),
+      obs("crossover", "Collar twisted or walked off the standing part", "wraps", true, [
+        `${p}-crossover`,
+      ]),
       obs("fully_seated", "Collar seated on the standing part", "geometry", false, []),
       obs("gap_seating", "Open collar or undressed nipping loop", "geometry", true, [`${p}-seat`]),
       obs("tags_ok", "Tail exits the documented lock path", "finish", false, []),
@@ -147,11 +149,17 @@ function observations(id: string, family: RopeObsFamily): ObservationDef[] {
   if (family === "cleat") {
     return [
       obs("barrel_uniform", "Figure-eights lie flat across both horns", "wraps", false, []),
-      obs("crossover", "Piled extra locks or a crossed first turn", "wraps", true, [`${p}-crossover`]),
+      obs("crossover", "Piled extra locks or a crossed first turn", "wraps", true, [
+        `${p}-crossover`,
+      ]),
       obs("fully_seated", "Full turn on the far-horn base", "geometry", false, []),
-      obs("gap_seating", "No base turn, or lock not under the last cross", "geometry", true, [`${p}-seat`]),
+      obs("gap_seating", "No base turn, or lock not under the last cross", "geometry", true, [
+        `${p}-seat`,
+      ]),
       obs("tags_ok", "Locking hitch parts lie parallel", "finish", false, []),
-      obs("tag_wrong", "Jammed lock or tail not under the last cross", "finish", true, [`${p}-tag`]),
+      obs("tag_wrong", "Jammed lock or tail not under the last cross", "finish", true, [
+        `${p}-tag`,
+      ]),
       obs("line_exits", "Load comes onto the far horn first", "exits", false, []),
       obs("off_axis", "First turn on the near horn", "exits", true, [`${p}-axis`]),
       obs("both_exits", "Far-horn turn, crosses, and lock all visible", "visibility", false, []),
@@ -160,7 +168,9 @@ function observations(id: string, family: RopeObsFamily): ObservationDef[] {
   if (family === "stopper") {
     return [
       obs("barrel_uniform", "Stopper body compact and larger than the opening", "wraps", false, []),
-      obs("crossover", "Loose or unfinished body that can pull through", "wraps", true, [`${p}-crossover`]),
+      obs("crossover", "Loose or unfinished body that can pull through", "wraps", true, [
+        `${p}-crossover`,
+      ]),
       obs("fully_seated", "Body dressed hard against itself", "geometry", false, []),
       obs("gap_seating", "Open or undersized stopper", "geometry", true, [`${p}-seat`]),
       obs("tags_ok", "Short tail, not loaded as a join", "finish", false, []),

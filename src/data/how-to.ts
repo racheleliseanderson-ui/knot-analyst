@@ -90,7 +90,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Coils stacked evenly against the eye, no gap, no crossover.",
       },
       5: {
-        detail: "Trim after the seat, not during it. A tag sucked into the stack can cut the line at the eye.",
+        detail:
+          "Trim after the seat, not during it. A tag sucked into the stack can cut the line at the eye.",
         expectedResult: "Short square tag pointing away from the coil stack.",
       },
     },
@@ -105,7 +106,8 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "Leave enough tag for the wraps and both tucks. A short tag is the usual unfinished clinch.",
+        detail:
+          "Leave enough tag for the wraps and both tucks. A short tag is the usual unfinished clinch.",
         expectedResult: "Tag through the eye with working length to spare.",
       },
       2: {
@@ -134,15 +136,18 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "The tag has to double back long enough to form the barrel. Short here and you cannot wrap both strands.",
+        detail:
+          "The tag has to double back long enough to form the barrel. Short here and you cannot wrap both strands.",
         expectedResult: "Tag doubled back alongside the standing line.",
       },
       2: {
-        detail: "The open loop is the barrel. Both strands must run through it — wrapping one strand is a different knot.",
+        detail:
+          "The open loop is the barrel. Both strands must run through it — wrapping one strand is a different knot.",
         expectedResult: "An open loop with both lines running parallel through it.",
       },
       3: {
-        detail: "Wraps go around both strands, inside the loop. Around one strand is a different, weaker knot.",
+        detail:
+          "Wraps go around both strands, inside the loop. Around one strand is a different, weaker knot.",
         expectedResult: "Even turns encircling both strands.",
       },
       4: {
@@ -162,7 +167,8 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "Two passes spread eye contact over two strands, which is where the abrasion resistance comes from.",
+        detail:
+          "Two passes spread eye contact over two strands, which is where the abrasion resistance comes from.",
         expectedResult: "A small double loop at the eye.",
       },
       2: {
@@ -170,7 +176,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Even wrap barrel above the double loop.",
       },
       3: {
-        detail: "The tag returns through both eye loops together. Through one only and it unwinds under load.",
+        detail:
+          "The tag returns through both eye loops together. Through one only and it unwinds under load.",
         expectedResult: "Tag captured by both loops.",
       },
       4: {
@@ -201,7 +208,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Even wraps around the standing line.",
       },
       4: {
-        detail: "Seat the overhand first, then the wraps. Reversed order closes the loop on the eye.",
+        detail:
+          "Seat the overhand first, then the wraps. Reversed order closes the loop on the eye.",
         expectedResult: "Open loop of the intended size, knot body compact above it.",
       },
     },
@@ -216,11 +224,13 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "The overhand sits well up the standing line so the lure can swing. Too close and the loop dies.",
+        detail:
+          "The overhand sits well up the standing line so the lure can swing. Too close and the loop dies.",
         expectedResult: "Open overhand sitting up the standing line.",
       },
       2: {
-        detail: "Through the eye, then back through the same overhand. Missing the overhand is not this knot.",
+        detail:
+          "Through the eye, then back through the same overhand. Missing the overhand is not this knot.",
         expectedResult: "Tag through the eye and back through the overhand.",
       },
       3: {
@@ -228,7 +238,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Three or more even turns up the standing line.",
       },
       4: {
-        detail: "Work the tag back down through the overhand and the new loop before any tension goes on.",
+        detail:
+          "Work the tag back down through the overhand and the new loop before any tension goes on.",
         expectedResult: "Loop open and fixed, knot body neat, tag short.",
       },
     },
@@ -247,7 +258,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Line through the eye with a long tag along the shank.",
       },
       2: {
-        detail: "Each wrap must land beside the last. An overlapping wrap becomes a pressure point under load.",
+        detail:
+          "Each wrap must land beside the last. An overlapping wrap becomes a pressure point under load.",
         expectedResult: "A tidy sleeve of wraps along the shank.",
       },
       3: {
@@ -282,7 +294,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Second barrel formed, mirrored on the other line.",
       },
       4: {
-        detail: "Close each barrel on its own line first. Only then pull the standing lines to bring them together.",
+        detail:
+          "Close each barrel on its own line first. Only then pull the standing lines to bring them together.",
         expectedResult: "Two closed barrels sliding toward each other.",
       },
       5: {
@@ -301,28 +314,52 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "The leader must stay straight and under load throughout. Slack leader means no bite.",
+        detail:
+          "The leader must stay straight and under load throughout. Slack leader means no bite.",
         expectedResult: "Leader taut across the braid.",
       },
       2: {
-        detail: "Alternating weaves are what lock the braid onto the leader. A missed alternation unravels the whole sequence.",
+        detail:
+          "Alternating weaves are what lock the braid onto the leader. A missed alternation unravels the whole sequence.",
         expectedResult: "A tight, even plait climbing the leader.",
       },
       3: {
-        detail: "The lock hitches are the fail point. A plait without them creeps on the first hard pull.",
+        detail:
+          "The lock hitches are the fail point. A plait without them creeps on the first hard pull.",
         expectedResult: "Half hitches locking the plait, braid gripping without slipping.",
       },
       4: {
-        detail: "Test by pulling hard before trimming. An FG that slips will do it on the first hard pull, not the twentieth.",
+        detail:
+          "Test by pulling hard before trimming. An FG that slips will do it on the first hard pull, not the twentieth.",
         expectedResult: "A slim tapered join that passes a guide without a click.",
       },
     },
     seatingSequence: [
-      { phase: "Moisten", action: "Wet the plait before locking.", tension: "Leader stays loaded." },
-      { phase: "Load", action: "Pull braid and leader against each other steadily.", tension: "Progressive, never sudden." },
-      { phase: "Dress", action: "Slide the plait tight along the leader.", tension: "Held constant." },
-      { phase: "Set", action: "Lock with half hitches, then load hard to prove the bite.", tension: "Full expected fighting load." },
-      { phase: "Trim", action: "Trim leader tag close, braid tag slightly longer.", tension: "None." },
+      {
+        phase: "Moisten",
+        action: "Wet the plait before locking.",
+        tension: "Leader stays loaded.",
+      },
+      {
+        phase: "Load",
+        action: "Pull braid and leader against each other steadily.",
+        tension: "Progressive, never sudden.",
+      },
+      {
+        phase: "Dress",
+        action: "Slide the plait tight along the leader.",
+        tension: "Held constant.",
+      },
+      {
+        phase: "Set",
+        action: "Lock with half hitches, then load hard to prove the bite.",
+        tension: "Full expected fighting load.",
+      },
+      {
+        phase: "Trim",
+        action: "Trim leader tag close, braid tag slightly longer.",
+        tension: "None.",
+      },
     ],
     fieldNotes: [
       "Not a knot to invent in the dark. Pre-tie leaders at home and carry them wound on foam.",
@@ -338,7 +375,8 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "The leader bight has to stay open the whole sequence. A collapsed bight is a restart.",
+        detail:
+          "The leader bight has to stay open the whole sequence. A collapsed bight is a restart.",
         expectedResult: "A long open bight in the leader.",
       },
       2: {
@@ -346,15 +384,18 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Braid wrapped up the doubled leader in even turns.",
       },
       3: {
-        detail: "The return wraps travel back over the first set. Both directions are needed for the join to hold.",
+        detail:
+          "The return wraps travel back over the first set. Both directions are needed for the join to hold.",
         expectedResult: "Two wrap layers, tidy, no crossing.",
       },
       4: {
-        detail: "Re-enter the bight the same direction the braid entered. Reverse direction dumps the lock.",
+        detail:
+          "Re-enter the bight the same direction the braid entered. Reverse direction dumps the lock.",
         expectedResult: "Braid exits back through the bight, join compact and tapered.",
       },
       5: {
-        detail: "Trim only after a hard test pull. An Alberto that walks now will walk on the fish.",
+        detail:
+          "Trim only after a hard test pull. An Alberto that walks now will walk on the fish.",
         expectedResult: "Short tags, compact tapered join, test pull holds.",
       },
     },
@@ -381,7 +422,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Light line exiting the bight the same side it entered.",
       },
       4: {
-        detail: "Slide the wrap block toward the closed end before setting. It must not sit near the open end.",
+        detail:
+          "Slide the wrap block toward the closed end before setting. It must not sit near the open end.",
         expectedResult: "Wrap block seated mid-bight, both tags exiting cleanly.",
       },
     },
@@ -412,7 +454,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Both tags through the central opening, opposite directions.",
       },
       5: {
-        detail: "Pull both standing lines together. Pulling tags first locks the twists before they can gather.",
+        detail:
+          "Pull both standing lines together. Pulling tags first locks the twists before they can gather.",
         expectedResult: "Symmetrical barrel, tags exiting opposite sides.",
       },
     },
@@ -431,11 +474,13 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Lines lying parallel with a long overlap.",
       },
       2: {
-        detail: "Both lines through the overhand. One line through is a plain overhand and a weak point.",
+        detail:
+          "Both lines through the overhand. One line through is a plain overhand and a weak point.",
         expectedResult: "A loose overhand containing both lines.",
       },
       3: {
-        detail: "Each additional pass must carry both lines. One line through is a plain overhand and a weak point.",
+        detail:
+          "Each additional pass must carry both lines. One line through is a plain overhand and a weak point.",
         expectedResult: "Two or three complete passes, loop still open.",
       },
       4: {
@@ -470,7 +515,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Second loop pulled through the first.",
       },
       5: {
-        detail: "Pull the loop and standing line apart, not the tag. The tag only locks the structure.",
+        detail:
+          "Pull the loop and standing line apart, not the tag. The tag only locks the structure.",
         expectedResult: "Loop standing straight in line with the standing line.",
       },
     },
@@ -499,7 +545,8 @@ export const HOW_TO: Record<string, HowTo> = {
     },
     extraSteps: [
       {
-        instruction: "Moisten and pull the loop and both standing strands apart in one steady motion.",
+        instruction:
+          "Moisten and pull the loop and both standing strands apart in one steady motion.",
         tip: "Hold the loop with a finger or a hook shank so it seats round, not pinched.",
         commonError: "Setting on the tag closes the knot lopsided.",
         detail:
@@ -509,7 +556,8 @@ export const HOW_TO: Record<string, HowTo> = {
       {
         instruction: "Inspect the barrel for a crossed strand, then trim the tag square.",
         tip: "A crossed strand shows as a diagonal across the barrel face.",
-        detail: "This loop is bulky enough that a fault is visible — use that. It is the easiest knot here to inspect.",
+        detail:
+          "This loop is bulky enough that a fault is visible — use that. It is the easiest knot here to inspect.",
         expectedResult: "Clean parallel barrel, short tag, loop free to move.",
       },
     ],
@@ -524,15 +572,18 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "Count the twists under unchanging tension. A slackened Bimini cannot be recovered.",
+        detail:
+          "Count the twists under unchanging tension. A slackened Bimini cannot be recovered.",
         expectedResult: "A long doubled section with a counted twist column.",
       },
       2: {
-        detail: "Spreading the loop feeds the twists back over themselves. Lose the spread and the column collapses.",
+        detail:
+          "Spreading the loop feeds the twists back over themselves. Lose the spread and the column collapses.",
         expectedResult: "Twists rolling back in a tight even sleeve.",
       },
       3: {
-        detail: "Gaps in the sleeve mean the lock will not hold. Pack it to the base before you hitch.",
+        detail:
+          "Gaps in the sleeve mean the lock will not hold. Pack it to the base before you hitch.",
         expectedResult: "Sleeve fully packed with no gaps to the base.",
       },
       4: {
@@ -541,10 +592,26 @@ export const HOW_TO: Record<string, HowTo> = {
       },
     },
     seatingSequence: [
-      { phase: "Moisten", action: "Wet the twist column before rollback.", tension: "Loop held spread." },
-      { phase: "Load", action: "Maintain spread while feeding twists back.", tension: "Constant, both legs equal." },
-      { phase: "Dress", action: "Pack the sleeve down to the base with no voids.", tension: "Held." },
-      { phase: "Set", action: "Lock with half hitches, then a finishing hitch.", tension: "Firm, on the doubled line." },
+      {
+        phase: "Moisten",
+        action: "Wet the twist column before rollback.",
+        tension: "Loop held spread.",
+      },
+      {
+        phase: "Load",
+        action: "Maintain spread while feeding twists back.",
+        tension: "Constant, both legs equal.",
+      },
+      {
+        phase: "Dress",
+        action: "Pack the sleeve down to the base with no voids.",
+        tension: "Held.",
+      },
+      {
+        phase: "Set",
+        action: "Lock with half hitches, then a finishing hitch.",
+        tension: "Firm, on the doubled line.",
+      },
       { phase: "Trim", action: "Trim tag close to the finishing hitch.", tension: "None." },
     ],
     fieldNotes: [
@@ -561,7 +628,8 @@ export const HOW_TO: Record<string, HowTo> = {
     ],
     steps: {
       1: {
-        detail: "Around the arbor, tag back alongside the standing line. Braid on bare metal will slip whatever you tie.",
+        detail:
+          "Around the arbor, tag back alongside the standing line. Braid on bare metal will slip whatever you tie.",
         expectedResult: "Line around the arbor, tag alongside the standing line.",
       },
       2: {
@@ -573,7 +641,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Second overhand in the tag, acting as a stopper.",
       },
       4: {
-        detail: "Pull the standing line so the first knot slides down and the stopper jams against it.",
+        detail:
+          "Pull the standing line so the first knot slides down and the stopper jams against it.",
         expectedResult: "Both knots butted together against the arbor.",
       },
     },
@@ -604,7 +673,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Centre opening held clear with a finger or tool.",
       },
       4: {
-        detail: "Push the loop through the centre opening and hold it while pulling both standing lines apart.",
+        detail:
+          "Push the loop through the centre opening and hold it while pulling both standing lines apart.",
         expectedResult: "Loop standing perpendicular to the line, twists even on both sides.",
       },
     },
@@ -623,7 +693,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Line through the eye, doubled back.",
       },
       2: {
-        detail: "Wraps run back up the doubled line, away from the eye. Toward the eye is the wrong direction.",
+        detail:
+          "Wraps run back up the doubled line, away from the eye. Toward the eye is the wrong direction.",
         expectedResult: "Even wraps back up the doubled line.",
       },
       3: {
@@ -635,7 +706,8 @@ export const HOW_TO: Record<string, HowTo> = {
         expectedResult: "Tag through the large loop just formed.",
       },
       5: {
-        detail: "Seat slowly and watch the wraps roll down as a block. Uneven roll means one wrap is crossed.",
+        detail:
+          "Seat slowly and watch the wraps roll down as a block. Uneven roll means one wrap is crossed.",
         expectedResult: "Compact wrap block against the eye, tag outward.",
       },
     },

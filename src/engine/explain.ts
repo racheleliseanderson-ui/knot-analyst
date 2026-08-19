@@ -104,10 +104,7 @@ export function whyThisWon(
 }
 
 /** Why a non-winner is not the preferred pick vs #1 */
-export function whyNotThis(
-  option: RankedOption,
-  winner: RankedOption,
-): string[] {
+export function whyNotThis(option: RankedOption, winner: RankedOption): string[] {
   if (option.knot.id === winner.knot.id) return [];
 
   const lines: string[] = [];
@@ -167,7 +164,9 @@ export function annotateExplainability(
         whyNotOthers: runnerUp
           ? [
               explainTradeoff(r, runnerUp),
-              ...whyNotThis(runnerUp, r).slice(0, 2).map((line) => `${runnerUp.knot.name}: ${line}`),
+              ...whyNotThis(runnerUp, r)
+                .slice(0, 2)
+                .map((line) => `${runnerUp.knot.name}: ${line}`),
               ...eliminated.slice(0, 2).map((e) => `${e.knotName} eliminated: ${e.reasons[0]}`),
             ]
           : eliminated.slice(0, 4).map((e) => `${e.knotName}: ${e.reasons[0]}`),

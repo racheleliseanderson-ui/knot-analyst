@@ -106,11 +106,11 @@ export function parseOverlay(raw: unknown): { data: OverlayData; errors: string[
   const src = (typeof raw === "object" && raw !== null ? raw : {}) as Record<string, unknown>;
 
   const materials: CustomMaterial[] = [];
-  for (const m of Array.isArray(src['materials'] ) ? (src['materials'] as unknown[]) : []) {
+  for (const m of Array.isArray(src["materials"]) ? (src["materials"] as unknown[]) : []) {
     const o = (m ?? {}) as Record<string, unknown>;
-    const label = asString(o['label']).trim();
-    const behavesLike = asString(o['behavesLike']) as LineMaterial;
-    const id = slugify(asString(o['id']) || label);
+    const label = asString(o["label"]).trim();
+    const behavesLike = asString(o["behavesLike"]) as LineMaterial;
+    const id = slugify(asString(o["id"]) || label);
     if (!id || !label) {
       errors.push("Material skipped — missing id or label.");
       continue;
@@ -123,16 +123,16 @@ export function parseOverlay(raw: unknown): { data: OverlayData; errors: string[
       id,
       label,
       behavesLike,
-      ...(asString(o['note']) ? { note: asString(o['note']) } : {}),
+      ...(asString(o["note"]) ? { note: asString(o["note"]) } : {}),
     });
   }
 
   const connections: CustomConnection[] = [];
-  for (const c of Array.isArray(src['connections']) ? (src['connections'] as unknown[]) : []) {
+  for (const c of Array.isArray(src["connections"]) ? (src["connections"] as unknown[]) : []) {
     const o = (c ?? {}) as Record<string, unknown>;
-    const label = asString(o['label']).trim();
-    const behavesLike = asString(o['behavesLike']) as ConnectionJob;
-    const id = slugify(asString(o['id']) || label);
+    const label = asString(o["label"]).trim();
+    const behavesLike = asString(o["behavesLike"]) as ConnectionJob;
+    const id = slugify(asString(o["id"]) || label);
     if (!id || !label) {
       errors.push("Connection skipped — missing id or label.");
       continue;
@@ -144,19 +144,19 @@ export function parseOverlay(raw: unknown): { data: OverlayData; errors: string[
     connections.push({
       id,
       label,
-      group: asString(o['group']).trim() || "Custom",
+      group: asString(o["group"]).trim() || "Custom",
       behavesLike,
-      ...(asString(o['note']) ? { note: asString(o['note']) } : {}),
+      ...(asString(o["note"]) ? { note: asString(o["note"]) } : {}),
     });
   }
 
   const scenarios: CustomScenario[] = [];
-  for (const s of Array.isArray(src['scenarios']) ? (src['scenarios'] as unknown[]) : []) {
+  for (const s of Array.isArray(src["scenarios"]) ? (src["scenarios"] as unknown[]) : []) {
     const o = (s ?? {}) as Record<string, unknown>;
-    const title = asString(o['title']).trim();
-    const id = slugify(asString(o['id']) || title);
-    const input = (o['input'] ?? {}) as Record<string, unknown>;
-    const connection = asString(input['connection']) as ConnectionJob;
+    const title = asString(o["title"]).trim();
+    const id = slugify(asString(o["id"]) || title);
+    const input = (o["input"] ?? {}) as Record<string, unknown>;
+    const connection = asString(input["connection"]) as ConnectionJob;
     if (!id || !title) {
       errors.push("Scenario skipped — missing id or title.");
       continue;
@@ -165,35 +165,35 @@ export function parseOverlay(raw: unknown): { data: OverlayData; errors: string[
       errors.push(`Scenario "${title}" skipped — input.connection is not a known connection job.`);
       continue;
     }
-    const main = asString(input['mainMaterial']) as LineMaterial;
-    const secondary = asString(input['secondaryMaterial']) as LineMaterial;
+    const main = asString(input["mainMaterial"]) as LineMaterial;
+    const secondary = asString(input["secondaryMaterial"]) as LineMaterial;
     scenarios.push({
       id,
       title,
-      blurb: asString(o['blurb']),
-      tag: asString(o['tag']) || "Custom",
-      connectionLine: asString(o['connectionLine']) || title,
-      likelyPick: asString(o['likelyPick']),
-      autoRun: o['autoRun'] !== false,
+      blurb: asString(o["blurb"]),
+      tag: asString(o["tag"]) || "Custom",
+      connectionLine: asString(o["connectionLine"]) || title,
+      likelyPick: asString(o["likelyPick"]),
+      autoRun: o["autoRun"] !== false,
       input: {
         connection,
         ...(MATERIAL_SET.includes(main) ? { mainMaterial: main } : {}),
         ...(MATERIAL_SET.includes(secondary) ? { secondaryMaterial: secondary } : {}),
-        ...(typeof input['diameterRelation'] === "string"
-          ? { diameterRelation: input['diameterRelation'] as ChooseInput["diameterRelation"] }
+        ...(typeof input["diameterRelation"] === "string"
+          ? { diameterRelation: input["diameterRelation"] as ChooseInput["diameterRelation"] }
           : {}),
-        ...(input['mustPassGuides'] === true ? { mustPassGuides: true } : {}),
-        ...(input['windy'] === true ? { windy: true } : {}),
-        ...(input['coldHands'] === true ? { coldHands: true } : {}),
-        ...(input['lowLight'] === true ? { lowLight: true } : {}),
-        ...(input['hardwareEyeSmall'] === true ? { hardwareEyeSmall: true } : {}),
-        ...(input['freeSwing'] === true ? { freeSwing: true } : {}),
-        ...(input['needsUntie'] === true ? { needsUntie: true } : {}),
-        ...(typeof input['retieFrequency'] === "string"
-          ? { retieFrequency: input['retieFrequency'] as ChooseInput["retieFrequency"] }
+        ...(input["mustPassGuides"] === true ? { mustPassGuides: true } : {}),
+        ...(input["windy"] === true ? { windy: true } : {}),
+        ...(input["coldHands"] === true ? { coldHands: true } : {}),
+        ...(input["lowLight"] === true ? { lowLight: true } : {}),
+        ...(input["hardwareEyeSmall"] === true ? { hardwareEyeSmall: true } : {}),
+        ...(input["freeSwing"] === true ? { freeSwing: true } : {}),
+        ...(input["needsUntie"] === true ? { needsUntie: true } : {}),
+        ...(typeof input["retieFrequency"] === "string"
+          ? { retieFrequency: input["retieFrequency"] as ChooseInput["retieFrequency"] }
           : {}),
-        ...(typeof input['proficiency'] === "string"
-          ? { proficiency: input['proficiency'] as ChooseInput["proficiency"] }
+        ...(typeof input["proficiency"] === "string"
+          ? { proficiency: input["proficiency"] as ChooseInput["proficiency"] }
           : {}),
       },
     });
@@ -202,7 +202,7 @@ export function parseOverlay(raw: unknown): { data: OverlayData; errors: string[
   return {
     data: {
       version: OVERLAY_VERSION,
-      updatedAt: asString(src['updatedAt']) || new Date().toISOString(),
+      updatedAt: asString(src["updatedAt"]) || new Date().toISOString(),
       materials,
       connections,
       scenarios,

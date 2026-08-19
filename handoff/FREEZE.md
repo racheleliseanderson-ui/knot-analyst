@@ -6,23 +6,23 @@ Governing plan: `.lovable/plan/` archive. Canonical repository:
 
 ## 1. Frozen artifact
 
-| Item | Value |
-| --- | --- |
-| Baseline commit at freeze | `86cb510` (`Added a11y flow tests`) |
-| Freeze commit | the commit produced by the GitHub sync of this generation; use that SHA, not `main` |
-| Branch policy | port into an existing canonical branch; never merge this repo wholesale |
-| Routes in scope | `/` (Decide 01), `/diagnose` (02), `/compare` (03), `/tie/$knotId`, `/admin` (gated) |
-| Catalog version | `2026-08-09.2` — 86 modelled connections |
+| Item                      | Value                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| Baseline commit at freeze | `86cb510` (`Added a11y flow tests`)                                                  |
+| Freeze commit             | the commit produced by the GitHub sync of this generation; use that SHA, not `main`  |
+| Branch policy             | port into an existing canonical branch; never merge this repo wholesale              |
+| Routes in scope           | `/` (Decide 01), `/diagnose` (02), `/compare` (03), `/tie/$knotId`, `/admin` (gated) |
+| Catalog version           | `2026-08-09.2` — 86 modelled connections                                             |
 
 ## 2. Verification evidence at freeze
 
-| Check | Command | Result |
-| --- | --- | --- |
-| Schema regression | `bun run test:schema` | PASSED — 20 golden cases |
-| Catalog validation | `bun run test:catalog` | PASSED — 86 connections, 86 content entries, 86 how-to builds, 86 schematic families, 86 cited videos, 8 sources |
-| Production build | `bun run build` | PASSED — nitro/Cloudflare worker output generated |
-| End-to-end (production build served by `wrangler dev`) | `bun run e2e` | 32 passed, 8 skipped (desktop-only assertions skipped on the phone project and vice versa) |
-| Lint | `bun run lint` | run before merge in canonical; ESLint config is generated scaffold and is REJECT for port |
+| Check                                                  | Command                | Result                                                                                                           |
+| ------------------------------------------------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Schema regression                                      | `bun run test:schema`  | PASSED — 20 golden cases                                                                                         |
+| Catalog validation                                     | `bun run test:catalog` | PASSED — 86 connections, 86 content entries, 86 how-to builds, 86 schematic families, 86 cited videos, 8 sources |
+| Production build                                       | `bun run build`        | PASSED — nitro/Cloudflare worker output generated                                                                |
+| End-to-end (production build served by `wrangler dev`) | `bun run e2e`          | 32 passed, 8 skipped (desktop-only assertions skipped on the phone project and vice versa)                       |
+| Lint                                                   | `bun run lint`         | run before merge in canonical; ESLint config is generated scaffold and is REJECT for port                        |
 
 E2E coverage: Decide flow, Diagnose flow, deep-linked job context restore (desktop + phone),
 printable Decision/Diagnosis card incl. print-media emulation and PDF export, accessibility

@@ -12,7 +12,12 @@ import type { DiameterRelation } from "@/domain/types";
  * Ratio = main / secondary.
  */
 export function relationFromDiameters(mainMm: number, secondaryMm: number): DiameterRelation {
-  if (!(mainMm > 0) || !(secondaryMm > 0) || !Number.isFinite(mainMm) || !Number.isFinite(secondaryMm)) {
+  if (
+    !(mainMm > 0) ||
+    !(secondaryMm > 0) ||
+    !Number.isFinite(mainMm) ||
+    !Number.isFinite(secondaryMm)
+  ) {
     return "similar";
   }
   const ratio = mainMm / secondaryMm;
@@ -28,7 +33,11 @@ export function relationFromDiameters(mainMm: number, secondaryMm: number): Diam
 /** Parse a free-text mm field; empty / invalid → undefined. */
 export function parseMm(raw: string | undefined | null): number | undefined {
   if (raw == null || raw.trim() === "") return undefined;
-  const n = Number(String(raw).replace(/,/g, ".").replace(/[^\d.-]/g, ""));
+  const n = Number(
+    String(raw)
+      .replace(/,/g, ".")
+      .replace(/[^\d.-]/g, ""),
+  );
   if (!Number.isFinite(n) || n <= 0) return undefined;
   return n;
 }

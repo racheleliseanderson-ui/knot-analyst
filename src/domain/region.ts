@@ -12,14 +12,7 @@ import type { ChooseInput } from "@/domain/types";
 export type RegionTier = "broad" | "fine";
 
 export type SaltLean = "salt" | "fresh" | "mixed";
-export type AbrasionProfile =
-  | "oyster"
-  | "rock"
-  | "kelp"
-  | "timber"
-  | "barnacle"
-  | "mixed"
-  | "sand";
+export type AbrasionProfile = "oyster" | "rock" | "kelp" | "timber" | "barnacle" | "mixed" | "sand";
 
 /** Lightweight signals for advisor language and Phase E counterfactuals. */
 export interface RegionSignals {

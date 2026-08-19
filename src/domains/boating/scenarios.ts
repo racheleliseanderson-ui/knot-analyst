@@ -8,7 +8,8 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
   {
     id: "dock-cleat-surge",
     title: "Dock line · horn cleat · surge",
-    blurb: "Make fast to a horn cleat so you can still cast off under load. A jammed lock is the hazard.",
+    blurb:
+      "Make fast to a horn cleat so you can still cast off under load. A jammed lock is the hazard.",
     tag: "Dock · release",
     connectionLine: "Rope → cleat",
     likelyPick: "Cleat hitch when the first turn is on the far horn",
@@ -23,7 +24,8 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
   {
     id: "piling-overnight",
     title: "Piling overnight · cyclic tide",
-    blurb: "Make fast to a piling you will leave. A clove hitch walks. The turn must take the load.",
+    blurb:
+      "Make fast to a piling you will leave. A clove hitch walks. The turn must take the load.",
     tag: "Mooring · tide",
     connectionLine: "Rope → bollard / piling",
     likelyPick: "Round turn and two half hitches over a clove",
@@ -101,7 +103,8 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
   {
     id: "snubber-chain",
     title: "Snubber onto chain",
-    blurb: "Transfer load off the windlass. A rolling hitch is the first try; an icicle if it walks.",
+    blurb:
+      "Transfer load off the windlass. A rolling hitch is the first try; an icicle if it walks.",
     tag: "Anchorage · snubber",
     connectionLine: "Load transfer",
     likelyPick: "Rolling hitch first; icicle on a slick standing part",
@@ -131,7 +134,8 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
   {
     id: "taut-guy",
     title: "Guy line that must still adjust",
-    blurb: "Tension a guy or awning you will still slide. A lock-and-leave purchase is the wrong job.",
+    blurb:
+      "Tension a guy or awning you will still slide. A lock-and-leave purchase is the wrong job.",
     tag: "Working · tension",
     connectionLine: "Tension / lash",
     likelyPick: "Midshipman's hitch — the extra inside tuck is the hold",
@@ -163,7 +167,8 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
   {
     id: "hmpe-block-stopper",
     title: "HMPE stopper at a block",
-    blurb: "Dyneema through a block. A figure-8 walks in this fibre. This is a stopper, not a join.",
+    blurb:
+      "Dyneema through a block. A figure-8 walks in this fibre. This is a stopper, not a join.",
     tag: "Working · HMPE",
     connectionLine: "Stopper",
     likelyPick: "EStar stopper",
@@ -178,7 +183,8 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
   {
     id: "fender-rail",
     title: "Fenders on a rail · slide to adjust",
-    blurb: "Hang fenders you will still move. A clove hitch is the job. A clove left overnight on a piling is not.",
+    blurb:
+      "Hang fenders you will still move. A clove hitch is the job. A clove left overnight on a piling is not.",
     tag: "Dock · fenders",
     connectionLine: "Rope → rail",
     likelyPick: "Clove hitch — fast on, fast off, watched",
@@ -193,7 +199,8 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
   {
     id: "trailer-strap",
     title: "Strap the boat for the drive home",
-    blurb: "Put a line under working tension and lock it. A hitch you will still slide is the wrong job.",
+    blurb:
+      "Put a line under working tension and lock it. A hitch you will still slide is the wrong job.",
     tag: "Working · lash",
     connectionLine: "Tension / lash",
     likelyPick: "Trucker's hitch — purchase, then two half hitches",

@@ -8,7 +8,15 @@ import { activeRegion } from "@/domain/region";
 import { DecideStepper, type DecideStep } from "@/components/instrument/decide-stepper";
 import { useT } from "@/i18n";
 import { useDomain } from "@/domain/context";
-import { Bullets, Chip, Meter, MicroLabel, Panel, StepHead, Verdict } from "@/components/instrument/primitives";
+import {
+  Bullets,
+  Chip,
+  Meter,
+  MicroLabel,
+  Panel,
+  StepHead,
+  Verdict,
+} from "@/components/instrument/primitives";
 import { runChooser } from "@/engine/chooser";
 import { knotsForDomain } from "@/data/catalog";
 import { buildDecisionCard, counterfactuals, detectTradeoffs } from "@/engine/advisor";
@@ -18,18 +26,20 @@ import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import { encodeInput } from "@/lib/handoff";
 import { cn } from "@/lib/utils";
-import type { ChooseInput, ConnectionJob, DiameterRelation, Difficulty, LineMaterial } from "@/domain/types";
-import {
-  DIAMETER_LABELS,
-  DIMENSION_LABELS,
+import type {
+  ChooseInput,
+  ConnectionJob,
+  DiameterRelation,
+  Difficulty,
+  LineMaterial,
 } from "@/domain/types";
+import { DIAMETER_LABELS, DIMENSION_LABELS } from "@/domain/types";
 import { resolveMaterial, type MaterialPreset, type MaterialSpec } from "@/domain/material";
 import { FISHING_MATERIAL_PRESETS } from "@/domains/fishing/materials";
 import { dualWriteFromConnection, isJoinJob } from "@/domain/connection-preset";
 import { mergeVenueConditions, resolveLegacyVenue } from "@/domain/venue";
 import { parseMm, relationFromDiameters } from "@/domain/diameter";
 import { PRODUCT_META_DESCRIPTION, PRODUCT_META_TITLE } from "@/domain/brand";
-
 
 function DiameterMmFields({
   mainMm,
@@ -57,8 +67,7 @@ function DiameterMmFields({
   const push = (mainRaw: string, secRaw: string) => {
     const main = parseMm(mainRaw);
     const sec = parseMm(secRaw);
-    const relation =
-      main != null && sec != null ? relationFromDiameters(main, sec) : undefined;
+    const relation = main != null && sec != null ? relationFromDiameters(main, sec) : undefined;
     onApply(main, sec, relation);
   };
 
@@ -183,22 +192,22 @@ const bool = (v: unknown) => (v === true || v === "true" || v === "1" ? true : u
 
 export const Route = createFileRoute("/")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    connection: str(s['connection']) as ConnectionJob | undefined,
-    main: str(s['main']) as LineMaterial | undefined,
-    secondary: str(s['secondary']) as LineMaterial | undefined,
-    diameter: str(s['diameter']) as DiameterRelation | undefined,
-    guides: bool(s['guides']),
-    wind: bool(s['wind']),
-    cold: bool(s['cold']),
-    lowlight: bool(s['lowlight']),
-    retie: str(s['retie']) as Search["retie"],
-    prof: str(s['prof']) as Search["prof"],
-    eye: bool(s['eye']),
-    swing: bool(s['swing']),
-    scenario: str(s['scenario']),
-    run: bool(s['run']),
-    from: str(s['from']),
-    why: str(s['why']),
+    connection: str(s["connection"]) as ConnectionJob | undefined,
+    main: str(s["main"]) as LineMaterial | undefined,
+    secondary: str(s["secondary"]) as LineMaterial | undefined,
+    diameter: str(s["diameter"]) as DiameterRelation | undefined,
+    guides: bool(s["guides"]),
+    wind: bool(s["wind"]),
+    cold: bool(s["cold"]),
+    lowlight: bool(s["lowlight"]),
+    retie: str(s["retie"]) as Search["retie"],
+    prof: str(s["prof"]) as Search["prof"],
+    eye: bool(s["eye"]),
+    swing: bool(s["swing"]),
+    scenario: str(s["scenario"]),
+    run: bool(s["run"]),
+    from: str(s["from"]),
+    why: str(s["why"]),
   }),
   head: () => ({
     meta: [
@@ -304,8 +313,7 @@ function DecideMode() {
     setRan(false);
     setAltPick(0);
   };
-  const toggle = (key: keyof ChooseInput) =>
-    set({ [key]: !input[key] } as Partial<ChooseInput>);
+  const toggle = (key: keyof ChooseInput) => set({ [key]: !input[key] } as Partial<ChooseInput>);
 
   /** Soft-load merged waterbody + platform conditions (editable chips still win after). */
   const applyVenueLayers = (
@@ -340,7 +348,8 @@ function DecideMode() {
   const selectedRegion = activeRegion(regions, regionBroadId, regionFineId);
 
   const result = useMemo(
-    () => (ran && input.connection ? runChooser(input as ChooseInput, knotsForDomain(domain.id)) : null),
+    () =>
+      ran && input.connection ? runChooser(input as ChooseInput, knotsForDomain(domain.id)) : null,
     [ran, input, domain.id],
   );
   const card = result ? buildDecisionCard(result) : null;
@@ -362,76 +371,75 @@ function DecideMode() {
       label: "The job",
       ready: true,
       node: (
-                  <Panel className="p-5">
-                    <StepHead index="01" title="The job" hint="What is physically being joined." />
-                    <div className="space-y-4">
-                      {connectionGroups.map((g) => (
-                        <div key={g.title}>
-                          <MicroLabel className="mb-2">{g.title}</MicroLabel>
-                          <div className="flex flex-wrap gap-1.5">
-                            {g.jobs.map((j) => (
-                              <Chip
-                                key={j.key}
-                                tone="signal"
-                                active={
-                                  sel.connection
-                                    ? sel.connection === j.key
-                                    : input.connection === j.base && !j.custom
-                                }
-                                onClick={() => {
-                                  const dual = dualWriteFromConnection(j.base);
-                                  const patch: Partial<ChooseInput> = {
-                                    connection: j.base,
-                                    structuralJob: dual.structuralJob,
-                                    mainRole: dual.mainRole,
-                                    secondaryRole: dual.secondaryRole,
-                                  };
-                                  const selPatch: { connection?: string; main?: string; secondary?: string } = {
-                                    connection: j.key,
-                                  };
-                                  // Soft material hints from the convenience label — only when unset.
-                                  if (dual.mainMaterialHint && !input.mainMaterial) {
-                                    patch.mainMaterial = dual.mainMaterialHint;
-                                    patch.mainSpec = resolveMaterial(
-                                      dual.mainMaterialHint,
-                                      materialPresets,
-                                      { role: dual.mainRole },
-                                    );
-                                    selPatch.main = dual.mainMaterialHint;
-                                  }
-                                  if (dual.isJoin) {
-                                    if (dual.secondaryMaterialHint && !input.secondaryMaterial) {
-                                      patch.secondaryMaterial = dual.secondaryMaterialHint;
-                                      patch.secondarySpec = resolveMaterial(
-                                        dual.secondaryMaterialHint,
-                                        materialPresets,
-                                        {
-                                          ...(dual.secondaryRole ? { role: dual.secondaryRole } : {}),
-                                        },
-                                      );
-                                      selPatch.secondary = dual.secondaryMaterialHint;
-                                    }
-                                  } else {
-                                    // Terminal / single-side jobs: second line is not part of the job.
-                                    patch.secondaryMaterial = undefined;
-                                    patch.secondarySpec = undefined;
-                                    patch.secondaryRole = undefined;
-                                    patch.diameterRelation = undefined;
-                                    patch.mainDiameterMm = undefined;
-                                    patch.secondaryDiameterMm = undefined;
-                                    selPatch.secondary = undefined;
-                                  }
-                                  set(patch, selPatch);
-                                }}
-                              >
-                                {j.label}
-                              </Chip>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Panel>
+        <Panel className="p-5">
+          <StepHead index="01" title="The job" hint="What is physically being joined." />
+          <div className="space-y-4">
+            {connectionGroups.map((g) => (
+              <div key={g.title}>
+                <MicroLabel className="mb-2">{g.title}</MicroLabel>
+                <div className="flex flex-wrap gap-1.5">
+                  {g.jobs.map((j) => (
+                    <Chip
+                      key={j.key}
+                      tone="signal"
+                      active={
+                        sel.connection
+                          ? sel.connection === j.key
+                          : input.connection === j.base && !j.custom
+                      }
+                      onClick={() => {
+                        const dual = dualWriteFromConnection(j.base);
+                        const patch: Partial<ChooseInput> = {
+                          connection: j.base,
+                          structuralJob: dual.structuralJob,
+                          mainRole: dual.mainRole,
+                          secondaryRole: dual.secondaryRole,
+                        };
+                        const selPatch: { connection?: string; main?: string; secondary?: string } =
+                          {
+                            connection: j.key,
+                          };
+                        // Soft material hints from the convenience label — only when unset.
+                        if (dual.mainMaterialHint && !input.mainMaterial) {
+                          patch.mainMaterial = dual.mainMaterialHint;
+                          patch.mainSpec = resolveMaterial(dual.mainMaterialHint, materialPresets, {
+                            role: dual.mainRole,
+                          });
+                          selPatch.main = dual.mainMaterialHint;
+                        }
+                        if (dual.isJoin) {
+                          if (dual.secondaryMaterialHint && !input.secondaryMaterial) {
+                            patch.secondaryMaterial = dual.secondaryMaterialHint;
+                            patch.secondarySpec = resolveMaterial(
+                              dual.secondaryMaterialHint,
+                              materialPresets,
+                              {
+                                ...(dual.secondaryRole ? { role: dual.secondaryRole } : {}),
+                              },
+                            );
+                            selPatch.secondary = dual.secondaryMaterialHint;
+                          }
+                        } else {
+                          // Terminal / single-side jobs: second line is not part of the job.
+                          patch.secondaryMaterial = undefined;
+                          patch.secondarySpec = undefined;
+                          patch.secondaryRole = undefined;
+                          patch.diameterRelation = undefined;
+                          patch.mainDiameterMm = undefined;
+                          patch.secondaryDiameterMm = undefined;
+                          selPatch.secondary = undefined;
+                        }
+                        set(patch, selPatch);
+                      }}
+                    >
+                      {j.label}
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Panel>
       ),
     },
     {
@@ -439,161 +447,162 @@ function DecideMode() {
       label: "Material",
       ready: Boolean(input.connection),
       node: (
-                  <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
-                    <StepHead
-                      index="02"
-                      title="Line and leader"
-                      hint="The line decides what is even allowed."
-                      state={input.connection ? "open" : "locked"}
-                    />
-                    <div className="space-y-4">
-                      <div>
-                        <MicroLabel className="mb-2">Main line</MicroLabel>
-                        <div className="flex flex-wrap gap-1.5">
-                          {materialOptions.map((m) => (
-                            <Chip
-                              key={m.key}
-                              disabled={!input.connection}
-                              active={
-                                sel.main ? sel.main === m.key : input.mainMaterial === m.base && !m.custom
-                              }
-                              onClick={() => {
-                                const on = sel.main ? sel.main === m.key : input.mainMaterial === m.base;
-                                set(
-                                  {
-                                    mainMaterial: on ? undefined : m.base,
-                                    mainSpec: on
-                                      ? undefined
-                                      : resolveMaterial(m.base, materialPresets, {
-                                          ...(input.mainRole ? { role: input.mainRole } : {}),
-                                        }),
-                                  },
-                                  { main: on ? undefined : m.key },
-                                );
-                              }}
-                            >
-                              {m.label}
-                            </Chip>
-                          ))}
-                        </div>
-                        <MaterialDetail
-                          category={input.mainMaterial}
-                          spec={input.mainSpec}
-                          presets={materialPresets}
-                          onChange={(next) => set({ mainSpec: next })}
-                        />
-                      </div>
-                      {input.connection ? (
-                        isJoin ? (
-                          <>
-                            <div className="rounded-md border border-primary/30 bg-primary/8 px-3 py-2">
-                              <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary">
-                                Two-sided job
-                              </p>
-                              <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                                Both sides matter for joins. Declare the leader / second line so the model can score diameter mismatch and material pairs.
-                              </p>
-                            </div>
-                            <div>
-                              <MicroLabel className="mb-2">Leader / second line · required</MicroLabel>
-                              <div className="flex flex-wrap gap-1.5">
-                                {materialOptions.map((m) => (
-                                  <Chip
-                                    key={m.key}
-                                    active={
-                                      sel.secondary
-                                        ? sel.secondary === m.key
-                                        : input.secondaryMaterial === m.base && !m.custom
-                                    }
-                                    onClick={() => {
-                                      const on = sel.secondary
-                                        ? sel.secondary === m.key
-                                        : input.secondaryMaterial === m.base;
-                                      set(
-                                        {
-                                          secondaryMaterial: on ? undefined : m.base,
-                                          secondarySpec: on
-                                            ? undefined
-                                            : resolveMaterial(m.base, materialPresets, {
-                                                ...(input.secondaryRole
-                                                  ? { role: input.secondaryRole }
-                                                  : {}),
-                                              }),
-                                        },
-                                        { secondary: on ? undefined : m.key },
-                                      );
-                                    }}
-                                  >
-                                    {m.label}
-                                  </Chip>
-                                ))}
-                              </div>
-                              <MaterialDetail
-                                category={input.secondaryMaterial}
-                                spec={input.secondarySpec}
-                                presets={materialPresets}
-                                onChange={(next) => set({ secondarySpec: next })}
-                              />
-                            </div>
-                            <div>
-                              <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
-                              <div className="flex flex-wrap gap-1.5">
-                                {DIAMETERS.map((d) => (
-                                  <Chip
-                                    key={d}
-                                    active={input.diameterRelation === d}
-                                    onClick={() =>
-                                      set({
-                                        diameterRelation: input.diameterRelation === d ? undefined : d,
-                                        mainDiameterMm: undefined,
-                                        secondaryDiameterMm: undefined,
-                                      })
-                                    }
-                                  >
-                                    {DIAMETER_LABELS[d]}
-                                  </Chip>
-                                ))}
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() => setShowAdvanced((v) => !v)}
-                                className="ki-press mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
-                              >
-                                {showAdvanced ? "Hide measured Ø mm" : "Optional · enter measured Ø mm"}
-                              </button>
-                              {showAdvanced ? (
-                                <>
-                                  <DiameterMmFields
-                                    mainMm={input.mainDiameterMm}
-                                    secondaryMm={input.secondaryDiameterMm}
-                                    onApply={(main, secondary, relation) =>
-                                      set({
-                                        mainDiameterMm: main,
-                                        secondaryDiameterMm: secondary,
-                                        ...(relation ? { diameterRelation: relation } : {}),
-                                      })
-                                    }
-                                  />
-                                  <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
-                                    Prefer measured diameters over manufacturer pound-test. When both sides are entered, the relational band updates automatically.
-                                  </p>
-                                </>
-                              ) : null}
-                            </div>
-                          </>
-                        ) : (
-                          <div className="rounded-md border border-hairline bg-surface-2/30 px-3 py-2">
-                            <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
-                              Single-side job
-                            </p>
-                            <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
-                              This connection only needs a main line — no leader / second line for this job. Switch to a line-to-line join to declare both sides.
-                            </p>
-                          </div>
-                        )
-                      ) : null}
+        <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+          <StepHead
+            index="02"
+            title="Line and leader"
+            hint="The line decides what is even allowed."
+            state={input.connection ? "open" : "locked"}
+          />
+          <div className="space-y-4">
+            <div>
+              <MicroLabel className="mb-2">Main line</MicroLabel>
+              <div className="flex flex-wrap gap-1.5">
+                {materialOptions.map((m) => (
+                  <Chip
+                    key={m.key}
+                    disabled={!input.connection}
+                    active={
+                      sel.main ? sel.main === m.key : input.mainMaterial === m.base && !m.custom
+                    }
+                    onClick={() => {
+                      const on = sel.main ? sel.main === m.key : input.mainMaterial === m.base;
+                      set(
+                        {
+                          mainMaterial: on ? undefined : m.base,
+                          mainSpec: on
+                            ? undefined
+                            : resolveMaterial(m.base, materialPresets, {
+                                ...(input.mainRole ? { role: input.mainRole } : {}),
+                              }),
+                        },
+                        { main: on ? undefined : m.key },
+                      );
+                    }}
+                  >
+                    {m.label}
+                  </Chip>
+                ))}
+              </div>
+              <MaterialDetail
+                category={input.mainMaterial}
+                spec={input.mainSpec}
+                presets={materialPresets}
+                onChange={(next) => set({ mainSpec: next })}
+              />
+            </div>
+            {input.connection ? (
+              isJoin ? (
+                <>
+                  <div className="rounded-md border border-primary/30 bg-primary/8 px-3 py-2">
+                    <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary">
+                      Two-sided job
+                    </p>
+                    <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+                      Both sides matter for joins. Declare the leader / second line so the model can
+                      score diameter mismatch and material pairs.
+                    </p>
+                  </div>
+                  <div>
+                    <MicroLabel className="mb-2">Leader / second line · required</MicroLabel>
+                    <div className="flex flex-wrap gap-1.5">
+                      {materialOptions.map((m) => (
+                        <Chip
+                          key={m.key}
+                          active={
+                            sel.secondary
+                              ? sel.secondary === m.key
+                              : input.secondaryMaterial === m.base && !m.custom
+                          }
+                          onClick={() => {
+                            const on = sel.secondary
+                              ? sel.secondary === m.key
+                              : input.secondaryMaterial === m.base;
+                            set(
+                              {
+                                secondaryMaterial: on ? undefined : m.base,
+                                secondarySpec: on
+                                  ? undefined
+                                  : resolveMaterial(m.base, materialPresets, {
+                                      ...(input.secondaryRole ? { role: input.secondaryRole } : {}),
+                                    }),
+                              },
+                              { secondary: on ? undefined : m.key },
+                            );
+                          }}
+                        >
+                          {m.label}
+                        </Chip>
+                      ))}
                     </div>
-                  </Panel>
+                    <MaterialDetail
+                      category={input.secondaryMaterial}
+                      spec={input.secondarySpec}
+                      presets={materialPresets}
+                      onChange={(next) => set({ secondarySpec: next })}
+                    />
+                  </div>
+                  <div>
+                    <MicroLabel className="mb-2">Diameter relationship</MicroLabel>
+                    <div className="flex flex-wrap gap-1.5">
+                      {DIAMETERS.map((d) => (
+                        <Chip
+                          key={d}
+                          active={input.diameterRelation === d}
+                          onClick={() =>
+                            set({
+                              diameterRelation: input.diameterRelation === d ? undefined : d,
+                              mainDiameterMm: undefined,
+                              secondaryDiameterMm: undefined,
+                            })
+                          }
+                        >
+                          {DIAMETER_LABELS[d]}
+                        </Chip>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowAdvanced((v) => !v)}
+                      className="ki-press mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                    >
+                      {showAdvanced ? "Hide measured Ø mm" : "Optional · enter measured Ø mm"}
+                    </button>
+                    {showAdvanced ? (
+                      <>
+                        <DiameterMmFields
+                          mainMm={input.mainDiameterMm}
+                          secondaryMm={input.secondaryDiameterMm}
+                          onApply={(main, secondary, relation) =>
+                            set({
+                              mainDiameterMm: main,
+                              secondaryDiameterMm: secondary,
+                              ...(relation ? { diameterRelation: relation } : {}),
+                            })
+                          }
+                        />
+                        <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
+                          Prefer measured diameters over manufacturer pound-test. When both sides
+                          are entered, the relational band updates automatically.
+                        </p>
+                      </>
+                    ) : null}
+                  </div>
+                </>
+              ) : (
+                <div className="rounded-md border border-hairline bg-surface-2/30 px-3 py-2">
+                  <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+                    Single-side job
+                  </p>
+                  <p className="mt-1 text-[0.75rem] leading-relaxed text-muted-foreground">
+                    This connection only needs a main line — no leader / second line for this job.
+                    Switch to a line-to-line join to declare both sides.
+                  </p>
+                </div>
+              )
+            ) : null}
+          </div>
+        </Panel>
       ),
     },
     {
@@ -601,67 +610,69 @@ function DecideMode() {
       label: "Conditions",
       ready: Boolean(input.connection),
       node: (
-                  <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
-                    <StepHead
-                      index="03"
-                      title="On the water"
-                      hint="Only the conditions you tap count."
-                      state={input.connection ? "open" : "locked"}
-                    />
-                    <div className="flex flex-wrap gap-1.5">
-                      <Chip active={input.mustPassGuides} onClick={() => toggle("mustPassGuides")}>
-                        Must pass guides
-                      </Chip>
-                      <Chip active={input.windy} onClick={() => toggle("windy")}>
-                        Wind
-                      </Chip>
-                      <Chip active={input.coldHands} onClick={() => toggle("coldHands")}>
-                        Cold / wet hands
-                      </Chip>
-                      <Chip active={input.lowLight} onClick={() => toggle("lowLight")}>
-                        Low light
-                      </Chip>
-                      <Chip active={input.hardwareEyeSmall} onClick={() => toggle("hardwareEyeSmall")}>
-                        Small eye
-                      </Chip>
-                      <Chip active={input.freeSwing} onClick={() => toggle("freeSwing")}>
-                        Free-swing action
-                      </Chip>
-                      <Chip active={input.needsUntie} onClick={() => toggle("needsUntie")}>
-                        Must untie later
-                      </Chip>
-                    </div>
-                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <MicroLabel className="mb-2">Retie tempo</MicroLabel>
-                        <div className="flex flex-wrap gap-1.5">
-                          {(["frequent", "occasional", "rare"] as const).map((r) => (
-                            <Chip
-                              key={r}
-                              active={input.retieFrequency === r}
-                              onClick={() => set({ retieFrequency: input.retieFrequency === r ? undefined : r })}
-                            >
-                              {r}
-                            </Chip>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <MicroLabel className="mb-2">Hands</MicroLabel>
-                        <div className="flex flex-wrap gap-1.5">
-                          {(["beginner", "intermediate", "advanced"] as const).map((p) => (
-                            <Chip
-                              key={p}
-                              active={input.proficiency === p}
-                              onClick={() => set({ proficiency: input.proficiency === p ? undefined : p })}
-                            >
-                              {p}
-                            </Chip>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </Panel>
+        <Panel className={input.connection ? "p-5" : "p-5 opacity-45"}>
+          <StepHead
+            index="03"
+            title="On the water"
+            hint="Only the conditions you tap count."
+            state={input.connection ? "open" : "locked"}
+          />
+          <div className="flex flex-wrap gap-1.5">
+            <Chip active={input.mustPassGuides} onClick={() => toggle("mustPassGuides")}>
+              Must pass guides
+            </Chip>
+            <Chip active={input.windy} onClick={() => toggle("windy")}>
+              Wind
+            </Chip>
+            <Chip active={input.coldHands} onClick={() => toggle("coldHands")}>
+              Cold / wet hands
+            </Chip>
+            <Chip active={input.lowLight} onClick={() => toggle("lowLight")}>
+              Low light
+            </Chip>
+            <Chip active={input.hardwareEyeSmall} onClick={() => toggle("hardwareEyeSmall")}>
+              Small eye
+            </Chip>
+            <Chip active={input.freeSwing} onClick={() => toggle("freeSwing")}>
+              Free-swing action
+            </Chip>
+            <Chip active={input.needsUntie} onClick={() => toggle("needsUntie")}>
+              Must untie later
+            </Chip>
+          </div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <MicroLabel className="mb-2">Retie tempo</MicroLabel>
+              <div className="flex flex-wrap gap-1.5">
+                {(["frequent", "occasional", "rare"] as const).map((r) => (
+                  <Chip
+                    key={r}
+                    active={input.retieFrequency === r}
+                    onClick={() =>
+                      set({ retieFrequency: input.retieFrequency === r ? undefined : r })
+                    }
+                  >
+                    {r}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div>
+              <MicroLabel className="mb-2">Hands</MicroLabel>
+              <div className="flex flex-wrap gap-1.5">
+                {(["beginner", "intermediate", "advanced"] as const).map((p) => (
+                  <Chip
+                    key={p}
+                    active={input.proficiency === p}
+                    onClick={() => set({ proficiency: input.proficiency === p ? undefined : p })}
+                  >
+                    {p}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Panel>
       ),
     },
     ...(regions.length
@@ -740,7 +751,10 @@ function DecideMode() {
     setRan(true);
     if (typeof window !== "undefined" && window.innerWidth < 1024) {
       window.setTimeout(
-        () => document.getElementById("ki-output")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        () =>
+          document
+            .getElementById("ki-output")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" }),
         60,
       );
     }
@@ -761,8 +775,8 @@ function DecideMode() {
           <div className="flex flex-wrap items-center gap-3">
             <MicroLabel className="text-accent">Carried from diagnosis</MicroLabel>
             <p className="text-[0.8125rem] text-foreground/85">
-              {safeDecode(search.from)} — context preloaded below. Adjust anything that was
-              wrong before you trust the answer.
+              {safeDecode(search.from)} — context preloaded below. Adjust anything that was wrong
+              before you trust the answer.
             </p>
           </div>
           {search.why ? (
@@ -861,7 +875,11 @@ function DecideMode() {
 
         {/* ── OUTPUT ─────────────────────────────────── */}
         <div id="ki-output" className="space-y-6 scroll-mt-20">
-          {!result ? <EmptyDecide onPick={(id) => navigate({ to: "/", search: { scenario: id, run: true } })} /> : null}
+          {!result ? (
+            <EmptyDecide
+              onPick={(id) => navigate({ to: "/", search: { scenario: id, run: true } })}
+            />
+          ) : null}
 
           {result && card ? (
             <>
@@ -901,7 +919,11 @@ function DecideMode() {
                       {(
                         [
                           ["brief", "Brief", "One sheet: the call and its compromises"],
-                          ["field", "Field packet", "Adds the other knots, why they lost, and how to tie the one that won"],
+                          [
+                            "field",
+                            "Field packet",
+                            "Adds the other knots, why they lost, and how to tie the one that won",
+                          ],
                         ] as [PacketVariant, string, string][]
                       ).map(([kind, label, hint]) => {
                         const busy = packetState === "working" && packetKind === kind;
@@ -972,9 +994,14 @@ function DecideMode() {
                           <div className="mt-4 space-y-3">
                             <MicroLabel>Candidate terminations</MicroLabel>
                             {result.terminationCandidates.map((c) => (
-                              <div key={c.id} className="rounded-md border border-hairline/80 bg-card/60 px-3 py-2.5">
+                              <div
+                                key={c.id}
+                                className="rounded-md border border-hairline/80 bg-card/60 px-3 py-2.5"
+                              >
                                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                                  <p className="text-[0.875rem] font-medium tracking-tight">{c.name}</p>
+                                  <p className="text-[0.875rem] font-medium tracking-tight">
+                                    {c.name}
+                                  </p>
                                   <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
                                     {c.terminationType} · {c.confidence}
                                   </span>
@@ -990,7 +1017,9 @@ function DecideMode() {
                     ) : null}
                     {selectedRegion ? (
                       <div className="border-b border-hairline bg-accent/6 px-6 py-4">
-                        <MicroLabel className="mb-2 text-accent">{t("region.fieldNote")}</MicroLabel>
+                        <MicroLabel className="mb-2 text-accent">
+                          {t("region.fieldNote")}
+                        </MicroLabel>
                         <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
                           {selectedRegion.label}
                           {selectedRegion.signals?.saltLean
@@ -1035,7 +1064,8 @@ function DecideMode() {
                           ))}
                         </div>
                         <p className="mt-2 text-[0.75rem] leading-relaxed text-muted-foreground">
-                          Same rules. Switch knots without running it again — hold the trade-offs side by side.
+                          Same rules. Switch knots without running it again — hold the trade-offs
+                          side by side.
                         </p>
                       </div>
                     ) : null}
@@ -1154,8 +1184,7 @@ function DecideMode() {
                         suppressHydrationWarning
                         className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70"
                       >
-                        {result.eliminated.length} knots ruled out ·{" "}
-                        engine {result.engineVersion} ·{" "}
+                        {result.eliminated.length} knots ruled out · engine {result.engineVersion} ·{" "}
                         {result.generatedAt.slice(0, 19).replace("T", " ")}Z
                       </p>
                     </div>
@@ -1215,7 +1244,9 @@ function DecideMode() {
                             <Meter value={o.fieldFitPercent} />
                           </div>
                           <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
-                            {idx === 0 ? (o.vsNext ?? o.whyBest[0]) : (o.whyBest[0] ?? o.butNotes[0] ?? o.vsNext)}
+                            {idx === 0
+                              ? (o.vsNext ?? o.whyBest[0])
+                              : (o.whyBest[0] ?? o.butNotes[0] ?? o.vsNext)}
                           </p>
                           {idx === 0 ? (
                             <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -1316,7 +1347,10 @@ function DecideMode() {
                   <MicroLabel className="mb-4">What would change this</MicroLabel>
                   <div className="divide-y divide-hairline">
                     {cfs.map((c) => (
-                      <div key={c.id} className="flex flex-wrap gap-x-6 gap-y-1 py-3 first:pt-0 last:pb-0">
+                      <div
+                        key={c.id}
+                        className="flex flex-wrap gap-x-6 gap-y-1 py-3 first:pt-0 last:pb-0"
+                      >
                         <p className="min-w-[240px] flex-1 text-[0.875rem] text-foreground/85">
                           {c.question}
                         </p>
@@ -1343,9 +1377,7 @@ function DecideMode() {
                     onClick={() => setShowEliminated((v) => !v)}
                     className="flex w-full items-center justify-between gap-4 text-left"
                   >
-                    <MicroLabel>
-                      Ruled out — {result.eliminated.length}
-                    </MicroLabel>
+                    <MicroLabel>Ruled out — {result.eliminated.length}</MicroLabel>
                     <span className="font-mono text-xs text-muted-foreground">
                       {showEliminated ? "hide" : "show"}
                     </span>

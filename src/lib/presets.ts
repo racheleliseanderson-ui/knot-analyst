@@ -86,7 +86,9 @@ export function parsePresets(raw: unknown): { presets: Preset[]; errors: string[
       sel: isRecord(item["sel"]) ? (item["sel"] as PresetSelection) : {},
       ...(typeof item["venueId"] === "string" ? { venueId: item["venueId"] } : {}),
       ...(typeof item["platformId"] === "string" ? { platformId: item["platformId"] } : {}),
-      ...(typeof item["regionBroadId"] === "string" ? { regionBroadId: item["regionBroadId"] } : {}),
+      ...(typeof item["regionBroadId"] === "string"
+        ? { regionBroadId: item["regionBroadId"] }
+        : {}),
       ...(typeof item["regionFineId"] === "string" ? { regionFineId: item["regionFineId"] } : {}),
       pinned: item["pinned"] === true,
       createdAt: typeof item["createdAt"] === "string" ? item["createdAt"] : now,
@@ -192,5 +194,8 @@ export function describePreset(p: Preset): string {
     p.input.hardwareEyeSmall && "small eye",
     p.input.freeSwing && "free-swing",
   ].filter(Boolean) as string[];
-  return [bits.join(" + "), conditions.join(" · ")].filter(Boolean).join(" — ") || "no conditions declared";
+  return (
+    [bits.join(" + "), conditions.join(" · ")].filter(Boolean).join(" — ") ||
+    "no conditions declared"
+  );
 }

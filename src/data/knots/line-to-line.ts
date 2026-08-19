@@ -9,7 +9,10 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
     bestFor: ["join-lines", "braid-to-leader", "leader-tippet"],
     goodFor:
       "Reliable way to join two lines of similar or moderately different diameters. Works for mono-to-mono, fluoro-to-mono, and many braid-to-leader pairings when wrap counts are adjusted.",
-    notIdealFor: ["Extreme diameter mismatches", "Ultra-slim braid-to-leader profiles (consider FG)"],
+    notIdealFor: [
+      "Extreme diameter mismatches",
+      "Ultra-slim braid-to-leader profiles (consider FG)",
+    ],
     lineMaterials: ["mono", "fluoro", "braid", "mixed"],
     strengthRetentionTypical: "Solid all-around connector when both Uni barrels are uniform",
     difficulty: "beginner",
@@ -20,7 +23,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       { order: 1, instruction: "Overlap the two lines by 6–8 in." },
       {
         order: 2,
-        instruction: "With line A’s tag, form a Uni around line B (4–6 wraps mono/fluoro; 6–8 for braid).",
+        instruction:
+          "With line A’s tag, form a Uni around line B (4–6 wraps mono/fluoro; 6–8 for braid).",
       },
       {
         order: 3,
@@ -28,7 +32,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       },
       {
         order: 4,
-        instruction: "Moisten and pull the standing lines so the two Uni knots slide together and butt firmly.",
+        instruction:
+          "Moisten and pull the standing lines so the two Uni knots slide together and butt firmly.",
       },
       { order: 5, instruction: "Trim both tags short but not flush into the barrels." },
     ],
@@ -79,9 +84,13 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
     bestFor: ["braid-to-leader", "join-lines", "high-strength"],
     goodFor:
       "Slim, strong braid-to-leader connection that passes guides well. Preferred when braid must join a mono or fluoro leader with minimal bulk.",
-    notIdealFor: ["Beginners needing a fast re-tie in wind", "Joining two similar mono lines (use Double Uni or Blood)"],
+    notIdealFor: [
+      "Beginners needing a fast re-tie in wind",
+      "Joining two similar mono lines (use Double Uni or Blood)",
+    ],
     lineMaterials: ["braid", "mixed"],
-    strengthRetentionTypical: "Among the strongest slim braid-to-leader options when tensioned correctly",
+    strengthRetentionTypical:
+      "Among the strongest slim braid-to-leader options when tensioned correctly",
     difficulty: "advanced",
     materialsNeeded: ["Braid mainline", "Mono or fluoro leader"],
     toolsHelpful: ["Tension from rod or helper", "Clippers"],
@@ -90,17 +99,20 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
     steps: [
       {
         order: 1,
-        instruction: "Hold leader tight (teeth/tool/helper). Lay braid across it at a shallow angle.",
+        instruction:
+          "Hold leader tight (teeth/tool/helper). Lay braid across it at a shallow angle.",
       },
       {
         order: 2,
-        instruction: "Make 15–20 alternating tight wraps of braid around the leader (tension is everything).",
+        instruction:
+          "Make 15–20 alternating tight wraps of braid around the leader (tension is everything).",
         tip: "Keep each wrap snug against the last — gaps kill the FG.",
         commonError: "Loose early wraps that collapse when loaded.",
       },
       {
         order: 3,
-        instruction: "Lock with several half-hitches of braid around both lines, then a few around the braid alone.",
+        instruction:
+          "Lock with several half-hitches of braid around both lines, then a few around the braid alone.",
       },
       {
         order: 4,
@@ -176,7 +188,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       { order: 1, instruction: "Double a section of leader to form a long loop." },
       {
         order: 2,
-        instruction: "Pass braid through the loop and wrap tightly down the doubled leader ~7 times.",
+        instruction:
+          "Pass braid through the loop and wrap tightly down the doubled leader ~7 times.",
       },
       { order: 3, instruction: "Wrap back up toward the loop ~7 times." },
       {
@@ -404,7 +417,8 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       "Situations that demand the absolute slimmest guide passage (FG)",
     ],
     lineMaterials: ["braid", "mixed"],
-    strengthRetentionTypical: "Near full system strength when the doubled base is correct — band, not a single figure",
+    strengthRetentionTypical:
+      "Near full system strength when the doubled base is correct — band, not a single figure",
     difficulty: "intermediate",
     materialsNeeded: ["Doubled braid section", "Mono or fluoro leader"],
     toolsHelpful: ["Clippers"],
@@ -424,11 +438,13 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
       },
       {
         order: 3,
-        instruction: "Lock the wraps so the double cannot walk; moisten and seat by opposing pull on double and leader.",
+        instruction:
+          "Lock the wraps so the double cannot walk; moisten and seat by opposing pull on double and leader.",
       },
       {
         order: 4,
-        instruction: "Trim the leader tag short; confirm the connection is collinear with no hinge.",
+        instruction:
+          "Trim the leader tag short; confirm the connection is collinear with no hinge.",
       },
     ],
     commonMistakes: [
@@ -442,7 +458,11 @@ export const LINE_TO_LINE_KNOTS: KnotContent[] = [
         symptom: "Connection hinges or walks under load",
         likelyCauses: ["Insufficient wraps", "Incomplete seat", "Weak double base"],
         checks: ["Inspect wrap density", "Pull-test before fishing"],
-        fixes: ["Retie with more wraps", "Verify Bimini/double integrity", "Consider FG when guide passage is mandatory"],
+        fixes: [
+          "Retie with more wraps",
+          "Verify Bimini/double integrity",
+          "Consider FG when guide passage is mandatory",
+        ],
         severity: "stop",
         confidence: "high",
       },

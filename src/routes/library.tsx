@@ -4,7 +4,13 @@ import { Search } from "lucide-react";
 import { Shell } from "@/components/instrument/shell";
 import { Chip, MicroLabel } from "@/components/instrument/primitives";
 import { KnotDiagram } from "@/components/instrument/diagram";
-import { FISHING_KNOTS, BOATING_KNOTS, catalogMeta, knotsForDomain, searchKnots } from "@/data/catalog";
+import {
+  FISHING_KNOTS,
+  BOATING_KNOTS,
+  catalogMeta,
+  knotsForDomain,
+  searchKnots,
+} from "@/data/catalog";
 import { useDomain } from "@/domain/context";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, type KnotCategory } from "@/domain/types";
 import { useT } from "@/i18n";
@@ -113,7 +119,9 @@ function LibraryMode() {
           {meta.reviewDue ? (
             <p className="mt-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-amber-600 dark:text-amber-400">
               Catalog review due
-              {meta.daysSinceReview != null ? ` · ${meta.daysSinceReview}d since ${meta.newestReviewed}` : ""}
+              {meta.daysSinceReview != null
+                ? ` · ${meta.daysSinceReview}d since ${meta.newestReviewed}`
+                : ""}
             </p>
           ) : meta.newestReviewed ? (
             <p className="mt-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted-foreground">

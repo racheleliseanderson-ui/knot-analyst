@@ -32,7 +32,8 @@ export const LOOP_KNOTS: KnotContent[] = [
       },
       {
         order: 4,
-        instruction: "Bring the tag between the loops, then seat by pulling the standing line and loop B.",
+        instruction:
+          "Bring the tag between the loops, then seat by pulling the standing line and loop B.",
         tip: "Keep the finished loop size intentional before full tension.",
       },
       {
@@ -83,7 +84,11 @@ export const LOOP_KNOTS: KnotContent[] = [
     howToSummary: "Double the line, tie a double (or triple) overhand with the bight, and seat.",
     steps: [
       { order: 1, instruction: "Double the end of the line to form a long bight." },
-      { order: 2, instruction: "Tie an overhand knot with the bight, then pass the bight through a second time." },
+      {
+        order: 2,
+        instruction:
+          "Tie an overhand knot with the bight, then pass the bight through a second time.",
+      },
       { order: 3, instruction: "Moisten and pull to seat; trim the tag if a separate tag exists." },
     ],
     commonMistakes: ["Single overhand only", "Loop larger than needed"],
@@ -132,15 +137,18 @@ export const LOOP_KNOTS: KnotContent[] = [
     steps: [
       {
         order: 1,
-        instruction: "Form a long loop (often 3–5+ ft depending on system) and put the loop under tension.",
+        instruction:
+          "Form a long loop (often 3–5+ ft depending on system) and put the loop under tension.",
       },
       {
         order: 2,
-        instruction: "Rotate the loop end to put 20–40+ twists into the doubled section while maintaining tension.",
+        instruction:
+          "Rotate the loop end to put 20–40+ twists into the doubled section while maintaining tension.",
       },
       {
         order: 3,
-        instruction: "Compress the twists so they gather, then carefully work the tag to lock the twist column.",
+        instruction:
+          "Compress the twists so they gather, then carefully work the tag to lock the twist column.",
       },
       {
         order: 4,
@@ -158,7 +166,11 @@ export const LOOP_KNOTS: KnotContent[] = [
         symptom: "Twists unravel before fishing",
         likelyCauses: ["Lost tension", "Incomplete lock"],
         checks: ["Inspect twist column density"],
-        fixes: ["Practice with heavier cord", "Use a partner for tension", "Watch a long-form vetted demo"],
+        fixes: [
+          "Practice with heavier cord",
+          "Use a partner for tension",
+          "Watch a long-form vetted demo",
+        ],
         severity: "stop",
         confidence: "high",
       },

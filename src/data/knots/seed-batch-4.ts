@@ -11,17 +11,24 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["Orvis tippet join"],
     category: "line-to-line",
     bestFor: ["leader-tippet", "join-lines"],
-    goodFor: "Leader-to-tippet join with a slim profile and strong band on mono/fluoro, including fluorocarbon tippets.",
+    goodFor:
+      "Leader-to-tippet join with a slim profile and strong band on mono/fluoro, including fluorocarbon tippets.",
     notIdealFor: ["Extreme diameter jumps", "Braid-to-leader primary joins"],
     lineMaterials: ["mono", "fluoro"],
-    strengthRetentionTypical: "High band (often cited near 90–95%) when diameters are similar and the structure seats fully",
+    strengthRetentionTypical:
+      "High band (often cited near 90–95%) when diameters are similar and the structure seats fully",
     difficulty: "intermediate",
     materialsNeeded: ["Leader", "Tippet of similar diameter"],
-    howToSummary: "Overlap leader and tippet, form the Orvis doubled-loop structure, pass tags through, seat all four ends evenly.",
+    howToSummary:
+      "Overlap leader and tippet, form the Orvis doubled-loop structure, pass tags through, seat all four ends evenly.",
     steps: [
       { order: 1, instruction: "Overlap leader and tippet several inches." },
       { order: 2, instruction: "Form the Orvis loop structure with both lines held together." },
-      { order: 3, instruction: "Pass both tags through the loop the required times; moisten and seat all four ends evenly." },
+      {
+        order: 3,
+        instruction:
+          "Pass both tags through the loop the required times; moisten and seat all four ends evenly.",
+      },
     ],
     commonMistakes: ["Uneven four-end seat", "Large diameter mismatch", "Dry seat on fluoro"],
     diagnostics: [
@@ -35,11 +42,22 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Orvis Tippet Knot", url: "https://hookthehorizon.blog/orvis-tippet-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Orvis Tippet Knot",
+        url: "https://hookthehorizon.blog/orvis-tippet-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["surgeons", "blood", "j-knot", "seaguar"],
     tags: ["leader", "tippet", "fly"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Cast & Spear / field tests — Orvis Tippet strength band" }, { title: "Hook the Horizon — Orvis Tippet Knot" }],
+    sources: [
+      { title: "Cast & Spear / field tests — Orvis Tippet strength band" },
+      { title: "Hook the Horizon — Orvis Tippet Knot" },
+    ],
   },
   {
     id: "seaguar",
@@ -47,7 +65,8 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["Seaguar join"],
     category: "line-to-line",
     bestFor: ["leader-tippet", "join-lines"],
-    goodFor: "Fluoro-friendly line-to-line join when diameters are similar; popular for leader/tippet systems.",
+    goodFor:
+      "Fluoro-friendly line-to-line join when diameters are similar; popular for leader/tippet systems.",
     notIdealFor: ["Extreme mismatch", "Primary braid-to-heavy-leader (use FG/Slim Beauty family)"],
     lineMaterials: ["mono", "fluoro"],
     strengthRetentionTypical: "Strong similar-diameter band when twists and passes seat clean",
@@ -71,11 +90,22 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Seaguar Knot", url: "https://hookthehorizon.blog/seaguar-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Seaguar Knot",
+        url: "https://hookthehorizon.blog/seaguar-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["orvis-tippet", "blood", "surgeons", "j-knot"],
     tags: ["leader", "tippet", "fluoro"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Hook the Horizon — Seaguar Knot" }, { title: "Field practice (fluoro joins)" }],
+    sources: [
+      { title: "Hook the Horizon — Seaguar Knot" },
+      { title: "Field practice (fluoro joins)" },
+    ],
   },
   {
     id: "j-knot",
@@ -83,10 +113,12 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["J-knot"],
     category: "line-to-line",
     bestFor: ["leader-tippet", "join-lines"],
-    goodFor: "Leader-to-tippet join that has tested well on similar-diameter tippet steps in independent shootouts.",
+    goodFor:
+      "Leader-to-tippet join that has tested well on similar-diameter tippet steps in independent shootouts.",
     notIdealFor: ["Braid primary joins", "Extreme mismatch"],
     lineMaterials: ["mono", "fluoro"],
-    strengthRetentionTypical: "High similar-diameter band in tippet-step testing when seated correctly",
+    strengthRetentionTypical:
+      "High similar-diameter band in tippet-step testing when seated correctly",
     difficulty: "intermediate",
     materialsNeeded: ["Leader", "Tippet"],
     howToSummary: "Overlap, form the J structure with both lines, complete passes, seat evenly.",
@@ -107,11 +139,22 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "J Knot", url: "https://hookthehorizon.blog/j-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "J Knot",
+        url: "https://hookthehorizon.blog/j-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["orvis-tippet", "blood", "surgeons"],
     tags: ["leader", "tippet", "fly"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Yellowstone Angler tippet shootout (J knot as strong tippet join)" }, { title: "Hook the Horizon — J Knot" }],
+    sources: [
+      { title: "Yellowstone Angler tippet shootout (J knot as strong tippet join)" },
+      { title: "Hook the Horizon — J Knot" },
+    ],
   },
   {
     id: "aussie-quickie",
@@ -119,10 +162,12 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["Australian quickie"],
     category: "line-to-line",
     bestFor: ["braid-to-leader", "join-lines"],
-    goodFor: "Faster braid-to-leader option when guide passage and field tempo matter more than perfect FG.",
+    goodFor:
+      "Faster braid-to-leader option when guide passage and field tempo matter more than perfect FG.",
     notIdealFor: ["Absolute maximum slim FG profile", "Equal thin mono joins"],
     lineMaterials: ["braid", "mixed"],
-    strengthRetentionTypical: "Competitive braid-leader band when wraps seat; technique-sensitive like other diameter-jump joins",
+    strengthRetentionTypical:
+      "Competitive braid-leader band when wraps seat; technique-sensitive like other diameter-jump joins",
     difficulty: "intermediate",
     materialsNeeded: ["Braid main", "Mono or fluoro leader"],
     howToSummary: "Braid-to-leader wrap structure designed for speed and reasonable guide passage.",
@@ -143,11 +188,22 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Aussie Quickie", url: "https://hookthehorizon.blog/aussie-quickie/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Aussie Quickie",
+        url: "https://hookthehorizon.blog/aussie-quickie/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["fg", "alberto", "slim-beauty", "double-uni"],
     tags: ["braid", "leader", "fast"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Hook the Horizon — Aussie Quickie" }, { title: "Field practice (braid-leader family)" }],
+    sources: [
+      { title: "Hook the Horizon — Aussie Quickie" },
+      { title: "Field practice (braid-leader family)" },
+    ],
   },
   {
     id: "needle-knot",
@@ -155,14 +211,17 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["Needle nail variant"],
     category: "line-to-line",
     bestFor: ["join-lines"],
-    goodFor: "Fly-line to leader transition with a needle-assisted path for a smooth, low-profile join.",
+    goodFor:
+      "Fly-line to leader transition with a needle-assisted path for a smooth, low-profile join.",
     notIdealFor: ["Braid-to-leader offshore joins", "No-tool bankside reties"],
     lineMaterials: ["fly-line", "mono", "fluoro", "mixed"],
-    strengthRetentionTypical: "Similar band to Nail Knot when the coil seats fully on the fly-line tip",
+    strengthRetentionTypical:
+      "Similar band to Nail Knot when the coil seats fully on the fly-line tip",
     difficulty: "intermediate",
     materialsNeeded: ["Fly line", "Leader", "Needle"],
     toolsHelpful: ["Needle", "Clippers"],
-    howToSummary: "Needle paths the leader into/alongside the fly-line tip; wraps form a smooth transition coil.",
+    howToSummary:
+      "Needle paths the leader into/alongside the fly-line tip; wraps form a smooth transition coil.",
     steps: [
       { order: 1, instruction: "Use the needle to establish the leader path at the fly-line tip." },
       { order: 2, instruction: "Wrap evenly and transfer the coil onto the fly line." },
@@ -180,11 +239,22 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Needle Knot", url: "https://hookthehorizon.blog/needle-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Needle Knot",
+        url: "https://hookthehorizon.blog/needle-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["nail-knot", "albright", "perfection-loop"],
     tags: ["fly", "leader", "low-profile"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "FishingKnots.com (Nail/Needle family band)" }, { title: "Hook the Horizon — Needle Knot" }],
+    sources: [
+      { title: "FishingKnots.com (Nail/Needle family band)" },
+      { title: "Hook the Horizon — Needle Knot" },
+    ],
   },
   {
     id: "homer-rhode",
@@ -192,10 +262,12 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["Homer Rhodes", "Homer Rhode"],
     category: "loop",
     bestFor: ["loop-connection", "hook-to-line"],
-    goodFor: "Heavy-leader free-swing loop for lures when you want action without a tiny tippet loop knot.",
+    goodFor:
+      "Heavy-leader free-swing loop for lures when you want action without a tiny tippet loop knot.",
     notIdealFor: ["Fine tippet dry-fly work", "Maximum slim fixed eye"],
     lineMaterials: ["mono", "fluoro"],
-    strengthRetentionTypical: "Solid loop band on heavy mono/fluoro when the non-slip structure completes",
+    strengthRetentionTypical:
+      "Solid loop band on heavy mono/fluoro when the non-slip structure completes",
     difficulty: "intermediate",
     materialsNeeded: ["Heavy mono or fluoro", "Lure or terminal with eye"],
     howToSummary: "Form a non-slip loop structure sized for heavy leader and free-swinging lures.",
@@ -216,11 +288,22 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Homer Rhode Loop", url: "https://hookthehorizon.blog/homer-rhode-loop-knot/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Homer Rhode Loop",
+        url: "https://hookthehorizon.blog/homer-rhode-loop-knot/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["non-slip-mono-loop", "rapala", "king-sling"],
     tags: ["loop", "lure", "heavy"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Hook the Horizon — Homer Rhode" }, { title: "Field practice (heavy leader loops)" }],
+    sources: [
+      { title: "Hook the Horizon — Homer Rhode" },
+      { title: "Field practice (heavy leader loops)" },
+    ],
   },
   {
     id: "king-sling",
@@ -228,7 +311,8 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["King sling loop"],
     category: "loop",
     bestFor: ["loop-connection"],
-    goodFor: "Fixed end loop with controllable loop size for leaders and systems that need a stable loop.",
+    goodFor:
+      "Fixed end loop with controllable loop size for leaders and systems that need a stable loop.",
     notIdealFor: ["Free-swing lure action (prefer non-slip lure loops)"],
     lineMaterials: ["mono", "fluoro"],
     strengthRetentionTypical: "Solid fixed-loop band when the structure seats fully",
@@ -252,11 +336,22 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "King Sling", url: "https://hookthehorizon.blog/king-sling/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "King Sling",
+        url: "https://hookthehorizon.blog/king-sling/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["perfection-loop", "surgeons-loop", "homer-rhode"],
     tags: ["loop", "leader"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Hook the Horizon — King Sling" }, { title: "Field practice (fixed end loops)" }],
+    sources: [
+      { title: "Hook the Horizon — King Sling" },
+      { title: "Field practice (fixed end loops)" },
+    ],
   },
   {
     id: "australian-plait",
@@ -264,13 +359,16 @@ export const SEED_BATCH_4: KnotContent[] = [
     aliases: ["Aussie plait", "Australian braid double"],
     category: "loop",
     bestFor: ["loop-connection", "high-strength"],
-    goodFor: "Plaited double-line structure for heavy tackle when you need a strong double without a full Bimini twist column.",
+    goodFor:
+      "Plaited double-line structure for heavy tackle when you need a strong double without a full Bimini twist column.",
     notIdealFor: ["Quick bankside reties", "Beginners without practice"],
     lineMaterials: ["mono", "fluoro", "braid"],
-    strengthRetentionTypical: "High double-line band when the plait is tight and locked; still inspect before big-game use",
+    strengthRetentionTypical:
+      "High double-line band when the plait is tight and locked; still inspect before big-game use",
     difficulty: "advanced",
     materialsNeeded: ["Long enough line section for the plait"],
-    howToSummary: "Plait the doubled section into a tight braid, lock the end, form the working double loop.",
+    howToSummary:
+      "Plait the doubled section into a tight braid, lock the end, form the working double loop.",
     steps: [
       { order: 1, instruction: "Form a long doubled section." },
       { order: 2, instruction: "Plait tightly along the double." },
@@ -288,10 +386,21 @@ export const SEED_BATCH_4: KnotContent[] = [
         confidence: "high",
       },
     ],
-    resources: [{ type: "article", title: "Australian Plait", url: "https://hookthehorizon.blog/australian-plait/", source: "Hook the Horizon", vetted: true }],
+    resources: [
+      {
+        type: "article",
+        title: "Australian Plait",
+        url: "https://hookthehorizon.blog/australian-plait/",
+        source: "Hook the Horizon",
+        vetted: true,
+      },
+    ],
     relatedKnots: ["bimini-twist", "spider-hitch", "yucatan"],
     tags: ["double-line", "heavy", "advanced"],
     reviewedOn: "2026-08-14",
-    sources: [{ title: "Hook the Horizon — Australian Plait" }, { title: "Field practice (double-line family)" }],
+    sources: [
+      { title: "Hook the Horizon — Australian Plait" },
+      { title: "Field practice (double-line family)" },
+    ],
   },
 ];

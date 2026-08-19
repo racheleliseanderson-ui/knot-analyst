@@ -40,9 +40,7 @@ test.describe("Decide", () => {
 
     await expect(page.getByText("Knot decision card")).toBeVisible();
     // A verdict is always stated — recommended, constrained, or fail closed.
-    await expect(
-      page.getByText(/Recommended|Constrained fit|Fail closed/).first(),
-    ).toBeVisible();
+    await expect(page.getByText(/Recommended|Constrained fit|Fail closed/).first()).toBeVisible();
     // Field fit is reported as a percentage, never as a vague score.
     await expect(page.getByText(/\d+%/).first()).toBeVisible();
     expect(errors).toEqual([]);
@@ -65,7 +63,10 @@ test.describe("Decide", () => {
   test("changing a field condition re-runs the model", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "desktop", "desktop instrument column only");
     await page.goto("/");
-    await page.getByRole("button", { name: /^Load scenario:/ }).first().click();
+    await page
+      .getByRole("button", { name: /^Load scenario:/ })
+      .first()
+      .click();
     await expect(page.getByText("Knot decision card")).toBeVisible();
 
     const before = await page.getByText(/\d+%/).first().innerText();
@@ -77,7 +78,10 @@ test.describe("Decide", () => {
     await lowLight.click();
     await expect(page.getByText("Knot decision card")).toHaveCount(0);
 
-    await page.getByRole("button", { name: /^(re-?run|run)\b/i }).first().click();
+    await page
+      .getByRole("button", { name: /^(re-?run|run)\b/i })
+      .first()
+      .click();
     await expect(page.getByText("Knot decision card")).toBeVisible();
 
     const after = await page.getByText(/\d+%/).first().innerText();

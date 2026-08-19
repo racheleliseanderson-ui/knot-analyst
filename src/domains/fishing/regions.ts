@@ -48,7 +48,8 @@ export const FISHING_REGIONS: DomainRegion[] = [
     id: "midwest",
     label: "Midwest",
     tier: "broad",
-    summary: "Great Lakes and interior fresh water — pike/muskie wire country, walleye and bass systems.",
+    summary:
+      "Great Lakes and interior fresh water — pike/muskie wire country, walleye and bass systems.",
     conditions: { coldHands: true, retieFrequency: "occasional" },
     advisories: [
       "Great Lakes and northern interior waters make wire-watch real for pike and muskie — mono tippets get cut, not slipped.",

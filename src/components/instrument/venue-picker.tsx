@@ -22,9 +22,7 @@ function Callout({ venue }: { venue: DomainVenue }) {
         </div>
         <div>
           <MicroLabel>{t("venue.fix")}</MicroLabel>
-          <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
-            {venue.fix}
-          </p>
+          <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">{venue.fix}</p>
         </div>
       </div>
     </div>

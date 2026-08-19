@@ -131,7 +131,8 @@ export function inferConnectionFromPurpose(purpose: string): ChooseInput["connec
   if (p.includes("spool") || p.includes("arbor")) return "line-to-spool";
   if (p.includes("swivel")) return "line-to-swivel";
   if (p.includes("fly line") || p.includes("fly-line")) return "fly-line-to-leader";
-  if (p.includes("join") || p.includes("line to line") || p.includes("splice")) return "leader-to-leader";
+  if (p.includes("join") || p.includes("line to line") || p.includes("splice"))
+    return "leader-to-leader";
   if (p.includes("lure") || p.includes("swing")) return "line-to-lure";
   return "line-to-hook";
 }

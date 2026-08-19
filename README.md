@@ -1,6 +1,6 @@
 # Knot Analyst
 
-Improve this existing live application: 
+Improve this existing live application:
 
 Use the current live version as the baseline. Do not start from scratch — elevate what already exists.
 
