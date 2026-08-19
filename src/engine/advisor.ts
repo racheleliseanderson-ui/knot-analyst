@@ -6,6 +6,7 @@
 import { runChooser } from "@/engine/chooser";
 import type { ChooseInput, ChooseResult, RankedOption } from "@/domain/types";
 import { CONNECTION_LABELS, DIMENSION_LABELS, MATERIAL_LABELS } from "@/domain/types";
+import { failsWhenFor } from "@/data/connection-model-meta";
 
 export interface Tradeoff {
   id: string;
@@ -297,6 +298,15 @@ export function buildDecisionCard(result: ChooseResult): DecisionCard {
     ...c.failureSensitiveStages.slice(0, 2).map((s) => `Failure-sensitive stage: ${s}`),
   ].filter(Boolean);
 
+  const watchFor: string[] = [];
+  const seen = new Set<string>();
+  for (const line of [...failsWhenFor(top.knot.id, top.knot.commonMistakes), ...top.butNotes]) {
+    if (!line || seen.has(line)) continue;
+    seen.add(line);
+    watchFor.push(line);
+    if (watchFor.length >= 4) break;
+  }
+
   return {
     ...base,
     status: top.fieldFitPercent >= 70 ? "recommended" : "constrained",
@@ -305,7 +315,7 @@ export function buildDecisionCard(result: ChooseResult): DecisionCard {
     fieldFit: top.fieldFitPercent,
     reasons: top.whyBest.slice(0, 4),
     retieNotes,
-    watchFor: [...top.butNotes, ...top.knot.commonMistakes.slice(0, 2)].slice(0, 4),
+    watchFor,
     ...(second
       ? {
           runnerUp: {

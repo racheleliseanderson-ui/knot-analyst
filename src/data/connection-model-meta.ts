@@ -403,6 +403,12 @@ export function getConnectionModelMeta(id: string): ConnectionModelMeta | undefi
   return CONNECTION_MODEL_META[id];
 }
 
+/** Modelled failure modes. Watch-for and Diagnose read this — not commonMistakes. */
+export function failsWhenFor(id: string, fallback: string[] = []): string[] {
+  const modelled = getConnectionModelMeta(id)?.failsWhen ?? [];
+  return modelled.length ? modelled : fallback;
+}
+
 export const REVIEW_DUE_AFTER_DAYS = 120;
 
 export function catalogReviewDue(asOf: Date = new Date()): {

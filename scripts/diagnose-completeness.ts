@@ -8,6 +8,10 @@
 import { FAILURE_PLAYS, playsForDomain } from "../src/data/failure-playbook";
 import { DIAGNOSE_STARTERS } from "../src/data/diagnose-starters";
 import { runTroubleshoot } from "../src/engine/troubleshoot";
+import { runChooser } from "../src/engine/chooser";
+import { buildDecisionCard } from "../src/engine/advisor";
+import { tackleHandoffFromDiagnosis } from "../src/lib/tackle-handoff";
+import { failsWhenFor } from "../src/data/connection-model-meta";
 
 let failed = 0;
 const report: string[] = [];
@@ -90,11 +94,52 @@ const riding = runTroubleshoot({
 });
 if (riding.retieDecision === "retie-now") fail("riding turn is not a cut-the-sheet retie-now");
 
+const named = runTroubleshoot({
+  event: "broke-under-load",
+  breakLocation: "in-knot",
+  connection: "line-to-hook",
+  mainMaterial: "braid",
+  knotId: "palomar",
+});
+if (!named.relatedKnot || named.relatedKnot.id !== "palomar") {
+  fail("named knotId must attach relatedKnot");
+}
+const palomarModes = failsWhenFor("palomar");
+if (!palomarModes.length) fail("palomar: modelled failsWhen missing");
+if (!(named.failsWhen ?? []).some((m) => palomarModes.includes(m))) {
+  fail("engine must read failsWhen when a knot is named");
+}
+if (!named.likelyCauses.some((c) => palomarModes.includes(c))) {
+  fail("failsWhen must refine likely causes for a named knot");
+}
+
+const weakest = tackleHandoffFromDiagnosis(
+  { event: "broke-under-load", breakLocation: "in-knot", connection: "line-to-hook" },
+  named,
+);
+if (!weakest.connectionIsWeakestLink) fail("in-knot break must offer Tackle as weakest-link");
+const notWeakest = tackleHandoffFromDiagnosis({
+  event: "clean-sever",
+  breakLocation: "above-knot",
+  connection: "line-to-hook",
+});
+if (notWeakest.connectionIsWeakestLink) fail("above-knot must not claim the connection is weakest");
+
+const card = buildDecisionCard(runChooser({ connection: "line-to-hook", mainMaterial: "braid" }));
+if (card.knotId) {
+  const modes = failsWhenFor(card.knotId);
+  if (modes.length && !modes.some((m) => card.watchFor.includes(m))) {
+    fail(`watch-for for ${card.knotId} does not include modelled failsWhen`);
+  }
+}
+
 if (failed === 0) {
   ok(`${FAILURE_PLAYS.length} symptom plays fully seeded`);
   ok(`${DIAGNOSE_STARTERS.length} starters run through the engine`);
   ok(`${fishing.length} fishing · ${boating.length} boating (includes shared)`);
   ok("forensic look and location change retie logic");
+  ok("named knot reads modelled failsWhen");
+  ok("Tackle handoff only when the connection is the weakest link");
 }
 
 for (const line of report) console.log(line);
