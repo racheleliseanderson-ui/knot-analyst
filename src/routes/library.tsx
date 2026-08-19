@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import { Shell } from "@/components/instrument/shell";
 import { Chip, MicroLabel } from "@/components/instrument/primitives";
 import { KnotDiagram } from "@/components/instrument/diagram";
-import { FISHING_KNOTS, BOATING_KNOTS, knotsForDomain, searchKnots } from "@/data/catalog";
+import { FISHING_KNOTS, BOATING_KNOTS, catalogMeta, knotsForDomain, searchKnots } from "@/data/catalog";
 import { useDomain } from "@/domain/context";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, type KnotCategory } from "@/domain/types";
 import { useT } from "@/i18n";
@@ -55,6 +55,7 @@ function LibraryMode() {
   const category = search.job ?? "all";
   const pool = knotsForDomain(domain.id);
   const total = FISHING_KNOTS.length + BOATING_KNOTS.length;
+  const meta = catalogMeta();
 
   const categories = useMemo(() => {
     const set = new Set<KnotCategory>();
@@ -105,9 +106,22 @@ function LibraryMode() {
             {t("library.lede")}
           </p>
         </div>
-        <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
-          {domain.label} · {pool.length} of {total} knots
-        </p>
+        <div className="text-right">
+          <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+            {domain.label} · {pool.length} of {total} knots
+          </p>
+          {meta.reviewDue ? (
+            <p className="mt-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-amber-600 dark:text-amber-400">
+              Catalog review due
+              {meta.daysSinceReview != null ? ` · ${meta.daysSinceReview}d since ${meta.newestReviewed}` : ""}
+            </p>
+          ) : meta.newestReviewed ? (
+            <p className="mt-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted-foreground">
+              Reviewed {meta.newestReviewed}
+              {meta.daysSinceReview != null ? ` · ${meta.daysSinceReview}d ago` : ""}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       <label className="relative mb-4 block">
