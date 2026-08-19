@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 560" role="img" aria-labelledby="title desc">
+<title id="title">Surgeon's Knot correct versus wrong finished-knot diagnostic</title>
+<desc id="desc">Surgeon's Knot finished-state diagnostic. Correct: two overhand passes seat squarely; both tags exit cleanly; finished knot is compact without crossed strands. Wrong: only one pass is completed; strands cross inside the overhand; knot remains open or asymmetric after pull. Consequence: uneven junction or reduced holding power.</desc>
+<style>
+  .bg{fill:#F7F5EF}.panel{fill:#fff;stroke:#D8D4CA;stroke-width:2}.good-head{fill:#0F5660}.bad-head{fill:#8C3426}.head{font:700 20px system-ui,sans-serif;fill:#fff;letter-spacing:.06em}.title{font:800 28px system-ui,sans-serif;fill:#071827}.caption{font:600 16px system-ui,sans-serif;fill:#12202B}.note{font:500 14px system-ui,sans-serif;fill:#424546}.leader,.braid,.wire,.lock,.tag,.barrel{fill:none;stroke:#0F5660;stroke-width:10;stroke-linecap:round;stroke-linejoin:round}.leader{stroke:#071827}.braid{stroke:#176F78;stroke-width:8}.hardware{fill:none;stroke:#071827;stroke-width:10;stroke-linecap:round;stroke-linejoin:round}.wire{stroke:#355133;stroke-width:8}.lock,.tag,.barrel{stroke:#C7A257;stroke-width:7}.leader-bad,.braid-bad,.wire-bad,.tag-bad,.flyline-bad{fill:none;stroke:#8C3426;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 10}.error,.split,.sharp{fill:none;stroke:#8C3426;stroke-width:7;stroke-linecap:round}.gap{stroke:#8C3426;stroke-width:4;stroke-dasharray:6 6}.flyline{fill:#EAF0F2;stroke:#071827;stroke-width:8}.flyline-bad{fill:#FFF3E8}.center{fill:#0F5660}.badge-good{fill:#E8F2EF}.badge-bad{fill:#FBE8E1}.badge-text{font:800 13px system-ui,sans-serif;letter-spacing:.05em;fill:#071827}
+</style>
+<rect class="bg" width="1160" height="560"/>
+<text x="50" y="52" class="title">Surgeon's Knot — finished-state check</text>
+<rect x="30" y="82" width="535" height="408" rx="18" class="panel"/><rect x="595" y="82" width="535" height="408" rx="18" class="panel"/>
+<rect x="30" y="82" width="535" height="52" rx="18" class="good-head"/><rect x="595" y="82" width="535" height="52" rx="18" class="bad-head"/>
+<text x="54" y="116" class="head">CORRECT</text><text x="619" y="116" class="head">WRONG / RETIE</text>
+<line x1="100" y1="250" x2="450" y2="250" class="leader"/><path d="M200 215 C230 285,280 285,310 215 C280 215,230 215,200 285" class="braid"/><line x1="250" y1="210" x2="250" y2="190" class="tag"/><line x1="270" y1="290" x2="270" y2="310" class="tag"/><line x1="680" y1="250" x2="1030" y2="250" class="leader-bad"/><path d="M780 210 C830 300,880 230,910 280" class="braid-bad"/><line x1="838" y1="238" x2="862" y2="262" class="error"/><line x1="862" y1="238" x2="838" y2="262" class="error"/>
+<rect x="54" y="366" width="487" height="52" rx="12" class="badge-good"/><rect x="619" y="366" width="487" height="52" rx="12" class="badge-bad"/>
+<text x="72" y="397" class="caption">Two overhand passes seat squarely with clean tag exits</text><text x="637" y="397" class="caption">Single pass only or open asymmetric knot</text>
+<text x="54" y="454" class="note">Both passes must complete before the final draw.</text><text x="619" y="454" class="note">Consequence: uneven junction or reduced holding power</text>
+<text x="30" y="530" class="note">Hook the Horizon original diagnostic schematic · finished-state inspection only · not a substitute for the tying sequence</text>
+</svg>

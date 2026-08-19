@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 720" role="img" aria-labelledby="title desc">
+<title id="title">Surgeon's Knot advanced failure modes</title>
+<desc id="desc">Four advanced failure modes for Surgeon's Knot: symptom, cause, action, and severity.</desc>
+<style>
+  .bg{fill:#F7F5EF}.panel{fill:#fff;stroke:#D8D4CA;stroke-width:2}
+  .title{font:800 28px system-ui,sans-serif;fill:#071827}
+  .kicker{font:700 12px system-ui,sans-serif;fill:#176F78;letter-spacing:.12em}
+  .head{font:700 14px system-ui,sans-serif;fill:#fff;letter-spacing:.08em}
+  .mode-title{font:800 18px system-ui,sans-serif;fill:#071827;text-transform:capitalize}
+  .label{font:700 11px system-ui,sans-serif;fill:#5E6A71;letter-spacing:.08em}
+  .body{font:500 14px system-ui,sans-serif;fill:#12202B}
+  .footer{font:600 12px system-ui,sans-serif;fill:#5E6A71}
+</style>
+<rect class="bg" width="1160" height="720"/>
+<text x="40" y="42" class="kicker">HOOK THE HORIZON · ADVANCED FAILURE MODES</text>
+<text x="40" y="78" class="title">Surgeon's Knot — what fails and what to do</text>
+
+<rect x="30" y="110" width="535" height="260" rx="16" class="panel"/>
+<rect x="30" y="110" width="535" height="44" rx="16" fill="#0F5660"/>
+<rect x="30" y="138" width="535" height="16" fill="#0F5660"/>
+<text x="50" y="140" class="head">CONSTRUCTION</text>
+<text x="50" y="182" class="mode-title">single pass</text>
+<text x="50" y="214" class="label">SYMPTOM</text>
+<text x="50" y="236" class="body">Only one overhand pass completed.</text>
+<text x="50" y="266" class="label">CAUSE</text>
+<text x="50" y="288" class="body">Stopped early on a double-pass knot.</text>
+<text x="50" y="318" class="label">ACTION · failure</text>
+<text x="50" y="340" class="body">Complete both passes before the final draw.</text>
+<rect x="595" y="110" width="535" height="260" rx="16" class="panel"/>
+<rect x="595" y="110" width="535" height="44" rx="16" fill="#176F78"/>
+<rect x="595" y="138" width="535" height="16" fill="#176F78"/>
+<text x="615" y="140" class="head">SEATING</text>
+<text x="615" y="182" class="mode-title">open knot</text>
+<text x="615" y="214" class="label">SYMPTOM</text>
+<text x="615" y="236" class="body">Join stays open and asymmetric after pulling.</text>
+<text x="615" y="266" class="label">CAUSE</text>
+<text x="615" y="288" class="body">Dry mono or uneven draw.</text>
+<text x="615" y="318" class="label">ACTION · slip</text>
+<text x="615" y="340" class="body">Wet and pull both standing lines evenly.</text>
+<rect x="30" y="400" width="535" height="260" rx="16" class="panel"/>
+<rect x="30" y="400" width="535" height="44" rx="16" fill="#C7A257"/>
+<rect x="30" y="428" width="535" height="16" fill="#C7A257"/>
+<text x="50" y="430" class="head">MATERIAL</text>
+<text x="50" y="472" class="mode-title">diameter limit</text>
+<text x="50" y="504" class="label">SYMPTOM</text>
+<text x="50" y="526" class="body">Join fails on a large diameter step.</text>
+<text x="50" y="556" class="label">CAUSE</text>
+<text x="50" y="578" class="body">Surgeon family overstressed by mismatch.</text>
+<text x="50" y="608" class="label">ACTION · cut</text>
+<text x="50" y="630" class="body">Use a diameter-tolerant join instead.</text>
+<rect x="595" y="400" width="535" height="260" rx="16" class="panel"/>
+<rect x="595" y="400" width="535" height="44" rx="16" fill="#5E6A71"/>
+<rect x="595" y="428" width="535" height="16" fill="#5E6A71"/>
+<text x="615" y="430" class="head">SERVICE</text>
+<text x="615" y="472" class="mode-title">tag chafe</text>
+<text x="615" y="504" class="label">SYMPTOM</text>
+<text x="615" y="526" class="body">Tags chafe the standing line after fishing.</text>
+<text x="615" y="556" class="label">CAUSE</text>
+<text x="615" y="578" class="body">Tags left long and free.</text>
+<text x="615" y="608" class="label">ACTION · abrasion</text>
+<text x="615" y="630" class="body">Trim tags and recheck after first fish.</text>
+<text x="40" y="700" class="footer">Symptom → cause → action. Finished-state plates still apply for correct vs wrong visual checks.</text>
+</svg>
+

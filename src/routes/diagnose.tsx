@@ -18,7 +18,7 @@ import { runChooser } from "@/engine/chooser";
 import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { diagnosisToDecide, encodeInput } from "@/lib/handoff";
 import { tackleHandoffFromDiagnosis } from "@/lib/tackle-handoff";
-import { knotsForDomain } from "@/data/catalog";
+import { knotsForDomain, getKnot } from "@/data/catalog";
 import {
   END_LOOK_LABELS,
   SYMPTOM_GROUP_LABELS,
@@ -36,8 +36,9 @@ import { CATEGORY_LABELS, DIAMETER_LABELS, RETIE_LABELS } from "@/domain/types";
 import { isJoinJob } from "@/domain/connection-preset";
 
 export const Route = createFileRoute("/diagnose")({
-  validateSearch: (s: Record<string, unknown>): { event?: string } => ({
+  validateSearch: (s: Record<string, unknown>): { event?: string; knot?: string } => ({
     event: typeof s["event"] === "string" ? (s["event"] as string) : undefined,
+    knot: typeof s["knot"] === "string" ? (s["knot"] as string) : undefined,
   }),
   head: () => ({
     meta: [
@@ -116,9 +117,10 @@ function DiagnoseMode() {
   const connectionGroups = useConnectionGroups();
   const materials = useMaterialOptions();
   const search = Route.useSearch();
-  const seeded = plays.some((p) => p.id === search.event)
-    ? ({ event: search.event as FailureEvent } as Partial<TroubleshootInput>)
-    : {};
+  const seeded: Partial<TroubleshootInput> = {
+    ...(plays.some((p) => p.id === search.event) ? { event: search.event as FailureEvent } : {}),
+    ...(search.knot && getKnot(search.knot) ? { knotId: search.knot } : {}),
+  };
   const [input, setInput] = useState<Partial<TroubleshootInput>>(seeded);
   const [ran, setRan] = useState(false);
 
@@ -173,14 +175,20 @@ function DiagnoseMode() {
 
   const namedKnots = useMemo(() => {
     const pool = knotsForDomain(domain.id);
-    if (!input.connection) return pool;
-    const matched = pool.filter(
-      (k) =>
-        k.contract.connectionFamilies.includes(input.connection!) ||
-        k.bestFor.includes(input.connection!),
-    );
-    return matched.length ? matched : pool;
-  }, [domain.id, input.connection]);
+    const matched = input.connection
+      ? pool.filter(
+          (k) =>
+            k.contract.connectionFamilies.includes(input.connection!) ||
+            k.bestFor.includes(input.connection!),
+        )
+      : pool;
+    const base = matched.length ? matched : pool;
+    if (input.knotId && !base.some((k) => k.id === input.knotId)) {
+      const extra = getKnot(input.knotId);
+      if (extra) return [extra, ...base];
+    }
+    return base;
+  }, [domain.id, input.connection, input.knotId]);
 
   const namedByCategory = useMemo(() => {
     const map = new Map<string, typeof namedKnots>();
@@ -243,6 +251,12 @@ function DiagnoseMode() {
               <br />
               <span className="text-muted-foreground">Not from a knot name.</span>
             </h1>
+            {search.knot && getKnot(search.knot) ? (
+              <p className="mt-3 max-w-xl text-[0.8125rem] leading-relaxed text-muted-foreground">
+                Named {getKnot(search.knot)!.name} so we can overlay its failure modes. Pick the
+                symptom first — the recovered end still outranks the name.
+              </p>
+            ) : null}
           </div>
 
           <Panel className="p-5">

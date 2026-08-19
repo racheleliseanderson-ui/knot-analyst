@@ -11,6 +11,7 @@ import { MECHANICS_EXTRAS_BOATING } from "@/data/mechanics-extras-boating";
 import { MECHANICS_EXTRAS_BOATING_2 } from "@/data/mechanics-extras-boating-2";
 import { MECHANICS_EXTRAS_BOATING_3 } from "@/data/mechanics-extras-boating-3";
 import { DIAGRAM_KIND_BY_KNOT } from "@/data/diagram-assign";
+import { applyDefectOverlay } from "@/data/defect-assign";
 
 const ALL: Record<string, MechanicsBundle> = {
   ...MECHANICS,
@@ -29,9 +30,10 @@ export type { MechanicsBundle };
 export function getMechanics(knotId: string): MechanicsBundle | undefined {
   const m = ALL[knotId];
   if (!m) return undefined;
+  const withDefects = applyDefectOverlay(knotId, m);
   const kind = DIAGRAM_KIND_BY_KNOT[knotId];
-  if (!kind || kind === m.diagramKind) return m;
-  return { ...m, diagramKind: kind };
+  if (!kind || kind === withDefects.diagramKind) return withDefects;
+  return { ...withDefects, diagramKind: kind };
 }
 
 export function allMechanicsIds(): string[] {

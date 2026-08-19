@@ -1,0 +1,6 @@
+Hook the Horizon content package 0.3.19
+Source: https://github.com/racheleliseanderson-ui/hth-content-packages
+Commit: 525af1ab541b5dc7b270352ba4aa784fc9f16da2
+Zip: hook-the-horizon-content-0.3.19.zip
+Verified: 2026-08-09
+These plates are the attached HTH PNG/SVG package. Do not invent replacements.

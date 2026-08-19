@@ -14,6 +14,7 @@ import { BOATING_BATCH_1 } from "@/data/knots/boating-batch-1";
 import { BOATING_BATCH_2 } from "@/data/knots/boating-batch-2";
 import { BOATING_BATCH_3 } from "@/data/knots/boating-batch-3";
 import { getMechanics } from "@/data/mechanics";
+import { applyDiagOverlay } from "@/data/diag-assign";
 import { applyHowTo } from "@/data/how-to";
 import { applyVideo } from "@/data/videos";
 import { applySeedComplete } from "@/data/seed-complete";
@@ -51,6 +52,7 @@ function hydrate(raw: KnotContent): Knot {
     diagramKind: m.diagramKind,
     mechanicsSummary: m.mechanicsSummary,
     completeness: m.completeness,
+    diagnostics: applyDiagOverlay(content.id, content.diagnostics, m),
   };
 }
 

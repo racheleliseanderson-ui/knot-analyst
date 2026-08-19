@@ -1,5 +1,11 @@
 import { useMemo } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useChildMatches,
+  useNavigate,
+} from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Shell } from "@/components/instrument/shell";
 import { Chip, MicroLabel, Panel } from "@/components/instrument/primitives";
@@ -51,8 +57,14 @@ export const Route = createFileRoute("/applications")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: ApplicationsMode,
+  component: ApplicationsLayout,
 });
+
+function ApplicationsLayout() {
+  const children = useChildMatches();
+  if (children.length > 0) return <Outlet />;
+  return <ApplicationsMode />;
+}
 
 function ApplicationsMode() {
   const t = useT();

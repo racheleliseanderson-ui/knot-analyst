@@ -1,0 +1,964 @@
+{
+  "schema_version": "1.0.0",
+  "verified_date": "2026-08-09",
+  "purpose": "Advanced failure-mode diagnostics beyond binary correct/wrong finished-state plates. Each mode maps symptom \u2192 cause \u2192 action for high-risk knots.",
+  "mode_types": [
+    {
+      "id": "construction",
+      "label": "Construction failure",
+      "description": "Structure never formed correctly while tying."
+    },
+    {
+      "id": "seating",
+      "label": "Seating failure",
+      "description": "Looks tied but does not lock under the first real load."
+    },
+    {
+      "id": "material",
+      "label": "Material failure",
+      "description": "Right knot geometry, wrong line behavior or diameter mismatch."
+    },
+    {
+      "id": "load_path",
+      "label": "Load-path failure",
+      "description": "Load concentrates on one leg, coil, or side."
+    },
+    {
+      "id": "service",
+      "label": "Service failure",
+      "description": "Started good; degraded after guides, abrasion, or heat cycles."
+    },
+    {
+      "id": "misapplication",
+      "label": "Misapplication",
+      "description": "Correctly tied knot used for the wrong connection job."
+    }
+  ],
+  "profiles": {
+    "fg-knot": {
+      "title": "FG Knot",
+      "modes": [
+        {
+          "id": "open-weave",
+          "type": "construction",
+          "symptom": "Braid coils look alternating-open or uneven before locks.",
+          "cause": "Inconsistent tension or reverse weave direction mid-series.",
+          "action": "Retie with even tension; count and maintain direction.",
+          "severity": "slip"
+        },
+        {
+          "id": "pre-lock-slide",
+          "type": "seating",
+          "symptom": "Weave slides on the leader before half-hitches engage.",
+          "cause": "Too few wraps, slick braid, or insufficient pre-tension.",
+          "action": "Add wraps for material; seat weave firmly before locks.",
+          "severity": "slip"
+        },
+        {
+          "id": "leader-crush",
+          "type": "material",
+          "symptom": "Leader shows whitening, kink, or deep deformation under the weave.",
+          "cause": "Diameter mismatch or over-cinching a soft leader.",
+          "action": "Match diameters; wet and draw progressively; retie if crushed.",
+          "severity": "leader damage"
+        },
+        {
+          "id": "guide-shoulder",
+          "type": "service",
+          "symptom": "After a day of casting, the junction hangs in guides.",
+          "cause": "Bulky locks or frayed braid shoulder at the transition.",
+          "action": "Trim tags, re-dress locks, or switch to a slimmer connection family.",
+          "severity": "abrasion / hang"
+        }
+      ]
+    },
+    "palomar-knot": {
+      "title": "Palomar Knot",
+      "modes": [
+        {
+          "id": "crossed-doubled-line",
+          "type": "construction",
+          "symptom": "Doubled strands cross before cinching.",
+          "cause": "Loop twisted while forming the overhand.",
+          "action": "Retie keeping doubled strands parallel.",
+          "severity": "uneven load / break"
+        },
+        {
+          "id": "trapped-hardware",
+          "type": "seating",
+          "symptom": "Final loop catches on hook point, split ring, or lure body.",
+          "cause": "Hardware not fully passed or seated around the eye only.",
+          "action": "Open, re-pass hardware cleanly through the big loop, reseat.",
+          "severity": "premature failure"
+        },
+        {
+          "id": "asymmetric-seat",
+          "type": "load_path",
+          "symptom": "One strand looks tighter than the other after seating.",
+          "cause": "Standing and tag not pulled evenly.",
+          "action": "Wet and draw both legs evenly; retie if already deformed.",
+          "severity": "break at eye"
+        },
+        {
+          "id": "slick-braid-slip",
+          "type": "material",
+          "symptom": "Knot creeps on slick braid or fused superline.",
+          "cause": "Wrong terminal choice for the material.",
+          "action": "Use verified braid-friendly terminal (e.g. Uni with more wraps, NanoFil variant).",
+          "severity": "slip"
+        }
+      ]
+    },
+    "bimini-twist": {
+      "title": "Bimini Twist",
+      "modes": [
+        {
+          "id": "loose-twist-column",
+          "type": "construction",
+          "symptom": "Twist column shows gaps or loose sections.",
+          "cause": "Insufficient tension during the initial twists.",
+          "action": "Retie under continuous tension; keep legs even.",
+          "severity": "twist collapse"
+        },
+        {
+          "id": "stacked-reverse-wraps",
+          "type": "seating",
+          "symptom": "Reverse wraps stack or jump instead of progressing.",
+          "cause": "Loss of tension while transitioning to reverse wraps.",
+          "action": "Maintain tension; re-wrap reverse series cleanly.",
+          "severity": "uneven load"
+        },
+        {
+          "id": "uneven-legs",
+          "type": "load_path",
+          "symptom": "One loop leg bears visibly more load.",
+          "cause": "Asymmetric finishing or uneven initial legs.",
+          "action": "Equalize legs before final locks; retie if already set wrong.",
+          "severity": "single-leg failure"
+        },
+        {
+          "id": "wrong-job",
+          "type": "misapplication",
+          "symptom": "Used as a terminal to a lure eye.",
+          "cause": "Double-line loop job confused with terminal eye job.",
+          "action": "Use Bimini for double-line/system building; pick a terminal knot for the eye.",
+          "severity": "system mismatch"
+        }
+      ]
+    },
+    "blood-knot": {
+      "title": "Blood Knot",
+      "modes": [
+        {
+          "id": "collapsed-side",
+          "type": "construction",
+          "symptom": "One wrap column collapses or overlaps.",
+          "cause": "Uneven wrap counts or diameter mismatch.",
+          "action": "Balance wraps; consider a different join for large diameter steps.",
+          "severity": "concentrated stress"
+        },
+        {
+          "id": "same-direction-tags",
+          "type": "seating",
+          "symptom": "Both tags exit the same direction.",
+          "cause": "Incorrect center exit during final draw.",
+          "action": "Retie ensuring opposite tag exits.",
+          "severity": "uneven turnover"
+        },
+        {
+          "id": "diameter-bury",
+          "type": "material",
+          "symptom": "Thinner line buries under thicker coils.",
+          "cause": "Too large diameter step for a blood knot.",
+          "action": "Use a join designed for mismatch (Alberto/FG family) or taper leaders.",
+          "severity": "weak junction"
+        },
+        {
+          "id": "abrasion-after-guides",
+          "type": "service",
+          "symptom": "Junction frays after repeated guide passes.",
+          "cause": "Slight shoulder or tag stub abrasion.",
+          "action": "Trim flush; inspect often; switch family if bulk remains.",
+          "severity": "abrasion failure"
+        }
+      ]
+    },
+    "alberto-knot": {
+      "title": "Alberto Knot",
+      "modes": [
+        {
+          "id": "crossed-returns",
+          "type": "construction",
+          "symptom": "Return wraps cross randomly over outbound wraps.",
+          "cause": "Lost wrap order on the return series.",
+          "action": "Retie keeping outbound and return ordered.",
+          "severity": "slip"
+        },
+        {
+          "id": "wrong-side-exit",
+          "type": "seating",
+          "symptom": "Tag exits the wrong side of the leader opening.",
+          "cause": "Final pass direction error.",
+          "action": "Retie with correct exit path.",
+          "severity": "telescoping barrel"
+        },
+        {
+          "id": "telescoping-barrel",
+          "type": "seating",
+          "symptom": "Finished barrel can be pushed or telescoped after seating.",
+          "cause": "Insufficient seating tension or too few wraps.",
+          "action": "Seat firmly wet; add wraps if material is slick.",
+          "severity": "slip under load"
+        },
+        {
+          "id": "guide-hang",
+          "type": "service",
+          "symptom": "Junction hangs in smaller guides.",
+          "cause": "Bulky barrel relative to guide ID.",
+          "action": "Dress tags; consider FG or slimmer join for that rod.",
+          "severity": "cast interruption"
+        }
+      ]
+    },
+    "non-slip-loop-kreh-loop": {
+      "title": "Non-Slip Loop / Kreh",
+      "modes": [
+        {
+          "id": "loop-collapse",
+          "type": "seating",
+          "symptom": "Loop size shrinks under a firm pull test.",
+          "cause": "Incorrect return path through the overhand or insufficient wraps.",
+          "action": "Retie holding loop size while seating; verify return path.",
+          "severity": "lost lure action"
+        },
+        {
+          "id": "wrap-bunch",
+          "type": "construction",
+          "symptom": "Wraps bunch or reverse during final draw.",
+          "cause": "Dry cinch or uneven wrap spacing.",
+          "action": "Wet, keep wraps ordered, draw steadily.",
+          "severity": "unstable loop"
+        },
+        {
+          "id": "fluoro-misuse",
+          "type": "material",
+          "symptom": "Stiff fluoro kinks or refuses to seat cleanly.",
+          "cause": "Material too stiff for the loop variant in hand.",
+          "action": "Use a fluoro-appropriate loop variant or different terminal strategy.",
+          "severity": "kink / weak seat"
+        },
+        {
+          "id": "wrong-lure-job",
+          "type": "misapplication",
+          "symptom": "Loop used on a lure that needs a snug eye seat.",
+          "cause": "Loop applied where a tight terminal is safer (cover, trebles, etc.).",
+          "action": "Switch to Palomar/Uni/Clinch family for pinned terminals.",
+          "severity": "foul / hang"
+        }
+      ]
+    },
+    "double-uni-knot": {
+      "title": "Double Uni Knot",
+      "modes": [
+        {
+          "id": "open-barrel",
+          "type": "construction",
+          "symptom": "One barrel remains open while the other is tight.",
+          "cause": "Uneven wrap quality or incomplete seating.",
+          "action": "Retie the weak side; ensure both barrels form fully.",
+          "severity": "asymmetric failure"
+        },
+        {
+          "id": "barrels-pass",
+          "type": "seating",
+          "symptom": "Barrels pass through each other instead of meeting.",
+          "cause": "Insufficient standing-line pull or crossed tags.",
+          "action": "Pull standing lines so barrels slide together and meet.",
+          "severity": "braid creep"
+        },
+        {
+          "id": "too-few-braid-wraps",
+          "type": "material",
+          "symptom": "Braid side creeps under load.",
+          "cause": "Too few wraps on slick braid.",
+          "action": "Increase braid-side wraps; retest.",
+          "severity": "slip"
+        },
+        {
+          "id": "bulk-in-guides",
+          "type": "service",
+          "symptom": "Connection hangs after repeated casts.",
+          "cause": "Double barrels too bulky for guide train.",
+          "action": "Trim tags flush; consider FG/Alberto for guide-heavy work.",
+          "severity": "cast hang"
+        }
+      ]
+    },
+    "albright-special": {
+      "title": "Albright Special",
+      "modes": [
+        {
+          "id": "crossed-wraps",
+          "type": "construction",
+          "symptom": "Main-line wraps reverse mid-series.",
+          "cause": "Lost wrap order while under tension.",
+          "action": "Retie with consistent wrap direction.",
+          "severity": "slip"
+        },
+        {
+          "id": "twisted-leader-loop",
+          "type": "seating",
+          "symptom": "Leader loop is twisted through the barrel.",
+          "cause": "Leader doubled section rotated during wraps.",
+          "action": "Keep leader loop flat; retie.",
+          "severity": "uneven load"
+        },
+        {
+          "id": "telescoping",
+          "type": "seating",
+          "symptom": "Junction can be pushed open after seating.",
+          "cause": "Under-tensioned final draw.",
+          "action": "Wet and seat firmly; add wraps if needed.",
+          "severity": "slip under load"
+        },
+        {
+          "id": "diameter-step-too-large",
+          "type": "material",
+          "symptom": "Heavy leader will not grip fine braid cleanly.",
+          "cause": "Extreme diameter mismatch.",
+          "action": "Step leaders or use a connection verified for that mismatch.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "improved-clinch-knot": {
+      "title": "Improved Clinch Knot",
+      "modes": [
+        {
+          "id": "open-coil",
+          "type": "construction",
+          "symptom": "Wraps look uneven or reverse direction mid-coil.",
+          "cause": "Lost count or line spun while wrapping.",
+          "action": "Retie counting wraps; keep wraps stacked side-by-side.",
+          "severity": "slip"
+        },
+        {
+          "id": "eye-gap",
+          "type": "seating",
+          "symptom": "Coil sits above the eye with a visible gap.",
+          "cause": "Not fully drawn after wetting.",
+          "action": "Wet, draw hard, and seat the coil flush to the eye.",
+          "severity": "slip"
+        },
+        {
+          "id": "cross-wraps",
+          "type": "construction",
+          "symptom": "Wraps cross over each other instead of spiral cleanly.",
+          "cause": "Tag pulled across standing line mid-build.",
+          "action": "Retie keeping wraps ordered and parallel.",
+          "severity": "cut"
+        },
+        {
+          "id": "tag-creep",
+          "type": "service",
+          "symptom": "After fishing, the tag has worked back out of the coil.",
+          "cause": "Short tag or soft line creep under load cycles.",
+          "action": "Leave a longer tag and recheck after first fish.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "uni-grinner-knot": {
+      "title": "Uni / Grinner Knot",
+      "modes": [
+        {
+          "id": "open-barrel",
+          "type": "construction",
+          "symptom": "Uni barrel stays open or elongated.",
+          "cause": "Too few wraps or uneven tension.",
+          "action": "Add wraps for the material and draw both sides evenly.",
+          "severity": "slip"
+        },
+        {
+          "id": "barrel-ride",
+          "type": "seating",
+          "symptom": "Barrel does not slide fully to the eye under load.",
+          "cause": "Dry line or insufficient pull test.",
+          "action": "Wet and pull-test until barrel seats against the eye.",
+          "severity": "slip"
+        },
+        {
+          "id": "tag-through",
+          "type": "construction",
+          "symptom": "Tag did not pass back through the loop correctly.",
+          "cause": "Mis-threaded final pass.",
+          "action": "Retie; the tag must exit the loop after wraps.",
+          "severity": "failure"
+        },
+        {
+          "id": "material-slick",
+          "type": "material",
+          "symptom": "Barrel slides under moderate load on slick line.",
+          "cause": "Wrong knot for fused/slick mono.",
+          "action": "Use a verified slick-line terminal or more wraps.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "nanofil-knot": {
+      "title": "NanoFil Knot",
+      "modes": [
+        {
+          "id": "crossed-double",
+          "type": "construction",
+          "symptom": "Doubled strands cross before the overhand.",
+          "cause": "Twisted loop while passing the eye.",
+          "action": "Keep strands parallel; retie if crossed.",
+          "severity": "cut"
+        },
+        {
+          "id": "trapped-hardware",
+          "type": "construction",
+          "symptom": "Overhand loop traps lure hardware incorrectly.",
+          "cause": "Passed the wrong part of the doubled loop.",
+          "action": "Retie sending only the free loop over the hardware.",
+          "severity": "failure"
+        },
+        {
+          "id": "half-seat",
+          "type": "seating",
+          "symptom": "Knot sits crooked at the eye after the first pull.",
+          "cause": "Uneven draw on the standing line.",
+          "action": "Draw both legs evenly while seating.",
+          "severity": "slip"
+        },
+        {
+          "id": "abrasion-tag",
+          "type": "service",
+          "symptom": "Tag frays at the seat after a few casts.",
+          "cause": "Sharp eye edge or short tag.",
+          "action": "Inspect the eye, leave a safer tag, retie if abraded.",
+          "severity": "abrasion"
+        }
+      ]
+    },
+    "snell-knot-traditional": {
+      "title": "Traditional Snell",
+      "modes": [
+        {
+          "id": "overlap-wraps",
+          "type": "construction",
+          "symptom": "Shank wraps overlap instead of lying side-by-side.",
+          "cause": "Lost wrap spacing while building.",
+          "action": "Retie with even side-by-side wraps.",
+          "severity": "failure"
+        },
+        {
+          "id": "wrong-exit",
+          "type": "construction",
+          "symptom": "Line exits the eye in the wrong orientation.",
+          "cause": "Started from the wrong side of the eye.",
+          "action": "Retie matching the intended eye exit.",
+          "severity": "poor hookset"
+        },
+        {
+          "id": "climb-eye",
+          "type": "seating",
+          "symptom": "Coil climbs toward the eye under load.",
+          "cause": "Not seated down the shank.",
+          "action": "Draw so the coil stays on the shank.",
+          "severity": "failure"
+        },
+        {
+          "id": "hook-twist",
+          "type": "service",
+          "symptom": "Hook twists relative to the line after fish.",
+          "cause": "Uneven wrap tension.",
+          "action": "Retie and pull-test for hook alignment.",
+          "severity": "poor presentation"
+        }
+      ]
+    },
+    "snell-knot-uni-version": {
+      "title": "Uni Snell",
+      "modes": [
+        {
+          "id": "overlap-wraps",
+          "type": "construction",
+          "symptom": "Shank wraps overlap instead of lying side-by-side.",
+          "cause": "Lost wrap spacing while building.",
+          "action": "Retie with even side-by-side wraps.",
+          "severity": "failure"
+        },
+        {
+          "id": "wrong-exit",
+          "type": "construction",
+          "symptom": "Line exits the eye in the wrong orientation.",
+          "cause": "Started from the wrong side of the eye.",
+          "action": "Retie matching the intended eye exit.",
+          "severity": "poor hookset"
+        },
+        {
+          "id": "climb-eye",
+          "type": "seating",
+          "symptom": "Coil climbs toward the eye under load.",
+          "cause": "Not seated down the shank.",
+          "action": "Draw so the coil stays on the shank.",
+          "severity": "failure"
+        },
+        {
+          "id": "hook-twist",
+          "type": "service",
+          "symptom": "Hook twists relative to the line after fish.",
+          "cause": "Uneven wrap tension.",
+          "action": "Retie and pull-test for hook alignment.",
+          "severity": "poor presentation"
+        }
+      ]
+    },
+    "haywire-twist": {
+      "title": "Haywire Twist",
+      "modes": [
+        {
+          "id": "barrel-only",
+          "type": "construction",
+          "symptom": "Only barrel wraps present\u2014no true haywire twists.",
+          "cause": "Skipped the mutual-twist section.",
+          "action": "Retie with true twists before barrel wraps.",
+          "severity": "failure"
+        },
+        {
+          "id": "sharp-tag",
+          "type": "service",
+          "symptom": "Cut tag leaves a sharp wire point.",
+          "cause": "Tag not finished safely.",
+          "action": "Barrel-wrap the tag and finish without a spear.",
+          "severity": "injury / hang"
+        },
+        {
+          "id": "soft-twist",
+          "type": "construction",
+          "symptom": "Twists are open and do not lock.",
+          "cause": "Insufficient twist count or tension.",
+          "action": "Add true twists under even tension.",
+          "severity": "slip"
+        },
+        {
+          "id": "fatigue",
+          "type": "service",
+          "symptom": "Wire work-hardens and snaps at the twist.",
+          "cause": "Repeated bend cycles at the same spot.",
+          "action": "Retie fresh wire; do not rework a fatigued twist.",
+          "severity": "break"
+        }
+      ]
+    },
+    "needle-knot": {
+      "title": "Needle Knot",
+      "modes": [
+        {
+          "id": "off-center",
+          "type": "construction",
+          "symptom": "Leader exits off-center from the fly-line core.",
+          "cause": "Needle path not centered.",
+          "action": "Retie with a centered insertion path.",
+          "severity": "weak joint"
+        },
+        {
+          "id": "split-coat",
+          "type": "material",
+          "symptom": "Fly-line coating splits at the insertion.",
+          "cause": "Oversized needle or dry force.",
+          "action": "Use a compatible needle size; inspect coating.",
+          "severity": "line damage"
+        },
+        {
+          "id": "loose-insert",
+          "type": "seating",
+          "symptom": "Leader pulls free under moderate load.",
+          "cause": "Too shallow an insertion or no finish wraps.",
+          "action": "Increase insert depth and finish correctly.",
+          "severity": "slip"
+        },
+        {
+          "id": "service-leak",
+          "type": "service",
+          "symptom": "Water entry softens the joint after a day.",
+          "cause": "Unsealed coating breach.",
+          "action": "Retie; consider a sealed finish method.",
+          "severity": "failure"
+        }
+      ]
+    },
+    "yucatan-knot": {
+      "title": "Yucatan Knot",
+      "modes": [
+        {
+          "id": "too-few-wraps",
+          "type": "construction",
+          "symptom": "Wrap column looks short or sparse for the line.",
+          "cause": "Under-counted wraps for the material.",
+          "action": "Retie with the profile wrap count for that material.",
+          "severity": "slip"
+        },
+        {
+          "id": "angled-exit",
+          "type": "seating",
+          "symptom": "Leader exits at a sharp angle from the wraps.",
+          "cause": "Not drawn in-line while seating.",
+          "action": "Seat wraps so the exit continues the line of pull.",
+          "severity": "cut"
+        },
+        {
+          "id": "diameter-mismatch",
+          "type": "material",
+          "symptom": "Heavy braid digs into light leader under wraps.",
+          "cause": "Diameter gap too large for this family.",
+          "action": "Step diameters or use a different join family.",
+          "severity": "leader damage"
+        },
+        {
+          "id": "wrap-creep",
+          "type": "service",
+          "symptom": "Wraps loosen after hard runs.",
+          "cause": "Insufficient seat or wet-draw.",
+          "action": "Re-seat under progressive load; retie if wraps open.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "bristol-knot": {
+      "title": "Bristol Knot",
+      "modes": [
+        {
+          "id": "too-few-wraps",
+          "type": "construction",
+          "symptom": "Wrap column looks short or sparse for the line.",
+          "cause": "Under-counted wraps for the material.",
+          "action": "Retie with the profile wrap count for that material.",
+          "severity": "slip"
+        },
+        {
+          "id": "angled-exit",
+          "type": "seating",
+          "symptom": "Leader exits at a sharp angle from the wraps.",
+          "cause": "Not drawn in-line while seating.",
+          "action": "Seat wraps so the exit continues the line of pull.",
+          "severity": "cut"
+        },
+        {
+          "id": "diameter-mismatch",
+          "type": "material",
+          "symptom": "Heavy braid digs into light leader under wraps.",
+          "cause": "Diameter gap too large for this family.",
+          "action": "Step diameters or use a different join family.",
+          "severity": "leader damage"
+        },
+        {
+          "id": "wrap-creep",
+          "type": "service",
+          "symptom": "Wraps loosen after hard runs.",
+          "cause": "Insufficient seat or wet-draw.",
+          "action": "Re-seat under progressive load; retie if wraps open.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "fish-n-fool-knot": {
+      "title": "Fish N Fool Knot",
+      "modes": [
+        {
+          "id": "crossed-double",
+          "type": "construction",
+          "symptom": "Doubled strands cross before the overhand.",
+          "cause": "Twisted loop while passing the eye.",
+          "action": "Keep strands parallel; retie if crossed.",
+          "severity": "cut"
+        },
+        {
+          "id": "trapped-hardware",
+          "type": "construction",
+          "symptom": "Overhand loop traps lure hardware incorrectly.",
+          "cause": "Passed the wrong part of the doubled loop.",
+          "action": "Retie sending only the free loop over the hardware.",
+          "severity": "failure"
+        },
+        {
+          "id": "half-seat",
+          "type": "seating",
+          "symptom": "Knot sits crooked at the eye after the first pull.",
+          "cause": "Uneven draw on the standing line.",
+          "action": "Draw both legs evenly while seating.",
+          "severity": "slip"
+        },
+        {
+          "id": "abrasion-tag",
+          "type": "service",
+          "symptom": "Tag frays at the seat after a few casts.",
+          "cause": "Sharp eye edge or short tag.",
+          "action": "Inspect the eye, leave a safer tag, retie if abraded.",
+          "severity": "abrasion"
+        }
+      ]
+    },
+    "kryston-non-slip-loop-knot": {
+      "title": "Kryston Non-Slip Loop",
+      "modes": [
+        {
+          "id": "loop-collapse",
+          "type": "seating",
+          "symptom": "Loop size shrinks under the first real load.",
+          "cause": "Overhand or return path incorrect.",
+          "action": "Hold loop size while seating; verify return path.",
+          "severity": "failure"
+        },
+        {
+          "id": "wrap-bunch",
+          "type": "construction",
+          "symptom": "Wraps bunch instead of lying ordered.",
+          "cause": "Lost tension while wrapping.",
+          "action": "Retie keeping wraps side-by-side.",
+          "severity": "slip"
+        },
+        {
+          "id": "wrong-material",
+          "type": "material",
+          "symptom": "Loop fails or creeps on fluoro/slick mono.",
+          "cause": "Knot family misapplied to the material.",
+          "action": "Use a verified loop for that material.",
+          "severity": "slip"
+        },
+        {
+          "id": "tag-slip",
+          "type": "service",
+          "symptom": "Tag works free after repeated casts.",
+          "cause": "Short tag or soft mono creep.",
+          "action": "Leave a safer tag and recheck mid-session.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "loop-to-loop-connection": {
+      "title": "Loop-to-Loop Connection",
+      "modes": [
+        {
+          "id": "girth-hitch",
+          "type": "construction",
+          "symptom": "Connection formed as a girth hitch instead of square interlock.",
+          "cause": "One loop pulled through the other incorrectly.",
+          "action": "Retie as a true loop-to-loop interlock.",
+          "severity": "failure"
+        },
+        {
+          "id": "twisted-loops",
+          "type": "construction",
+          "symptom": "Loops enter twisted relative to each other.",
+          "cause": "Rotated while connecting.",
+          "action": "Open, re-seat squarely, or reconnect.",
+          "severity": "weak joint"
+        },
+        {
+          "id": "size-mismatch",
+          "type": "material",
+          "symptom": "One loop is far smaller and cuts the other.",
+          "cause": "Loop size mismatch under load.",
+          "action": "Match practical loop sizes.",
+          "severity": "cut"
+        },
+        {
+          "id": "abrasion-legs",
+          "type": "service",
+          "symptom": "Loop legs abrade at the contact point.",
+          "cause": "High cycle load on mono loops.",
+          "action": "Inspect mid-session; retie nicked loops.",
+          "severity": "abrasion"
+        }
+      ]
+    },
+    "nail-knot": {
+      "title": "Nail Knot",
+      "modes": [
+        {
+          "id": "loose-barrel",
+          "type": "construction",
+          "symptom": "Barrel coils stay open on the host.",
+          "cause": "Too few wraps or soft tension.",
+          "action": "Add wraps and seat firmly against the host.",
+          "severity": "slip"
+        },
+        {
+          "id": "angled-exit",
+          "type": "seating",
+          "symptom": "Leader exits with a snag shoulder.",
+          "cause": "Not drawn in-line with the host.",
+          "action": "Seat so the exit continues the host line of pull.",
+          "severity": "hang"
+        },
+        {
+          "id": "host-damage",
+          "type": "material",
+          "symptom": "Host coating splits or softens under the barrel.",
+          "cause": "Over-cinch or incompatible host.",
+          "action": "Retie with progressive tension; inspect host.",
+          "severity": "host damage"
+        },
+        {
+          "id": "creep",
+          "type": "service",
+          "symptom": "Barrel creeps on the host after load cycles.",
+          "cause": "Insufficient seat for the material.",
+          "action": "Re-seat or retie; verify host diameter fit.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "rapala-knot": {
+      "title": "Rapala Knot",
+      "modes": [
+        {
+          "id": "loop-collapse",
+          "type": "seating",
+          "symptom": "Loop size shrinks under the first real load.",
+          "cause": "Overhand or return path incorrect.",
+          "action": "Hold loop size while seating; verify return path.",
+          "severity": "failure"
+        },
+        {
+          "id": "wrap-bunch",
+          "type": "construction",
+          "symptom": "Wraps bunch instead of lying ordered.",
+          "cause": "Lost tension while wrapping.",
+          "action": "Retie keeping wraps side-by-side.",
+          "severity": "slip"
+        },
+        {
+          "id": "wrong-material",
+          "type": "material",
+          "symptom": "Loop fails or creeps on fluoro/slick mono.",
+          "cause": "Knot family misapplied to the material.",
+          "action": "Use a verified loop for that material.",
+          "severity": "slip"
+        },
+        {
+          "id": "tag-slip",
+          "type": "service",
+          "symptom": "Tag works free after repeated casts.",
+          "cause": "Short tag or soft mono creep.",
+          "action": "Leave a safer tag and recheck mid-session.",
+          "severity": "slip"
+        }
+      ]
+    },
+    "seaguar-knot": {
+      "title": "Seaguar Knot",
+      "modes": [
+        {
+          "id": "uneven-twist",
+          "type": "construction",
+          "symptom": "One side twists more than the other.",
+          "cause": "Uneven hand tension while twisting.",
+          "action": "Retie with matched twist counts.",
+          "severity": "weak joint"
+        },
+        {
+          "id": "wrong-material",
+          "type": "misapplication",
+          "symptom": "Braid used where mono-main is required.",
+          "cause": "System misapplication.",
+          "action": "Use the verified material pairing for this knot.",
+          "severity": "failure"
+        },
+        {
+          "id": "cutting-angle",
+          "type": "seating",
+          "symptom": "Finished junction shows a sharp cutting angle.",
+          "cause": "Not drawn square.",
+          "action": "Seat so the join is compact and square.",
+          "severity": "cut"
+        },
+        {
+          "id": "abrasion",
+          "type": "service",
+          "symptom": "Outer strands abrade after guide contact.",
+          "cause": "Bulky twist on small guides.",
+          "action": "Dress tags; consider a slimmer join.",
+          "severity": "abrasion"
+        }
+      ]
+    },
+    "spider-hitch": {
+      "title": "Spider Hitch",
+      "modes": [
+        {
+          "id": "gap-twist",
+          "type": "construction",
+          "symptom": "Twist column shows gaps or stacked reverse wraps.",
+          "cause": "Lost twist count or reverse direction mid-build.",
+          "action": "Retie with continuous even twists.",
+          "severity": "failure"
+        },
+        {
+          "id": "uneven-legs",
+          "type": "seating",
+          "symptom": "One loop leg carries more load than the other.",
+          "cause": "Legs not equalized before locking.",
+          "action": "Equalize legs, then finish locks.",
+          "severity": "cut"
+        },
+        {
+          "id": "short-wrap",
+          "type": "construction",
+          "symptom": "Locking wraps are too few for the line.",
+          "cause": "Rushed finish on braid.",
+          "action": "Add the practical wrap count for the material.",
+          "severity": "slip"
+        },
+        {
+          "id": "service-fray",
+          "type": "service",
+          "symptom": "Loop legs fray at the twist shoulder.",
+          "cause": "Abrasion or repeated high load.",
+          "action": "Retie; inspect for nicks before reuse.",
+          "severity": "abrasion"
+        }
+      ]
+    },
+    "surgeons-knot": {
+      "title": "Surgeon's Knot",
+      "modes": [
+        {
+          "id": "single-pass",
+          "type": "construction",
+          "symptom": "Only one overhand pass completed.",
+          "cause": "Stopped early on a double-pass knot.",
+          "action": "Complete both passes before the final draw.",
+          "severity": "failure"
+        },
+        {
+          "id": "open-knot",
+          "type": "seating",
+          "symptom": "Join stays open and asymmetric after pulling.",
+          "cause": "Dry mono or uneven draw.",
+          "action": "Wet and pull both standing lines evenly.",
+          "severity": "slip"
+        },
+        {
+          "id": "diameter-limit",
+          "type": "material",
+          "symptom": "Join fails on a large diameter step.",
+          "cause": "Surgeon family overstressed by mismatch.",
+          "action": "Use a diameter-tolerant join instead.",
+          "severity": "cut"
+        },
+        {
+          "id": "tag-chafe",
+          "type": "service",
+          "symptom": "Tags chafe the standing line after fishing.",
+          "cause": "Tags left long and free.",
+          "action": "Trim tags and recheck after first fish.",
+          "severity": "abrasion"
+        }
+      ]
+    }
+  }
+}
