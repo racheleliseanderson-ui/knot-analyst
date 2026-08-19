@@ -86,6 +86,21 @@ export const MODEL_SOURCES: Record<string, { title: string; url?: string; note?:
     url: "https://www.netknots.com/fishing_knots",
     note: "Structural / application authority; strength claims treated as bands and cross-checked.",
   },
+  "saltstrong-palomar": {
+    title: "Salt Strong — Palomar variation testing series",
+    url: "https://www.saltstrong.com/articles/strongest-palomar-knot/",
+    note: "Controlled mono/braid Palomar variant head-to-heads; seating and eye geometry sensitive.",
+  },
+  "outdoorlife-fg": {
+    title: "Outdoor Life — FG Knot (braid-to-leader)",
+    url: "https://www.outdoorlife.com/fishing/fg-knot/",
+    note: "Practical FG overview and why the thin profile matters for guide passage.",
+  },
+  orvis: {
+    title: "Orvis — knot structural / application references",
+    url: "https://www.orvis.com/",
+    note: "Fly and terminal application authority; pair with independent strength bands.",
+  },
 };
 
 const monoFluoro = ["mono", "fluoro"] as LineMaterial[];
