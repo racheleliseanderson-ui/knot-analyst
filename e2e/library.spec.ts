@@ -28,7 +28,7 @@ test.describe("Library", () => {
 
     const cards = page.locator("article");
     expect(await cards.count()).toBeGreaterThan(40);
-    await expect(page.getByText("Palomar Knot").first()).toBeVisible();
+    await expect(cards.filter({ hasText: "Palomar Knot" }).first()).toBeVisible();
     expect(errors).toEqual([]);
   });
 
@@ -41,11 +41,16 @@ test.describe("Library", () => {
     await page.goto("/library");
     const box = page.getByPlaceholder(/search palomar/i);
     await box.fill("palomar");
-    await expect(page.getByText("Palomar Knot").first()).toBeVisible();
-    await expect(page.getByText("Improved Clinch")).toHaveCount(0);
+    await expect(page.locator("article").filter({ hasText: "Palomar Knot" }).first()).toBeVisible();
+    await expect(page.locator("article").filter({ hasText: "Improved Clinch" })).toHaveCount(0);
 
     await page.goto("/library?q=fg");
-    await expect(page.getByText(/FG Knot/i).first()).toBeVisible();
+    await expect(
+      page
+        .locator("article")
+        .filter({ hasText: /FG Knot/i })
+        .first(),
+    ).toBeVisible();
 
     await page.goto("/library?job=line-to-line");
     await expect(page.getByRole("button", { name: /line-to-line/i })).toHaveAttribute(
@@ -67,7 +72,7 @@ test.describe("Library", () => {
       .click();
     await expect(page).toHaveURL(/\/diagram\/palomar/);
     await expect(page.getByRole("heading", { name: "Palomar Knot" })).toBeVisible();
-    await expect(page.getByText("Finished structure")).toBeVisible();
+    await expect(page.getByText("Finished structure", { exact: true })).toBeVisible();
     await expect(page.getByText(/^Step 01$/)).toBeVisible();
 
     await page.getByRole("link", { name: /how to tie it/i }).click();
@@ -82,9 +87,9 @@ test.describe("Library", () => {
 
     await page.goto("/library");
     await page.getByRole("radio", { name: /boating/i }).click();
-    await expect(page.getByText("Bowline").first()).toBeVisible();
-    await expect(page.getByText("Cleat Hitch").first()).toBeVisible();
-    await expect(page.getByText("Palomar Knot")).toHaveCount(0);
+    await expect(page.locator("article").filter({ hasText: "Bowline" }).first()).toBeVisible();
+    await expect(page.locator("article").filter({ hasText: "Cleat Hitch" }).first()).toBeVisible();
+    await expect(page.locator("article").filter({ hasText: "Palomar Knot" })).toHaveCount(0);
     await expect(page.getByText(/rope work/i).first()).toBeVisible();
     expect(errors).toEqual([]);
   });

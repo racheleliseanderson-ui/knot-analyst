@@ -35,9 +35,15 @@ test.describe("Applications", () => {
     const errors: string[] = [];
     failOnPageErrors(page, errors);
 
-    await page.goto("/applications/bowline");
+    await page.goto("/applications");
+    await page.getByRole("radio", { name: /boating/i }).click();
+    await page
+      .getByRole("link", { name: /bowline/i })
+      .first()
+      .click();
+    await expect(page).toHaveURL(/\/applications\/bowline$/);
     await expect(page.getByRole("heading", { name: "Bowline" })).toBeVisible();
-    await expect(page.getByText(/same crossing pattern/i)).toBeVisible();
+    await expect(page.getByText(/same crossing pattern/i).first()).toBeVisible();
     await expect(page.getByText(/does not pick a knot/i).first()).toBeVisible();
 
     await page.getByRole("link", { name: /how to tie it/i }).click();
@@ -49,12 +55,16 @@ test.describe("Applications", () => {
     const errors: string[] = [];
     failOnPageErrors(page, errors);
 
-    await page.goto("/applications/dna-topology");
+    await page.goto("/applications");
+    await page.getByRole("link", { name: /dna topology/i }).click();
+    await expect(page).toHaveURL(/\/applications\/dna-topology$/);
     await expect(page.getByRole("heading", { name: /dna topology/i })).toBeVisible();
     await expect(page.getByText(/does not tell you which fishing knot/i)).toBeVisible();
     await expect(page.getByText(/not about a fishing or boat knot/i)).toBeVisible();
 
-    await page.goto("/applications/physical-hitches");
+    await page.goto("/applications");
+    await page.getByRole("link", { name: /physical hitch theory/i }).click();
+    await expect(page).toHaveURL(/\/applications\/physical-hitches/);
     await expect(page.getByRole("link", { name: /cleat hitch/i })).toBeVisible();
     expect(errors).toEqual([]);
   });
@@ -65,9 +75,9 @@ test.describe("Applications", () => {
 
     await page.goto("/applications");
     await page.getByRole("radio", { name: /boating/i }).click();
-    await expect(page.getByText("Bowline").first()).toBeVisible();
-    await expect(page.getByText("Cleat Hitch").first()).toBeVisible();
-    await expect(page.getByText("Palomar Knot")).toHaveCount(0);
+    await expect(page.locator("article").filter({ hasText: "Bowline" }).first()).toBeVisible();
+    await expect(page.locator("article").filter({ hasText: "Cleat Hitch" }).first()).toBeVisible();
+    await expect(page.locator("article").filter({ hasText: "Palomar Knot" })).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 });

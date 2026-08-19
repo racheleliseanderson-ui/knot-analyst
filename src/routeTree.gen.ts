@@ -8,210 +8,240 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as CompareRouteImport } from './routes/compare'
-import { Route as DiagnoseRouteImport } from './routes/diagnose'
-import { Route as DiagramKnotIdRouteImport } from './routes/diagram.$knotId'
-import { Route as LibraryRouteImport } from './routes/library'
-import { Route as ApplicationsRouteImport } from './routes/applications'
-import { Route as ApplicationsIdRouteImport } from './routes/applications.$id'
-import { Route as TieKnotIdRouteImport } from './routes/tie.$knotId'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as AdminRouteImport } from "./routes/admin";
+import { Route as CompareRouteImport } from "./routes/compare";
+import { Route as DiagnoseRouteImport } from "./routes/diagnose";
+import { Route as DiagramKnotIdRouteImport } from "./routes/diagram.$knotId";
+import { Route as LibraryRouteImport } from "./routes/library";
+import { Route as ApplicationsRouteImport } from "./routes/applications";
+import { Route as ApplicationsIndexRouteImport } from "./routes/applications.index";
+import { Route as ApplicationsIdRouteImport } from "./routes/applications.$id";
+import { Route as TieKnotIdRouteImport } from "./routes/tie.$knotId";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+  id: "/admin",
+  path: "/admin",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const CompareRoute = CompareRouteImport.update({
-  id: '/compare',
-  path: '/compare',
+  id: "/compare",
+  path: "/compare",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DiagnoseRoute = DiagnoseRouteImport.update({
-  id: '/diagnose',
-  path: '/diagnose',
+  id: "/diagnose",
+  path: "/diagnose",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DiagramKnotIdRoute = DiagramKnotIdRouteImport.update({
-  id: '/diagram/$knotId',
-  path: '/diagram/$knotId',
+  id: "/diagram/$knotId",
+  path: "/diagram/$knotId",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const LibraryRoute = LibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
+  id: "/library",
+  path: "/library",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ApplicationsRoute = ApplicationsRouteImport.update({
-  id: '/applications',
-  path: '/applications',
+  id: "/applications",
+  path: "/applications",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
+const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => ApplicationsRoute,
+} as any);
 const ApplicationsIdRoute = ApplicationsIdRouteImport.update({
-  id: '/applications/$id',
-  path: '/applications/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
+  id: "/$id",
+  path: "/$id",
+  getParentRoute: () => ApplicationsRoute,
+} as any);
 const TieKnotIdRoute = TieKnotIdRouteImport.update({
-  id: '/tie/$knotId',
-  path: '/tie/$knotId',
+  id: "/tie/$knotId",
+  path: "/tie/$knotId",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/compare': typeof CompareRoute
-  '/diagnose': typeof DiagnoseRoute
-  '/diagram/$knotId': typeof DiagramKnotIdRoute
-  '/library': typeof LibraryRoute
-  '/applications': typeof ApplicationsRoute
-  '/applications/$id': typeof ApplicationsIdRoute
-  '/tie/$knotId': typeof TieKnotIdRoute
+  "/": typeof IndexRoute;
+  "/admin": typeof AdminRoute;
+  "/compare": typeof CompareRoute;
+  "/diagnose": typeof DiagnoseRoute;
+  "/diagram/$knotId": typeof DiagramKnotIdRoute;
+  "/library": typeof LibraryRoute;
+  "/applications": typeof ApplicationsRouteWithChildren;
+  "/applications/": typeof ApplicationsIndexRoute;
+  "/applications/$id": typeof ApplicationsIdRoute;
+  "/tie/$knotId": typeof TieKnotIdRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/compare': typeof CompareRoute
-  '/diagnose': typeof DiagnoseRoute
-  '/diagram/$knotId': typeof DiagramKnotIdRoute
-  '/library': typeof LibraryRoute
-  '/applications': typeof ApplicationsRoute
-  '/applications/$id': typeof ApplicationsIdRoute
-  '/tie/$knotId': typeof TieKnotIdRoute
+  "/": typeof IndexRoute;
+  "/admin": typeof AdminRoute;
+  "/compare": typeof CompareRoute;
+  "/diagnose": typeof DiagnoseRoute;
+  "/diagram/$knotId": typeof DiagramKnotIdRoute;
+  "/library": typeof LibraryRoute;
+  "/applications": typeof ApplicationsIndexRoute;
+  "/applications/": typeof ApplicationsIndexRoute;
+  "/applications/$id": typeof ApplicationsIdRoute;
+  "/tie/$knotId": typeof TieKnotIdRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/compare': typeof CompareRoute
-  '/diagnose': typeof DiagnoseRoute
-  '/diagram/$knotId': typeof DiagramKnotIdRoute
-  '/library': typeof LibraryRoute
-  '/applications': typeof ApplicationsRoute
-  '/applications/$id': typeof ApplicationsIdRoute
-  '/tie/$knotId': typeof TieKnotIdRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/admin": typeof AdminRoute;
+  "/compare": typeof CompareRoute;
+  "/diagnose": typeof DiagnoseRoute;
+  "/diagram/$knotId": typeof DiagramKnotIdRoute;
+  "/library": typeof LibraryRoute;
+  "/applications": typeof ApplicationsRouteWithChildren;
+  "/applications/": typeof ApplicationsIndexRoute;
+  "/applications/$id": typeof ApplicationsIdRoute;
+  "/tie/$knotId": typeof TieKnotIdRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/admin'
-    | '/compare'
-    | '/diagnose'
-    | '/diagram/$knotId'
-    | '/library'
-    | '/applications'
-    | '/applications/$id'
-    | '/tie/$knotId'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/admin"
+    | "/compare"
+    | "/diagnose"
+    | "/diagram/$knotId"
+    | "/library"
+    | "/applications"
+    | "/applications/"
+    | "/applications/$id"
+    | "/tie/$knotId";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/admin'
-    | '/compare'
-    | '/diagnose'
-    | '/diagram/$knotId'
-    | '/library'
-    | '/applications'
-    | '/applications/$id'
-    | '/tie/$knotId'
+    | "/"
+    | "/admin"
+    | "/compare"
+    | "/diagnose"
+    | "/diagram/$knotId"
+    | "/library"
+    | "/applications"
+    | "/applications/"
+    | "/applications/$id"
+    | "/tie/$knotId";
   id:
-    | '__root__'
-    | '/'
-    | '/admin'
-    | '/compare'
-    | '/diagnose'
-    | '/diagram/$knotId'
-    | '/library'
-    | '/applications'
-    | '/applications/$id'
-    | '/tie/$knotId'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/admin"
+    | "/compare"
+    | "/diagnose"
+    | "/diagram/$knotId"
+    | "/library"
+    | "/applications"
+    | "/applications/"
+    | "/applications/$id"
+    | "/tie/$knotId";
+  fileRoutesById: FileRoutesById;
 }
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
-  CompareRoute: typeof CompareRoute
-  DiagnoseRoute: typeof DiagnoseRoute
-  DiagramKnotIdRoute: typeof DiagramKnotIdRoute
-  LibraryRoute: typeof LibraryRoute
-  ApplicationsRoute: typeof ApplicationsRoute
-  ApplicationsIdRoute: typeof ApplicationsIdRoute
-  TieKnotIdRoute: typeof TieKnotIdRoute
+export interface ApplicationsRouteChildren {
+  ApplicationsIndexRoute: typeof ApplicationsIndexRoute;
+  ApplicationsIdRoute: typeof ApplicationsIdRoute;
 }
 
-declare module '@tanstack/react-router' {
+const applicationsRouteChildren: ApplicationsRouteChildren = {
+  ApplicationsIndexRoute: ApplicationsIndexRoute,
+  ApplicationsIdRoute: ApplicationsIdRoute,
+};
+
+const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(applicationsRouteChildren);
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute;
+  AdminRoute: typeof AdminRoute;
+  CompareRoute: typeof CompareRoute;
+  DiagnoseRoute: typeof DiagnoseRoute;
+  DiagramKnotIdRoute: typeof DiagramKnotIdRoute;
+  LibraryRoute: typeof LibraryRoute;
+  ApplicationsRoute: typeof ApplicationsRouteWithChildren;
+  TieKnotIdRoute: typeof TieKnotIdRoute;
+}
+
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compare': {
-      id: '/compare'
-      path: '/compare'
-      fullPath: '/compare'
-      preLoaderRoute: typeof CompareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/diagnose': {
-      id: '/diagnose'
-      path: '/diagnose'
-      fullPath: '/diagnose'
-      preLoaderRoute: typeof DiagnoseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/diagram/$knotId': {
-      id: '/diagram/$knotId'
-      path: '/diagram/$knotId'
-      fullPath: '/diagram/$knotId'
-      preLoaderRoute: typeof DiagramKnotIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/library': {
-      id: '/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof LibraryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/applications': {
-      id: '/applications'
-      path: '/applications'
-      fullPath: '/applications'
-      preLoaderRoute: typeof ApplicationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/applications/$id': {
-      id: '/applications/$id'
-      path: '/applications/$id'
-      fullPath: '/applications/$id'
-      preLoaderRoute: typeof ApplicationsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tie/$knotId': {
-      id: '/tie/$knotId'
-      path: '/tie/$knotId'
-      fullPath: '/tie/$knotId'
-      preLoaderRoute: typeof TieKnotIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/admin": {
+      id: "/admin";
+      path: "/admin";
+      fullPath: "/admin";
+      preLoaderRoute: typeof AdminRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/compare": {
+      id: "/compare";
+      path: "/compare";
+      fullPath: "/compare";
+      preLoaderRoute: typeof CompareRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/diagnose": {
+      id: "/diagnose";
+      path: "/diagnose";
+      fullPath: "/diagnose";
+      preLoaderRoute: typeof DiagnoseRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/diagram/$knotId": {
+      id: "/diagram/$knotId";
+      path: "/diagram/$knotId";
+      fullPath: "/diagram/$knotId";
+      preLoaderRoute: typeof DiagramKnotIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/library": {
+      id: "/library";
+      path: "/library";
+      fullPath: "/library";
+      preLoaderRoute: typeof LibraryRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/applications": {
+      id: "/applications";
+      path: "/applications";
+      fullPath: "/applications";
+      preLoaderRoute: typeof ApplicationsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/applications/": {
+      id: "/applications/";
+      path: "/";
+      fullPath: "/applications/";
+      preLoaderRoute: typeof ApplicationsIndexRouteImport;
+      parentRoute: typeof ApplicationsRoute;
+    };
+    "/applications/$id": {
+      id: "/applications/$id";
+      path: "/$id";
+      fullPath: "/applications/$id";
+      preLoaderRoute: typeof ApplicationsIdRouteImport;
+      parentRoute: typeof ApplicationsRoute;
+    };
+    "/tie/$knotId": {
+      id: "/tie/$knotId";
+      path: "/tie/$knotId";
+      fullPath: "/tie/$knotId";
+      preLoaderRoute: typeof TieKnotIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -222,20 +252,17 @@ const rootRouteChildren: RootRouteChildren = {
   DiagnoseRoute: DiagnoseRoute,
   DiagramKnotIdRoute: DiagramKnotIdRoute,
   LibraryRoute: LibraryRoute,
-  ApplicationsRoute: ApplicationsRoute,
-  ApplicationsIdRoute: ApplicationsIdRoute,
+  ApplicationsRoute: ApplicationsRouteWithChildren,
   TieKnotIdRoute: TieKnotIdRoute,
-}
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+};
+export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
+import type { getRouter } from "./router.tsx";
+import type { startInstance } from "./start.ts";
+declare module "@tanstack/react-start" {
   interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>;
   }
 }

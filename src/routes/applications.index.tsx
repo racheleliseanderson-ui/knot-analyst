@@ -1,11 +1,5 @@
 import { useMemo } from "react";
-import {
-  createFileRoute,
-  Link,
-  Outlet,
-  useChildMatches,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Shell } from "@/components/instrument/shell";
 import { Chip, MicroLabel, Panel } from "@/components/instrument/primitives";
@@ -28,13 +22,8 @@ type Search = { q?: string; class?: TangleClass; world?: WorldGroup };
 const CLASSES = new Set<string>(Object.keys(TANGLE_LABELS));
 const GROUPS = new Set<string>(Object.keys(WORLD_GROUP_LABELS));
 const str = (v: unknown) => (typeof v === "string" && v.length ? v : undefined);
-import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-/**
- * Path prefix for /applications and /applications/$id.
- * Without an Outlet the $id note never mounts — the list route wins the match.
- */
-export const Route = createFileRoute("/applications")({
+export const Route = createFileRoute("/applications/")({
   validateSearch: (s: Record<string, unknown>): Search => {
     const tangle = str(s["class"]);
     const world = str(s["world"]);
@@ -62,19 +51,13 @@ export const Route = createFileRoute("/applications")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: ApplicationsLayout,
+  component: ApplicationsMode,
 });
-
-function ApplicationsLayout() {
-  const children = useChildMatches();
-  if (children.length > 0) return <Outlet />;
-  return <ApplicationsMode />;
-}
 
 function ApplicationsMode() {
   const t = useT();
   const domain = useDomain();
-  const navigate = useNavigate({ from: "/applications" });
+  const navigate = useNavigate({ from: "/applications/" });
   const search = Route.useSearch();
   const q = search.q ?? "";
   const tangle = search.class;
@@ -330,5 +313,3 @@ function ApplicationsMode() {
     </Shell>
   );
 }
-  component: () => <Outlet />,
-});

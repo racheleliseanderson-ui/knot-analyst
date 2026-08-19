@@ -2,8 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Production-like e2e: nitro cloudflare-module output served by wrangler.
- * compatibility-date is pinned — Nitro stamps today, and workerd in wrangler 4
- * often lags the calendar by a day, which aborts the worker on CI.
+ * scripts/e2e-serve.mjs pins compatibility_date (workerd lags "today") and
+ * sets assets.run_worker_first so /applications/$id hits the worker.
  */
 const PORT = Number(process.env["E2E_PORT"] ?? 8788);
 const baseURL = process.env["E2E_BASE_URL"] ?? `http://127.0.0.1:${PORT}`;
