@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Shell } from "@/components/instrument/shell";
+import { ModePlate } from "@/components/instrument/mode-plate";
+import { plate } from "@/components/instrument/plates";
 import { Chip, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { KnotDiagram } from "@/components/instrument/diagram";
 import { getKnot, FISHING_KNOTS, BOATING_KNOTS } from "@/data/catalog";
@@ -119,7 +121,7 @@ function ApplicationsMode() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <MicroLabel>{t("applications.mode")}</MicroLabel>
-          <h1 className="mt-2 text-[2rem] font-semibold leading-none tracking-[-0.03em]">
+          <h1 className="display-face mt-2 text-[2.125rem] leading-none sm:text-[2.375rem]">
             {t("applications.title")}
           </h1>
           <p className="mt-3 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">
@@ -130,6 +132,14 @@ function ApplicationsMode() {
           {domain.label} · {rows.length} of {total} knots · {WORLD_ESSAYS.length} essays
         </p>
       </div>
+
+      <ModePlate
+        height="slim"
+        eager
+        {...plate("applications")}
+        className="mb-6"
+        statement={<>Where each connection earns its keep — reference, never a recommendation.</>}
+      />
 
       <Panel className="mb-8 px-4 py-3">
         <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">

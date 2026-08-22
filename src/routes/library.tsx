@@ -2,6 +2,8 @@ import { useEffect, useMemo } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Shell } from "@/components/instrument/shell";
+import { ModePlate } from "@/components/instrument/mode-plate";
+import { plate } from "@/components/instrument/plates";
 import { Chip, MicroLabel } from "@/components/instrument/primitives";
 import { KnotDiagram } from "@/components/instrument/diagram";
 import {
@@ -105,7 +107,7 @@ function LibraryMode() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <MicroLabel>{t("library.mode")}</MicroLabel>
-          <h1 className="mt-2 text-[2rem] font-semibold leading-none tracking-[-0.03em]">
+          <h1 className="display-face mt-2 text-[2.125rem] leading-none sm:text-[2.375rem]">
             {t("library.title")}
           </h1>
           <p className="mt-3 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">
@@ -131,6 +133,14 @@ function LibraryMode() {
           ) : null}
         </div>
       </div>
+
+      <ModePlate
+        height="slim"
+        eager
+        {...plate("library")}
+        className="mb-6"
+        statement={<>Every knot here earned its place. Open a diagram or the steps.</>}
+      />
 
       <label className="relative mb-4 block">
         <span className="sr-only">{t("library.search")}</span>
@@ -170,13 +180,13 @@ function LibraryMode() {
           const extra = aka(k.name, k.aliases);
           return (
             <li key={k.id}>
-              <article className="panel flex min-h-28 overflow-hidden">
+              <article className="panel ki-lift flex min-h-28 overflow-hidden">
                 <Link
                   to="/diagram/$knotId"
                   params={{ knotId: k.id }}
                   className="group flex min-w-0 flex-1"
                 >
-                  <div className="w-[96px] shrink-0 border-r border-hairline bg-surface-2/40 sm:w-[132px]">
+                  <div className="vitrine w-[96px] shrink-0 border-r border-hairline sm:w-[132px]">
                     <KnotDiagram
                       kind={k.diagramKind}
                       title={`${k.name} — finished structure`}

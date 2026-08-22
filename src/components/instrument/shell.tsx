@@ -51,6 +51,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
 
   return (
     <div className="min-h-dvh">
+      <div className="ki-ambient no-print" aria-hidden="true" />
       <a
         href="#ki-main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-primary/60 focus:bg-card focus:px-4 focus:py-2 focus:text-sm focus:text-foreground"
@@ -108,6 +109,31 @@ export function Shell({ children, className }: { children: ReactNode; className?
         {children}
       </main>
       <footer className="border-t border-hairline no-print">
+        <div className="mx-auto max-w-[1240px] px-5 pt-6 sm:px-8">
+          <p className="label-micro mb-3 text-muted-foreground/70">
+            Part of the Hook the Horizon fleet
+          </p>
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {[
+              ["Hook the Horizon", "https://hookthehorizon.blog/"],
+              ["Field Ops Desk", "https://ops.hookthehorizon.blog/"],
+              ["Field Sense Navigator", "https://waterways.hookthehorizon.blog/"],
+              ["Tackle Link Analyst", "https://tackle.hookthehorizon.blog/"],
+              ["Hatch Match", "https://hatch.hookthehorizon.blog/"],
+              ["Rig Signal", "https://rig-signal.hookthehorizon.blog/"],
+            ].map(([label, href]) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="rule-brass mt-5 opacity-50" />
+        </div>
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-3 px-5 py-6 sm:px-8">
           <div className="max-w-md space-y-1">
             <p className="text-xs leading-relaxed text-muted-foreground">

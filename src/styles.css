@@ -81,11 +81,24 @@
   --gradient-depth: linear-gradient(180deg, oklch(0.216 0.024 232) 0%, oklch(0.178 0.02 232) 100%);
   --gradient-signal: linear-gradient(100deg, oklch(0.795 0.132 72), oklch(0.735 0.098 205));
 
-  /* Headline family is swappable per appearance; sans everywhere by default. */
-  --display-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --display-weight: 600;
-  --display-tracking: -0.02em;
+  /* Headline family: editorial serif for statements; sans stays for UI. */
+  --display-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --display-weight: 560;
+  --display-tracking: -0.012em;
   --display-style: normal;
+
+  /* Ambient depth program (luxury low-key): glows, grain, brass hairlines. */
+  --glow-warm: oklch(0.62 0.13 66 / 14%);
+  --glow-cold: oklch(0.55 0.09 220 / 16%);
+  --brass-hi: oklch(0.85 0.11 82);
+  --brass-lo: oklch(0.52 0.08 70);
+  --grain-opacity: 0.05;
+  --scrim-plate: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--background) 12%, transparent) 0%,
+    color-mix(in oklab, var(--background) 46%, transparent) 55%,
+    color-mix(in oklab, var(--background) 92%, transparent) 100%
+  );
 }
 
 /*
@@ -116,6 +129,11 @@
   --gradient-depth: linear-gradient(180deg, oklch(0.96 0.009 220) 0%, oklch(0.92 0.011 222) 100%);
   --shadow-instrument:
     0 1px 0 0 oklch(1 0 0 / 55%) inset, 0 14px 32px -22px oklch(0.25 0.04 232 / 35%);
+  --glow-warm: oklch(0.78 0.1 70 / 20%);
+  --glow-cold: oklch(0.72 0.06 220 / 22%);
+  --brass-hi: oklch(0.62 0.11 74);
+  --brass-lo: oklch(0.48 0.08 66);
+  --grain-opacity: 0.035;
 }
 
 /*
@@ -209,7 +227,171 @@
 @utility display-face {
   font-family: var(--display-family);
   font-weight: var(--display-weight);
+  font-style: var(--display-style);
   letter-spacing: var(--display-tracking);
+  font-variation-settings: "opsz" 60;
+  font-feature-settings: normal;
+}
+
+/* ---- Luxury depth program ------------------------------------------- */
+
+/* Fixed ambient field behind everything: warm horizon glow high, cold
+ * water glow low, both barely-there. Decorative only. */
+.ki-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(90rem 42rem at 82% -12%, var(--glow-warm), transparent 62%),
+    radial-gradient(80rem 46rem at -10% 108%, var(--glow-cold), transparent 60%),
+    radial-gradient(52rem 30rem at 50% 118%, oklch(0.4 0.06 232 / 10%), transparent 70%);
+}
+.ki-ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+/* Brass keyline: 1px gradient rule that reads as machined metal. */
+@utility rule-brass {
+  height: 1px;
+  border: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--brass-lo) 70%, transparent) 12%,
+    var(--brass-hi) 50%,
+    color-mix(in oklab, var(--brass-lo) 70%, transparent) 88%,
+    transparent
+  );
+}
+
+/* Elevated plate: panel with a lit top edge, deeper falloff, and an
+ * etched brass hairline across the top. */
+@utility plate-lux {
+  position: relative;
+  background: var(--gradient-depth);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-2xl);
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 7%) inset,
+    0 0 0 1px oklch(0 0 0 / 20%),
+    0 24px 50px -28px oklch(0 0 0 / 75%),
+    0 60px 120px -60px oklch(0 0 0 / 60%);
+}
+.plate-lux::before {
+  content: "";
+  position: absolute;
+  inset-inline: 10%;
+  top: -1px;
+  height: 1px;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--brass-hi) 65%, transparent),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Photographic plate: frame, film grain, and bottom scrim for legible copy. */
+.ki-photo-plate {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  border: 1px solid color-mix(in oklab, var(--brass-lo) 34%, var(--hairline));
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 8%) inset,
+    0 30px 60px -30px oklch(0 0 0 / 80%);
+  isolation: isolate;
+}
+.ki-photo-plate > img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+.ki-photo-plate::before {
+  /* inner hairline, set off the frame like a mat */
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid oklch(1 0 0 / 9%);
+  border-radius: calc(var(--radius-2xl) - 8px);
+  z-index: 3;
+  pointer-events: none;
+}
+.ki-photo-plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    var(--scrim-plate),
+    radial-gradient(120% 90% at 50% 0%, transparent 55%, oklch(0 0 0 / 28%) 100%);
+}
+.ki-photo-plate .ki-plate-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  mix-blend-mode: overlay;
+}
+.ki-photo-plate .ki-plate-copy {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 4;
+}
+
+/* Diagram vitrine: layered backdrop for specimen drawings. */
+@utility vitrine {
+  background:
+    radial-gradient(
+      70% 90% at 50% 40%,
+      color-mix(in oklab, var(--accent) 7%, transparent),
+      transparent 75%
+    ),
+    linear-gradient(
+      color-mix(in oklab, var(--foreground) 4%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--foreground) 4%, transparent) 1px,
+      transparent 1px
+    ),
+    var(--gradient-depth);
+  background-size:
+    100% 100%,
+    22px 22px,
+    22px 22px,
+    100% 100%;
+}
+
+/* Card hover lift — decorative, gated on hover-capable pointers. */
+@media (hover: hover) {
+  .ki-lift {
+    transition:
+      transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 220ms ease,
+      border-color 220ms ease;
+  }
+  .ki-lift:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--brass-hi) 36%, var(--hairline));
+    box-shadow:
+      0 1px 0 0 oklch(1 0 0 / 8%) inset,
+      0 26px 48px -26px oklch(0 0 0 / 78%);
+  }
 }
 
 @media print {

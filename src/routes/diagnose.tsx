@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { Shell } from "@/components/instrument/shell";
+import { ModePlate } from "@/components/instrument/mode-plate";
+import { plate } from "@/components/instrument/plates";
 import {
   Bullets,
   Chip,
@@ -254,7 +256,7 @@ function DiagnoseMode() {
         <div className="space-y-5 lg:sticky lg:top-24 lg:self-start no-print">
           <div>
             <MicroLabel className="text-accent">Mode 02 · Diagnose</MicroLabel>
-            <h1 className="mt-2 text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.02em]">
+            <h1 className="display-face mt-2 text-[1.9375rem] leading-[1.12] sm:text-[2.125rem]">
               Start from what failed.
               <br />
               <span className="text-muted-foreground">Not from a knot name.</span>
@@ -536,6 +538,18 @@ function DiagnoseMode() {
         <div className="space-y-6">
           {!result ? (
             <>
+              <ModePlate
+                height="band"
+                eager
+                {...plate("diagnose")}
+                kicker="Forensics first"
+                statement={
+                  <>
+                    The recovered end tells the truth. The knot you meant to tie is only a
+                    hypothesis.
+                  </>
+                }
+              />
               <Panel className="p-6">
                 <MicroLabel className="mb-1">Scenario starters</MicroLabel>
                 <p className="mb-5 text-[0.875rem] text-muted-foreground">

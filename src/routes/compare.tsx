@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Shell } from "@/components/instrument/shell";
+import { ModePlate } from "@/components/instrument/mode-plate";
+import { plate } from "@/components/instrument/plates";
 import { Bullets, Chip, MicroLabel, Panel, Verdict } from "@/components/instrument/primitives";
 import { EvidenceBody, EvidenceTag, evidenceText } from "@/components/instrument/evidence";
 import {
@@ -794,7 +796,7 @@ function CompareMode() {
     <Shell>
       <div className="mb-8">
         <MicroLabel className="text-accent">Mode 03 · Quick compare</MicroLabel>
-        <h1 className="mt-2 max-w-3xl text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.02em]">
+        <h1 className="display-face mt-2 max-w-3xl text-[1.9375rem] leading-[1.12] sm:text-[2.125rem]">
           Two jobs, side by side.
           <br />
           <span className="text-muted-foreground">
@@ -802,6 +804,14 @@ function CompareMode() {
           </span>
         </h1>
       </div>
+
+      <ModePlate
+        height="slim"
+        eager
+        {...plate("compare")}
+        className="mb-8"
+        statement={<>Change one thing. Watch what the model refuses to forgive.</>}
+      />
 
       <section aria-labelledby="setup-h">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">

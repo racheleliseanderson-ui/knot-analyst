@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Fragment, useMemo, useState, useEffect, useRef } from "react";
-import heroImg from "@/assets/line-tension.jpg";
 import { Shell } from "@/components/instrument/shell";
+import { ModePlate } from "@/components/instrument/mode-plate";
+import { plate } from "@/components/instrument/plates";
 import { VenuePicker } from "@/components/instrument/venue-picker";
 import { RegionPicker } from "@/components/instrument/region-picker";
 import { activeRegion } from "@/domain/region";
@@ -824,7 +825,7 @@ function DecideMode() {
         <div className="space-y-5 lg:sticky lg:top-24 lg:self-start no-print">
           <div>
             <MicroLabel>Mode 01 · Decide</MicroLabel>
-            <h1 className="mt-2 text-[1.75rem] font-semibold leading-[1.1] tracking-[-0.02em]">
+            <h1 className="display-face mt-2 text-[1.9375rem] leading-[1.12] sm:text-[2.125rem]">
               State the job.
               <br />
               <span className="text-muted-foreground">We’ll say what holds.</span>
@@ -1425,27 +1426,17 @@ function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
   const domain = useDomain();
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-xl border border-hairline">
-        <img
-          src={heroImg}
-          alt={
-            domain.id === "boating"
-              ? "Dock line under tension on a horn cleat"
-              : "Braid-to-leader connection under tension at first light"
-          }
-          width={1600}
-          height={1008}
-          className="h-[260px] w-full object-cover sm:h-[340px]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/10" />
-        <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-          <div className="rule-etch mb-4 w-24" />
-          <p className="max-w-lg text-[1.125rem] leading-snug tracking-tight text-foreground sm:text-[1.375rem]">
+      <ModePlate
+        height="tall"
+        eager
+        {...plate(domain.id === "boating" ? "decide.boating" : "decide.fishing")}
+        statement={
+          <>
             Every connection is a compromise between what holds, what you can build in the
             conditions you are actually standing in, and how often you will rebuild it.
-          </p>
-        </div>
-      </div>
+          </>
+        }
+      />
 
       <Panel className="p-6">
         <MicroLabel className="mb-1">Scenario starters</MicroLabel>
