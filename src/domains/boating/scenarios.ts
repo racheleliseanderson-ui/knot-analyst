@@ -10,10 +10,11 @@ export const BOATING_SCENARIOS: FieldScenario[] = [
     title: "Dock line · horn cleat · surge",
     blurb:
       "Make fast to a horn cleat so you can still cast off under load. A jammed lock is the hazard.",
-    tag: "Dock · release",
+    tag: "Minimal useful run",
     connectionLine: "Rope → cleat",
     likelyPick: "Cleat hitch when the first turn is on the far horn",
     autoRun: true,
+    featured: "minimal",
     input: {
       connection: "rope-to-cleat",
       mainMaterial: "polyester",

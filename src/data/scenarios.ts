@@ -17,6 +17,8 @@ export interface FieldScenario {
   input: ChooseInput;
   /** Jump straight to ranked results */
   autoRun: boolean;
+  /** Promoted on the empty first screen as a one-tap useful run */
+  featured?: "minimal";
 }
 
 export const FIELD_SCENARIOS: FieldScenario[] = [
@@ -122,13 +124,14 @@ export const FIELD_SCENARIOS: FieldScenario[] = [
   },
   {
     id: "beginner-hook",
-    title: "First terminal knot",
+    title: "Beginner terminal on mono",
     blurb:
-      "Hook to mono, beginner proficiency, frequent reties. The engine should favor simple, inspectable knots.",
-    tag: "Beginner · terminal",
+      "Hook to mono, beginner proficiency, frequent reties. One tap ranks two or three inspectable knots and shows how each fails.",
+    tag: "Minimal useful run",
     connectionLine: "Line → hook",
     likelyPick: "Improved Clinch or Uni when simplicity rules",
     autoRun: true,
+    featured: "minimal",
     input: {
       connection: "line-to-hook",
       mainMaterial: "mono",

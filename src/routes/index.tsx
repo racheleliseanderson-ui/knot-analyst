@@ -27,6 +27,7 @@ import { KnotDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { FailureModesPanel } from "@/components/instrument/failure-modes";
 import { useConnectionGroups, useMaterialOptions, useScenarios } from "@/lib/overlay";
 import { encodeInput } from "@/lib/handoff";
+import { failsWhenFor } from "@/data/connection-model-meta";
 import { cn } from "@/lib/utils";
 import type {
   ChooseInput,
@@ -34,6 +35,7 @@ import type {
   DiameterRelation,
   Difficulty,
   LineMaterial,
+  RankedOption,
 } from "@/domain/types";
 import { DIAMETER_LABELS, DIMENSION_LABELS } from "@/domain/types";
 import { resolveMaterial, type MaterialPreset, type MaterialSpec } from "@/domain/material";
@@ -241,6 +243,9 @@ const DIAMETERS: DiameterRelation[] = [
   "main-thicker",
   "extreme-mismatch",
 ];
+
+const EMPTY_JOB_COPY =
+  "No connection declared yet. Pick a job (Terminal, Line-to-line, etc.) or load a scenario starter so we can score real compromises instead of guessing.";
 function DecideMode() {
   const search = Route.useSearch();
   const navigate = useNavigate();
@@ -758,7 +763,7 @@ function DecideMode() {
       ]
         .filter(Boolean)
         .join(" · ")
-    : "Pick a job first — we will not guess";
+    : "No connection declared yet";
 
   const runNow = () => {
     setRan(true);
@@ -820,77 +825,30 @@ function DecideMode() {
         </div>
       ) : null}
 
-      <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-10">
-        {/* ── INSTRUMENT ─────────────────────────────── */}
-        <div className="space-y-5 lg:sticky lg:top-24 lg:self-start no-print">
-          <div>
-            <MicroLabel>Mode 01 · Decide</MicroLabel>
-            <h1 className="display-face mt-2 text-[1.9375rem] leading-[1.12] sm:text-[2.125rem]">
-              State the job.
-              <br />
-              <span className="text-muted-foreground">We’ll say what holds.</span>
-            </h1>
-          </div>
-
-          <PresetBar
-            domainId={domain.id}
-            input={input}
-            sel={sel}
-            {...(venueId ? { venueId } : {})}
-            {...(platformId ? { platformId } : {})}
-            {...(regionBroadId ? { regionBroadId } : {})}
-            {...(regionFineId ? { regionFineId } : {})}
-            onLoad={(p) => {
-              setInput(p.input);
-              setSel(p.sel);
-              // Phase C: migrate legacy single venue ids; prefer explicit platformId.
-              const legacy = resolveLegacyVenue(p.venueId);
-              const nextWb = legacy.waterbodyId ?? p.venueId;
-              const nextPl = p.platformId ?? legacy.platformId;
-              setVenueId(nextWb);
-              setPlatformId(nextPl);
-              setRegionBroadId(p.regionBroadId);
-              setRegionFineId(p.regionFineId);
-              setRan(true);
-            }}
-          />
-
-          {/* Desktop: the whole instrument at once */}
-          <div className="hidden space-y-5 lg:block">
-            {steps.map((s) => (
-              <Fragment key={s.id}>{s.node}</Fragment>
-            ))}
-            <button
-              type="button"
-              disabled={!input.connection}
-              onClick={runNow}
-              className="ki-press min-h-12 w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {ran ? t("decide.rerun") : t("decide.run")}
-            </button>
-            {!input.connection ? (
-              <p className="text-xs text-muted-foreground">
-                Nothing scores until a connection is declared. That is deliberate.
-              </p>
-            ) : null}
-          </div>
-
-          {/* Phone: one decision per screen, job carried in the sticky bar */}
-          <DecideStepper
-            className="lg:hidden"
-            steps={steps}
-            summary={jobSummary}
-            canRun={Boolean(input.connection)}
-            runLabel={ran ? t("decide.rerun") : t("decide.run")}
-            onRun={runNow}
-          />
-        </div>
-
+      <div
+        className={cn(
+          "grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8",
+          result
+            ? "lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-10"
+            : "lg:grid-cols-[minmax(0,1fr)_minmax(0,380px)] lg:gap-10",
+        )}
+      >
         {/* ── OUTPUT ─────────────────────────────────── */}
-        <div id="ki-output" className="space-y-6 scroll-mt-20">
+        <div
+          id="ki-output"
+          className={cn("space-y-6 scroll-mt-20", result && "lg:order-2")}
+        >
           {!result ? (
             <EmptyDecide
               onPick={(id) => navigate({ to: "/", search: { scenario: id, run: true } })}
+            />
+          ) : null}
+
+          {result && ranked.length ? (
+            <RankedFailureStrip
+              options={ranked}
+              activeId={activeOption?.knot.id}
+              onPick={setAltPick}
             />
           ) : null}
 
@@ -1416,27 +1374,229 @@ function DecideMode() {
             </>
           ) : null}
         </div>
+
+        {/* ── INSTRUMENT ─────────────────────────────── */}
+        <div
+          className={cn(
+            "space-y-5 no-print",
+            result ? "lg:order-1 lg:sticky lg:top-24 lg:self-start" : "lg:sticky lg:top-24 lg:self-start",
+          )}
+        >
+          <div>
+            <MicroLabel>{result ? "Mode 01 · Decide" : "Or pick the job yourself"}</MicroLabel>
+            {result ? (
+              <h1 className="display-face mt-2 text-[1.9375rem] leading-[1.12] sm:text-[2.125rem]">
+                State the job.
+                <br />
+                <span className="text-muted-foreground">We’ll say what holds.</span>
+              </h1>
+            ) : (
+              <h2 className="display-face mt-2 text-[1.375rem] leading-[1.18] sm:text-[1.5rem]">
+                Terminal, line-to-line, and the rest.
+                <br />
+                <span className="text-muted-foreground">We’ll score real compromises.</span>
+              </h2>
+            )}
+          </div>
+
+          <PresetBar
+            domainId={domain.id}
+            input={input}
+            sel={sel}
+            {...(venueId ? { venueId } : {})}
+            {...(platformId ? { platformId } : {})}
+            {...(regionBroadId ? { regionBroadId } : {})}
+            {...(regionFineId ? { regionFineId } : {})}
+            onLoad={(p) => {
+              setInput(p.input);
+              setSel(p.sel);
+              // Phase C: migrate legacy single venue ids; prefer explicit platformId.
+              const legacy = resolveLegacyVenue(p.venueId);
+              const nextWb = legacy.waterbodyId ?? p.venueId;
+              const nextPl = p.platformId ?? legacy.platformId;
+              setVenueId(nextWb);
+              setPlatformId(nextPl);
+              setRegionBroadId(p.regionBroadId);
+              setRegionFineId(p.regionFineId);
+              setRan(true);
+            }}
+          />
+
+          {/* Desktop: the whole instrument at once */}
+          <div className="hidden space-y-5 lg:block">
+            {steps.map((s) => (
+              <Fragment key={s.id}>{s.node}</Fragment>
+            ))}
+            <button
+              type="button"
+              disabled={!input.connection}
+              onClick={runNow}
+              className="ki-press min-h-12 w-full rounded-lg border border-primary/60 bg-primary/15 px-4 py-3 text-[0.875rem] font-semibold tracking-tight text-foreground transition-all hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {ran ? t("decide.rerun") : t("decide.run")}
+            </button>
+            {!input.connection ? (
+              <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
+                Load a starter, or pick a job in the chips. Nothing scores until a connection is
+                declared.
+              </p>
+            ) : null}
+          </div>
+
+          {/* Phone: one decision per screen, job carried in the sticky bar */}
+          <DecideStepper
+            className="lg:hidden"
+            steps={steps}
+            summary={jobSummary}
+            canRun={Boolean(input.connection)}
+            runLabel={ran ? t("decide.rerun") : t("decide.run")}
+            onRun={runNow}
+          />
+        </div>
       </div>
     </Shell>
+  );
+}
+
+function failureNotesFor(option: RankedOption, limit = 2): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const line of [
+    ...option.butNotes,
+    ...failsWhenFor(option.knot.id, option.knot.commonMistakes),
+    ...option.knot.commonMistakes,
+  ]) {
+    const text = (line ?? "").trim();
+    if (!text || seen.has(text)) continue;
+    seen.add(text);
+    out.push(text);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+function RankedFailureStrip({
+  options,
+  activeId,
+  onPick,
+}: {
+  options: RankedOption[];
+  activeId?: string;
+  onPick: (idx: number) => void;
+}) {
+  const top = options.slice(0, 3);
+  if (!top.length) return null;
+  return (
+    <Panel className="overflow-hidden">
+      <div className="border-b border-hairline px-6 py-4">
+        <MicroLabel>Ranked knots · how each fails</MicroLabel>
+        <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+          Two or three inspectable options for this job. Failure notes are the compromises, not
+          decoration.
+        </p>
+      </div>
+      <div className="divide-y divide-hairline">
+        {top.map((o, idx) => {
+          const notes = failureNotesFor(o);
+          const active = o.knot.id === activeId;
+          return (
+            <button
+              key={o.knot.id}
+              type="button"
+              onClick={() => onPick(idx)}
+              aria-pressed={active}
+              aria-label={`${idx === 0 ? "Recommended" : `Alternative ${idx}`}: ${o.knot.name}`}
+              className={cn(
+                "ki-press w-full px-6 py-4 text-left transition-colors hover:bg-surface-2/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
+                active && "bg-primary/8",
+              )}
+            >
+              <div className="flex items-baseline justify-between gap-4">
+                <p className="text-[0.9375rem] font-medium tracking-tight">
+                  <span className="mr-2 font-mono text-[0.6875rem] text-muted-foreground">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  {o.knot.name}
+                </p>
+                <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                  {o.fieldFitPercent}%
+                </span>
+              </div>
+              {notes.length ? (
+                <ul className="mt-2 space-y-1">
+                  {notes.map((n) => (
+                    <li key={n} className="text-[0.8125rem] leading-relaxed text-muted-foreground">
+                      <span className="mr-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-caution">
+                        Fails
+                      </span>
+                      {n}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+    </Panel>
   );
 }
 
 function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
   const scenarios = useScenarios();
   const domain = useDomain();
+  const featured = scenarios.filter((s) => s.featured === "minimal");
+  const rest = scenarios.filter((s) => s.featured !== "minimal");
+  const lost = domain.id === "boating" ? "Already lost a line?" : "Already lost a fish?";
+
   return (
     <div className="space-y-6">
-      <ModePlate
-        height="tall"
-        eager
-        {...plate(domain.id === "boating" ? "decide.boating" : "decide.fishing")}
-        statement={
-          <>
-            Every connection is a compromise between what holds, what you can build in the
-            conditions you are actually standing in, and how often you will rebuild it.
-          </>
-        }
-      />
+      <div>
+        <MicroLabel>Mode 01 · Decide</MicroLabel>
+        <h1 className="display-face mt-2 text-[1.9375rem] leading-[1.12] sm:text-[2.125rem]">
+          One tap loads a realistic setup.
+        </h1>
+        <p className="mt-3 max-w-2xl text-[0.875rem] leading-relaxed text-muted-foreground">
+          {EMPTY_JOB_COPY}
+        </p>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        {featured.map((s) => (
+          <button
+            key={s.id}
+            type="button"
+            onClick={() => onPick(s.id)}
+            aria-label={`Load scenario: ${s.title}`}
+            className="group ki-press min-h-11 touch-manipulation rounded-lg border border-primary/50 bg-primary/10 px-5 py-5 text-left transition-colors hover:bg-primary/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary">
+              {s.tag}
+            </p>
+            <p className="mt-2 text-[1.0625rem] font-semibold tracking-tight">{s.title}</p>
+            <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground">{s.blurb}</p>
+            <p className="mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary">
+              Run it now →
+            </p>
+          </button>
+        ))}
+        <Link
+          to="/diagnose"
+          aria-label="Diagnose from failure"
+          className="group ki-press min-h-11 touch-manipulation rounded-lg border border-accent/50 bg-accent/10 px-5 py-5 text-left transition-colors hover:bg-accent/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent">
+            Diagnose from failure
+          </p>
+          <p className="mt-2 text-[1.0625rem] font-semibold tracking-tight">{lost}</p>
+          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground">
+            Start from what broke. The diagnosis carries into this decision with full context.
+          </p>
+          <p className="mt-3 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent">
+            Open diagnose →
+          </p>
+        </Link>
+      </div>
 
       <Panel className="p-6">
         <MicroLabel className="mb-1">Scenario starters</MicroLabel>
@@ -1444,7 +1604,7 @@ function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
           One tap loads a realistic setup and runs the model.
         </p>
         <div className="ki-stagger grid gap-px overflow-hidden rounded-lg bg-hairline sm:grid-cols-2">
-          {scenarios.map((s) => (
+          {rest.map((s) => (
             <button
               key={s.id}
               type="button"
@@ -1464,13 +1624,17 @@ function EmptyDecide({ onPick }: { onPick: (id: string) => void }) {
         </div>
       </Panel>
 
-      <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
-        {domain.id === "boating" ? "Already lost a line?" : "Already lost a fish?"}{" "}
-        <Link to="/diagnose" className="text-accent underline underline-offset-4">
-          Start from the failure instead
-        </Link>{" "}
-        — the diagnosis carries into this decision with full context.
-      </p>
+      <ModePlate
+        height="band"
+        eager
+        {...plate(domain.id === "boating" ? "decide.boating" : "decide.fishing")}
+        statement={
+          <>
+            Every connection is a compromise between what holds, what you can build in the
+            conditions you are actually standing in, and how often you will rebuild it.
+          </>
+        }
+      />
     </div>
   );
 }

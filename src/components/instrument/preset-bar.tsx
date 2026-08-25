@@ -60,6 +60,8 @@ export function PresetBar({
   const mine = orderPresets(presets.filter((p) => p.domainId === domainId));
   const canSave = Boolean(input.connection);
 
+  if (mine.length === 0 && !canSave) return null;
+
   const save = () => {
     if (!canSave) return;
     const label = name.trim() || `Setup ${mine.length + 1}`;
@@ -210,7 +212,7 @@ export function PresetBar({
       </div>
 
       <p aria-live="polite" className="mt-2 min-h-[1rem] text-[0.75rem] text-muted-foreground">
-        {status ?? (mine.length === 0 ? "Nothing saved for this discipline yet." : "")}
+        {status ?? ""}
       </p>
     </section>
   );

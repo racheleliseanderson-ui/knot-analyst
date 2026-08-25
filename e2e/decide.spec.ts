@@ -24,8 +24,32 @@ test.describe("Decide", () => {
 
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByText("One tap loads a realistic setup.")).toBeVisible();
+    await expect(
+      page.getByText(
+        "No connection declared yet. Pick a job (Terminal, Line-to-line, etc.) or load a scenario starter so we can score real compromises instead of guessing.",
+      ),
+    ).toBeVisible();
     await expect(page.getByText("Scenario starters")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Diagnose from failure" })).toBeVisible();
     await expect(page.getByText("Knot decision card")).toHaveCount(0);
+    await expect(page.getByText("Pick a job first — we will not guess")).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
+
+  test("minimal useful run ranks knots with failure notes", async ({ page }) => {
+    const errors: string[] = [];
+    failOnPageErrors(page, errors);
+
+    await page.goto("/");
+    const starter = page.getByRole("button", { name: "Load scenario: Beginner terminal on mono" });
+    await expect(starter).toBeVisible();
+    await starter.click();
+
+    await expect(page.getByText("Knot decision card")).toBeVisible();
+    await expect(page.getByText("Ranked knots · how each fails")).toBeVisible();
+    await expect(page.getByText(/^Fails/).first()).toBeVisible();
+    await expect(page.getByText(/\d+%/).first()).toBeVisible();
     expect(errors).toEqual([]);
   });
 
