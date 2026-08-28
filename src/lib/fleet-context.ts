@@ -23,7 +23,17 @@ export type HthFleetPacket = {
   [key: string]: unknown;
 };
 
-const BLOCKED_KEYS = new Set(["coordinates", "coordinate", "latitude", "longitude", "lat", "lng", "lon", "gps", "geometry"]);
+const BLOCKED_KEYS = new Set([
+  "coordinates",
+  "coordinate",
+  "latitude",
+  "longitude",
+  "lat",
+  "lng",
+  "lon",
+  "gps",
+  "geometry",
+]);
 
 function sanitizeValue(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(sanitizeValue);
@@ -38,7 +48,11 @@ function sanitizeValue(value: unknown): unknown {
 
 export function sanitizeFleetPacket(packet: HthFleetPacket): HthFleetPacket {
   const clean = sanitizeValue(packet) as HthFleetPacket;
-  clean.privacy = { ...(clean.privacy ?? {}), containsCoordinates: false, containsPrivateWater: false };
+  clean.privacy = {
+    ...(clean.privacy ?? {}),
+    containsCoordinates: false,
+    containsPrivateWater: false,
+  };
   return clean;
 }
 
@@ -46,7 +60,9 @@ export function parseFleetPacket(hash: string): HthFleetPacket | null {
   if (!hash.startsWith("#packet=")) return null;
   try {
     const parsed = JSON.parse(decodeURIComponent(hash.slice("#packet=".length)));
-    return parsed && typeof parsed === "object" ? sanitizeFleetPacket(parsed as HthFleetPacket) : null;
+    return parsed && typeof parsed === "object"
+      ? sanitizeFleetPacket(parsed as HthFleetPacket)
+      : null;
   } catch {
     return null;
   }
@@ -72,14 +88,25 @@ export function saveFleetContext(packet: HthFleetPacket) {
 }
 
 function objectPart(value: unknown): Record<string, unknown> {
-  return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
 }
 
-export function mergeFleetPacket(base: HthFleetPacket | null | undefined, origin: string, instrumentId: string, patch: HthFleetPacket): HthFleetPacket {
+export function mergeFleetPacket(
+  base: HthFleetPacket | null | undefined,
+  origin: string,
+  instrumentId: string,
+  patch: HthFleetPacket,
+): HthFleetPacket {
   const now = new Date().toISOString();
   const prior = sanitizeFleetPacket(base ?? {});
   const priorTrail = Array.isArray(prior.fleet?.trail) ? prior.fleet!.trail! : [];
-  const trail = priorTrail.length ? [...priorTrail] : prior.origin ? [{ origin: prior.origin, at: prior.createdAt ?? now }] : [];
+  const trail = priorTrail.length
+    ? [...priorTrail]
+    : prior.origin
+      ? [{ origin: prior.origin, at: prior.createdAt ?? now }]
+      : [];
   if (trail.at(-1)?.origin !== origin) trail.push({ origin, at: now });
   return sanitizeFleetPacket({
     ...prior,
@@ -93,10 +120,22 @@ export function mergeFleetPacket(base: HthFleetPacket | null | undefined, origin
     species: { ...objectPart(prior.species), ...objectPart(patch.species) },
     conditions: { ...objectPart(prior.conditions), ...objectPart(patch.conditions) },
     observations: { ...objectPart(prior.observations), ...objectPart(patch.observations) },
-    presentationRequirements: { ...objectPart(prior.presentationRequirements), ...objectPart(patch.presentationRequirements) },
-    equipmentRequirements: { ...objectPart(prior.equipmentRequirements), ...objectPart(patch.equipmentRequirements) },
-    connectionRequirements: { ...objectPart(prior.connectionRequirements), ...objectPart(patch.connectionRequirements) },
-    provenance: [...(Array.isArray(prior.provenance) ? prior.provenance : []), ...(Array.isArray(patch.provenance) ? patch.provenance : [])],
+    presentationRequirements: {
+      ...objectPart(prior.presentationRequirements),
+      ...objectPart(patch.presentationRequirements),
+    },
+    equipmentRequirements: {
+      ...objectPart(prior.equipmentRequirements),
+      ...objectPart(patch.equipmentRequirements),
+    },
+    connectionRequirements: {
+      ...objectPart(prior.connectionRequirements),
+      ...objectPart(patch.connectionRequirements),
+    },
+    provenance: [
+      ...(Array.isArray(prior.provenance) ? prior.provenance : []),
+      ...(Array.isArray(patch.provenance) ? patch.provenance : []),
+    ],
   });
 }
 
