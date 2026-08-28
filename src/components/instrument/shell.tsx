@@ -2,10 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { APPLICATION_ID, ENGINE_VERSION, KNOT_CATALOG_VERSION } from "@/domain/types";
-import { PRODUCT_MONOGRAM, PRODUCT_NAME, PRODUCT_TAGLINE, PUBLISHER_NAME } from "@/domain/brand";
-import { knotsForDomain } from "@/data/catalog";
-import { catalogReviewDue } from "@/data/connection-model-meta";
+import { PRODUCT_MONOGRAM, PRODUCT_NAME, PUBLISHER_NAME } from "@/domain/brand";
 import { DomainSwitch } from "@/components/instrument/domain-switch";
 import { AppearanceMenu } from "@/components/instrument/appearance-menu";
 import { Finder } from "@/components/instrument/finder";
@@ -30,7 +27,6 @@ function ModeLink({ to, label, code }: { to: string; label: string; code: string
 export function Shell({ children, className }: { children: ReactNode; className?: string }) {
   const t = useT();
   const domain = useDomain();
-  const review = catalogReviewDue();
   const [finderOpen, setFinderOpen] = useState(false);
 
   useEffect(() => {
@@ -86,8 +82,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
             <ModeLink to="/compare" label={t("nav.compare")} code="03" />
             <ModeLink to="/library" label={t("nav.library")} code="04" />
-            <ModeLink to="/applications" label={t("nav.applications")} code="05" />
-            <ModeLink to="/admin" label={t("nav.data")} code="06" />
+            <ModeLink to="/applications/" label={t("nav.applications")} code="05" />
             <button
               type="button"
               onClick={() => setFinderOpen(true)}
@@ -110,8 +105,8 @@ export function Shell({ children, className }: { children: ReactNode; className?
       </main>
       <footer className="border-t border-hairline no-print">
         <div className="mx-auto max-w-[1240px] px-5 pt-6 sm:px-8">
-          <p className="label-micro mb-3 text-muted-foreground/70">
-            Part of the Hook the Horizon fleet
+          <p className="label-micro mb-3 text-muted-foreground">
+            More Hook the Horizon field tools
           </p>
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             {[
@@ -135,23 +130,18 @@ export function Shell({ children, className }: { children: ReactNode; className?
           <div className="rule-brass mt-5 opacity-50" />
         </div>
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-3 px-5 py-6 sm:px-8">
-          <div className="max-w-md space-y-1">
+          <div className="max-w-xl space-y-1">
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Run Decide or Diagnose when you need a call or something failed. Or just open a knot
-              and tie it. Applications never picks a knot for you.
+              Use Decide when you need help choosing a connection, Diagnose when something failed,
+              or open the Library when you already know the knot you want to tie.
             </p>
-            <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/60">
-              {PRODUCT_NAME} · {PRODUCT_TAGLINE}
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              Knot strength and reliability depend on the exact line, diameter, hardware, tying method,
+              seating, and condition of the connection. Inspect and pull-test every critical tie.
             </p>
           </div>
-          <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground/70">
-            {APPLICATION_ID} · {ENGINE_VERSION} · {KNOT_CATALOG_VERSION} ·{" "}
-            {knotsForDomain(domain.id).length} knots · {domain.label}
-            {review.due
-              ? ` · review due · ${review.daysSince ?? "?"}d since ${review.newestReviewed ?? "unknown"}`
-              : review.newestReviewed
-                ? ` · reviewed ${review.newestReviewed}`
-                : ""}
+          <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
+            {domain.label} · Hook the Horizon
           </p>
         </div>
       </footer>
