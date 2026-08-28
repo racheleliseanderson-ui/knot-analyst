@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { FleetCarryBridge } from "../components/FleetCarryBridge";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { THEME_BOOT_SCRIPT } from "../lib/theme";
 import { OverlayProvider } from "../lib/overlay";
@@ -200,6 +201,7 @@ function RootComponent() {
       <PrefsProvider>
         <DomainProvider>
           <OverlayProvider>
+            <FleetCarryBridge />
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </OverlayProvider>
