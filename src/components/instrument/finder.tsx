@@ -1,5 +1,5 @@
 /**
- * Finder — keyboard-first search across scenarios, knots and symptoms.
+ * Finder — keyboard-first search across scenarios, knots, symptoms, and use cases.
  * Every result is an action, not a page of prose.
  *
  * Filters narrow by result type and, for knots, by category, material fit and
@@ -9,11 +9,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Search, X } from "lucide-react";
-import { knotsForDomain } from "@/data/catalog";
+import { knotsForDomain, getKnot } from "@/data/catalog";
 import { useDomain } from "@/domain/context";
 import { playsForDomain } from "@/data/failure-playbook";
 import { startersForDomain } from "@/data/diagnose-starters";
-import { WORLD_ESSAYS } from "@/data/applications";
+import { applicationsForDomain } from "@/data/applications";
 import { MATERIAL_LABELS } from "@/domain/types";
 import { useScenarios } from "@/lib/overlay";
 import { useT } from "@/i18n";
@@ -46,10 +46,6 @@ const ALIASES: Record<string, string> = {
   bimini: "bimini twist",
   slim: "slim beauty",
   "no name": "no-name",
-  dna: "dna topology",
-  granny: "surgical throws",
-  bayman: "physical hitch",
-  jones: "topological quantum",
 };
 
 /** One-character slip tolerance — cheap, bounded, and only for whole words. */
@@ -83,13 +79,13 @@ function score(hay: string, q: string): number {
   const terms = expanded.split(/\s+/).filter(Boolean);
   const words = hay.split(/[^a-z0-9]+/).filter(Boolean);
   let total = 0;
-  for (const t of terms) {
-    const i = hay.indexOf(t);
+  for (const term of terms) {
+    const i = hay.indexOf(term);
     if (i >= 0) {
       total += i === 0 ? 3 : 1;
       continue;
     }
-    if (t.length >= 4 && words.some((w) => nearMiss(w, t))) {
+    if (term.length >= 4 && words.some((word) => nearMiss(word, term))) {
       total += 0.5;
       continue;
     }
@@ -118,7 +114,7 @@ const GROUP_FILTERS: { id: Group; label: string }[] = [
   { id: "finder.scenarios", label: "Scenarios" },
   { id: "finder.knots", label: "Knots" },
   { id: "finder.symptoms", label: "Symptoms" },
-  { id: "finder.applications", label: "Applications" },
+  { id: "finder.applications", label: "Use cases" },
 ];
 
 const RECENTS_KEY = "ki-finder-recents";
@@ -175,55 +171,57 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
 
   const all = useMemo<Hit[]>(() => {
     const items: Hit[] = [];
-    for (const s of scenarios) {
+    for (const scenario of scenarios) {
       items.push({
-        id: `sc:${s.id}`,
+        id: `sc:${scenario.id}`,
         group: "finder.scenarios",
-        label: s.title,
-        sub: `${s.connectionLine} · ${s.tag}`,
-        hay: `${s.title} ${s.blurb} ${s.tag} ${s.connectionLine}`.toLowerCase(),
-        go: () => navigate({ to: "/", search: { scenario: s.id, run: true } }),
+        label: scenario.title,
+        sub: `${scenario.connectionLine} · ${scenario.tag}`,
+        hay: `${scenario.title} ${scenario.blurb} ${scenario.tag} ${scenario.connectionLine}`.toLowerCase(),
+        go: () => navigate({ to: "/", search: { scenario: scenario.id, run: true } }),
       });
     }
-    for (const k of knotsForDomain(domain.id)) {
+    for (const knot of knotsForDomain(domain.id)) {
       items.push({
-        id: `kn:${k.id}`,
+        id: `kn:${knot.id}`,
         group: "finder.knots",
-        label: k.name,
-        sub: k.category.replace(/-/g, " "),
-        hay: `${k.name} ${k.id} ${k.category} ${k.tags.join(" ")} ${k.aliases?.join(" ") ?? ""}`.toLowerCase(),
-        category: k.category,
-        materials: k.lineMaterials,
-        difficulty: k.difficulty,
-        go: () => navigate({ to: "/tie/$knotId", params: { knotId: k.id } }),
+        label: knot.name,
+        sub: knot.category.replace(/-/g, " "),
+        hay: `${knot.name} ${knot.id} ${knot.category} ${knot.tags.join(" ")} ${knot.aliases?.join(" ") ?? ""}`.toLowerCase(),
+        category: knot.category,
+        materials: knot.lineMaterials,
+        difficulty: knot.difficulty,
+        go: () => navigate({ to: "/diagram/$knotId", params: { knotId: knot.id } }),
       });
     }
-    for (const p of playsForDomain(domain.id)) {
+    for (const play of playsForDomain(domain.id)) {
       const starterBits = startersForDomain(domain.id)
-        .filter((s) => s.input.event === p.id)
-        .map((s) => `${s.title} ${s.line}`)
+        .filter((starter) => starter.input.event === play.id)
+        .map((starter) => `${starter.title} ${starter.line}`)
         .join(" ");
       items.push({
-        id: `fp:${p.id}`,
+        id: `fp:${play.id}`,
         group: "finder.symptoms",
-        label: p.title,
+        label: play.title,
         sub: "Diagnose",
-        hay: `${p.title} ${p.plain} ${p.meaning} ${p.id} ${starterBits}`
+        hay: `${play.title} ${play.plain} ${play.meaning} ${play.id} ${starterBits}`
           .toLowerCase()
           .replace(/-/g, " "),
-        go: () => navigate({ to: "/diagnose", search: { event: p.id } }),
+        go: () => navigate({ to: "/diagnose", search: { event: play.id } }),
       });
     }
-    for (const w of WORLD_ESSAYS) {
+    for (const application of applicationsForDomain(domain.id)) {
+      const knot = getKnot(application.knotId);
+      if (!knot) continue;
       items.push({
-        id: `ap:${w.id}`,
+        id: `ap:${application.knotId}`,
         group: "finder.applications",
-        label: w.title,
-        sub: "Applications",
-        hay: `${w.title} ${w.lede} ${w.meaning} ${w.id} ${w.group}`
+        label: knot.name,
+        sub: "Use case",
+        hay: `${knot.name} ${knot.aliases.join(" ")} ${knot.goodFor} ${knot.bestFor.join(" ")} ${knot.notIdealFor.join(" ")} ${application.applicationNotes.join(" ")} ${application.notFor.join(" ")}`
           .toLowerCase()
           .replace(/-/g, " "),
-        go: () => navigate({ to: "/applications/$id", params: { id: w.id } }),
+        go: () => navigate({ to: "/applications/$id", params: { id: application.knotId } }),
       });
     }
     return items;
@@ -233,11 +231,11 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
     const cats = new Set<string>();
     const mats = new Set<string>();
     const diffs = new Set<string>();
-    for (const h of all) {
-      if (h.group !== "finder.knots") continue;
-      if (h.category) cats.add(h.category);
-      h.materials?.forEach((m) => mats.add(m));
-      if (h.difficulty) diffs.add(h.difficulty);
+    for (const hit of all) {
+      if (hit.group !== "finder.knots") continue;
+      if (hit.category) cats.add(hit.category);
+      hit.materials?.forEach((m) => mats.add(m));
+      if (hit.difficulty) diffs.add(hit.difficulty);
     }
     return {
       categories: [...cats].sort(),
@@ -248,12 +246,12 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
 
   const knotFiltersOn = Boolean(category || material || difficulty);
 
-  const passes = (h: Hit) => {
-    if (groups.length && !groups.includes(h.group)) return false;
-    if (h.group !== "finder.knots") return !knotFiltersOn;
-    if (category && h.category !== category) return false;
-    if (material && !h.materials?.includes(material as never)) return false;
-    if (difficulty && h.difficulty !== difficulty) return false;
+  const passes = (hit: Hit) => {
+    if (groups.length && !groups.includes(hit.group)) return false;
+    if (hit.group !== "finder.knots") return !knotFiltersOn;
+    if (category && hit.category !== category) return false;
+    if (material && !hit.materials?.includes(material as never)) return false;
+    if (difficulty && hit.difficulty !== difficulty) return false;
     return true;
   };
 
@@ -264,8 +262,8 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
       "finder.symptoms": 0,
       "finder.applications": 0,
     };
-    for (const h of all) {
-      if (!q.trim() || score(h.hay, q) >= 0) map[h.group] += 1;
+    for (const hit of all) {
+      if (!q.trim() || score(hit.hay, q) >= 0) map[hit.group] += 1;
     }
     return map;
   }, [all, q]);
@@ -273,18 +271,18 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
   const hits = useMemo(() => {
     const pool = all.filter(passes);
     if (!q.trim()) {
-      const recent = recents.map((id) => pool.find((h) => h.id === id)).filter(Boolean) as Hit[];
+      const recent = recents.map((id) => pool.find((hit) => hit.id === id)).filter(Boolean) as Hit[];
       const rest = pool
-        .filter((h) => !recent.includes(h))
-        .filter((h) => (groups.length || knotFiltersOn ? true : h.group === "finder.scenarios"));
+        .filter((hit) => !recent.includes(hit))
+        .filter((hit) => (groups.length || knotFiltersOn ? true : hit.group === "finder.scenarios"));
       return [...recent, ...rest].slice(0, 8);
     }
     return pool
-      .map((h) => ({ h, s: score(h.hay, q.trim()) }))
-      .filter((x) => x.s >= 0)
-      .sort((a, b) => b.s - a.s)
+      .map((hit) => ({ hit, score: score(hit.hay, q.trim()) }))
+      .filter((item) => item.score >= 0)
+      .sort((a, b) => b.score - a.score)
       .slice(0, 12)
-      .map((x) => x.h);
+      .map((item) => item.hit);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [all, q, groups, category, material, difficulty, recents]);
 
@@ -315,8 +313,10 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
     target.go();
   };
 
-  const toggleGroup = (g: Group) =>
-    setGroups((prev) => (prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]));
+  const toggleGroup = (group: Group) =>
+    setGroups((prev) =>
+      prev.includes(group) ? prev.filter((item) => item !== group) : [...prev, group],
+    );
 
   const showKnotFacets = groups.length === 0 || groups.includes("finder.knots");
   let lastGroup = "";
@@ -372,21 +372,20 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
           </button>
         </div>
 
-        {/* Filters */}
         <div className="border-b border-hairline px-4 py-2">
           <div
             className="ki-rail flex gap-1.5 overflow-x-auto"
             role="group"
             aria-label="Result type"
           >
-            {GROUP_FILTERS.map((g) => (
+            {GROUP_FILTERS.map((group) => (
               <FilterChip
-                key={g.id}
-                active={groups.includes(g.id)}
-                onClick={() => toggleGroup(g.id)}
+                key={group.id}
+                active={groups.includes(group.id)}
+                onClick={() => toggleGroup(group.id)}
               >
-                {g.label}
-                <span className="ml-1.5 tabular-nums text-muted-foreground">{counts[g.id]}</span>
+                {group.label}
+                <span className="ml-1.5 tabular-nums text-muted-foreground">{counts[group.id]}</span>
               </FilterChip>
             ))}
           </div>
@@ -431,31 +430,31 @@ export function Finder({ open, onClose }: { open: boolean; onClose: () => void }
           {hits.length === 0 ? (
             <li className="px-4 py-6 text-[0.875rem] text-muted-foreground">{t("finder.empty")}</li>
           ) : (
-            hits.map((h, i) => {
-              const header = h.group !== lastGroup ? h.group : null;
-              lastGroup = h.group;
+            hits.map((hit, index) => {
+              const header = hit.group !== lastGroup ? hit.group : null;
+              lastGroup = hit.group;
               return (
-                <li key={h.id}>
+                <li key={hit.id}>
                   {header ? <div className="label-micro px-4 pb-1 pt-3">{t(header)}</div> : null}
                   <button
-                    id={`ki-hit-${h.id}`}
+                    id={`ki-hit-${hit.id}`}
                     type="button"
                     role="option"
-                    aria-selected={i === active}
-                    onMouseEnter={() => setActive(i)}
-                    onClick={() => commit(h)}
+                    aria-selected={index === active}
+                    onMouseEnter={() => setActive(index)}
+                    onClick={() => commit(hit)}
                     className={cn(
                       "ki-press flex min-h-11 w-full items-baseline justify-between gap-4 px-4 py-2.5 text-left transition-colors",
-                      i === active
+                      index === active
                         ? "bg-primary/12 text-foreground"
                         : "text-foreground/85 hover:bg-surface-2/50",
                     )}
                   >
                     <span className="text-[0.875rem] tracking-tight">
-                      <Highlight text={h.label} q={q} />
+                      <Highlight text={hit.label} q={q} />
                     </span>
                     <span className="shrink-0 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
-                      {h.sub}
+                      {hit.sub}
                     </span>
                   </button>
                 </li>

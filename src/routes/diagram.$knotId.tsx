@@ -4,6 +4,7 @@ import { Bullets, MicroLabel, Panel } from "@/components/instrument/primitives";
 import { KnotDiagram, describeDiagram, diagramStepNote } from "@/components/instrument/diagram";
 import { FailureModesPanel } from "@/components/instrument/failure-modes";
 import { HthInspectPlates } from "@/components/instrument/hth-plate";
+import { KnotFieldGuide } from "@/components/instrument/knot-field-guide";
 import { getKnot } from "@/data/catalog";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, MATERIAL_LABELS } from "@/domain/types";
 import { useT } from "@/i18n";
@@ -21,9 +22,9 @@ export const Route = createFileRoute("/diagram/$knotId")({
         { title: `${name} — diagrams | Knot Analyst` },
         {
           name: "description",
-          content: `Diagrams for ${name}. Open the steps when you are ready to tie.`,
+          content: `Diagrams, practical use, line compatibility, field notes, and tying steps for ${name}.`,
         },
-        { property: "og:title", content: `${name} — diagrams` },
+        { property: "og:title", content: `${name} — diagrams and field guide` },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -64,13 +65,13 @@ function DiagramMode() {
 
       <div className="mb-6 mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <MicroLabel>Mode 04 · Diagram</MicroLabel>
+          <MicroLabel>Mode 04 · Knot guide</MicroLabel>
           <h1 className="mt-2 text-[2rem] font-semibold leading-none tracking-[-0.03em]">
             {knot.name}
           </h1>
           {extra.length ? (
             <p className="mt-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground">
-              {extra.join(" · ")}
+              Also known as {extra.join(" · ")}
             </p>
           ) : null}
           <p className="mt-3 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">
@@ -88,7 +89,7 @@ function DiagramMode() {
             params={{ id: knot.id }}
             className="inline-flex min-h-11 items-center font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
           >
-            {t("nav.applications")}
+            Where to use it
           </Link>
           <Link
             to="/tie/$knotId"
@@ -116,7 +117,19 @@ function DiagramMode() {
         </div>
       </div>
 
-      <ol className="space-y-6">
+      <KnotFieldGuide knot={knot} />
+
+      <section className="mt-10" aria-labelledby={`steps-${knot.id}`}>
+        <MicroLabel>Step by step</MicroLabel>
+        <h2 id={`steps-${knot.id}`} className="mt-2 text-[1.35rem] font-semibold tracking-tight">
+          How to tie {knot.name}
+        </h2>
+        <p className="mt-2 max-w-3xl text-[0.875rem] leading-relaxed text-muted-foreground">
+          Use the diagrams with the written steps. The look-for, failure, and quick-fix notes are there to catch mistakes before the knot reaches the water.
+        </p>
+      </section>
+
+      <ol className="mt-6 space-y-6">
         {knot.steps.map((s) => (
           <li key={s.order} className="panel overflow-hidden">
             <KnotDiagram
