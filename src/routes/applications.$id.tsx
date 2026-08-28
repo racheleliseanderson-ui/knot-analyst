@@ -48,7 +48,7 @@ export const Route = createFileRoute("/applications/$id")({
     <Shell>
       <p className="text-sm text-muted-foreground">
         No use-case note for that item.{" "}
-        <Link to="/applications/" className="text-accent underline underline-offset-4">
+        <Link to="/applications" className="text-accent underline underline-offset-4">
           Back to use cases
         </Link>
       </p>
@@ -69,7 +69,7 @@ function WorldPage({ id }: { id: string }) {
   return (
     <Shell>
       <Link
-        to="/applications/"
+        to="/applications"
         className="inline-flex min-h-11 items-center font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
       >
         ← Knot use cases
@@ -156,7 +156,7 @@ function KnotPage({ id }: { id: string }) {
   return (
     <Shell>
       <Link
-        to="/applications/"
+        to="/applications"
         className="inline-flex min-h-11 items-center font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
       >
         ← Knot use cases
