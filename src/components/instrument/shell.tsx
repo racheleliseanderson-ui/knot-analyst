@@ -82,7 +82,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
             <ModeLink to="/diagnose" label={t("nav.diagnose")} code="02" />
             <ModeLink to="/compare" label={t("nav.compare")} code="03" />
             <ModeLink to="/library" label={t("nav.library")} code="04" />
-            <ModeLink to="/applications/" label={t("nav.applications")} code="05" />
+            <ModeLink to="/applications" label={t("nav.applications")} code="05" />
             <button
               type="button"
               onClick={() => setFinderOpen(true)}
