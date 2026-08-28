@@ -50,26 +50,40 @@ function diameterRelation(mainRaw: unknown, secondaryRaw: unknown): string | und
 
 function proposedSearch(packet: HthFleetPacket): ProposedSearch {
   const tackle = objectPart(packet.tackleEvaluation);
-  const system = objectPart(tackle.system);
-  const line = objectPart(system.line);
-  const leader = objectPart(system.leader);
+  const system = objectPart(tackle["system"]);
+  const line = objectPart(system["line"]);
+  const leader = objectPart(system["leader"]);
   const req = objectPart(packet.connectionRequirements);
-  const main = mapMaterial(req.mainMaterial ?? line.material, req.mainConstruction ?? line.construction);
-  const secondary = mapMaterial(req.secondaryMaterial ?? leader.material, req.secondaryConstruction ?? leader.construction);
-  const leaderDeclared = leader.material != null && !["", "none", "unknown"].includes(String(leader.material));
+  const main = mapMaterial(
+    req["mainMaterial"] ?? line["material"],
+    req["mainConstruction"] ?? line["construction"],
+  );
+  const secondary = mapMaterial(
+    req["secondaryMaterial"] ?? leader["material"],
+    req["secondaryConstruction"] ?? leader["construction"],
+  );
+  const leaderMaterial = leader["material"];
+  const leaderDeclared =
+    leaderMaterial != null && !["", "none", "unknown"].includes(String(leaderMaterial));
   const mainBraided = main === "braid";
 
   let connection: string | undefined;
-  if (leaderDeclared && main && secondary) connection = mainBraided ? "braid-to-leader" : "leader-to-leader";
-  else if (!leaderDeclared && main) connection = "line-to-lure";
+  if (leaderDeclared && main && secondary) {
+    connection = mainBraided ? "braid-to-leader" : "leader-to-leader";
+  } else if (!leaderDeclared && main) {
+    connection = "line-to-lure";
+  }
 
-  const light = packet.conditions?.light;
+  const light = packet.conditions?.["light"];
   return {
     connection,
     main,
     secondary: leaderDeclared ? secondary : undefined,
-    diameter: diameterRelation(req.mainDiameterIn ?? line.diameterIn, req.secondaryDiameterIn ?? leader.diameterIn),
-    guides: req.mustPassGuides === true,
+    diameter: diameterRelation(
+      req["mainDiameterIn"] ?? line["diameterIn"],
+      req["secondaryDiameterIn"] ?? leader["diameterIn"],
+    ),
+    guides: req["mustPassGuides"] === true,
     lowlight: light === "low_light" || light === "night",
   };
 }
@@ -77,9 +91,11 @@ function proposedSearch(packet: HthFleetPacket): ProposedSearch {
 function packetRows(packet: HthFleetPacket | null, proposed: ProposedSearch) {
   if (!packet) return [] as Array<[string, string]>;
   const rows: Array<[string, string]> = [];
-  const waterName = typeof packet.water?.waterName === "string" ? packet.water.waterName : null;
-  const species = Array.isArray(packet.species?.commonNames)
-    ? packet.species!.commonNames!.find((v): v is string => typeof v === "string")
+  const waterNameValue = packet.water?.["waterName"];
+  const waterName = typeof waterNameValue === "string" ? waterNameValue : null;
+  const commonNames = packet.species?.["commonNames"];
+  const species = Array.isArray(commonNames)
+    ? commonNames.find((v): v is string => typeof v === "string")
     : null;
   if (species) rows.push(["Target", species]);
   if (waterName) rows.push(["Water", waterName]);
@@ -133,7 +149,12 @@ export function FleetCarryBridge() {
     };
     scan();
     const observer = new MutationObserver(scan);
-    observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["href"] });
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["href"],
+    });
     return () => observer.disconnect();
   }, []);
 
@@ -195,26 +216,54 @@ export function FleetCarryBridge() {
   if (!active && !outgoing) return null;
 
   return (
-    <section className="border-b border-hairline bg-card/95" aria-label="Hook the Horizon carried context">
+    <section
+      className="border-b border-hairline bg-card/95"
+      aria-label="Hook the Horizon carried context"
+    >
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
-        <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-accent">Hook fleet · carried context</p>
+        <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-accent">
+          Hook fleet · carried context
+        </p>
         {pending ? (
           <>
             <div className="mt-1 flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="font-semibold text-xl">Use Tackle Link's declared connection context?</h2>
-                <p className="mt-1 max-w-3xl text-xs leading-relaxed text-muted-foreground">Knot Analyst will map line/leader materials, guide-passage and low-light constraints. The proposed connection job is visible before it is applied and can be changed immediately.</p>
+                <h2 className="font-semibold text-xl">
+                  Use Tackle Link's declared connection context?
+                </h2>
+                <p className="mt-1 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+                  Knot Analyst will map line/leader materials, guide-passage and low-light
+                  constraints. The proposed connection job is visible before it is applied and can
+                  be changed immediately.
+                </p>
               </div>
               <div className="flex gap-2">
-                <button type="button" onClick={useIncoming} className="min-h-11 rounded-md bg-primary px-4 text-xs font-semibold text-primary-foreground">Use context</button>
-                <button type="button" onClick={dismissIncoming} className="min-h-11 rounded-md border border-hairline px-4 text-xs">Ignore</button>
+                <button
+                  type="button"
+                  onClick={useIncoming}
+                  className="min-h-11 rounded-md bg-primary px-4 text-xs font-semibold text-primary-foreground"
+                >
+                  Use context
+                </button>
+                <button
+                  type="button"
+                  onClick={dismissIncoming}
+                  className="min-h-11 rounded-md border border-hairline px-4 text-xs"
+                >
+                  Ignore
+                </button>
               </div>
             </div>
             {rows.length > 0 && (
               <dl className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-6">
                 {rows.map(([label, value]) => (
-                  <div key={`${label}-${value}`} className="rounded-md border border-hairline bg-surface-2/40 p-2">
-                    <dt className="font-mono text-[0.55rem] uppercase tracking-[0.12em] text-muted-foreground">{label}</dt>
+                  <div
+                    key={`${label}-${value}`}
+                    className="rounded-md border border-hairline bg-surface-2/40 p-2"
+                  >
+                    <dt className="font-mono text-[0.55rem] uppercase tracking-[0.12em] text-muted-foreground">
+                      {label}
+                    </dt>
                     <dd className="mt-0.5 text-xs capitalize">{value}</dd>
                   </div>
                 ))}
@@ -223,7 +272,10 @@ export function FleetCarryBridge() {
           </>
         ) : (
           <div className="mt-1 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs text-muted-foreground">Upstream fishing and tackle context remains attached while you compare connection families.</p>
+            <p className="text-xs text-muted-foreground">
+              Upstream fishing and tackle context remains attached while you compare connection
+              families.
+            </p>
             {outgoing && (
               <a
                 href={fleetUrl(OPS_URL, outgoing)}
