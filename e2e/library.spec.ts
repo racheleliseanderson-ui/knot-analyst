@@ -1,16 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 
-/**
- * Library (mode 05) and diagram pages (mode 06).
- * The knots are browsable without running Decide, domain isolation holds,
- * and every card opens diagrams plus how to tie it.
- */
-
 const failOnPageErrors = (page: Page, sink: string[]) => {
-  page.on("pageerror", (e) => sink.push(String(e)));
-  page.on("console", (m) => {
-    if (m.type() === "error" && !m.text().includes("Failed to load resource")) {
-      sink.push(m.text());
+  page.on("pageerror", (error) => sink.push(String(error)));
+  page.on("console", (message) => {
+    if (message.type() === "error" && !message.text().includes("Failed to load resource")) {
+      sink.push(message.text());
     }
   });
 };
@@ -22,9 +16,9 @@ test.describe("Library", () => {
 
     await page.goto("/library");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/the knots/i);
-    await expect(page.getByText(/don’t have to run decide first/i)).toBeVisible();
+    await expect(page.getByText(/each knot opens to a larger diagram/i)).toBeVisible();
     await expect(page.getByText("Knot decision card")).toHaveCount(0);
-    await expect(page.getByText(/\d+ of \d+ knots/i)).toBeVisible();
+    await expect(page.getByText(/\d+ fishing knots/i)).toBeVisible();
 
     const cards = page.locator("article");
     expect(await cards.count()).toBeGreaterThan(40);
@@ -61,18 +55,18 @@ test.describe("Library", () => {
     expect(errors).toEqual([]);
   });
 
-  test("a card opens diagrams, then the step player", async ({ page }) => {
+  test("a card opens the field guide and then the step player", async ({ page }) => {
     const errors: string[] = [];
     failOnPageErrors(page, errors);
 
     await page.goto("/library?q=palomar");
-    await page
-      .getByRole("link", { name: /Palomar Knot/i })
-      .first()
-      .click();
+    await page.getByRole("link", { name: /Palomar Knot/i }).first().click();
     await expect(page).toHaveURL(/\/diagram\/palomar/);
     await expect(page.getByRole("heading", { name: "Palomar Knot" })).toBeVisible();
     await expect(page.getByText("Finished structure", { exact: true })).toBeVisible();
+    await expect(page.getByText(/what to know before you trust this knot/i)).toBeVisible();
+    await expect(page.getByText(/line compatibility/i)).toBeVisible();
+    await expect(page.getByText(/how to test it/i)).toBeVisible();
     await expect(page.getByText(/^Step 01$/)).toBeVisible();
 
     await page.getByRole("link", { name: /how to tie it/i }).click();
