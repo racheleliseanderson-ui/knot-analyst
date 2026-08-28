@@ -1,6 +1,7 @@
 /** The Fishing domain — assembled from today's data, behavior unchanged. */
 import { playsForDomain } from "@/data/failure-playbook";
 import { FIELD_SCENARIOS } from "@/data/scenarios";
+import { ADDITIONAL_FIELD_SCENARIOS } from "@/data/scenarios-extra";
 import { TERMINAL_KNOTS } from "@/data/knots/terminal";
 import { LINE_TO_LINE_KNOTS } from "@/data/knots/line-to-line";
 import { LOOP_KNOTS } from "@/data/knots/loops";
@@ -30,7 +31,7 @@ export const FISHING_DOMAIN: KnotDomain = {
   venues: FISHING_VENUES,
   platforms: FISHING_PLATFORMS,
   regions: FISHING_REGIONS,
-  scenarios: FIELD_SCENARIOS,
+  scenarios: [...FIELD_SCENARIOS, ...ADDITIONAL_FIELD_SCENARIOS],
   failurePlays: playsForDomain("fishing"),
   knots: [
     ...TERMINAL_KNOTS,
