@@ -1,9 +1,15 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 /**
- * Path prefix for /applications and /applications/$id.
- * Without an Outlet the $id note never mounts — the list route wins the match.
+ * Parent route for knot use cases. Keep the outlet for detail pages and make
+ * the bare /applications path land on the practical index instead of an empty
+ * parent shell.
  */
 export const Route = createFileRoute("/applications")({
+  beforeLoad: ({ location }) => {
+    if (location.pathname === "/applications") {
+      throw redirect({ to: "/applications/" });
+    }
+  },
   component: () => <Outlet />,
 });
