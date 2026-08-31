@@ -111,24 +111,23 @@ export function Shell({ children, className }: { children: ReactNode; className?
       <footer className="border-t border-hairline no-print">
         <div className="mx-auto max-w-[1240px] px-5 pt-6 sm:px-8">
           <p className="label-micro mb-3 text-muted-foreground/70">
-            Part of the Hook the Horizon fleet
+            In this site
           </p>
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             {[
-              ["Hook the Horizon", "https://hookthehorizon.blog/"],
-              ["Field Ops Desk", "https://ops.hookthehorizon.blog/"],
-              ["Field Sense Navigator", "https://waterways.hookthehorizon.blog/"],
-              ["Tackle Link Analyst", "https://tackle.hookthehorizon.blog/"],
-              ["Hatch Match", "https://hatch.hookthehorizon.blog/"],
-              ["Rig Signal", "https://rig-signal.hookthehorizon.blog/"],
+              ["Decide", "/"],
+              ["Diagnose", "/diagnose"],
+              ["Compare", "/compare"],
+              ["Library", "/library"],
+              ["Applications", "/applications"],
             ].map(([label, href]) => (
               <li key={href}>
-                <a
-                  href={href}
+                <Link
+                  to={href}
                   className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
                 >
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
